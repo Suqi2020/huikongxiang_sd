@@ -1011,27 +1011,12 @@
             <File>
               <FileName>stm32f4xx_hal_sd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\huikongxiang_env_tcp\bsp\stm32\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_mmc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\huikongxiang_env_tcp\bsp\stm32\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_mmc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_ll_fsmc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\huikongxiang_env_tcp\bsp\stm32\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fsmc.c</FilePath>
+              <FilePath>..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sd.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_ll_sdmmc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\huikongxiang_env_tcp\bsp\stm32\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_sdmmc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_ll_usb.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\huikongxiang_env_tcp\bsp\stm32\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c</FilePath>
+              <FilePath>..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_sdmmc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1244,9 +1229,14 @@
               <FilePath>.\FatFs\ff_gen_drv.c</FilePath>
             </File>
             <File>
-              <FileName>sd_diskio.c</FileName>
+              <FileName>sd_diskio_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\FatFs\sd_diskio.c</FilePath>
+              <FilePath>.\FatFs\sd_diskio_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>syscall.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FatFs\option\syscall.c</FilePath>
             </File>
           </Files>
         </Group>

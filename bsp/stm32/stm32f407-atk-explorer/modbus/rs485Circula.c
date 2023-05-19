@@ -235,7 +235,7 @@ void readMultiCirCulaPoint()
 		}
 }
 
-extern void huanLiuTxtSave2SD(char *id,char *data);
+extern void huanLiuTxtSaveSD(char *id,char *data);
 
 
 //环流json格式打包
@@ -308,9 +308,13 @@ uint16_t circulaJsonPack(bool respFlag)
 					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
 					sprintf(sprinBuf,"%llu",utcTime());
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"\r\n");
-					
-					huanLiuTxtSave2SD(sheet.cirCula[i].ID,data);//
-					rt_kprintf("%sSD data：%s\n",sign,data);
+					huanLiuTxtReadSD(sheet.cirCula[i].ID);
+					uint32_t time =65000;
+					while(time--){
+//					huanLiuTxtSaveSD(sheet.cirCula[i].ID,data);//suqi
+						rt_thread_delay(10);
+					}
+					rt_kprintf("%sSD data：%s",sign,data);//自带换行
 					memset(data,0,sizeof((char *)data));
 //					rt_free(data);
 //					data=NULL;
@@ -336,9 +340,9 @@ uint16_t circulaJsonPack(bool respFlag)
 		rt_strcpy((char *)packBuf+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
+//				for(int i=0;i<rt_strlen(out);i++)
+//						rt_kprintf("%c",out[i]);
+//				rt_kprintf("\n");
 				rt_free(out);
 				out=NULL;
 		}
@@ -527,12 +531,13 @@ bool modCirCurrWarn2Send()
 void circulaRead2Send(rt_bool_t netStat,bool respFlag)
 {					
 		int workFlag=RT_FALSE;
-		for(int i=0;i<CIRCULA_485_NUM;i++){
-			if(sheet.cirCula[i].workFlag==RT_TRUE){
-						readCirCurrAndWaring(i);
-						workFlag=RT_TRUE;
-				}
-		}
+//		for(int i=0;i<CIRCULA_485_NUM;i++){
+//			if(sheet.cirCula[i].workFlag==RT_TRUE){
+//						readCirCurrAndWaring(i);
+//						workFlag=RT_TRUE;//suqi
+//				}
+//		}
+		workFlag=RT_TRUE;
 		if(workFlag==RT_TRUE){
 				rt_kprintf("%s打包采集的circula数据\r\n",sign);
 				circulaJsonPack(respFlag);

@@ -191,10 +191,11 @@
 //V1.08    增加井盖LCD显示控制  
 //V3.01    增加SD卡读写
 //         SDIO_TRANSFER_CLK_DIV  设置为2 原本为0  导致读写sd速度过快  84/2+2 =21mhz 不能大于25Mhz
-#define APP_VER       ((3<<8)+1)//0x0105 表示1.5版本
+//V3.02    采用安富来的rafts驱动代替野火的  写入65000条 测试OK  20230519 
+#define APP_VER       ((3<<8)+2)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230518";
+const char date[]="20230519";
 
 //static    rt_thread_t tid 	= RT_NULL;
 static    rt_thread_t tidW5500 	  = RT_NULL;
@@ -399,11 +400,11 @@ int main(void)
 		
 
 ////////////////////////////////任务////////////////////////////////////
-    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,1024,3, 10 );
-		if(tidW5500!=NULL){
-				rt_thread_startup(tidW5500);													 
-				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
-		}
+//    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,1024,3, 10 );
+//		if(tidW5500!=NULL){
+//				rt_thread_startup(tidW5500);													 
+//				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
+//		}
 		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,1024,2, 10 );
 		if(tidNetRec!=NULL){
 				rt_thread_startup(tidNetRec);													 

@@ -254,8 +254,9 @@ void startTimeList()
 		timeInit(HEART_TIME,      120,2);//心跳定时  定时30秒 第一次28秒就来
 		timeInit(REG_TIME,        5,0);//注册 注册成功后定时器就关闭
 
-		timeInit(CIRCULA_TIME, 		10,5);
-//		timeInit(CIRCULA_TIME, 		sheet.cirCulaColTime,5);//suqi
+		timeInit(CIRCULA_TIME, 		2,5); //suqi
+		#if 0
+		timeInit(CIRCULA_TIME, 		sheet.cirCulaColTime,5);//suqi
 		timeInit(PARTDISCHAG_TIME,sheet.partDischagColTime,10);
 		timeInit(PRESSSETTL_TIME, sheet.pressSetlColTime,15);
 		timeInit(THREEAXIS_TIME,  sheet.threeAxissColTime,20);
@@ -269,6 +270,7 @@ void startTimeList()
 		timeInit(WATERDEPTH_TIME, sheet.waterDepthColTime,45);
 		timeInit(CRACKMETER_TIME, sheet.crackMeterColTime,50);
 		timeInit(COVER_TIME, 			sheet.coverColTime,55);
+		#endif
 		#endif
 	  //启动温湿度
 #ifndef     ANA_MASK

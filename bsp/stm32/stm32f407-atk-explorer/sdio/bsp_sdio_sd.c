@@ -1,3 +1,20 @@
+/*
+*********************************************************************************************************
+*
+*	模块名称 : SD卡驱动模块
+*	文件名称 : bsp_sdio_sd.c
+*	版    本 : V1.0
+*	说    明 : SD卡底层驱动。根据ST的驱动文件修改。
+*
+*	修改记录 :
+*		版本号  日期        作者     说明
+*		V1.0    2018-09-08  armfly  正式发布
+*
+*	Copyright (C), 2018-2030, 安富莱电子 www.armfly.com
+*
+*********************************************************************************************************
+*/
+
 /**
   ******************************************************************************
   * @file    stm324x9i_eval_sd.c
@@ -80,7 +97,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "bsp_sdio_sd.h"
-#include "board.h"
 
 /** @addtogroup BSP
   * @{
@@ -114,7 +130,7 @@ SD_HandleTypeDef uSdHandle;
 uint8_t BSP_SD_Init(void)
 { 
   uint8_t SD_state = MSD_OK;
-  extern rt_bool_t gbSDExit;
+  
   /* uSD device interface configuration */
   uSdHandle.Instance = SDIO;
 
@@ -123,16 +139,18 @@ uint8_t BSP_SD_Init(void)
   uSdHandle.Init.ClockPowerSave      = SDIO_CLOCK_POWER_SAVE_DISABLE;
   uSdHandle.Init.BusWide             = SDIO_BUS_WIDE_1B;
   uSdHandle.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
-  uSdHandle.Init.ClockDiv            = 2;//SDIO_TRANSFER_CLK_DIV;  suqi
+  uSdHandle.Init.ClockDiv            =3;// SDIO_TRANSFER_CLK_DIV;
   
-//  /* Configure IO functionalities for SD detect pin */
-//  BSP_IO_Init(); 
-//  
-//  /* Check if the SD card is plugged in the slot */
-//  if(BSP_SD_IsDetected() != SD_PRESENT)
-//  {
-//    return MSD_ERROR;
-//  }
+#if 0
+  /* Configure IO functionalities for SD detect pin */
+  BSP_IO_Init(); 
+  
+  /* Check if the SD card is plugged in the slot */
+  if(BSP_SD_IsDetected() != SD_PRESENT)
+  {
+    return MSD_ERROR;
+  }
+#endif
   
   /* Msp SD initialization */
   BSP_SD_MspInit(&uSdHandle, NULL);
@@ -140,7 +158,6 @@ uint8_t BSP_SD_Init(void)
   if(HAL_SD_Init(&uSdHandle) != HAL_OK)
   {
     SD_state = MSD_ERROR;
-		gbSDExit=false;
   }
   
   /* Configure SD Bus width */
@@ -160,59 +177,64 @@ uint8_t BSP_SD_Init(void)
   return  SD_state;
 }
 
-///**
-//  * @brief  Configures Interrupt mode for SD detection pin.
-//  * @retval Returns 0
-//  */
-//uint8_t BSP_SD_ITConfig(void)
-//{  
-//  /* Configure Interrupt mode for SD detection pin */  
-//  BSP_IO_ConfigPin(SD_DETECT_PIN, IO_MODE_IT_FALLING_EDGE);
-//  
-//  return 0;
-//}
+/**
+  * @brief  Configures Interrupt mode for SD detection pin.
+  * @retval Returns 0
+  */
+#if 0
+uint8_t BSP_SD_ITConfig(void)
+{  
+  /* Configure Interrupt mode for SD detection pin */  
+  BSP_IO_ConfigPin(SD_DETECT_PIN, IO_MODE_IT_FALLING_EDGE);
+  
+  return 0;
+}
+#endif
 
-///**
-// * @brief  Detects if SD card is correctly plugged in the memory slot or not.
-// * @retval Returns if SD is detected or not
-// */
-//uint8_t BSP_SD_IsDetected(void)
-//{
-//  __IO uint8_t status = SD_PRESENT;
-//  
-//  /* Check SD card detect pin */
-//  if(BSP_IO_ReadPin(SD_DETECT_PIN))
-//  {
-//    status = SD_NOT_PRESENT;
-//  }
-//  
-//  return status;
-//}
+/**
+ * @brief  Detects if SD card is correctly plugged in the memory slot or not.
+ * @retval Returns if SD is detected or not
+ */
+#if 0
+uint8_t BSP_SD_IsDetected(void)
+{
+  __IO uint8_t status = SD_PRESENT;
+  
+  /* Check SD card detect pin */
+  if(BSP_IO_ReadPin(SD_DETECT_PIN))
+  {
+    status = SD_NOT_PRESENT;
+  }
+  
+  return status;
+}
 
-///** @brief  SD detect IT treatment.
-//  * @retval None
-//  */
-//void BSP_SD_DetectIT(void)
-//{
-//  /* Clear all pending bits */
-//  BSP_IO_ITClear();
-//  
-//  /* To re-enable IT */
-//  BSP_SD_ITConfig();
-//  
-//  /* SD detect IT callback */
-//  BSP_SD_DetectCallback();
-//}
+/** @brief  SD detect IT treatment.
+  * @retval None
+  */
+  
+void BSP_SD_DetectIT(void)
+{
+  /* Clear all pending bits */
+  BSP_IO_ITClear();
+  
+  /* To re-enable IT */
+  BSP_SD_ITConfig();
+  
+  /* SD detect IT callback */
+  BSP_SD_DetectCallback();
+}
+#endif 
 
 /** @brief  SD detect IT detection callback
   * @retval None
   */
-//__weak void BSP_SD_DetectCallback(void)
-//{
-//  /* NOTE: This function Should not be modified, when the callback is needed,
-//     the BSP_SD_DetectCallback could be implemented in the user file
-//  */ 
-//}
+__weak void BSP_SD_DetectCallback(void)
+{
+  /* NOTE: This function Should not be modified, when the callback is needed,
+     the BSP_SD_DetectCallback could be implemented in the user file
+  */ 
+}
 
 /**
   * @brief  Reads block(s) from a specified address in an SD card, in polling mode.
@@ -319,8 +341,8 @@ uint8_t BSP_SD_Erase(uint32_t StartAddr, uint32_t EndAddr)
   */
 __weak void BSP_SD_MspInit(SD_HandleTypeDef *hsd, void *Params)
 {
-  static DMA_HandleTypeDef dmaRxHandle;
-  static DMA_HandleTypeDef dmaTxHandle;
+  static DMA_HandleTypeDef dmaRxHandle = {0};
+  static DMA_HandleTypeDef dmaTxHandle = {0};
   GPIO_InitTypeDef GPIO_Init_Structure;
   
   /* Enable SDIO clock */
@@ -349,7 +371,7 @@ __weak void BSP_SD_MspInit(SD_HandleTypeDef *hsd, void *Params)
   HAL_GPIO_Init(GPIOD, &GPIO_Init_Structure);
 
   /* NVIC configuration for SDIO interrupts */
-  HAL_NVIC_SetPriority(SDIO_IRQn, 5, 0);
+  HAL_NVIC_SetPriority(SDIO_IRQn, 0x0E, 0);
   HAL_NVIC_EnableIRQ(SDIO_IRQn);
     
   /* Configure DMA Rx parameters */
@@ -358,12 +380,12 @@ __weak void BSP_SD_MspInit(SD_HandleTypeDef *hsd, void *Params)
   dmaRxHandle.Init.PeriphInc           = DMA_PINC_DISABLE;
   dmaRxHandle.Init.MemInc              = DMA_MINC_ENABLE;
   dmaRxHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-  dmaRxHandle.Init.MemDataAlignment    = DMA_MDATAALIGN_WORD;
+  dmaRxHandle.Init.MemDataAlignment    = DMA_MDATAALIGN_BYTE;
   dmaRxHandle.Init.Mode                = DMA_PFCTRL;
   dmaRxHandle.Init.Priority            = DMA_PRIORITY_VERY_HIGH;
   dmaRxHandle.Init.FIFOMode            = DMA_FIFOMODE_ENABLE;
   dmaRxHandle.Init.FIFOThreshold       = DMA_FIFO_THRESHOLD_FULL;
-  dmaRxHandle.Init.MemBurst            = DMA_MBURST_INC4;
+  dmaRxHandle.Init.MemBurst            = DMA_MBURST_SINGLE;
   dmaRxHandle.Init.PeriphBurst         = DMA_PBURST_INC4;
   
   dmaRxHandle.Instance = SD_DMAx_Rx_STREAM;
@@ -383,12 +405,12 @@ __weak void BSP_SD_MspInit(SD_HandleTypeDef *hsd, void *Params)
   dmaTxHandle.Init.PeriphInc           = DMA_PINC_DISABLE;
   dmaTxHandle.Init.MemInc              = DMA_MINC_ENABLE;
   dmaTxHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-  dmaTxHandle.Init.MemDataAlignment    = DMA_MDATAALIGN_WORD;
+  dmaTxHandle.Init.MemDataAlignment    = DMA_MDATAALIGN_BYTE;
   dmaTxHandle.Init.Mode                = DMA_PFCTRL;
   dmaTxHandle.Init.Priority            = DMA_PRIORITY_VERY_HIGH;
   dmaTxHandle.Init.FIFOMode            = DMA_FIFOMODE_ENABLE;
   dmaTxHandle.Init.FIFOThreshold       = DMA_FIFO_THRESHOLD_FULL;
-  dmaTxHandle.Init.MemBurst            = DMA_MBURST_INC4;
+  dmaTxHandle.Init.MemBurst            = DMA_MBURST_SINGLE;
   dmaTxHandle.Init.PeriphBurst         = DMA_PBURST_INC4;
   
   dmaTxHandle.Instance = SD_DMAx_Tx_STREAM;
@@ -403,11 +425,11 @@ __weak void BSP_SD_MspInit(SD_HandleTypeDef *hsd, void *Params)
   HAL_DMA_Init(&dmaTxHandle); 
   
   /* NVIC configuration for DMA transfer complete interrupt */
-  HAL_NVIC_SetPriority(SD_DMAx_Rx_IRQn, 6, 0);
+  HAL_NVIC_SetPriority(SD_DMAx_Rx_IRQn, 0x0F, 0);
   HAL_NVIC_EnableIRQ(SD_DMAx_Rx_IRQn);
   
   /* NVIC configuration for DMA transfer complete interrupt */
-  HAL_NVIC_SetPriority(SD_DMAx_Tx_IRQn, 6, 0);
+  HAL_NVIC_SetPriority(SD_DMAx_Tx_IRQn, 0x0F, 0);
   HAL_NVIC_EnableIRQ(SD_DMAx_Tx_IRQn);
 }
 
@@ -492,6 +514,28 @@ __weak void BSP_SD_ReadCpltCallback(void)
 
 }
 
+/*
+*********************************************************************************************************
+*	函 数 名: SDIO_IRQHandler
+*	功能说明: SDIO中断
+*	形    参:  无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+void SDIO_IRQHandler(void)
+{
+	HAL_SD_IRQHandler(&uSdHandle);
+}
+
+void DMA2_Stream6_IRQHandler(void)
+{
+    HAL_DMA_IRQHandler(uSdHandle.hdmatx);
+}
+
+void DMA2_Stream3_IRQHandler(void)
+{
+    HAL_DMA_IRQHandler(uSdHandle.hdmarx);
+}
 /**
   * @}
   */ 

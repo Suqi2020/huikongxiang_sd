@@ -43,7 +43,8 @@
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx.h"
+#include "stm32f4xx_hal.h"
+#include "bsp_sdio_sd.h"
 
 /** @addtogroup BSP
   * @{
@@ -101,7 +102,7 @@
 #define BSP_SD_IRQHandler                 SDIO_IRQHandler
 #define BSP_SD_DMA_Tx_IRQHandler          DMA2_Stream6_IRQHandler   
 #define BSP_SD_DMA_Rx_IRQHandler          DMA2_Stream3_IRQHandler 
-//#define SD_DetectIRQHandler()             HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8)
+#define SD_DetectIRQHandler()             HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8)
 /**
   * @}
   */
