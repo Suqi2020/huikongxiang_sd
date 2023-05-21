@@ -32,7 +32,7 @@
   *
   ******************************************************************************
   */
-
+//经测试 速度达到 3538992字节/279秒=12.38KB/秒
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "bsp_sdio_sd.h"
@@ -143,12 +143,9 @@ void huanLiuTxtSaveSD(char *id,char *data)
 			f_lseek(&fnew,f_size(&fnew));
 			res_sd=f_write(&fnew,data,strlen(data),&fnum);
 			if(res_sd!=FR_OK){
-				//while(1)
-					{
 
 				rt_kprintf("%sERR:f_write %s,res_sd=%d\n",sign,txtName,res_sd);
 					rt_thread_delay(3000);
-				}
 			}
 			else {
 				writetime++;

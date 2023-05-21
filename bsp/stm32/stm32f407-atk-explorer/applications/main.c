@@ -192,10 +192,12 @@
 //V3.01    增加SD卡读写
 //         SDIO_TRANSFER_CLK_DIV  设置为2 原本为0  导致读写sd速度过快  84/2+2 =21mhz 不能大于25Mhz
 //V3.02    采用安富来的rafts驱动代替野火的  写入65000条 测试OK  20230519 
-#define APP_VER       ((3<<8)+2)//0x0105 表示1.5版本
+//V3.03    SDIO_TRANSFER_CLK_DIV改为0 提高写入速度 达到3538992字节/279秒=12.38KB/秒
+
+#define APP_VER       ((3<<8)+3)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230519";
+const char date[]="20230521";
 
 //static    rt_thread_t tid 	= RT_NULL;
 static    rt_thread_t tidW5500 	  = RT_NULL;

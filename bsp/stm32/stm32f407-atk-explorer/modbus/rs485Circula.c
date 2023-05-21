@@ -308,12 +308,12 @@ uint16_t circulaJsonPack(bool respFlag)
 					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
 					sprintf(sprinBuf,"%llu",utcTime());
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"\r\n");
-					huanLiuTxtReadSD(sheet.cirCula[i].ID);
-					uint32_t time =65000;
-					while(time--){
-//					huanLiuTxtSaveSD(sheet.cirCula[i].ID,data);//suqi
+//					huanLiuTxtReadSD(sheet.cirCula[i].ID);
+					//uint32_t time =65000;
+					//while(time--){
+					huanLiuTxtSaveSD(sheet.cirCula[i].ID,data);//suqi
 						rt_thread_delay(10);
-					}
+					//}
 					rt_kprintf("%sSD data£º%s",sign,data);//×Ô´ø»»ÐÐ
 					memset(data,0,sizeof((char *)data));
 //					rt_free(data);
