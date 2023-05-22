@@ -4,18 +4,6 @@
 //w5500联网状态的维护 
 const static char task[]="[w55task]";
 
-//rt_sem_t  w5500Iqr_semp = RT_NULL;//w5500有数据时候中断来临
-
-/***************----- 网络参数变量定义 -----***************/
-//unsigned char Gateway_IP[4];//网关IP地址 
-//unsigned char Sub_Mask[4];	//子网掩码 
-//unsigned char Phy_Addr[6];	//物理地址(MAC) 
-//unsigned char IP_Addr[4];	//本机IP地址 
-
-//unsigned char S0_Port[2];	//端口0的端口号(5000) 
-//unsigned char S0_DIP[4];	//端口0目的IP地址 
-//unsigned char S0_DPort[2];	//端口0目的端口号(6000) 
-
 
 
 /***************----- 端口的运行模式 -----***************/
@@ -106,7 +94,7 @@ void  w5500Task(void *parameter)
 							      packFlash.netIpFlash.remoteIp[1],packFlash.netIpFlash.remoteIp[2],packFlash.netIpFlash.remoteIp[3]);
 								rt_kprintf("%sW5500 监听端口:%d \r\n",task,packFlash.netIpFlash.remotePort);
 								W5500State=W5500NetOKEnum;
-//							  rt_sem_release(w5500Iqr_semp);
+
 								break;
 						}
 						if(dhcpTick++>=5){//1秒基准  200*5

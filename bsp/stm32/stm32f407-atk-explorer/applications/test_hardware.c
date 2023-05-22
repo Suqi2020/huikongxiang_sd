@@ -4,7 +4,7 @@
 #include <rtdevice.h>
 #include <board.h>
 #include <string.h>
-#include "board.h"
+
 #include "drv_usart.h"
 
 #include "drv_config.h"
@@ -460,7 +460,7 @@ void  hardWareDriverTest(void)
 int tick()
 {
 
-	  uint64_t time =utcTime();
+	  uint64_t time =utcTime_ms();
 
 	  uint32_t rtc_s=time/1000;
 	  uint32_t rtc_ms=time%1000;
@@ -470,6 +470,42 @@ int tick()
 }
 //FINSH_FUNCTION_EXPORT(tick, tick finsh);//FINSH_FUNCTION_EXPORT_CMD
 MSH_CMD_EXPORT(tick,tick stamp);//FINSH_FUNCTION_EXPORT_CMD
+
+
+
+
+//extern uint64_t subTimeStamp;
+// void  subTimeStampSet(uint64_t time)
+//{
+//	  if(time>=rt_tick_get())
+//				subTimeStamp=time-rt_tick_get();//服务器rtc值-当前tick值
+//		else
+//				subTimeStamp = 0;
+
+//}
+int tickSet(int argc, char *argv[])
+{
+
+
+		static uint64_t u64getTick_p;
+
+		u64getTick_p =atoll(argv[1]);
+//		rt_kprintf("%stime:[%lu]s \r\n",sign, (uint32_t)((u64getTick_p)/1000));
+
+//		rt_kprintf("%stime:[%lu]ms\r\n",sign, (uint32_t)(u64getTick_p)%1000);
+	  extern void  subTimeStampSet(uint64_t time);
+	  if(utcTime_ms()-u64getTick_p>=3000){
+        subTimeStampSet(u64getTick_p);
+			  rt_kprintf("%stime:RTC 误差大于3秒 校时\r\n","[TEST]");
+		}
+		
+
+	  return 0;
+}
+//FINSH_FUNCTION_EXPORT(tick, tick finsh);//FINSH_FUNCTION_EXPORT_CMD
+MSH_CMD_EXPORT(tickSet,tick set stamp);//FINSH_FUNCTION_EXPORT_CMD
+
+
 
 uint32_t 	offLTimes;
 uint32_t 	onLTimes;

@@ -201,13 +201,13 @@ static uint16_t coverJsonPack(bool respFlag)
 				cJSON_AddNumberToObject(nodeobj_p,"incline"  ,cover[i].incline);
 				cJSON_AddNumberToObject(nodeobj_p,"switch"   ,cover[i].switchP);
 				cJSON_AddNumberToObject(nodeobj_p,"vibration",cover[i].vibration);
-				sprintf(sprinBuf,"%llu",utcTime());
+				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 			}
 		}
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 
@@ -303,12 +303,12 @@ bool modCoverWarn2Send()
 							cJSON_AddNumberToObject(nodeobj_p,"switch_high_alarm",   inpoutpFlag.modbusCover[i].switchUpFlag);
 						//	cJSON_AddNumberToObject(nodeobj_p,"vibration_low_alarm", inpoutpFlag.modbusCover[i].vibrationLowFlag);
 							cJSON_AddNumberToObject(nodeobj_p,"vibration_high_alarm",inpoutpFlag.modbusCover[i].vibrationUpFlag);
-							sprintf(sprinBuf,"%llu",utcTime());
+							sprintf(sprinBuf,"%llu",utcTime_ms());
 							cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 						}
 				}
 		}
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;
@@ -481,7 +481,7 @@ void coverJsonOnOff(cJSON   *Json)
 
 		}
 
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		
 		

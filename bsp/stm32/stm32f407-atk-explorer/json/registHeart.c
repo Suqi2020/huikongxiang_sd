@@ -15,29 +15,34 @@ uint32_t upMessIdAdd()
 }
 
 
-uint64_t subTimeStamp=0;
+//static uint64_t subTimeStamp=0;
 
 //获取到服务器时间戳差值
 uint64_t subTimeStampGet()
 {
-		return subTimeStamp;
+		return packFlash.utcTime;
 }
 //存储服务器的时间戳差值  
  void  subTimeStampSet(uint64_t time)
 {
 	  if(time>=rt_tick_get())
-				subTimeStamp=time-rt_tick_get();//服务器rtc值-当前tick值
+				packFlash.utcTime=time-rt_tick_get();//服务器rtc值-当前tick值
 		else
-				subTimeStamp = 0;
-
+				packFlash.utcTime = 0;
+		stm32_flash_erase(FLASH_IP_SAVE_ADDR, sizeof(packFlash));//每次擦除128k字节数据 存储时候需要一起存储
+		stm32_flash_write(FLASH_IP_SAVE_ADDR,(uint8_t*)&packFlash,sizeof(packFlash));
+		stm32_flash_write(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,sizeof(sheet));
 }
-//获取当前的utc时间8个字节长度
-uint64_t  utcTime()
+//获取当前的utc时间8个字节长度 精确到ms
+uint64_t  utcTime_ms()
 {
 	return (uint64_t)rt_tick_get()+(uint64_t)subTimeStampGet();
 }
-
-
+//精确到s
+uint64_t  utcTime_s()
+{
+	return (uint64_t)(rt_tick_get()/1000)+(uint64_t)(subTimeStampGet()/1000);
+}
 
 
 
@@ -60,7 +65,7 @@ uint16_t heartUpJsonPack()
 		char *sprinBuf=RT_NULL;
 		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
 		
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		nodeobj = cJSON_CreateObject();
 	  cJSON_AddStringToObject(nodeobj, "identifier","area_control_unit");
@@ -342,7 +347,7 @@ uint16_t devRegJsonPack()
 			}
 		}
 	}
-	sprintf(sprinBuf,"%llu",utcTime());
+	sprintf(sprinBuf,"%llu",utcTime_ms());
 	cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 	rt_free(sprinBuf);
 	sprinBuf=RT_NULL;
@@ -707,7 +712,7 @@ uint16_t devRegJsonPack()
 				}
 		 }
 	}
-	sprintf(sprinBuf,"%llu",utcTime());
+	sprintf(sprinBuf,"%llu",utcTime_ms());
 	cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 	rt_free(sprinBuf);
 	sprinBuf=RT_NULL;

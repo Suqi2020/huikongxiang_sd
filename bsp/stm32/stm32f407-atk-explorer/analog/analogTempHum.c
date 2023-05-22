@@ -119,11 +119,11 @@ uint16_t analogTempHumJsonPack(bool respFlag)
 				sprintf(sprinBuf,"%02f",humi );
 				cJSON_AddItemToObject(nodeobj_p,"湿度",cJSON_CreateString(sprinBuf));
 
-				sprintf(sprinBuf,"%llu",utcTime());
+				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 
 		//打包
@@ -223,11 +223,11 @@ bool anaTempHumWarn2Send()
 		    cJSON_AddNumberToObject(nodeobj_p,"temperature_high_alarm",inpoutpFlag.analogTempHum.tempUpFlag);
 			  cJSON_AddNumberToObject(nodeobj_p,"humidity_low_alarm",inpoutpFlag.analogTempHum.humLowFlag);
 			  cJSON_AddNumberToObject(nodeobj_p,"humidity_high_alarm",inpoutpFlag.analogTempHum.humUpFlag);
-				sprintf(sprinBuf,"%llu",utcTime());
+				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 
 		//打包

@@ -1203,6 +1203,71 @@
               <FileType>1</FileType>
               <FilePath>.\sdio\sdioRW.c</FilePath>
             </File>
+            <File>
+              <FileName>sdFangChenJiang.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdFangChenJiang.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdFangWaiPo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdFangWaiPo.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdHuanliu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdHuanliu.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdioRW.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\sdio\sdioRW.h</FilePath>
+            </File>
+            <File>
+              <FileName>sdJiaWan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdJiaWan.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdJingGai.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdJingGai.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdJuFang.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdJuFang.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdLieFengYi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdLieFengYi.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdLiuHuaQing.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdLiuHuaQing.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdShuiWei.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdShuiWei.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdWenShiDu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdWenShiDu.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdYangQi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdYangQi.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdYiYangHuaTan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\sdio\sdYiYangHuaTan.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

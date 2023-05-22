@@ -396,7 +396,7 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 		else{
 			cJSON_AddNumberToObject(root, "code",1);
 		}
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;
@@ -727,7 +727,7 @@ void senseTHSetJsonResp(cJSON   *Json,bool  modbusFlag)
 		else{
 			cJSON_AddNumberToObject(root, "code",1);
 		}
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;

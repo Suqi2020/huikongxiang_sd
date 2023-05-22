@@ -357,13 +357,13 @@ uint16_t partDischagJsonPack(bool respFlag)
 				cJSON_AddItemToObject(nodeobj_p,"prpsDataC",cJSON_CreateString(""));
 				
 				
-				sprintf(sprinBuf,"%llu",utcTime());
+				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 			}
 		}
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		//打包
@@ -507,12 +507,12 @@ bool modPartDischagWarn2Send()
 							cJSON_AddNumberToObject(nodeobj_p,"freqC_high_alarm",inpoutpFlag.modbusPartDisChg[i].freqCUpFlag);		
 							cJSON_AddNumberToObject(nodeobj_p,"dischargeDateC_low_alarm",inpoutpFlag.modbusPartDisChg[i].dischargeCLowFlag);
 							cJSON_AddNumberToObject(nodeobj_p,"dischargeDateC_high_alarm",inpoutpFlag.modbusPartDisChg[i].dischargeCUpFlag);	
-							sprintf(sprinBuf,"%llu",utcTime());
+							sprintf(sprinBuf,"%llu",utcTime_ms());
 							cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 						}
 				}
 		}
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;

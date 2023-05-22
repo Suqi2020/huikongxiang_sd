@@ -306,7 +306,7 @@ uint16_t circulaJsonPack(bool respFlag)
 					cJSON_AddItemToObject(nodeobj_p,"earthCurC",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"runCurC",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
-					sprintf(sprinBuf,"%llu",utcTime());
+					sprintf(sprinBuf,"%llu",utcTime_ms());
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"\r\n");
 //					huanLiuTxtReadSD(sheet.cirCula[i].ID);
 					//uint32_t time =65000;
@@ -322,7 +322,7 @@ uint16_t circulaJsonPack(bool respFlag)
 			}
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 
@@ -477,12 +477,12 @@ bool modCirCurrWarn2Send()
 							cJSON_AddNumberToObject(nodeobj_p,"runCurC_high_alarm",0);		
 							cJSON_AddNumberToObject(nodeobj_p,"loadRatioC_low_alarm",0);
 							cJSON_AddNumberToObject(nodeobj_p,"loadRatioC_high_alarm",0);								
-							sprintf(sprinBuf,"%llu",utcTime());
+							sprintf(sprinBuf,"%llu",utcTime_ms());
 							cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 						}
 				}
 		}
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;

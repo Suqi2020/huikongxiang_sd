@@ -149,13 +149,13 @@ uint16_t waterDepthJsonPack(bool respFlag)
 				sprintf(sprinBuf,"%02f",waterDepth[i]);
 				cJSON_AddItemToObject(nodeobj_p,"depth",cJSON_CreateString(sprinBuf));
 
-				sprintf(sprinBuf,"%llu",utcTime());
+				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 			}
 		}
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		//打包
@@ -260,12 +260,12 @@ bool modPWaterLevWarn2Send()
 //							cJSON_AddNumberToObject(nodeobj_p,"height_low_alarm",inpoutpFlag.modbusPreSettl[i].tempLowFlag);
 //							cJSON_AddNumberToObject(nodeobj_p,"height_high_alarm",inpoutpFlag.modbusPreSettl[i].tempUpFlag);		
 							
-							sprintf(sprinBuf,"%llu",utcTime());
+							sprintf(sprinBuf,"%llu",utcTime_ms());
 							cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 						}
 				}
 		}
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;

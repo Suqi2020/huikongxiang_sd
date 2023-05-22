@@ -29,7 +29,7 @@ uint16_t resetMcuResp(cJSON *Json)
 		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		cJSON_AddStringToObject(root, "identifier","digital_output");
 		cJSON_AddNumberToObject(root, "code",0);
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		//打包
@@ -232,7 +232,7 @@ uint16_t resetDeviceResp(cJSON *Json,char *identify)
 			cJSON_AddNumberToObject(root, "code",1);
 		else
 			cJSON_AddNumberToObject(root, "code",0);
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		//打包
@@ -303,7 +303,7 @@ uint16_t saveMcuResp()
 		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		cJSON_AddNumberToObject(root, "code",0);
 
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 

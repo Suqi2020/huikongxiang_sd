@@ -203,13 +203,13 @@ uint16_t crackMeterJsonPack(bool respFlag)
 
 					sprintf(sprinBuf,"%02f",crackMeter[i].distanc.flotVal );
 					cJSON_AddItemToObject(nodeobj_p,"distance",cJSON_CreateString(sprinBuf));
-					sprintf(sprinBuf,"%llu",utcTime());
+					sprintf(sprinBuf,"%llu",utcTime_ms());
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 				}
 			}
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 
@@ -324,12 +324,12 @@ bool modCrackMeterWarn2Send()
 							cJSON_AddNumberToObject(nodeobj_p,"distance_low_alarm",inpoutpFlag.modbusCrackMeter[i].distancLowFlag);
 							cJSON_AddNumberToObject(nodeobj_p,"distance_high_alarm",inpoutpFlag.modbusCrackMeter[i].distancUpFlag);		
 							
-							sprintf(sprinBuf,"%llu",utcTime());
+							sprintf(sprinBuf,"%llu",utcTime_ms());
 							cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 						}
 				}
 		}
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;

@@ -51,7 +51,7 @@ uint16_t digitalInputReport()
 			}
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 
@@ -153,7 +153,7 @@ uint16_t digitalInputGetResp(cJSON *Json)
 		}
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 
@@ -320,7 +320,7 @@ uint16_t digitalOutputReport(char *identify)
 			}
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 
@@ -451,7 +451,7 @@ uint16_t digitalOutputGetResp(cJSON *Json,char *identify)
 				
 		}
 		}
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		//打包
@@ -579,7 +579,7 @@ uint16_t digitalOutputSetResp(cJSON *Json,char *identify)
 		else
 			cJSON_AddNumberToObject(root, "code",0);
 
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 

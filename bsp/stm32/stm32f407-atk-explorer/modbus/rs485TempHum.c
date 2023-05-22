@@ -189,13 +189,13 @@ static uint16_t tempHumJsonPack(bool respFlag)
 
 				sprintf(sprinBuf,"%02f",thum[i].hum );
 				cJSON_AddItemToObject(nodeobj_p,"humidity",cJSON_CreateString(sprinBuf));
-				sprintf(sprinBuf,"%llu",utcTime());
+				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 			}
 		}
 		}
 	
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 
@@ -289,12 +289,12 @@ bool modTempHumWarn2Send()
 							cJSON_AddNumberToObject(nodeobj_p,"temperature_high_alarm",inpoutpFlag.modbusTempHum[i].tempUpFlag);
 							cJSON_AddNumberToObject(nodeobj_p,"humidity_low_alarm",inpoutpFlag.modbusTempHum[i].humLowFlag);
 							cJSON_AddNumberToObject(nodeobj_p,"humidity_high_alarm",inpoutpFlag.modbusTempHum[i].humUpFlag);
-							sprintf(sprinBuf,"%llu",utcTime());
+							sprintf(sprinBuf,"%llu",utcTime_ms());
 							cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 						}
 				}
 		}
-		sprintf(sprinBuf,"%llu",utcTime());
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;

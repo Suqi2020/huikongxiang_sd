@@ -72,100 +72,25 @@ FRESULT res_sd;                /* 文件操作结果 */
 extern Diskio_drvTypeDef  SD_Driver;
 
 extern rt_bool_t gbSDExit;
-//在 creatFolder创建的文件夹下边创建带有ID号命令的txt文件
-//如 GYNJLXSD000000562.txt
-const char huanliuText[]="earthCurA  runCurA  loadRatioA  earthCurB  runCurB  loadRatioB  earthCurC  runCurC  loadRatioC  time\r\n";
-#define HUANLIU_DATA_LEN 200
-void huanLiuTxtReadSD(char *id)
+//extern uint64_t utcTime_ms();
+
+
+//后期需要用时间戳转换函数来实现
+DWORD  get_fattime (void)
 {
-		char *txtName;
-	  char *readData;
-		uint32_t fnum;
-    int ret;
-		if(gbSDExit==false){
-				return;
-		 }
-		txtName =rt_malloc(50);
-		readData=rt_malloc(HUANLIU_DATA_LEN);
-		strcpy(txtName,modbusName[CIRCULA]);
-		strcat(txtName,"/");
-		strcat(txtName,id);
-		strcat(txtName,".txt");
-		ret=f_open(&fnew,txtName, FA_OPEN_EXISTING|FA_READ);//suqi
-		int realLen=0;
-		if(ret==FR_OK){
-			  //printf("%ssizeof(fnew):%d\r\n",sign,fnew.fsize);
-				memset(readData,0,HUANLIU_DATA_LEN);
-				while(realLen<f_size(&fnew))
-				{
-					f_gets(readData,HUANLIU_DATA_LEN,&fnew);
-					printf("%sread:%s\r\n",sign,readData);
-				
-					realLen=f_tell(&fnew);
-					printf("%sreallen:%d\r\n",sign,realLen);
-				
-					f_lseek(&fnew, realLen);  
-					memset(readData,0,HUANLIU_DATA_LEN);
-				}
+	DWORD Value;
+	Value = ((23 + 20) << 25) | (5 << 21) | (22 << 16) |
+				 (9 << 11) | (0 << 5) | (0 >> 1);
 
-		}
-		else{
-				rt_kprintf("%sERR:f_open read %s,ret=%d\n",sign,txtName,ret);
-		}
-		f_close(&fnew);
-		rt_free(txtName);
-		txtName=NULL;
-		rt_free(readData);
-		readData=NULL;
-		static int testtime=0;
-		testtime++;
-		while(testtime==3){
-			rt_thread_delay(2000);
-			rt_kprintf("%sRead end\n",sign);
-		}
+  return Value;
+  return 0;//(DWORD )+254275200;//utcTime_s()
 }
-uint32_t writetime=0;
-void huanLiuTxtSaveSD(char *id,char *data)
-{
-		char *txtName;
-		uint32_t fnum;
-    int ret;
-		if(gbSDExit==false){
-				return;
-		 }
-		txtName =rt_malloc(50);
-		strcpy(txtName,modbusName[CIRCULA]);
-		strcat(txtName,"/");
-		strcat(txtName,id);
-		strcat(txtName,".txt");
-		ret=f_open(&fnew,txtName, FA_WRITE);//suqi
-		if(ret==FR_OK){
-			f_lseek(&fnew,f_size(&fnew));
-			res_sd=f_write(&fnew,data,strlen(data),&fnum);
-			if(res_sd!=FR_OK){
 
-				rt_kprintf("%sERR:f_write %s,res_sd=%d\n",sign,txtName,res_sd);
-					rt_thread_delay(3000);
-			}
-			else {
-				writetime++;
-				rt_kprintf("%sOK:f_write %s total times[%d] realy times[%d]\n",sign,txtName,writetime,(((writetime-1)/3)+1));
-				rt_kprintf("%s %s\n",sign,txtName);
-			}
-		}
-		else{
-			//while(1)
-			{
 
-			rt_kprintf("%sERR:f_open  write %s,ret=%d\n",sign,txtName,ret);
-					rt_thread_delay(3000);
-			}
-		}
-		f_close(&fnew);
-		rt_free(txtName);
-		txtName=NULL;
-}
-void creatIDtxt(int i)
+
+
+//创建2级别目录ID目录
+void creatIDFolder(int i)
 {
 		char *txtName;
 	  uint32_t fnum;
@@ -179,31 +104,7 @@ void creatIDtxt(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.cirCula[j].ID);
-							strcat(txtName,".txt");
-							ret=f_open(&fnew,txtName,FA_CREATE_NEW | FA_WRITE);
-							if(!((ret==0)||(ret==8))){
-									rt_kprintf("%sERR:creat txtname %d\n",sign,ret);
-							}
-							res_sd=f_write(&fnew,huanliuText,strlen(huanliuText),&fnum);
-							f_lseek(&fnew,f_size(&fnew));
-							f_close(&fnew);
-//												cJSON_AddItemToObject(nodeobj_p,"earthCurA",cJSON_CreateString(sprinBuf));
-//					cJSON_AddItemToObject(nodeobj_p,"runCurA",cJSON_CreateString(""));
-//					cJSON_AddItemToObject(nodeobj_p,"loadRatioA",cJSON_CreateString(""));
-//					
-//					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurB);
-//					cJSON_AddItemToObject(nodeobj_p,"earthCurB",cJSON_CreateString(sprinBuf));
-//					cJSON_AddItemToObject(nodeobj_p,"runCurB",cJSON_CreateString(""));
-//					cJSON_AddItemToObject(nodeobj_p,"loadRatioB",cJSON_CreateString(""));
-//					
-//					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurC);
-//					cJSON_AddItemToObject(nodeobj_p,"earthCurC",cJSON_CreateString(sprinBuf));
-//					cJSON_AddItemToObject(nodeobj_p,"runCurC",cJSON_CreateString(""));
-//					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));
-//					sprintf(sprinBuf,"%llu",utcTime());
-//					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
-					
-					
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 						}
 				}
@@ -320,7 +221,7 @@ void creatIDtxt(int i)
 	 txtName=NULL;
 }
 
-//上电后创建jinggai yangqi huanliu等传感器命令的文件夹
+//上电后创建jinggai yangqi huanliu等传感器命令的文件夹 一级目录
 void creatFolder()
 {
 	 volatile int ret;
@@ -329,30 +230,22 @@ void creatFolder()
    //在外部SD卡挂载文件系统，文件系统挂载时会对SD卡初始化
    res_sd = f_mount(&fs,"0:",1);  
    if(res_sd==FR_OK){
-			//f_close(&fnew);
 		  for(int j=0;j<MODBUS_NUM;j++){
 					ret=f_mkdir(modbusName[j]);//创建目录
-				  if((ret==FR_OK)||(ret==FR_EXIST))
-							creatIDtxt(j);
+				  if((ret==FR_OK)||(ret==FR_EXIST)){
+						  creatIDFolder(j);
+					}
 					else
-					//f_open(&fnew, "FatFs读写测试文件1.txt",FA_CREATE_ALWAYS);//创建文档
-					rt_kprintf("%sERR:mkdir ret=%d\n",sign,ret);
+							rt_kprintf("%sERR:mkdir ret=%d\n",sign,ret);
 			}
 			f_close(&fnew);
 	 }
     /* 不再使用文件系统，取消挂载文件系统 */
-    //f_mount(NULL,"0:",1);
 		if(gbSDExit==false){
 				rt_kprintf("%s请插入TF卡并重启设备\n",sign);
 				return;
-		 }
+		}
 }
-/**
-  * @}
-  */ 
 
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

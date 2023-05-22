@@ -75,7 +75,7 @@ typedef struct{
 		digitStru v33output[V33O_NUM]; //3V3电源输出
 		digitStru v5output[V5O_NUM];   //5V电源输出
 		digitStru v12output[V12O_NUM]; //12V电源输出
-	
+	  uint64_t  utcTime;
 //			//配置的输入输出高低电平有效需要存储
 //		digitStru_p        digInput[DI_NUM];
 //		digitStru_p        digOutput[DO_NUM];

@@ -83,7 +83,7 @@ rt_bool_t heartRespFun(cJSON  *Json)
 
 		rt_kprintf("%stime:[%lu]ms\r\n",sign, (uint32_t)(u64getTick_p)%1000);
 	  extern void  subTimeStampSet(uint64_t time);
-	  if(utcTime()-u64getTick_p>=3000){
+	  if(utcTime_ms()-u64getTick_p>=3000){
         subTimeStampSet(u64getTick_p);
 			  rt_kprintf("%stime:RTC 误差大于3秒 校时\r\n",sign);
 		}

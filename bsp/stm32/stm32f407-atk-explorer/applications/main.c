@@ -27,8 +27,23 @@
 		available: 44068
 		RAM:占用 71.97（变量编译后）+12.92（操作系统malloc）=84.88k 剩余43.03K  剩余量 33.6%
 		ROM:占用:264.04k +参数保存占用最后一个128K 总共392.04k  剩余量61.8%
-=============================================================================================
+		
 
+=============================================================================================
+==============================================================================
+
+    //Total RO  Size (Code + RO Data)               468200 ( 457.23kB)
+    Total RW  Size (RW Data + ZI Data)             63632 (  62.14k//
+    Total ROM Size (Code + RO Data + RW Data)     468508 ( 457.53kB)
+		[16:05:24.710]收←◆free
+		total    : 67360
+		used     : 12124
+		maximum  : 19636
+		available: 55236
+		
+		RAM:占用 62.14k（变量编译后）+11.83（操作系统malloc）=74k 剩余54K  剩余量 42%
+		ROM:占用:457.53kB +参数保存占用最后一个128K 总共571.8k  剩余量44.2%
+==============================================================================
 
 */
 //https://github.com/Suqi2020/huikongxiang_env.git
@@ -128,10 +143,10 @@
 //         1、去掉串口和LCD配置传感器时候4种气体的的deviceID查重
 //         2、统一4种气体定时器为co定时器
 //         3、更改4种气体打包逻辑  2023-1-7
-//V0.58    utcTime()打包json格式错误
-//         sprintf(sprinBuf,"%u",utcTime()); 
-//         更改为		sprintf(sprinBuf,"%llu",utcTime());
-//         更改uint32_t utcTime() 为 uint64_t utcTime()  2023-1-10
+//V0.58    utcTime_ms()打包json格式错误
+//         sprintf(sprinBuf,"%u",utcTime_ms()); 
+//         更改为		sprintf(sprinBuf,"%llu",utcTime_ms());
+//         更改uint32_t utcTime_ms() 为 uint64_t utcTime_ms()  2023-1-10
 //V0.59    修改串口配置modbus传感器情况下不能删除传感器  2023-1-11
 //V0.60		 增加串口digitalinput配置以及存储              2023-1-12
 //V0.61    增加串口digital output 配置以及存储 参考文档《汇控箱modbus串口配置V0.3》 2023-1-17
@@ -193,11 +208,11 @@
 //         SDIO_TRANSFER_CLK_DIV  设置为2 原本为0  导致读写sd速度过快  84/2+2 =21mhz 不能大于25Mhz
 //V3.02    采用安富来的rafts驱动代替野火的  写入65000条 测试OK  20230519 
 //V3.03    SDIO_TRANSFER_CLK_DIV改为0 提高写入速度 达到3538992字节/279秒=12.38KB/秒
-
-#define APP_VER       ((3<<8)+3)//0x0105 表示1.5版本
+//V3.04    增加sd写入时候根据时间保存 以ID号建立二级目录 保存RTC记录。
+#define APP_VER       ((3<<8)+4)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230521";
+const char date[]="20230522";
 
 //static    rt_thread_t tid 	= RT_NULL;
 static    rt_thread_t tidW5500 	  = RT_NULL;
@@ -206,8 +221,8 @@ static    rt_thread_t tidNetSend 	= RT_NULL;
 static    rt_thread_t tidUpkeep 	= RT_NULL;
 static    rt_thread_t tidLCD      = RT_NULL;
 static    rt_thread_t tidAutoCtrl = RT_NULL;
-//信号量的定义
-//extern  rt_sem_t  w5500Iqr_semp ;//w5500有数据时候中断来临
+
+
 //互斥信号量定义
 rt_mutex_t   read485_mutex=RT_NULL;//防止多个线程同事读取modbus数据
 rt_mutex_t   lcdSend_mutex=RT_NULL;//防止多个线程同事往lcd发数据
@@ -295,22 +310,9 @@ extern void creatFolder(void);
 void  outIOInit(void);
 int main(void)
 {
-
-//		RELAY1_ON;
-//		RELAY2_ON;
-//		RELAY3_ON;
-//		RELAY4_ON;//上电后外部485全部供
-
-		
 		
 	  rt_kprintf("\n%\n",sign,date,(uint8_t)(APP_VER>>8),(uint8_t)APP_VER);
     rt_kprintf("\n%s%s  ver=%02d.%02d\n",sign,date,(uint8_t)(APP_VER>>8),(uint8_t)APP_VER);
-//	if(1.00001==1)
-//		rt_kprintf("(1.00001==1)\n");
-//	if(1.0000000==1)
-//		rt_kprintf("(1.00000==1)\n");
-	 // rt_kprintf("[%s %f]\n",strnum,atof(strnum));
-	  //rt_kprintf("name %s  %s\n",modbusName[0],modbusName_utf8[0]);
 	  rt_err_t result;
 		stm32_flash_read(FLASH_IP_SAVE_ADDR,    (uint8_t*)&packFlash,sizeof(packFlash));
 		stm32_flash_read(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,    sizeof(sheet));
@@ -318,39 +320,10 @@ int main(void)
 		if(packFlash.acuId[0]>=0x7F){
 				rt_strcpy(packFlash.acuId,"000000000000001");//必须加上 执行cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		}    
-		//creatFolder();
+		if(packFlash.utcTime==0xffffffffffffffff){
+				packFlash.utcTime=0;
+		}
 		creatFolder();
-//		extern void testSD();		
-//		testSD();
-		//会导致内存泄漏	
-	//		sheet.testFlag[0]=testNum+0;
-//		sheet.testFlag[1]=&testNum[1];
-//		sheet.testFlag[2]=&testNum[2];
-//		sheet.testFlag[3]=&testNum[3];
-//	  for(int i=0;i<4;i++){
-//				//rt_kprintf("%d ",testNum[i]);
-//			  rt_kprintf("%d ",*sheet.testFlag[i]);
-//		}
-//		rt_kprintf("\n");
-//		for(int i=0;i<4;i++){
-//				testNum[i]=i+10;
-//		}
-//		
-//		for(int i=0;i<4;i++){
-//				rt_kprintf("%d ",*sheet.testFlag[i]);
-//		}
-//		rt_kprintf("\n");
-//		stm32_flash_erase(FLASH_IP_SAVE_ADDR, sizeof(packFlash));//每次擦除128k字节数据 存储时候需要一起存储
-//		stm32_flash_write(FLASH_IP_SAVE_ADDR,(uint8_t*)&packFlash,sizeof(packFlash));
-//		stm32_flash_write(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,sizeof(sheet));
-		
-//////////////////////////////////////信号量//////////////////////////////
-//	  w5500Iqr_semp = rt_sem_create("w5500Iqr_semp",0, RT_IPC_FLAG_FIFO);
-//		if (w5500Iqr_semp == RT_NULL)
-//    {
-//        rt_kprintf("%screate w5500Iqr_semp failed\n",sign);
-//    }
-		
 		
 		  /* 创建定时器 周期定时器 */
     timer1 = rt_timer_create("timer1", timeout1,
