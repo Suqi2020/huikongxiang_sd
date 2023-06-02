@@ -165,7 +165,7 @@
 //         更改模拟温湿度读取数值不准确  已经实现并且测试
 //V0.74    修复配置threadshold 时候高低值放反的问题 
 //V0.75    修复自动配置出现的bug
-//V0.76    增加开关控制的接口显示V3O V12O V5O
+//V0.76    增加开关控制的接口显示V3O SWITCH V5O
 //V0.77    增加开关控制对接LCD屏，测试OK
 //V0.78    增加电平显示窗口默认显示电平值  20230312
 //V0.79    输入设置配置测试OK
@@ -209,10 +209,11 @@
 //V3.02    采用安富来的rafts驱动代替野火的  写入65000条 测试OK  20230519 
 //V3.03    SDIO_TRANSFER_CLK_DIV改为0 提高写入速度 达到3538992字节/279秒=12.38KB/秒
 //V3.04    增加sd写入时候根据时间保存 以ID号建立二级目录 保存RTC记录。
-#define APP_VER       ((3<<8)+4)//0x0105 表示1.5版本
+//V3.05    使用STM32F4中的CCM的另外64K内存  __attribute__((at(0x10000000)));
+#define APP_VER       ((3<<8)+5)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230522";
+const char date[]="20230602";
 
 //static    rt_thread_t tid 	= RT_NULL;
 static    rt_thread_t tidW5500 	  = RT_NULL;
@@ -247,8 +248,13 @@ struct rt_event WDTEvent;
 
 
 //队列的定义
-struct  rt_messagequeue LCDmque;//= {RT_NULL} ;//创建LCD队列
-uint8_t LCDQuePool[LCD_BUF_LEN];  //创建lcd队列池
+
+#if   USE_RINGBUF
+
+#else
+	struct  rt_messagequeue LCDmque;//= {RT_NULL} ;//创建LCD队列
+	uint8_t LCDQuePool[LCD_BUF_LEN];  //创建lcd队列池
+#endif
 //任务的定义
 extern  void   netDataRecTask(void *para);//网络数据接收
 extern  void   netDataSendTask(void *para);//网络数据发送
@@ -342,12 +348,16 @@ int main(void)
     {
         rt_kprintf("%screate lcdSend_mutex failed\n",sign);
     }
+#if   USE_RINGBUF
+
+#else
 		int ret = rt_mq_init(&LCDmque,"LCDrecBuf",&LCDQuePool[0],1,LCD_BUF_LEN,RT_IPC_FLAG_FIFO);       
 		if (ret != RT_EOK)
 		{
 				rt_kprintf("%sinit LCD msgque failed.\n",sign);
 				return -1;
 		}
+#endif
 		extern void 	uartMutexQueueCreate();
 		uartMutexQueueCreate();
 ////////////////////////////////////邮箱//////////////////////////////////
@@ -375,34 +385,35 @@ int main(void)
 		
 
 ////////////////////////////////任务////////////////////////////////////
-//    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,1024,3, 10 );
-//		if(tidW5500!=NULL){
-//				rt_thread_startup(tidW5500);													 
-//				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
-//		}
-		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,1024,2, 10 );
+
+		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512,3, 10 );
 		if(tidNetRec!=NULL){
 				rt_thread_startup(tidNetRec);													 
 				rt_kprintf("%sRTcreat netDataRecTask \r\n",sign);
 		}
-		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,1024,2, 10 );
+		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512,3, 10 );
 		if(tidNetSend!=NULL){
 				rt_thread_startup(tidNetSend);													 
 				rt_kprintf("%sRTcreat netDataSendTask \r\n",sign);
 		}
 
 		
-		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*3,4, 10 );
+		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*2,4, 10 );
 		if(tidUpkeep!=NULL){
 				rt_thread_startup(tidUpkeep);													 
 				rt_kprintf("%sRTcreat upKeepStateTask \r\n",sign);
 		}
-		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512*3,2, 10 );
+		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512,2, 10 );
 		if(tidLCD!=NULL){
 				rt_thread_startup(tidLCD);													 
 				rt_kprintf("%sRTcreat LCDStateTask \r\n",sign);
 		}
-		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,1024,5, 10 );
+    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,1024,2, 10 );
+		if(tidW5500!=NULL){
+				rt_thread_startup(tidW5500);													 
+				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
+		}
+		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512,5, 10 );
 		if(tidAutoCtrl!=NULL){
 				rt_thread_startup(tidAutoCtrl);													 
 				rt_kprintf("%sRTcreat autoCtrlTask\r\n",sign);
@@ -415,8 +426,6 @@ int main(void)
 				rt_thread_startup(tidWDT);													 
 				rt_kprintf("%sRTcreat WDTTask\r\n",sign);
 		}
-	
-
 		HAL_IWDG_Refresh(&hiwdg);
 #endif	
 		//队列初始化之后再开启串口中断接收

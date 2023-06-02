@@ -115,7 +115,7 @@ void  w5500Task(void *parameter)
 						loopback_tcp( packFlash.netIpFlash.remotePort);
 						rt_thread_delay(100);
 					  if(gbNetState ==RT_FALSE){//没联网  重新初始化
-								if(count++>5){ //5秒或者连续中断5次 还没联网 重启
+								if(count++>20){ //5秒或者连续中断5次 还没联网 重启
 										W5500State=W5500InitEnum;
 									  count=0;
 								}

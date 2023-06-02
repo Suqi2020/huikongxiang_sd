@@ -85,12 +85,12 @@ uint16_t logCrtlReadResp(cJSON *Json)
 		// 打印JSON数据包  
 		//打包
 		int len=0;
-		packBuf[len]= (uint8_t)(HEAD>>8); len++;
-		packBuf[len]= (uint8_t)(HEAD);    len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
 		// 释放内存  
 		out = cJSON_Print(root);
-		rt_strcpy((char *)packBuf+len,out);
+		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
 				for(int i=0;i<rt_strlen(out);i++)
@@ -104,16 +104,16 @@ uint16_t logCrtlReadResp(cJSON *Json)
 			out=NULL;
 		}
 		//lenth
-	  packBuf[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  packBuf[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(packBuf+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc);    len++;
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 		//tail
-		packBuf[len]=(uint8_t)(TAIL>>8); len++;
-		packBuf[len]=(uint8_t)(TAIL);    len++;
-		packBuf[len]=0;//len++;//结尾 补0
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
 	  return len;
@@ -222,12 +222,12 @@ uint16_t logCrtlAddResp(cJSON *Json)
 		// 打印JSON数据包  
 		//打包
 		int len=0;
-		packBuf[len]= (uint8_t)(HEAD>>8); len++;
-		packBuf[len]= (uint8_t)(HEAD);    len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
 		// 释放内存  
 		out = cJSON_Print(root);
-		rt_strcpy((char *)packBuf+len,out);
+		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
 				for(int i=0;i<rt_strlen(out);i++)
@@ -241,16 +241,16 @@ uint16_t logCrtlAddResp(cJSON *Json)
 			out=NULL;
 		}
 		//lenth
-	  packBuf[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  packBuf[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(packBuf+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc);    len++;
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 		//tail
-		packBuf[len]=(uint8_t)(TAIL>>8); len++;
-		packBuf[len]=(uint8_t)(TAIL);    len++;
-		packBuf[len]=0;//len++;//结尾 补0
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
 	  return len;
@@ -304,12 +304,12 @@ uint16_t logCtrlDel(cJSON *Json)
 		// 打印JSON数据包  
 		//打包
 		int len=0;
-		packBuf[len]= (uint8_t)(HEAD>>8); len++;
-		packBuf[len]= (uint8_t)(HEAD);    len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
 		// 释放内存  
 		out = cJSON_Print(root);
-		rt_strcpy((char *)packBuf+len,out);
+		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
 				for(int i=0;i<rt_strlen(out);i++)
@@ -323,23 +323,23 @@ uint16_t logCtrlDel(cJSON *Json)
 			out=NULL;
 		}
 		//lenth
-	  packBuf[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  packBuf[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(packBuf+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc);    len++;
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 		//tail
-		packBuf[len]=(uint8_t)(TAIL>>8); len++;
-		packBuf[len]=(uint8_t)(TAIL);    len++;
-		packBuf[len]=0;//len++;//结尾 补0
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
 	  return len;
 }
 bool v33OutputReadFun(char num);
 bool v5OutputReadFun(char num);
-bool v12OutputReadFun(char num);
+bool switchOutputReadFun(char num);
 bool digOutputReadFun(char num);
 //子站删除逻辑控制回应
 uint16_t logCrtlDelResp(cJSON *Json,char *identify)
@@ -402,13 +402,13 @@ uint16_t logCrtlDelResp(cJSON *Json,char *identify)
 				}
 			}
 			else if(rt_strcmp(identify,"12v_output")==0){
-				for(int j=0;j<V12O_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
-					if(0==rt_strcmp(packFlash.v12output[j].devID ,devID->valuestring)){//打开
+				for(int j=0;j<SWITCH_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
+					if(0==rt_strcmp(packFlash.switchoutput[j].devID ,devID->valuestring)){//打开
 						nodeobj = cJSON_CreateObject();
 						cJSON_AddItemToArray(Array, nodeobj);
-						cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(packFlash.v12output[j].devID));
-						cJSON_AddNumberToObject(nodeobj,"levelStatus",v12OutputReadFun(j));
-						cJSON_AddNumberToObject(nodeobj,"port",packFlash.v12output[j].port);
+						cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(packFlash.switchoutput[j].devID));
+						cJSON_AddNumberToObject(nodeobj,"levelStatus",switchOutputReadFun(j));
+						cJSON_AddNumberToObject(nodeobj,"port",packFlash.switchoutput[j].port);
 					}
 				}
 			}
@@ -432,12 +432,12 @@ uint16_t logCrtlDelResp(cJSON *Json,char *identify)
 		// 打印JSON数据包  
 		//打包
 		int len=0;
-		packBuf[len]= (uint8_t)(HEAD>>8); len++;
-		packBuf[len]= (uint8_t)(HEAD);    len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
 		// 释放内存  
 		out = cJSON_Print(root);
-		rt_strcpy((char *)packBuf+len,out);
+		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
 				for(int i=0;i<rt_strlen(out);i++)
@@ -451,16 +451,16 @@ uint16_t logCrtlDelResp(cJSON *Json,char *identify)
 			out=NULL;
 		}
 		//lenth
-	  packBuf[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  packBuf[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(packBuf+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc);    len++;
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 		//tail
-		packBuf[len]=(uint8_t)(TAIL>>8); len++;
-		packBuf[len]=(uint8_t)(TAIL);    len++;
-		packBuf[len]=0;//len++;//结尾 补0
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
 	  return len;

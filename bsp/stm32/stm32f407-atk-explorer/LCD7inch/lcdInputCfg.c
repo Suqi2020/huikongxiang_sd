@@ -40,6 +40,12 @@ void lcdCopyInputID(uint8_t *rec)
 				break;
 		}
 	}
+	if(devIDOKCheck(digInputLCD.devID)!=true){//核对ID
+			LCDDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
+		  rt_kprintf("%sERR:same ID\n",sign);
+	}
+	else 
+		  LCDRstDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
 }
 //拷贝输入的type到digInputLCD中
 void lcdCopyInputModel(uint8_t *rec)
@@ -64,6 +70,11 @@ void lcdCopyInputPort(uint8_t *rec)
 void  lcdInputConfig()
 {
 		int port=digInputLCD.port;
+		if(devIDOKCheck(digInputLCD.devID)!=true){//核对ID
+				LCDDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
+			  rt_kprintf("%sERR:same ID\n",sign);
+				return;
+		}
 		if((port<=DI_NUM)&&(port>0)){//添加
 				packFlash.diginput[port-1].workFlag=RT_TRUE;
 				rt_strcpy(packFlash.diginput[port-1].name, digInputLCD.name);

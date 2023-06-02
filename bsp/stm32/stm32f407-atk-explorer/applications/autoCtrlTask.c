@@ -125,7 +125,7 @@ void v5OutputOFFFun(char num)
 
 //V12 output 置高  
 //输入 通道号
-void v12OutputONFun(char num)
+void switchOutputONFun(char num)
 {
 	switch(num)
 	{
@@ -138,7 +138,7 @@ void v12OutputONFun(char num)
 }
 //V12 output 置低  
 //输入 通道号
-void v12OutputOFFFun(char num)
+void switchOutputOFFFun(char num)
 {
 	switch(num)
 	{
@@ -185,7 +185,7 @@ bool v5OutputReadFun(char num)
 	}
 	return false;
 }
-bool v12OutputReadFun(char num)
+bool switchOutputReadFun(char num)
 {
 	switch(num)
 	{
@@ -236,14 +236,14 @@ void  outIOInit()
 										rt_kprintf("%s v5output off %d\n",sign,z);
 								}
 						}
-						for(z=0;z<V12O_NUM;z++){
-								if(sheet.autoctrl[j].output[z].flag==&inpoutpFlag.v12Output[z].lowFlag){
-										v12OutputONFun(z);//默认低有效  初始化高的
-										rt_kprintf("%s v12output on %d\n",sign,z);
+						for(z=0;z<SWITCH_NUM;z++){
+								if(sheet.autoctrl[j].output[z].flag==&inpoutpFlag.switchOutput[z].lowFlag){
+										switchOutputONFun(z);//默认低有效  初始化高的
+										rt_kprintf("%s switchoutput on %d\n",sign,z);
 								}
-								if(sheet.autoctrl[j].output[z].flag==&inpoutpFlag.v12Output[z].upFlag){
-										v12OutputOFFFun(z);//默认高有效  初始化低的
-										rt_kprintf("%s v12output off %d\n",sign,z);
+								if(sheet.autoctrl[j].output[z].flag==&inpoutpFlag.switchOutput[z].upFlag){
+										switchOutputOFFFun(z);//默认高有效  初始化低的
+										rt_kprintf("%s switchoutput off %d\n",sign,z);
 								}
 						}
 				}
@@ -278,7 +278,7 @@ void  inIOInit()
 uint8_t doUpLowFlag[DO_NUM]={0};  //标记给个初值为了判断低电平还是高电平有效，标记失效时候执行相应动作
 uint8_t v33oUpLowFlag[V33O_NUM]={0};
 uint8_t v5oUpLowFlag[V5O_NUM]={0};
-uint8_t v12oUpLowFlag[V12O_NUM]={0};
+uint8_t switchoUpLowFlag[SWITCH_NUM]={0};
 //输出电平执行
 void  ctrlOutSetIO()
 {
@@ -360,27 +360,27 @@ void  ctrlOutSetIO()
 					}
 			}
 
-			for(i=0;i<V12O_NUM;i++){
-					if(inpoutpFlag.v12Output[i].lowFlag==true){
-							v12OutputOFFFun(i);
-						  //rt_kprintf("%s ctrlOutSetIO v12O off %d\n",sign,i);
-						  v12oUpLowFlag[i]=1;
-						  inpoutpFlag.v12Output[i].lowFlag=false;
+			for(i=0;i<SWITCH_NUM;i++){
+					if(inpoutpFlag.switchOutput[i].lowFlag==true){
+							switchOutputOFFFun(i);
+						  //rt_kprintf("%s ctrlOutSetIO switchO off %d\n",sign,i);
+						  switchoUpLowFlag[i]=1;
+						  inpoutpFlag.switchOutput[i].lowFlag=false;
 					}
 					else{
-							if(v12oUpLowFlag[i]==1){
-									v12OutputONFun(i);
+							if(switchoUpLowFlag[i]==1){
+									switchOutputONFun(i);
 							}
 					}
-					if(inpoutpFlag.v12Output[i].upFlag==true){
-							v12OutputONFun(i);
-						  //rt_kprintf("%s ctrlOutSetIO v12O on %d\n",sign,i);
-						  v12oUpLowFlag[i]=2;
-						  inpoutpFlag.v12Output[i].upFlag=false;
+					if(inpoutpFlag.switchOutput[i].upFlag==true){
+							switchOutputONFun(i);
+						  //rt_kprintf("%s ctrlOutSetIO switchO on %d\n",sign,i);
+						  switchoUpLowFlag[i]=2;
+						  inpoutpFlag.switchOutput[i].upFlag=false;
 					}
 					else{
-							if(v12oUpLowFlag[i]==2){
-									v12OutputOFFFun(i);
+							if(switchoUpLowFlag[i]==2){
+									switchOutputOFFFun(i);
 							}
 					}
 			}
@@ -393,11 +393,11 @@ void  autoCtrlTask(void *para)
 //	  ctrlPrintf();
 	
 //		for(int i=0;i<4;i++){
-//			v12OutputONFun(i);
+//			switchOutputONFun(i);
 //		}
 //		rt_thread_mdelay(1000);
 //		for(int i=0;i<4;i++){
-//			v12OutputOFFFun(i);
+//			switchOutputOFFFun(i);
 //		}
 //		rt_thread_mdelay(1000);
 	  extern void printModbusDevList();
@@ -441,8 +441,8 @@ void  autoCtrlTask(void *para)
 //		}
 //			rt_kprintf("\n");
 //		rt_kprintf("%sV12 addr\n",sign);
-//			for(i=0;i<V12O_NUM;i++){
-//			rt_kprintf("0x%x 0x%x\n",&inpoutpFlag.v12Output[i].lowFlag,&inpoutpFlag.v12Output[i].upFlag);
+//			for(i=0;i<SWITCH_NUM;i++){
+//			rt_kprintf("0x%x 0x%x\n",&inpoutpFlag.switchOutput[i].lowFlag,&inpoutpFlag.switchOutput[i].upFlag);
 //		}
 //			rt_kprintf("\n");
 //		inpoutpFlag.analogTempHum.humUpFlag=1;

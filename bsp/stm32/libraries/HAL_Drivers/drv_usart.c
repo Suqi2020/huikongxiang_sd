@@ -548,9 +548,12 @@ void UART1_DMA_TX_IRQHandler(void)
 }
 #endif /* defined(RT_SERIAL_USING_DMA) && defined(BSP_UART1_TX_USING_DMA) */
 #endif /* BSP_USING_UART1 */
-char testRecBuf1[200];
-int testCount1;
+//char testRecBuf1[200];
+//int testCount1;
 #if defined(BSP_USING_UART2)
+
+extern struct  rt_messagequeue LCDmque;//= {RT_NULL} ;//创建LCD队列
+extern uint8_t LCDQuePool[LCD_BUF_LEN];  //创建lcd队列池
 void USART2_IRQHandler(void)
 {
     /* enter interrupt */
@@ -563,7 +566,8 @@ void USART2_IRQHandler(void)
 		if((__HAL_UART_GET_FLAG(&huart2,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 		{
 				HAL_UART_Receive(&huart2,&Res,1,1000); 
-			  uartDataRec(USE_UART2,Res);
+			 // uartDataRec(USE_UART2,Res);
+			   rt_mq_send(&LCDmque,&Res,1);
 		}
 		HAL_UART_IRQHandler(&huart2);	
 		#endif
@@ -693,8 +697,7 @@ void UART4_DMA_TX_IRQHandler(void)
 #endif /* BSP_USING_UART4*/
 
 #if defined(BSP_USING_UART5)
-extern struct  rt_messagequeue LCDmque;//= {RT_NULL} ;//创建LCD队列
-extern uint8_t LCDQuePool[LCD_BUF_LEN];  //创建lcd队列池
+
 void UART5_IRQHandler(void)
 {
     /* enter interrupt */
@@ -710,7 +713,7 @@ void UART5_IRQHandler(void)
 			  
 				HAL_UART_Receive(&huart5,&Res,1,1000); 
 //			  rt_kprintf("*%02x*\n",Res);
-			  rt_mq_send(&LCDmque,&Res,1);
+			 
 		}
 		HAL_UART_IRQHandler(&huart5);	
 #endif

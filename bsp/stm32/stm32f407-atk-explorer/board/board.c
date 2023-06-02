@@ -69,7 +69,7 @@ void cubeHardWareInit(void)
   MX_USART1_UART_Init();
 //  MX_UART4_Init(9600);
 //  MX_UART5_Init();
-//  MX_USART2_UART_Init(115200);
+  MX_USART2_UART_Init(115200);
 //  MX_USART3_UART_Init(115200);
 //  MX_USART6_UART_Init(9600);
   MX_ADC1_Init();
@@ -564,10 +564,10 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : W5500_IRQ_Pin */
-  GPIO_InitStruct.Pin = W5500_IRQ_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(W5500_IRQ_GPIO_Port, &GPIO_InitStruct);
+//  GPIO_InitStruct.Pin = W5500_IRQ_Pin;
+//  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+//  GPIO_InitStruct.Pull = GPIO_PULLUP;
+//  HAL_GPIO_Init(W5500_IRQ_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : SPAKER1_Pin SPAKER3_Pin SPAKER4_Pin SPAKER2_Pin
                            IO_OUT6_Pin IO_OUT5_Pin IO_OUT4_Pin IO_OUT3_Pin
@@ -594,8 +594,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(IO_IN8_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+//  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 1, 0);
+//  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 }
 

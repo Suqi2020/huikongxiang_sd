@@ -10,19 +10,22 @@
 
 #include "7inchRegist.h"
 const static char sign[]="[LCD]";
-extern struct  rt_messagequeue LCDmque;
+#if   USE_RINGBUF
 
+#else
+extern struct  rt_messagequeue LCDmque;
+#endif
 uint8_t  sendLCDBuf[LCD_BUF_LEN];
-uint8_t  recLCDBuf[LCD_BUF_LEN];
+//uint8_t  recLCDBuf[LCD_BUF_LEN];
 
 
 
 //往LCD屏幕发送数据 调用底层串口发送函数
-static void LCDDataSend(uint8_t *buf,int lenth)
+ void LCDDataSend(uint8_t *buf,int lenth)
 {
 	 //rt_kprintf("%s LCD send:",sign);
 	 for(int i=0;i<lenth;i++){
-		 HAL_UART_Transmit(&huart5,buf+i,1,1000); 
+		 HAL_UART_Transmit(&huart2,buf+i,1,1000); //串口5被sd卡占用  改成了串口2
 		 //rt_kprintf("%02x ",buf[i]);
 	 }
 	 rt_thread_mdelay(5);//两个相邻数据包 分包
@@ -61,7 +64,6 @@ int LCDWtite(uint16_t addr,uint8_t *data,uint8_t dataLen)
 		rt_mutex_take(lcdSend_mutex,RT_WAITING_FOREVER);
 	  int len=0;
 		rt_memset(sendLCDBuf,0,LCD_BUF_LEN);
-//		rt_memset(recLCDBuf,0,LCD_BUF_LEN);
 		sendLCDBuf[len++]=(uint8_t)(LCD_HEAD>>8);
 	  sendLCDBuf[len++]=(uint8_t)LCD_HEAD;		
 	  sendLCDBuf[len++]=dataLen+2+1;						//长度暂时填充0  2-headlen 1-writelen
@@ -71,29 +73,9 @@ int LCDWtite(uint16_t addr,uint8_t *data,uint8_t dataLen)
 	  for (int i=0;i<dataLen;i++){
 				sendLCDBuf[len++]=data[i];
 		}
-//    int repTimes=2;
-//		while(repTimes--){
-			//data send
-//		rt_kprintf("%s fa:",sign);
-//		for(int i=0;i<len;i++){//ACUID_LEN
-//			 	rt_kprintf("%0x ",sendLCDBuf[i]);
-//		}
-//   rt_kprintf("%\n ");
 		LCDDataSend(sendLCDBuf,len);
 		rt_mutex_release(lcdSend_mutex);
-//		rt_kprintf("%\n ");
-			//data rec
-//				int revLen=0;
-//				if(rt_mq_recv(&LCDmque, recLCDBuf+revLen, 1, 25) == RT_EOK){
-//					revLen++;
-//				}
-//				while(rt_mq_recv(&LCDmque, recLCDBuf+revLen, 1, 2) == RT_EOK){
-//					revLen++;
-//				}
-//				if(revLen){
-//					return LCDWriteResp(recLCDBuf,revLen);
-//				}
-//		}
+
 		return 0;
 }
 
@@ -295,8 +277,3 @@ void  LCDDispNetOffline()
 		}
 		
 }
-
-
-
-
-

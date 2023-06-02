@@ -323,8 +323,8 @@ void printfThresholdList()
 						rt_kprintf("%s ",sheet.cover[i].ID);
 						rt_kprintf("1 ");
 						rt_kprintf("2 ");
-						rt_kprintf("%d ",sheet.modbusCover[i].switchLowLimit);
-						rt_kprintf("%d \n",sheet.modbusCover[i].switchUpLimit);
+						rt_kprintf("%d ",sheet.modbusCover[i].switch2LowLimit);
+						rt_kprintf("%d \n",sheet.modbusCover[i].switch2UpLimit);
 					  rt_kprintf("\n");
 					
 						rt_kprintf("%s threshold ",sign);
@@ -334,6 +334,15 @@ void printfThresholdList()
 						rt_kprintf("3 ");
 						rt_kprintf("%d ",sheet.modbusCover[i].vibrationLowLimit);
 						rt_kprintf("%d \n",sheet.modbusCover[i].vibrationUpLimit);
+					  rt_kprintf("\n");
+						
+						rt_kprintf("%s threshold ",sign);
+						rt_kprintf("%s ",modbusName[COVER]);
+						rt_kprintf("%s ",sheet.cover[i].ID);
+						rt_kprintf("1 ");
+						rt_kprintf("4 ");
+						rt_kprintf("%d ",sheet.modbusCover[i].switch1LowLimit);
+						rt_kprintf("%d \n",sheet.modbusCover[i].switch1UpLimit);
 					  rt_kprintf("\n");
 				}
 				//rt_kprintf("\n");
@@ -614,13 +623,18 @@ bool   modbusThresholdConfig(int num,char *ID,int sensorSubName,float upLimit,fl
 									  return  true;
 								}
 								else if(sensorSubName==2){
-										sheet.modbusCover[i].switchUpLimit  = upLimit;
-									  sheet.modbusCover[i].switchLowLimit = lowLimit;
+										sheet.modbusCover[i].switch2UpLimit  = upLimit;
+									  sheet.modbusCover[i].switch2LowLimit = lowLimit;
 									  return  true;
 								}
 								else if(sensorSubName==3){
 										sheet.modbusCover[i].vibrationUpLimit  = upLimit;
 									  sheet.modbusCover[i].vibrationLowLimit = lowLimit;
+									  return  true;
+								}
+								else if(sensorSubName==4){
+										sheet.modbusCover[i].switch1UpLimit  = upLimit;
+									  sheet.modbusCover[i].switch1LowLimit = lowLimit;
 									  return  true;
 								}
 								else

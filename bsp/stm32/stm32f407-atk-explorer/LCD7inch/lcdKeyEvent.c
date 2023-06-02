@@ -91,6 +91,54 @@ void coverLastDisp(void);
 void coverNextDisp(void);
 void coverNowDisp(void);
 void LCDDispNetErrState(void);
+bool surePassWord(void);
+void LCDRstPw(void);
+
+void dispChooseModbusName(void);
+
+void  nextModName(void);
+
+void  lastModName(void);
+void  changeBmp(int num);
+void  dispCurrentModData(void);
+
+void  dispHuanliuData(void);
+void  nextHuanliuIndex(void);
+void  lastHuanliuIndex(void);
+void  dispJufangData(void);
+void  nextJufangIndex(void);
+void  lastJufangIndex(void);
+void  dispChenjiangData(void);
+void  nextChenJiangIndex(void);
+void  lastChenJiangIndex(void);
+void  dispWaipoData(void);
+void  lastWaipoIndex(void);
+void  nextWaipoIndex(void);
+void  dispCH4Data(void);
+void  nextCH4Index(void);
+void  lastCH4Index(void);
+void  dispO2Data(void);
+void  nextO2Index(void);
+void  lastO2Index(void);
+void  dispH2SData(void);
+void  nextH2SIndex(void);
+void  lastH2SIndex(void);
+void  dispCOData(void);
+void  nextCOIndex(void);
+void  lastCOIndex(void);
+void  dispWenshiduData(void);
+void  nextWenshiduIndex(void);
+void  lastWenshiduIndex(void);
+void  dispWaterData(void);
+void  nextWaterIndex(void);
+void  lastWaterIndex(void);
+void  dispLiefengData(void);
+void  nextLiefengIndex(void);
+void  lastLiefengIndex(void);
+void  nextJinggaiIndex(void);
+void  lastJinggaiIndex(void);
+void  dispJinggaiData(void);
+extern int modbusChosIndex;
 #ifndef     ANA_MASK
 void lcdAnaConfig(void);
 void  delOneAna(void);
@@ -104,21 +152,134 @@ void  keyReturn(uint16_t keyAddr)
 	 // int nameLen=0;
 		switch(keyAddr)
 		{
-			case	KEY_MODBUS_CFG_NAME_ADDR://点击传感器设置名称显示框调出 模糊界面  显示到1380
+			
+			case KEY_SURE_CHOOSE_MODBUS_ADDR:
+				changeBmp(71+modbusChosIndex);//71.bmp为环流数据展示
+			  dispCurrentModData();
+				break;
+			case KEY_LAST_CHOOSE_MODBUS_ADDR:
+				lastModName();
+			  dispChooseModbusName();
+				break;
+			case KEY_NEXT_CHOOSE_MODBUS_ADDR:
+				nextModName();
+			  dispChooseModbusName();
+				break;
+			case KEY_MODUBS_DATA_ADDR:
+				dispChooseModbusName();
+				break ;	
+			case KEY_DATA_HUANLIU_LAST_ADDR:
+				lastHuanliuIndex();
+				dispHuanliuData();
+				break;
+			case KEY_DATA_HUANLIU_NEXT_ADDR:
+				nextHuanliuIndex();
+				dispHuanliuData();
+				break;
+			case	KEY_DATA_JUFANG_LAST_ADDR:
+				lastJufangIndex();
+				dispJufangData();
+				break;
+			case 	KEY_DATA_JUFANG_NEXT_ADDR:
+				nextJufangIndex();
+				dispJufangData();
+				break;
+			case	KEY_DATA_CEHNJIANG_LAST_ADDR:
+				lastChenJiangIndex();
+				dispChenjiangData();
+				break;
+			case	KEY_DATA_CEHNJIANG_NEXT_ADDR:
+				nextChenJiangIndex();
+				dispChenjiangData();
+				break;
+			case	KEY_DATA_FANGWAIPO_LAST_ADDR:
+				lastWaipoIndex();
+				dispWaipoData();
+				break;
+      case 	KEY_DATA_FANGWAIPO_NEXT_ADDR:
+				nextWaipoIndex();
+				dispWaipoData();
+				break;
+
+			case	KEY_DATA_CH4_LAST_ADDR:
+				lastCH4Index();
+			  dispCH4Data();
+				break;
+      case 	KEY_DATA_CH4_NEXT_ADDR:
+				nextCH4Index();
+			  dispCH4Data();
+				break;
+			case	KEY_DATA_O2_LAST_ADDR:
+				lastO2Index();
+			  dispO2Data();
+				break;
+      case 	KEY_DATA_O2_NEXT_ADDR:
+				nextO2Index();
+			  dispO2Data();
+				break;
+			case	KEY_DATA_H2S_LAST_ADDR:
+				lastH2SIndex();
+			  dispH2SData();
+				break;
+      case 	KEY_DATA_H2S_NEXT_ADDR:
+				nextH2SIndex();
+			  dispH2SData();
+				break;
+			case	KEY_DATA_CO_LAST_ADDR:
+				lastCOIndex();
+			  dispCOData();
+				break;
+      case 	KEY_DATA_CO_NEXT_ADDR:
+				nextCOIndex();
+			  dispCOData();
+				break;
+			case	KEY_DATA_WENSHIDU_LAST_ADDR:
+				lastWenshiduIndex();
+			  dispWenshiduData();
+				break;
+      case 	KEY_DATA_WENSHIDU_NEXT_ADDR:
+				nextWenshiduIndex();
+				dispWenshiduData();
+				break;
+			case	KEY_DATA_WATER_LAST_ADDR:
+				lastWaterIndex();
+				dispWaterData();
+				break;
+      case 	KEY_DATA_WATER_NEXT_ADDR:
+				nextWaterIndex();
+				dispWaterData();
+				break;
+			case	KEY_DATA_LIEFENG_LAST_ADDR:
+				lastLiefengIndex();
+				dispLiefengData();
+				break;
+      case 	KEY_DATA_LIEFENG_NEXT_ADDR:
+				nextLiefengIndex();
+				dispLiefengData();
+				break;
+			case	KEY_DATA_COVER_LAST_ADDR:
+				lastJinggaiIndex();
+				dispJinggaiData();
+				break;
+      case 	KEY_DATA_COVER_NEXT_ADDR:
+				nextJinggaiIndex();
+				dispJinggaiData();
+				break;
+			case KEY_MODBUS_CFG_NAME_ADDR://点击传感器设置名称显示框调出 模糊界面  显示到1380
 				//5A A5 1182 1380 C9CF BAA3 B9C8 D4AA BFC6 BCBC FFFF
         dispCinaName(buf);
 				break;
-			case	KEY_MODBUS_LASTNAME_ADDR:
+			case KEY_MODBUS_LASTNAME_ADDR:
 				dispChinaNameIndexLow();
 				dispCinaName(buf);
 				break;
-			case	KEY_MODBUS_NEXTNAME_ADDR:
+			case KEY_MODBUS_NEXTNAME_ADDR:
 				dispChinaNameIndexAdd();
 				dispCinaName(buf);
 				break;
-			case	KEY_MODBUS_SURENAME_ADDR:// 显示到1360
+			case KEY_MODBUS_SURENAME_ADDR:// 显示到1360
 				break;	
-			case  KEY_IP_READ_ADDR:
+			case KEY_IP_READ_ADDR:
 				LCDDispIP();
 				break;
 			case KEY_PORT_READ_ADDR:
@@ -146,6 +307,8 @@ void  keyReturn(uint16_t keyAddr)
 				LDCDispMosbusInfo();
 				break;
 			case KEY_MODBUS_CFG_SURE_ADDR:
+
+						
 				keyModbusCfgSure();
 				break;
 			case KEY_MODBUSDISP_LAST_ADDR:
@@ -210,7 +373,15 @@ void  keyReturn(uint16_t keyAddr)
 			
 			case KEY_SWITCH_RETURN_ADDR:
 				break;
-			
+			case  KEY_INPUT_ADDR:
+				LCDRstDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
+			  break;
+			case  KEY_OUTPUT_ADDR:
+				LCDRstDispSameID(DISP_OUTPUT_SAME_ID_MSG_ADDR);
+			  break;
+			case  KEY_MODUBS_ADDR:
+				LCDRstDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
+			  break;
 
 			case KEY_SWITCHINTERF_SURE_ADDR://do nothing
 				break;
@@ -296,6 +467,7 @@ void  keyReturn(uint16_t keyAddr)
 				dispInput();
 				break;
 			case  KEY_INPUT_RETURN_ADDR:
+				LCDRstDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
 				break;
 
 			case KEY_OUTPUT_SURE_ADDR://
@@ -348,8 +520,13 @@ void  keyReturn(uint16_t keyAddr)
 			case KEY_COVER_DISPLAY_ADDR:
 				coverNowDisp();
 				break;
+			case KEY_PASSWD_ENTER_ADDR:
+				LCDRstPw();
+				break;
+			case KEY_PASSWD_SURE_ADDR:
+				surePassWord();
+				break;
 
-			
 			case  KEY_OUTPUT_READ_INTERFACE_ADDR://进去接口
 				dispoutputReadInterf();
 				dispOutputRead();
@@ -447,8 +624,8 @@ void lcdCopyAnaModel(uint8_t *rec);
 void lcdCopyAnaPort(uint8_t *rec);
 //拷贝输入的time到AnaInput中
 void lcdCopyAnaTime(uint8_t *rec);
-
-
+bool checkPassWord(char *rec);
+void LCDHidePssd(void);
 //lcd 发来的配置解析
 void LCDDispConfig(uint8_t *recBuf,int len)
 {
@@ -554,6 +731,14 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 							break;
 					}
 				}
+				if(devIDOKCheck(LCDInput.ID)!=true){//核对ID
+						LCDDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
+						rt_kprintf("%sERR:same ID\n",sign);
+				}
+				else{
+							LCDRstDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
+				}
+				//lcdCopyInputID(recBuf);
 				break;    		
 //
 			case MODBUS_CFG_TYPE_ADDR:
@@ -583,7 +768,9 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 				lcdCopyInputName(recBuf);
 				break;
 			case DISP_INPUTCFG_ID_ADDR:
+				
 				lcdCopyInputID(recBuf);
+
 				break;
 			case DISP_INPUTCFG_TYPE_ADDR:
 				lcdCopyInputModel(recBuf);
@@ -597,8 +784,11 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 			case DISP_OUTPUT_ID_ADDR:
 				lcdCopyOutputID(recBuf);
 				break;
-
-			case DISP_OUTPUT_TYPE_ADDR:
+      case TEXT_PASSWD_ADDR://密码长度最大8位
+				pwssWdRet=checkPassWord((char *)recBuf);
+				LCDHidePssd();
+				break;
+ 			case DISP_OUTPUT_TYPE_ADDR:
 				lcdCopyOutputModel(recBuf);
 				break;
 			case DISP_OUTPUT_PORT_ADDR:
@@ -622,6 +812,15 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 		}
 }
 
+void LCDHidePssd()
+{
+	 uint8_t buf[10]="********";
+	 buf[8]=0xff;
+	 buf[9]=0xff;
+	
+	 LCDWtite(TEXT_PASSWD_ADDR,buf,10);
+	
+}
 void LCDClearSaveOK()
 {
 	 uint8_t buf[2];
@@ -646,7 +845,7 @@ void LCDClearRstOK()
 	 buf[0]=0xff;
 	 buf[1]=0xff;
 	
-	 LCDWtite(KEY_RESETOK_ADDR,buf,10);
+	 LCDWtite(KEY_RESETOK_ADDR,buf,4);
 }
 
 void LCDDispRstOK()
@@ -656,5 +855,105 @@ void LCDDispRstOK()
 	 buf[12]=0xff;
 	
 	 LCDWtite(KEY_RESETOK_ADDR,buf,10);
+}
+
+
+
+
+void LCDDispSameID(uint16_t addr)
+{
+		uint8_t buf[14]="ERR:SAME ID";
+		buf[12]=0xff;
+		buf[13]=0xff;
+	
+	 LCDWtite(addr,buf,14);
+}
+void LCDRstDispSameID(uint16_t addr)
+{
+		uint8_t buf[4]="";
+		buf[0]=0xff;
+		buf[1]=0xff;
+	
+	 LCDWtite(addr,buf,4);
+}
+
+
+#define PASSWORD_LEN   8
+char passWord[PASSWORD_LEN]="gy2023";
+bool pwssWdRet=false;
+bool checkPassWord(char *rec)
+{
+	  char passWord_p[PASSWORD_LEN]={0};
+		for(int i=0;i<PASSWORD_LEN;i++){
+				passWord_p[i]=rec[7+i];
+				if(((uint8_t )rec[7+i]==0xff)||(rec[7+i]==0)){
+						passWord_p[i]=0;
+						break;
+				}
+		}
+		if(strcmp(passWord,passWord_p)==0){
+				return true;
+		}
+		return false;
+}
+
+
+
+
+
+//void LCDDispErrPasswd()
+//{
+//		uint8_t buf[14]="ERROR!";
+//		buf[7]=0xff;
+//		buf[8]=0xff;
+//	
+//	  LCDWtite(TEXT_ERR_PASSWD_DISP_ADDR,buf,9);
+//}
+////LCD复位错误的pwd信息提示
+void LCDRstPw()
+{
+		uint8_t buf[4]="";
+		buf[0]=0xff;
+		buf[1]=0xff;
+	
+
+	  LCDWtite(TEXT_PASSWD_ADDR,buf,2);
+	
+}
+
+
+
+//password 确认按键
+bool  surePassWord()
+{
+	  //uint8_t buf[10]={0X5A,0XA5,0X07,0X82,0,0X84,0X5A,0X01,0,2};//最后一个0002 表示切换到02图
+		if(pwssWdRet==true){	
+				rt_kprintf("%sPassword ok\n",sign);
+			  LCDRstPw();
+//				extern rt_mutex_t   lcdSend_mutex;
+//				rt_mutex_take(lcdSend_mutex,RT_WAITING_FOREVER);
+//				extern  void LCDDataSend(uint8_t *buf,int lenth);
+//				LCDDataSend(buf,sizeof(buf));
+//				rt_mutex_release(lcdSend_mutex);
+			  changeBmp(2);
+			  pwssWdRet=false;
+		}
+		else{
+			  changeBmp(3);
+				rt_kprintf("%sPassword err\n",sign);
+//			  LCDDispErrPasswd();
+		}
+}
+
+
+void changeBmp(int num)
+{
+		uint8_t buf[10]={0X5A,0XA5,0X07,0X82,0,0X84,0X5A,0X01,0,0};
+		buf[9]=num;
+		extern rt_mutex_t   lcdSend_mutex;
+		rt_mutex_take(lcdSend_mutex,RT_WAITING_FOREVER);
+		extern  void LCDDataSend(uint8_t *buf,int lenth);
+		LCDDataSend(buf,sizeof(buf));
+		rt_mutex_release(lcdSend_mutex);
 }
 

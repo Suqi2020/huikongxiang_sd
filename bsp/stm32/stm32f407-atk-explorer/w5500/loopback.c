@@ -4,9 +4,9 @@
 uint8 I_STATUS[MAX_SOCK_NUM];
 uint8 ch_status[MAX_SOCK_NUM] = {0};/** 0:close, 1:ready, 2:connected */
 
-uint8_t  NetTxBuffer[TX_RX_MAX_BUF_SIZE]={0};
-uint8_t  NetRxBuffer[TX_RX_MAX_BUF_SIZE]={0};
-const static char sign[]="[lookback]";
+uint8_t  NetTxBuffer[TX_RX_MAX_BUF_SIZE] __attribute__((at(0x10000000))); //使用STM32F4中的CCM的另外64K内存  记录好偏移地址
+uint8_t  NetRxBuffer[TX_RX_MAX_BUF_SIZE] __attribute__((at(0x10000000+TX_RX_MAX_BUF_SIZE)));//使用STM32F4中的CCM的另外64K内存  记录好偏移地址
+const static char sign[]="[lookback]"; 
 void rstCh_status()
 {
 		rt_memset(ch_status,0,MAX_SOCK_NUM);
@@ -223,10 +223,17 @@ void loopback_tcp(uint16 port)
 //				void netRecSendEvent();		
 //        netRecSendEvent();				//mqttLoopData();						     	         /*向Server发送数据*/
 			}		 
-      extern rt_bool_t 	gbNetState;		
+      extern rt_bool_t 	gbNetState;	
+      static bool regFlag=false;			
 			if(gbNetState!=RT_TRUE){
 					gbNetState =RT_TRUE;	
 					rt_kprintf("SOCK_ESTABLISHED\n");
+				  if(regFlag==false){
+								regFlag=true;//联网后只注册一次  后期由定时器实现反复注册
+								extern uint16_t devRegJsonPack();
+								devRegJsonPack();//devRegJsonPack();
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					}
 			}
 		  break;
 		case SOCK_CLOSE_WAIT: 											    	         /*socket处于等待关闭状态*/
@@ -270,8 +277,8 @@ void loopback_tcp(uint16 port)
 //		  extern uint16_t heartUpJsonPack();
 //			heartUpJsonPack();
 //		  extern struct rt_mailbox mbNetSendData;
-////		  extern uint8_t   packBuf[TX_RX_MAX_BUF_SIZE];
-//			rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+////		  extern uint8_t   NetTxBuffer[TX_RX_MAX_BUF_SIZE];
+//			rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 //			break;
 //		case Sn_IR_DISCON: 
 //			// discon

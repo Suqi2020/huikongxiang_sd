@@ -36,6 +36,12 @@ void lcdCopyOutputID(uint8_t *rec)
 				break;
 		}
 	}
+	if(devIDOKCheck(outputLCD.devID)!=true){//核对ID
+			LCDDispSameID(DISP_OUTPUT_SAME_ID_MSG_ADDR);
+		  rt_kprintf("%sERR:same ID\n",sign);
+	}
+	else 
+		  LCDRstDispSameID(DISP_OUTPUT_SAME_ID_MSG_ADDR);
 }
 //拷贝输入的type到outputLCD中
 void lcdCopyOutputModel(uint8_t *rec)
@@ -92,7 +98,7 @@ void  dispoutputNameInterf()
 		}
 		LCDWtite(DISP_OUTPUT_INTERFACE_ADDR,buf,NAME_LEN);
 		
-		//显示输出接口 {"DO","V3O","V5O","V12O"}中的一个
+		//显示输出接口 {"DO","V3O","V5O","SWITCH"}中的一个
 }
 
 
@@ -100,6 +106,10 @@ void  dispoutputNameInterf()
 void  lcdOutputConfig()
 {
 	  int port=outputLCD.port;
+		if(devIDOKCheck(outputLCD.devID)!=true){//核对ID
+				LCDDispSameID(DISP_OUTPUT_SAME_ID_MSG_ADDR);
+				rt_kprintf("%sERR:same ID\n",sign);
+		}
 		switch(su8OutNameCfgIndex)
 		{
 			case 0:
@@ -136,13 +146,13 @@ void  lcdOutputConfig()
 				}
 				break;
 			case 3:
-				if((port<=V12O_NUM)&&(port>0)){//添加
-						packFlash.v12output[port-1].workFlag=RT_TRUE;
-						rt_strcpy(packFlash.v12output[port-1].name, outputLCD.name);
-						rt_strcpy(packFlash.v12output[port-1].devID,outputLCD.devID);
-						rt_strcpy(packFlash.v12output[port-1].model,outputLCD.model);
-						packFlash.v12output[port-1].port=port;
-						rt_kprintf("%s add v12output chanl %d\n",sign,port);
+				if((port<=SWITCH_NUM)&&(port>0)){//添加
+						packFlash.switchoutput[port-1].workFlag=RT_TRUE;
+						rt_strcpy(packFlash.switchoutput[port-1].name, outputLCD.name);
+						rt_strcpy(packFlash.switchoutput[port-1].devID,outputLCD.devID);
+						rt_strcpy(packFlash.switchoutput[port-1].model,outputLCD.model);
+						packFlash.switchoutput[port-1].port=port;
+						rt_kprintf("%s add switchoutput chanl %d\n",sign,port);
 						rt_kprintf("%s digoutput OK\n",sign);
 				}
 				break;
@@ -194,11 +204,11 @@ void getOutputTotalNum()
 				}
 		}
 
-		for(int i=0;i<V12O_NUM;i++){
-				if(packFlash.v12output[i].workFlag==RT_TRUE){
+		for(int i=0;i<SWITCH_NUM;i++){
+				if(packFlash.switchoutput[i].workFlag==RT_TRUE){
 						su8WorkOutput[3][su8OutputTotalNum[3]]=i;
 					  su8OutputTotalNum[3]++;
-						rt_kprintf("v12outputTotalNum:%d  %d\n",su8OutputTotalNum[3],i);
+						rt_kprintf("switchoutputTotalNum:%d  %d\n",su8OutputTotalNum[3],i);
 				}
 		}
 		for(int i=0;i<OUTNAME_NUM;i++){
@@ -237,7 +247,7 @@ void  dispoutputReadInterf()
 		LCDWtite(DISP_OUTPUT_READ_INTERFACE_ADDR,buf,NAME_LEN);
 		LCDWtite(DISP_OUTPUT_READ_INTERFACE_P_ADDR,buf,NAME_LEN);
 		
-		//显示输出接口 {"DO","V3O","V5O","V12O"}中的一个
+		//显示输出接口 {"DO","V3O","V5O","SWITCH"}中的一个
 }
 //输出设置读取interface接口下一个
 void  dispoutpReadInterfNext()
@@ -290,7 +300,7 @@ void  dispoutpReadNext()
 				su8OutputTheNum[su8OutNameReadIndex]=1;
 }
 
-digitStru  *outputp[DO_NUM]={0};//用digoutput v33output v5output v12output的最大值填充
+digitStru  *outputp[DO_NUM]={0};//用digoutput v33output v5output switchoutput的最大值填充
 
 void  delOneOutput()
 {
@@ -302,7 +312,7 @@ void  delOneOutput()
 }
 
 //输入显示发数据给LCD
-//输入值根据outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","V3O","V5O","V12O"};
+//输入值根据outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","V3O","V5O","SWITCH"};
 //          实际排列来确定 如有更改 需要更改此函数
 void  dispOutputRead()
 {
@@ -326,9 +336,9 @@ void  dispOutputRead()
 						outputp[i]=&packFlash.v5output[i];
 				}
 				break;
-			case 3://V12O显示
-				for(int i=0;i<V12O_NUM;i++){
-						outputp[i]=&packFlash.v12output[i];
+			case 3://SWITCH显示
+				for(int i=0;i<SWITCH_NUM;i++){
+						outputp[i]=&packFlash.switchoutput[i];
 				}
 				break;
 			default:
@@ -376,7 +386,7 @@ void  dispOutputRead()
 		}
 		LCDWtite(DISP_OUTPUT_READ_NAME_ADDR,buf,NAME_LEN);
 		
-		//显示输出接口 {"DO","V3O","V5O","V12O"}中的一个
+		//显示输出接口 {"DO","V3O","V5O","SWITCH"}中的一个
 		
 		//显示ID
 		 Len=strlen(outputp[p]->devID);

@@ -66,7 +66,7 @@ MSH_CMD_EXPORT(flash,flash save);//FINSH_FUNCTION_EXPORT_CMD
 
 //}
 //MSH_CMD_EXPORT(uart,uart config);//FINSH_FUNCTION_EXPORT_CMD
-static const uint8_t portStr[UART_NUM][6]={"port1","port2","port3","port4"};
+static const uint8_t portStr[UART_NUM][6]={"port1","port2","port3"};
 ////////////////////串口配置/////////////////////////////
 static void uart(int argc, char *argv[])
 {
@@ -84,7 +84,7 @@ static void uart(int argc, char *argv[])
 		}
 		return;
 		ERR:
-		rt_kprintf("%s[uart 端口(1-4) 波特率]\n",sign);
+		rt_kprintf("%s[uart 端口(1-%d) 波特率]\n",sign,UART_NUM);
 		rt_kprintf("%sfor example\n",sign);
 		rt_kprintf("%s[uart port1 9600]\n",sign);
 

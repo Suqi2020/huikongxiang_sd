@@ -4,7 +4,7 @@
 
 rt_bool_t gbRegFlag = RT_FALSE;
 extern struct rt_mailbox mbNetSendData;
-extern uint8_t   packBuf[TX_RX_MAX_BUF_SIZE];
+
 extern rt_bool_t gbNetState;
 const static char task[]="[dataUp]";
 
@@ -100,10 +100,10 @@ extern void partDischagRead2Send(rt_bool_t netStat,bool respFlag);
 extern void circulaRead2Send(rt_bool_t netStat,bool respFlag);
 extern void waterDepthRead2Send(rt_bool_t netStat,bool respFlag);
 extern void tempHumRead2Send(rt_bool_t netStat,bool respFlag);
-extern void o2Read2Send(rt_bool_t netStat);
-extern void h2sRead2Send(rt_bool_t netStat);	
-extern void ch4Read2Send(rt_bool_t netStat);	
-extern void coRead2Send(rt_bool_t netStat);	
+extern void o2Read2Send(rt_bool_t netStat,bool respFlag);
+extern void h2sRead2Send(rt_bool_t netStat,bool respFlag);
+extern void ch4Read2Send(rt_bool_t netStat,bool respFlag);
+extern void coRead2Send(rt_bool_t netStat,bool respFlag);
 //void analogTempHumJsonPack(uint8_t chanl);
 #ifndef     ANA_MASK
 extern void anaTempHumReadPack2Send(bool gbNetState,bool respFlag);
@@ -128,35 +128,35 @@ static void  timeOutRunFun()
 				heartUpJsonPack();
 				//jsonBufPackTest();
 			  if(gbNetState==RT_TRUE)
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 			  rt_kprintf("%sheart timer out\r\n",task);
 				break;
 			case REG_TIME://注册 注册成功后定时器就关闭 输入输出状态跟谁注册信息上发
 			  if(gbRegFlag==RT_FALSE){
 //					 jsonBufPackTest();
-//					rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+//					rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 //					break;//suqi
 					  devRegJsonPack();//devRegJsonPack();
 					  if(gbNetState==RT_TRUE)
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
-					  timeStop(REG_TIME);//正式使用时候需要去掉
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					//  timeStop(REG_TIME);//正式使用时候需要去掉
 						if(gbNetState==RT_TRUE){
 							  digitalInputReport();//数字输入上报
 								rt_thread_delay(500);
 								
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 								digitalOutputReport("3v3_output");
 								rt_thread_delay(500);
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 								digitalOutputReport("5v_output");
 								rt_thread_delay(500);
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 								digitalOutputReport("12v_output");
 								rt_thread_delay(500);
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 								digitalOutputReport("digital_output");
 								rt_thread_delay(500);
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						}
 				}
 				else
@@ -180,23 +180,18 @@ static void  timeOutRunFun()
 				rt_kprintf("%sTHREEAXIS_TIMEout\r\n",task);
 				break;
 
-//			case  CH4_TIME:
-//				ch4Read2Send(gbNetState);
-//				break;
-//			case  O2_TIME:
-//				o2Read2Send(gbNetState);
-//				break;
-//			case  H2S_TIME:
-//				h2sRead2Send(gbNetState);
-//				break;
-			case  GAS_TIME://4种气体在一起读取 所以前三个不使用 只在此处读取并打包发送  关闭时候只需要关闭CO就可以把所有气体全部关闭
-		#ifdef USE_4GAS 	
-   			ch4Read2Send(gbNetState);
-				o2Read2Send(gbNetState);
-				h2sRead2Send(gbNetState);
-			  coRead2Send(gbNetState);
-			  gasJsonPack(gbNetState,false);
-		#endif
+			case  CH4_TIME:
+				ch4Read2Send(gbNetState,false);
+				break;
+			case  O2_TIME:
+				o2Read2Send(gbNetState,false);
+				break;
+			case  H2S_TIME:
+				h2sRead2Send(gbNetState,false);
+				break;
+			case  CO_TIME://4种气体在一起读取 所以前三个不使用 只在此处读取并打包发送  关闭时候只需要关闭CO就可以把所有气体全部关闭
+
+			  coRead2Send(gbNetState,false);
 				break;
 			case  TEMPHUM_TIME:
 				tempHumRead2Send(gbNetState,false);
@@ -241,9 +236,9 @@ void startTimeList()
 		timeInit(PARTDISCHAG_TIME,5,10);
 		timeInit(PRESSSETTL_TIME, 8,15);
 		timeInit(THREEAXIS_TIME,  8,20);
-//	  timeInit(H2S_TIME, 				sheet.h2sColTime,24);
-//		timeInit(CH4_TIME, 				sheet.ch4ColTime,28);
-//		timeInit(O2_TIME, 				sheet.o2ColTime,30);
+	  timeInit(H2S_TIME, 				sheet.h2sColTime,24);
+		timeInit(CH4_TIME, 				sheet.ch4ColTime,28);
+		timeInit(O2_TIME, 				sheet.o2ColTime,30);
 
 		timeInit(GAS_TIME, 				10,35);
 
@@ -252,26 +247,25 @@ void startTimeList()
 		timeInit(CRACKMETER_TIME, 16,50);
 		#else 
 		timeInit(HEART_TIME,      120,2);//心跳定时  定时30秒 第一次28秒就来
-		timeInit(REG_TIME,        5,0);//注册 注册成功后定时器就关闭
+		timeInit(REG_TIME,        60,0);//注册 注册成功后定时器就关闭
 
 		timeInit(CIRCULA_TIME, 		2,5); //suqi
-		#if 0
+
 		timeInit(CIRCULA_TIME, 		sheet.cirCulaColTime,5);//suqi
 		timeInit(PARTDISCHAG_TIME,sheet.partDischagColTime,10);
 		timeInit(PRESSSETTL_TIME, sheet.pressSetlColTime,15);
 		timeInit(THREEAXIS_TIME,  sheet.threeAxissColTime,20);
-//	  timeInit(H2S_TIME, 				sheet.h2sColTime,24);
-//		timeInit(CH4_TIME, 				sheet.ch4ColTime,28);
-//		timeInit(O2_TIME, 				sheet.o2ColTime,30);
+	  timeInit(H2S_TIME, 				sheet.h2sColTime,24);
+		timeInit(CH4_TIME, 				sheet.ch4ColTime,28);
+		timeInit(O2_TIME, 				sheet.o2ColTime,30);
 
-		timeInit(GAS_TIME, 				sheet.gasColTime,35);
+		timeInit(CO_TIME, 				sheet.coColTime,35);
 
 		timeInit(TEMPHUM_TIME, 		sheet.tempHumColTime,40);
 		timeInit(WATERDEPTH_TIME, sheet.waterDepthColTime,45);
 		timeInit(CRACKMETER_TIME, sheet.crackMeterColTime,50);
 		timeInit(COVER_TIME, 			sheet.coverColTime,55);
-		#endif
-		#endif
+#endif
 	  //启动温湿度
 #ifndef     ANA_MASK
 	  for(int i=0;i<ANALOG_NUM;i++){

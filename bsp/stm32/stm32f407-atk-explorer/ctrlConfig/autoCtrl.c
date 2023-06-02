@@ -27,7 +27,7 @@ autoctrl DO ÀÆ±√  GYNJLXSD000000499 1
 autoctrl DO ÀÆ±√  GYNJLXSD000000499 2
 autoctrl V3O ÀÆ±√  GYNJLXSD000000419 1
 autoctrl V5O ÀÆ±√  GYNJLXSD000000429 1
-autoctrl V12O ÀÆ±√  GYNJLXSD000000439 1
+autoctrl SWITCH ÀÆ±√  GYNJLXSD000000439 1
 //////////////////////////////////////////////////
 */
 
@@ -35,8 +35,8 @@ inoutDevStru inpoutpFlag __attribute__((at(0x2000D000)))={0};// ‰»Î ‰≥ˆ≥¨÷µµƒ±Íº
 //sheet.autoctrl[pindex].output[outputIndex].flag÷–÷∏’Î÷∏œÚ¡ÀinpoutpFlag
 const static char sign[]="[autoCtrl]";
 char inName[INNAME_NUM][INOUTNAME_LEN]={"AI","DI","MB",};
-char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","V3O","V5O","V12O"};
-char outSwitchNum[OUTNAME_NUM]={DO_NUM,V33O_NUM,V5O_NUM,V12O_NUM};
+char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","V3O","V5O","SWITCH"};
+char outSwitchNum[OUTNAME_NUM]={DO_NUM,V33O_NUM,V5O_NUM,SWITCH_NUM};
 uint8_t inputIndex=0; //±æ¥Œ≈‰÷√øÿ÷∆¬ﬂº≠µƒ ‰»Î◊¯±Í≈‰÷√   ±ªinputFlag ÷∏’Îµ˜”√
 uint8_t outputIndex=0;//±æ¥Œ≈‰÷√øÿ÷∆¬ﬂº≠µƒ ‰≥ˆµƒ◊¯±Í≈‰÷√ ±ªoutputFlag÷∏’Îµ˜”√
 
@@ -574,14 +574,14 @@ static bool  ctrlCoverConf(char **argv)
 											return true;
 									}
 							}
-							else if(strcmp(argv[4],"switch")==0){//A
+							else if(strcmp(argv[4],"switch2")==0){//A
 									if(limit==0){//œ¬œﬁ
-											sheet.autoctrl[pindex].input[inputIndex].flag=(uint32_t*)&inpoutpFlag.modbusCover[i].switchLowFlag;
+											sheet.autoctrl[pindex].input[inputIndex].flag=(uint32_t*)&inpoutpFlag.modbusCover[i].switch2LowFlag;
 											
 											return true;// true;
 									}
 									else{
-											sheet.autoctrl[pindex].input[inputIndex].flag=(uint32_t*)&inpoutpFlag.modbusCover[i].switchUpFlag;
+											sheet.autoctrl[pindex].input[inputIndex].flag=(uint32_t*)&inpoutpFlag.modbusCover[i].switch2UpFlag;
 											
 											return true;
 									}
@@ -594,6 +594,18 @@ static bool  ctrlCoverConf(char **argv)
 									}
 									else{
 											sheet.autoctrl[pindex].input[inputIndex].flag=(uint32_t*)&inpoutpFlag.modbusCover[i].vibrationUpFlag;
+											
+											return true;
+									}
+							}
+							else if(strcmp(argv[4],"switch1")==0){//A
+									if(limit==0){//œ¬œﬁ
+											sheet.autoctrl[pindex].input[inputIndex].flag=(uint32_t*)&inpoutpFlag.modbusCover[i].switch1LowFlag;
+											
+											return true;// true;
+									}
+									else{
+											sheet.autoctrl[pindex].input[inputIndex].flag=(uint32_t*)&inpoutpFlag.modbusCover[i].switch1UpFlag;
 											
 											return true;
 									}
@@ -761,7 +773,7 @@ void autoctrlInputcfg(char*argv[])
 }
 
 // ‰≥ˆµƒ÷∏’Î≈‰÷√
-//{"DO","V3O","V5O","V12O"};
+//{"DO","V3O","V5O","SWITCH"};
 void autoctrlOutputcfg(char*argv[])
 {
 		int i;
@@ -833,14 +845,14 @@ void autoctrlOutputcfg(char*argv[])
 								}
 								break;
 							case 3:
-								for(i=0;i<V12O_NUM;i++){
-										if(0==rt_strcmp((char *)packFlash.v12output[i].devID,argv[3])){
+								for(i=0;i<SWITCH_NUM;i++){
+										if(0==rt_strcmp((char *)packFlash.switchoutput[i].devID,argv[3])){
 												//packFlash.digoutput[i].levelFlag=limit;//Õ®π˝levelFlag¿¥÷√Œª lowFlag upFlag
 											  if(limit==0)
-														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v12Output[i].lowFlag;
+														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.switchOutput[i].lowFlag;
 												else
-														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v12Output[i].upFlag;
-												rt_kprintf("%saotuctrl V12O OK  addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
+														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.switchOutput[i].upFlag;
+												rt_kprintf("%saotuctrl SWITCH OK  addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
 												outputIndex++;
 												configFlag=true;
 												

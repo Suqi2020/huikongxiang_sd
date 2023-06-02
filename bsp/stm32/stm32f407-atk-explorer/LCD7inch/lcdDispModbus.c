@@ -365,7 +365,7 @@ void LCDDispModInfoCpy(modbusPositStru *posit,uint8_t readIndex,LCDDispModInfoSt
 									 rt_strcpy(lcdRead->model,sheet.ch4[posit_p.Y].model);
 									 lcdRead->port = sheet.ch4[posit_p.Y].useUartNum;
 									 lcdRead->addr = sheet.ch4[posit_p.Y].slaveAddr;
-									 lcdRead->colTime =sheet.gasColTime;// //sheet.ch4ColTime;
+									 lcdRead->colTime =sheet.ch4ColTime;// //sheet.ch4ColTime;
 								 }
 								 break;
 							}
@@ -380,7 +380,7 @@ void LCDDispModInfoCpy(modbusPositStru *posit,uint8_t readIndex,LCDDispModInfoSt
 									 rt_strcpy(lcdRead->model,sheet.o2[posit_p.Y].model);
 									 lcdRead->port = sheet.o2[posit_p.Y].useUartNum;
 									 lcdRead->addr = sheet.o2[posit_p.Y].slaveAddr;
-									 lcdRead->colTime = sheet.gasColTime;//sheet.o2ColTime;
+									 lcdRead->colTime = sheet.o2ColTime;//sheet.o2ColTime;
 								 }
 								 break;
 							}
@@ -395,7 +395,7 @@ void LCDDispModInfoCpy(modbusPositStru *posit,uint8_t readIndex,LCDDispModInfoSt
 									 rt_strcpy(lcdRead->model,sheet.h2s[posit_p.Y].model);
 									 lcdRead->port = sheet.h2s[posit_p.Y].useUartNum;
 									 lcdRead->addr = sheet.h2s[posit_p.Y].slaveAddr;
-									 lcdRead->colTime = sheet.gasColTime;//sheet.h2sColTime;
+									 lcdRead->colTime = sheet.h2sColTime;//sheet.h2sColTime;
 								 }
 								 break;
 							}
@@ -410,7 +410,7 @@ void LCDDispModInfoCpy(modbusPositStru *posit,uint8_t readIndex,LCDDispModInfoSt
 										 rt_strcpy(lcdRead->model,sheet.co[posit_p.Y].model);
 										 lcdRead->port = sheet.co[posit_p.Y].useUartNum;
 										 lcdRead->addr = sheet.co[posit_p.Y].slaveAddr;
-										 lcdRead->colTime = sheet.gasColTime;
+										 lcdRead->colTime = sheet.coColTime;
 								 }
 								 break;
 							}
@@ -1033,8 +1033,18 @@ void  offLineIndexAdd()
 int modbusConfIDCheck(char *inputID);
 void keyModbusCfgSure()
 {
-		modbusConfIDCheck(LCDInput.ID);
-		singlModbConf(chinaNameIndex);
+		if(devIDOKCheck(LCDInput.ID)!=true){//ºË¶ÔID
+				LCDDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
+				rt_kprintf("%sERR:same ID\n",sign);
+
+		}
+		else{
+				LCDRstDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
+			  singlModbConf(chinaNameIndex);
+		}
+
+		//modbusConfIDCheck(LCDInput.ID);
+		
 }
 
 

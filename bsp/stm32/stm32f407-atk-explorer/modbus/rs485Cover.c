@@ -7,13 +7,8 @@ const static char sign[]="[井盖]";
 //#define   SLAVE_ADDR     0X01 
 //#define   LENTH          50  //工作环流用到的最大接收buf长度
 static bool alarmFLag=false;
-typedef struct{
-	uint8_t incline;
-	uint8_t switchP;
-	uint8_t	vibration;
-	uint8_t respStat;
-}thStru;
-static thStru cover[COVER_485_NUM];
+
+coverStru cover[COVER_485_NUM];
 
 //float temp[TEMPHUM_485_NUM];
 //float hum[TEMPHUM_485_NUM]; 
@@ -46,15 +41,27 @@ int coverState(int i)
 					alarmFLag=true;
 				}
 		}
-		if(sheet.modbusCover[num].switchUpLimit!=0){//启用
-				if(cover[num].switchP==1){
-					inpoutpFlag.modbusCover[num].switchUpFlag=true;
+		if(sheet.modbusCover[num].switch1UpLimit!=0){//启用
+				if(cover[num].switch1p==1){
+					inpoutpFlag.modbusCover[num].switch1UpFlag=true;
 					alarmFLag=true;
 				}
 		}
-		if(sheet.modbusCover[num].switchLowLimit!=0){//启用
-				if(cover[num].switchP==0){
-					inpoutpFlag.modbusCover[num].switchLowFlag=true;
+		if(sheet.modbusCover[num].switch1LowLimit!=0){//启用
+				if(cover[num].switch1p==0){
+					inpoutpFlag.modbusCover[num].switch1LowFlag=true;
+					alarmFLag=true;
+				}
+		}
+		if(sheet.modbusCover[num].switch2UpLimit!=0){//启用
+				if(cover[num].switch2p==1){
+					inpoutpFlag.modbusCover[num].switch2UpFlag=true;
+					alarmFLag=true;
+				}
+		}
+		if(sheet.modbusCover[num].switch2LowLimit!=0){//启用
+				if(cover[num].switch2p==0){
+					inpoutpFlag.modbusCover[num].switch2LowFlag=true;
 					alarmFLag=true;
 				}
 		}
@@ -78,10 +85,12 @@ void resetCoverWarnFlag()
 		{		
 				inpoutpFlag.modbusCover[i].inclineUpFlag	  =false;
 				inpoutpFlag.modbusCover[i].inclineLowFlag		=false;
-				inpoutpFlag.modbusCover[i].switchUpFlag  		=false;
-				inpoutpFlag.modbusCover[i].switchLowFlag 		=false;
+				inpoutpFlag.modbusCover[i].switch1UpFlag  		=false;
+				inpoutpFlag.modbusCover[i].switch1LowFlag 		=false;
 				inpoutpFlag.modbusCover[i].vibrationUpFlag  =false;
 				inpoutpFlag.modbusCover[i].vibrationLowFlag =false;
+				inpoutpFlag.modbusCover[i].switch2UpFlag  		=false;
+				inpoutpFlag.modbusCover[i].switch2LowFlag 		=false;
 		}
 }
 /*
@@ -101,7 +110,7 @@ void readCover(int num)
 	  uint8_t offset=3;//add+regadd+len
 	  uint8_t  *buf = RT_NULL;
 		buf = rt_malloc(LENTH);
-	  uint16_t len = modbusReadReg(sheet.cover[num].slaveAddr,0X0BB8,READ_03,4,buf);
+	  uint16_t len = modbusReadReg(sheet.cover[num].slaveAddr,0X0BB8,READ_03,5,buf);
 //		rt_mutex_take(uartDev[sheet.tempHum[num].useUartNum].uartMutex,RT_WAITING_FOREVER);
 	  //485发送buf  len  等待modbus回应
 		coverUartSend(num,(uint8_t *)buf,len);
@@ -128,11 +137,11 @@ void readCover(int num)
 		int ret2=modbusRespCheck(sheet.cover[num].slaveAddr,buf,len,RT_TRUE);
 		if(0 == ret2){//刷新读取到的值
 			  cover[num].incline = buf[offset+3];
-			  cover[num].switchP = buf[offset+5];
+			  cover[num].switch2p = buf[offset+5];
 			  cover[num].vibration = buf[offset+7];
+			  cover[num].switch1p = buf[offset+9];
 
-
-			  rt_kprintf("%s倾斜:%d 开关:%d 震动:%d\n",sign,cover[num].incline,cover[num].switchP,cover[num].vibration);  
+			  rt_kprintf("%s倾斜:%d 开关1:%d 震动:%d 开关2:%d\n",sign,cover[num].incline,cover[num].switch1p,cover[num].vibration,cover[num].switch2p);  
         cover[num].respStat=1;			
 				coverCheckSetFlag(num);
 
@@ -141,8 +150,9 @@ void readCover(int num)
 				if(ret2==2){
 				}
 			  cover[num].incline = 0;
-			  cover[num].switchP = 0;
+			  cover[num].switch1p = 0;
 			  cover[num].vibration = 0;
+				cover[num].switch2p = 0;
 				cover[num].respStat  = 0;	
 			  rt_kprintf("%s read fail\n",sign);
 		}
@@ -199,9 +209,10 @@ static uint16_t coverJsonPack(bool respFlag)
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 				
 				cJSON_AddNumberToObject(nodeobj_p,"incline"  ,cover[i].incline);
-				cJSON_AddNumberToObject(nodeobj_p,"switch"   ,cover[i].switchP);
+				cJSON_AddNumberToObject(nodeobj_p,"switch2"   ,cover[i].switch2p);
 				cJSON_AddNumberToObject(nodeobj_p,"vibration",cover[i].vibration);
-				sprintf(sprinBuf,"%llu",utcTime_ms());
+				cJSON_AddNumberToObject(nodeobj_p,"switch1"   ,cover[i].switch1p);
+				sprintf(sprinBuf,"%ll",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 			}
 		}
@@ -213,13 +224,13 @@ static uint16_t coverJsonPack(bool respFlag)
 
 		//打包
 		int len=0;
-		packBuf[len]= (uint8_t)(HEAD>>8); len++;
-		packBuf[len]= (uint8_t)(HEAD);    len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
 		
 		// 释放内存  
 		out = cJSON_Print(root);
-		rt_strcpy((char *)packBuf+len,out);
+		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
 				for(int i=0;i<rt_strlen(out);i++)
@@ -234,24 +245,24 @@ static uint16_t coverJsonPack(bool respFlag)
 		}
 
 		//lenth
-	  packBuf[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  packBuf[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(packBuf+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc);    len++;
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 
 		//tail
-		packBuf[len]=(uint8_t)(TAIL>>8); len++;
-		packBuf[len]=(uint8_t)(TAIL);    len++;
-		packBuf[len]=0;//len++;//结尾 补0
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
 		if(respFlag==false){
 				mcu.repDataMessID =mcu.upMessID;
 				//mcu.devRegMessID =mcu.upMessID;
 				upMessIdAdd();
 		}
 		rt_kprintf("%s len:%d\r\n",sign,len);
-		rt_kprintf("\r\n%slen：%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",sign,len,packBuf[0],packBuf[1],packBuf[2],packBuf[3]);
+		rt_kprintf("\r\n%slen：%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",sign,len,NetTxBuffer[0],NetTxBuffer[1],NetTxBuffer[2],NetTxBuffer[3]);
 
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
@@ -299,10 +310,12 @@ bool modCoverWarn2Send()
 							cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 						//	cJSON_AddNumberToObject(nodeobj_p,"incline_low_alarm",   inpoutpFlag.modbusCover[i].inclineLowFlag);//cJSON_CreateNumber("10"));
 							cJSON_AddNumberToObject(nodeobj_p,"incline_high_alarm",  inpoutpFlag.modbusCover[i].inclineUpFlag);
-							cJSON_AddNumberToObject(nodeobj_p,"switch_low_alarm",    inpoutpFlag.modbusCover[i].switchLowFlag);
-							cJSON_AddNumberToObject(nodeobj_p,"switch_high_alarm",   inpoutpFlag.modbusCover[i].switchUpFlag);
+							cJSON_AddNumberToObject(nodeobj_p,"switch2_low_alarm",    inpoutpFlag.modbusCover[i].switch2LowFlag);
+							cJSON_AddNumberToObject(nodeobj_p,"switch2_high_alarm",   inpoutpFlag.modbusCover[i].switch2UpFlag);
 						//	cJSON_AddNumberToObject(nodeobj_p,"vibration_low_alarm", inpoutpFlag.modbusCover[i].vibrationLowFlag);
 							cJSON_AddNumberToObject(nodeobj_p,"vibration_high_alarm",inpoutpFlag.modbusCover[i].vibrationUpFlag);
+							cJSON_AddNumberToObject(nodeobj_p,"switch1_low_alarm",    inpoutpFlag.modbusCover[i].switch1LowFlag);
+							cJSON_AddNumberToObject(nodeobj_p,"switch1_high_alarm",   inpoutpFlag.modbusCover[i].switch1UpFlag);
 							sprintf(sprinBuf,"%llu",utcTime_ms());
 							cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 						}
@@ -312,12 +325,12 @@ bool modCoverWarn2Send()
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;
-		packBuf[len]= (uint8_t)(HEAD>>8); len++;
-		packBuf[len]= (uint8_t)(HEAD);    len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
 		// 释放内存  
 		out = cJSON_Print(root);
-		rt_strcpy((char *)packBuf+len,out);
+		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
 				for(int i=0;i<rt_strlen(out);i++)
@@ -331,16 +344,16 @@ bool modCoverWarn2Send()
 			out=NULL;
 		}
 		//lenth
-	  packBuf[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  packBuf[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(packBuf+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc);    len++;
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 		//tail
-		packBuf[len]=(uint8_t)(TAIL>>8); len++;
-		packBuf[len]=(uint8_t)(TAIL);    len++;
-		packBuf[len]=0;//len++;//结尾 补0
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
 		mcu.repDataMessID =mcu.upMessID;
 		//mcu.devRegMessID =mcu.upMessID;
 		upMessIdAdd();
@@ -351,27 +364,29 @@ bool modCoverWarn2Send()
 
 
 
-
+extern int dispJinggaiTotlNum;
 //井盖状态读取并打包json格式
 void coverRead2Send(rt_bool_t netStat,bool respFlag)
 {
 	 int workFlag=RT_FALSE;
+	  dispJinggaiTotlNum=0;
 	 for(int i=0;i<COVER_485_NUM;i++){
 		if(sheet.cover[i].workFlag==RT_TRUE){
 					readCover(i);
 					workFlag=RT_TRUE;
+			    dispJinggaiTotlNum++;
 			}
 		}
 		if(workFlag==RT_TRUE){
 				rt_kprintf("%s打包采集的cover数据\r\n",sign);
 				coverJsonPack(respFlag);
 				if(netStat==RT_TRUE)
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER);
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
 						rt_thread_mdelay(500);
 				if(modCoverWarn2Send()==true){
 						resetCoverWarnFlag();//每次判断后复位warnflag状态值
 						if(netStat==RT_TRUE)
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER);
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
 				}
 		}
 }
@@ -468,7 +483,7 @@ void coverJsonOnOff(cJSON   *Json)
 				cJSON *item=cJSON_GetArrayItem(array,i);
 				cJSON  *id =cJSON_GetObjectItem(item,"deviceId");
 
-			  cJSON  *switchp=cJSON_GetObjectItem(item,"switch");
+			  cJSON  *switchp=cJSON_GetObjectItem(item,"switch2");
 
 			
 				cJSON_AddStringToObject(nodeobj,"deviceId",id->string);
@@ -489,13 +504,13 @@ void coverJsonOnOff(cJSON   *Json)
 		
 		//打包
 		int len=0;
-		packBuf[len]= (uint8_t)(HEAD>>8); len++;
-		packBuf[len]= (uint8_t)(HEAD);    len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
 		
 		// 释放内存  
 		out = cJSON_Print(root);
-		rt_strcpy((char *)packBuf+len,out);
+		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
 				for(int i=0;i<rt_strlen(out);i++)
@@ -509,17 +524,17 @@ void coverJsonOnOff(cJSON   *Json)
 			out=NULL;
 		}
 		//lenth
-	  packBuf[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  packBuf[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(packBuf+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc);    len++;
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 
 		//tail
-		packBuf[len]=(uint8_t)(TAIL>>8); len++;
-		packBuf[len]=(uint8_t)(TAIL);    len++;
-		packBuf[len]=0;//len++;//结尾 补0
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
 }

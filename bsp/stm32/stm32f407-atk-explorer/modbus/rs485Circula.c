@@ -15,35 +15,12 @@
 // rs485Circula.c-cirCurrUartSend(uint8_t *buf,int len) 和drv_uart.c-USART2_IRQHandler中
 // cirCurrUartSend(uint8_t *buf,int len)   cirCurrUartRec(uint8_t dat)
 static  bool alarmFLag=false;
-typedef struct
-{
-	  //环流值 放大了100倍
-		float circlCurA;
-		float circlCurB;
-	  float circlCurC;
-	  float circlCurD;//备用
-	  //阈值
-	  //uint32_t thresholdVal;
-
-	  
-	  //报警状态  一个字节足够 方便对接modbus回应
-	  uint16_t warningA;
-	  uint16_t warningB;
-	  uint16_t warningC;
-	  uint16_t warningD;
-	  
-	  //采集间隔 单位秒
-		//uint16_t AcqInterv;
-	//小数点计算数值
-    uint16_t point; //非modbus真实值  此处读取modbus后经过了转换便于直接计算  0-值为100  1-2 值为10
-	  uint8_t respStat;
-} CIRCURStru;
 
 const static char sign[]="[环流]";
 
 //#define   SLAVE_ADDR     0X02
 //#define   LENTH          50  //工作环流用到的最大接收buf长度
-extern uint8_t packBuf[TX_RX_MAX_BUF_SIZE];
+
 
  CIRCURStru  cirCurStru_p[CIRCULA_485_NUM];
 //static uint16_t readAcqInterv(int num);
@@ -244,8 +221,7 @@ extern void huanLiuTxtSaveSD(char *id,char *data);
 //char data[100];
 uint16_t circulaJsonPack(bool respFlag)
 {
-		char *data;
-		data =rt_malloc(200); // suqi 根据实际长度来调整
+
 		char* out = NULL;
 		//创建数组
 		cJSON* Array = NULL;
@@ -292,32 +268,21 @@ uint16_t circulaJsonPack(bool respFlag)
 					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 					
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurA);
-					
-					cJSON_AddItemToObject(nodeobj_p,"earthCurA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"runCurA",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"loadRatioA",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"earthCurA",cJSON_CreateString(sprinBuf));
+					cJSON_AddItemToObject(nodeobj_p,"runCurA",cJSON_CreateString(""));
+					cJSON_AddItemToObject(nodeobj_p,"loadRatioA",cJSON_CreateString(""));
 					
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurB);
-					cJSON_AddItemToObject(nodeobj_p,"earthCurB",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"runCurB",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"loadRatioB",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"earthCurB",cJSON_CreateString(sprinBuf));
+					cJSON_AddItemToObject(nodeobj_p,"runCurB",cJSON_CreateString(""));
+					cJSON_AddItemToObject(nodeobj_p,"loadRatioB",cJSON_CreateString(""));
 					
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurC);
-					cJSON_AddItemToObject(nodeobj_p,"earthCurC",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"runCurC",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"earthCurC",cJSON_CreateString(sprinBuf));
+					cJSON_AddItemToObject(nodeobj_p,"runCurC",cJSON_CreateString(""));
+					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));
 					sprintf(sprinBuf,"%llu",utcTime_ms());
-					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"\r\n");
-//					huanLiuTxtReadSD(sheet.cirCula[i].ID);
-					//uint32_t time =65000;
-					//while(time--){
-					huanLiuTxtSaveSD(sheet.cirCula[i].ID,data);//suqi
-						rt_thread_delay(10);
-					//}
-					rt_kprintf("%sSD data：%s",sign,data);//自带换行
-					memset(data,0,sizeof((char *)data));
-//					rt_free(data);
-//					data=NULL;
+					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 				}
 			}
 		}
@@ -329,15 +294,15 @@ uint16_t circulaJsonPack(bool respFlag)
 
 		//打包
 		int len=0;
-		packBuf[len]= (uint8_t)(HEAD>>8); len++;
-		packBuf[len]= (uint8_t)(HEAD);    len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
 		
 		// 释放内存  
 		
 		
 		out = cJSON_Print(root);
-		rt_strcpy((char *)packBuf+len,out);
+		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
 //				for(int i=0;i<rt_strlen(out);i++)
@@ -353,29 +318,28 @@ uint16_t circulaJsonPack(bool respFlag)
 	
 
 		//lenth
-	  packBuf[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  packBuf[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(packBuf+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc);    len++;
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 
 		//tail
-		packBuf[len]=(uint8_t)(TAIL>>8); len++;
-		packBuf[len]=(uint8_t)(TAIL);    len++;
-		packBuf[len]=0;//len++;//结尾 补0
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
 		if(respFlag==false){
 				mcu.repDataMessID =mcu.upMessID;
 				//mcu.devRegMessID =mcu.upMessID;
 				upMessIdAdd();
 		}
 		rt_kprintf("%scirCula len:%d\r\n",sign,len);
-		rt_kprintf("\r\n%slen：%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",sign,len,packBuf[0],packBuf[1],packBuf[2],packBuf[3]);
+		rt_kprintf("\r\n%slen：%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",sign,len,NetTxBuffer[0],NetTxBuffer[1],NetTxBuffer[2],NetTxBuffer[3]);
 
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
-		rt_free(data);
-		data=NULL;
+
 		return len;
 }
 
@@ -486,12 +450,12 @@ bool modCirCurrWarn2Send()
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
 		int len=0;
-		packBuf[len]= (uint8_t)(HEAD>>8); len++;
-		packBuf[len]= (uint8_t)(HEAD);    len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
 		// 释放内存  
 		out = cJSON_Print(root);
-		rt_strcpy((char *)packBuf+len,out);
+		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
 				for(int i=0;i<rt_strlen(out);i++)
@@ -505,16 +469,16 @@ bool modCirCurrWarn2Send()
 			out=NULL;
 		}
 		//lenth
-	  packBuf[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  packBuf[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(packBuf+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  packBuf[len]=(uint8_t)(jsonBodyCrc);    len++;
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 		//tail
-		packBuf[len]=(uint8_t)(TAIL>>8); len++;
-		packBuf[len]=(uint8_t)(TAIL);    len++;
-		packBuf[len]=0;//len++;//结尾 补0
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
 		mcu.repDataMessID =mcu.upMessID;
 		//mcu.devRegMessID =mcu.upMessID;
 		upMessIdAdd();
@@ -525,30 +489,34 @@ bool modCirCurrWarn2Send()
 
 
 
+
+
+extern int dispHuanliuTotlNum;
 //环流读取并打包发送  仅仅做封装而已
 	//输入 respFlag 为true就是回应
 //              为false就是report数据
 void circulaRead2Send(rt_bool_t netStat,bool respFlag)
 {					
+	  dispHuanliuTotlNum=0;
 		int workFlag=RT_FALSE;
-//		for(int i=0;i<CIRCULA_485_NUM;i++){
-//			if(sheet.cirCula[i].workFlag==RT_TRUE){
-//						readCirCurrAndWaring(i);
-//						workFlag=RT_TRUE;//suqi
-//				}
-//		}
-		workFlag=RT_TRUE;
+		for(int i=0;i<CIRCULA_485_NUM;i++){
+			if(sheet.cirCula[i].workFlag==RT_TRUE){
+						readCirCurrAndWaring(i);
+				    dispHuanliuTotlNum++;
+						workFlag=RT_TRUE;
+				}
+		}
 		if(workFlag==RT_TRUE){
 				rt_kprintf("%s打包采集的circula数据\r\n",sign);
 				circulaJsonPack(respFlag);
 				if(netStat==RT_TRUE)
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER);
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
 				rt_thread_mdelay(500);
 				if(modCirCurrWarn2Send()==true){
 							resetCirCurrlWarnFlag();//每次判断后复位warnflag状态值
 							//rt_thread_mdelay(500);
 							if(netStat==RT_TRUE)
-									rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER);
+									rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
 				}
 		}
 }

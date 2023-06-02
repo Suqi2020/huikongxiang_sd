@@ -21,10 +21,10 @@ extern void partDischagRead2Send(rt_bool_t netStat,bool respFlag);
 extern void circulaRead2Send(rt_bool_t netStat,bool respFlag);
 extern void waterDepthRead2Send(rt_bool_t netStat,bool respFlag);
 extern void tempHumRead2Send(rt_bool_t netStat,bool respFlag);
-extern void o2Read2Send(rt_bool_t netStat);
-extern void h2sRead2Send(rt_bool_t netStat);	
-extern void ch4Read2Send(rt_bool_t netStat);	
-extern void coRead2Send(rt_bool_t netStat);	
+extern void o2Read2Send(rt_bool_t netStat,bool respFlag);
+extern void h2sRead2Send(rt_bool_t netStat,bool respFlag);
+extern void ch4Read2Send(rt_bool_t netStat,bool respFlag);
+extern void coRead2Send(rt_bool_t netStat,bool respFlag);
 extern void crackMeterRead2Send(rt_bool_t netStat,bool respFlag);
 //void analogTempHumJsonPack(uint8_t chanl);
 #ifndef     ANA_MASK
@@ -52,14 +52,21 @@ void  readModbusDataResp(char *monitor)
 		else if(0==rt_strcmp(monitor,"crackmeter_monitor")){
 			crackMeterRead2Send(true,true);
 		}
-		else if(0==rt_strcmp(monitor,"environment_mointor")){
-		#ifdef USE_4GAS 	
-   			ch4Read2Send(true);
-				o2Read2Send(true);
-				h2sRead2Send(true);
-			  coRead2Send(true);
-			  gasJsonPack(true,false);
-		#endif
+		else if(0==rt_strcmp(monitor,"ch4_monitor")){
+   			//ch4Read2Send(true);
+			  ch4Read2Send(true,true);
+		}
+		else if(0==rt_strcmp(monitor,"o2_monitor")){
+				//o2Read2Send(true);
+			  o2Read2Send(true,true);
+		}
+		else if(0==rt_strcmp(monitor,"h2s_monitor")){
+				//h2sRead2Send(true);
+			  h2sRead2Send(true,true);
+		}
+		else if(0==rt_strcmp(monitor,"co_monitor")){
+			  //coRead2Send(true);
+			  coRead2Send(true,true);
 		}
 		else if(0==rt_strcmp(monitor,"vibration_monitor")){
 				threeAxisRead2Send(true,true);

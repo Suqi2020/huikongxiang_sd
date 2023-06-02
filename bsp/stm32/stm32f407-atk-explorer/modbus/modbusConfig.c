@@ -1,8 +1,8 @@
 #include "board.h"
 const static char sign[]="[modbusConfig]";
 
-const static char     UartName[UART_NUM][6] ={"port1", "port2",  "port3",  "port4"};//重映射一个名称
-const  uartEnum UartNum[UART_NUM]     ={USE_UART2,USE_UART3,USE_UART6,USE_UART4};//重映射一个名称
+const static char     UartName[UART_NUM][6] ={"port1", "port2",  "port3"};//重映射一个名称
+const  uartEnum UartNum[UART_NUM]     ={USE_UART3,USE_UART6,USE_UART4};//重映射一个名称
 
 		
 //打印所有增加的modbus设备列表
@@ -79,7 +79,7 @@ void printModbusDevList()
 									rt_kprintf("%s ",sheet.ch4[j].model);
 									rt_kprintf("%s ",UartName[sheet.ch4[j].useUartNum]);
 									rt_kprintf("%d ",sheet.ch4[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.gasColTime);//sheet.ch4ColTime);
+									rt_kprintf("%d \n",sheet.ch4ColTime);//sheet.ch4ColTime);
 							}
 					}
 				break;
@@ -93,7 +93,7 @@ void printModbusDevList()
 									rt_kprintf("%s ",sheet.o2[j].model);
 									rt_kprintf("%s ",UartName[sheet.o2[j].useUartNum]);
 									rt_kprintf("%d ",sheet.o2[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.gasColTime);//sheet.o2ColTime);
+									rt_kprintf("%d \n",sheet.o2ColTime);//sheet.o2ColTime);
 							}
 					}
 				break;
@@ -107,7 +107,7 @@ void printModbusDevList()
 									rt_kprintf("%s ",sheet.h2s[j].model);
 									rt_kprintf("%s ",UartName[sheet.h2s[j].useUartNum]);
 									rt_kprintf("%d ",sheet.h2s[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.gasColTime);//sheet.h2sColTime);
+									rt_kprintf("%d \n",sheet.h2sColTime);//sheet.h2sColTime);
 							}
 					}
 				break;
@@ -121,7 +121,7 @@ void printModbusDevList()
 									rt_kprintf("%s ",sheet.co[j].model);
 									rt_kprintf("%s ",UartName[sheet.co[j].useUartNum]);
 									rt_kprintf("%d ",sheet.co[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.gasColTime);
+									rt_kprintf("%d \n",sheet.coColTime);
 							}
 					}
 				break;
@@ -475,7 +475,7 @@ static int ch4Conf(int uartnum,char *argv[])
 	int i=0;
 	int ret=0;
 	int slaveAddr=atoi32(argv[5],10);
-	sheet.gasColTime=atoi32(argv[6],10);
+	sheet.ch4ColTime=atoi32(argv[6],10);
 	for( i=0;i<CH4_485_NUM;i++){//核对有没有配置过
 			if(rt_strcmp(sheet.ch4[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
@@ -521,7 +521,7 @@ static int coConf(int uartnum,char *argv[])
 	int i=0;
 	int ret=0;
 	int slaveAddr=atoi32(argv[5],10);
-	sheet.gasColTime=atoi32(argv[6],10);
+	sheet.coColTime=atoi32(argv[6],10);
 	for( i=0;i<CO_485_NUM;i++){//核对有没有配置过
 			if(rt_strcmp(sheet.co[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
@@ -567,7 +567,7 @@ static int h2sConf(int uartnum,char *argv[])
 	int i=0;
 	int ret=0;
 	int slaveAddr=atoi32(argv[5],10);
-	sheet.gasColTime=atoi32(argv[6],10);
+	sheet.h2sColTime=atoi32(argv[6],10);
 	for( i=0;i<H2S_485_NUM;i++){//核对有没有配置过
 			if(rt_strcmp(sheet.h2s[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
@@ -614,7 +614,7 @@ static int o2Conf(int uartnum,char *argv[])
 	int ret=0;
 	int slaveAddr=atoi32(argv[5],10);
 	sheet.cirCulaColTime=atoi32(argv[6],10);
-	sheet.gasColTime=atoi32(argv[6],10);
+	sheet.o2ColTime=atoi32(argv[6],10);
 	for( i=0;i<O2_485_NUM;i++){//核对有没有配置过
 			if(rt_strcmp(sheet.o2[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
@@ -798,154 +798,154 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 		return ret;
 }
 //配置前检查ID有没有重复的 有的话删除重复的ID
-int modbusConfIDCheck(char *inputID)
-{
-		for(int i=0;i<MODBUS_NUM;i++){
-			switch(i)
-			{
-				case CIRCULA:
-					for(int j=0;j<CIRCULA_485_NUM;j++){//核对有没有配置过
-							if(sheet.cirCula[j].workFlag==RT_TRUE){
-									if(rt_strcmp(sheet.cirCula[j].ID,inputID)==0){
-											rt_kprintf("del cirCula same ID\n");
-											sheet.cirCula[j].workFlag=RT_FALSE;
-										  return 1;
-									}
-							}
-					}
-				break;
-				case PARTDISCHAG:
-					for(int j=0;j<PARTDISCHAG_485_NUM;j++){//核对有没有配置过
-							if(sheet.partDischag[j].workFlag==RT_TRUE){
-									if(rt_strcmp(sheet.partDischag[j].ID,inputID)==0){
-											rt_kprintf("del partDischag same ID\n");
-											sheet.partDischag[j].workFlag=RT_FALSE;
-										  return 1;
-									}
-							}
-					}
-				break;
-				case PRESSSETTL:
-					for(int j=0;j<PRESSSETTL_485_NUM;j++){//核对有没有配置过
-							if(sheet.pressSetl[j].workFlag==RT_TRUE){
-									if(rt_strcmp(sheet.pressSetl[j].ID,inputID)==0){
-											rt_kprintf("del pressSetl same ID\n");
-											sheet.pressSetl[j].workFlag=RT_FALSE;
-										  return 1;
-									}
-							}
-					}
-				break;
-				case THREEAXIS:
-					for(int j=0;j<THREEAXIS_485_NUM;j++){//核对有没有配置过
-							if(sheet.threeAxiss[j].workFlag==RT_TRUE){
-									if(rt_strcmp(sheet.threeAxiss[j].ID,inputID)==0){
-											rt_kprintf("del threeAxiss same ID\n");
-											sheet.threeAxiss[j].workFlag=RT_FALSE;
-										  return 1;
-									}
-							}
-					}
-				break;
-	#ifdef 	 USE_4GAS 	
-				case CH4:
-//					for(int j=0;j<CH4_485_NUM;j++){//核对有没有配置过
-//							if(sheet.ch4[j].workFlag==RT_TRUE){
-//									if(rt_strcmp(sheet.ch4[j].ID,inputID)==0){
-//											rt_kprintf("del ch4 same ID\n");
-//											sheet.ch4[j].workFlag=RT_FALSE;
-//										  return 1;
-//									}
-//								}
-//					}
-				break;
-				case O2:
-//					for(int j=0;j<O2_485_NUM;j++){//核对有没有配置过
-//							if(sheet.o2[j].workFlag==RT_TRUE){
-//									if(rt_strcmp(sheet.o2[j].ID,inputID)==0){
-//											rt_kprintf("del o2 same ID\n");
-//											sheet.o2[j].workFlag=RT_FALSE;
+//int modbusConfIDCheck(char *inputID)
+//{
+//		for(int i=0;i<MODBUS_NUM;i++){
+//			switch(i)
+//			{
+//				case CIRCULA:
+//					for(int j=0;j<CIRCULA_485_NUM;j++){//核对有没有配置过
+//							if(sheet.cirCula[j].workFlag==RT_TRUE){
+//									if(rt_strcmp(sheet.cirCula[j].ID,inputID)==0){
+//											rt_kprintf("del cirCula same ID\n");
+//											sheet.cirCula[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
 //							}
 //					}
-				break;
-				case H2S:
-//					for(int j=0;j<H2S_485_NUM;j++){//核对有没有配置过
-//							if(sheet.h2s[j].workFlag==RT_TRUE){
-//									if(rt_strcmp(sheet.h2s[j].ID,inputID)==0){
-//											rt_kprintf("del h2s same ID\n");
-//											sheet.h2s[j].workFlag=RT_FALSE;
+//				break;
+//				case PARTDISCHAG:
+//					for(int j=0;j<PARTDISCHAG_485_NUM;j++){//核对有没有配置过
+//							if(sheet.partDischag[j].workFlag==RT_TRUE){
+//									if(rt_strcmp(sheet.partDischag[j].ID,inputID)==0){
+//											rt_kprintf("del partDischag same ID\n");
+//											sheet.partDischag[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
 //							}
 //					}
-				break;
-				case CO:
-//					for(int j=0;j<CO_485_NUM;j++){//核对有没有配置过
-//							if(sheet.co[j].workFlag==RT_TRUE){
-//									if(rt_strcmp(sheet.co[j].ID,inputID)==0){
-//											rt_kprintf("del co same ID\n");
-//											sheet.co[j].workFlag=RT_FALSE;
+//				break;
+//				case PRESSSETTL:
+//					for(int j=0;j<PRESSSETTL_485_NUM;j++){//核对有没有配置过
+//							if(sheet.pressSetl[j].workFlag==RT_TRUE){
+//									if(rt_strcmp(sheet.pressSetl[j].ID,inputID)==0){
+//											rt_kprintf("del pressSetl same ID\n");
+//											sheet.pressSetl[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
 //							}
 //					}
-				break;
-	#endif
-				case TEMPHUM:
-					for(int j=0;j<TEMPHUM_485_NUM;j++){//核对有没有配置过
-							if(sheet.tempHum[j].workFlag==RT_TRUE){
-									if(rt_strcmp(sheet.tempHum[j].ID,inputID)==0){
-											rt_kprintf("del TEMPHUM same ID\n");
-											sheet.tempHum[j].workFlag=RT_FALSE;
-										  return 1;
-									}
-							}
-					}
-				break;
-				case WATERDEPTH:
-					for(int j=0;j<WATERDEPTH_485_NUM;j++){//核对有没有配置过
-							if(sheet.waterDepth[j].workFlag==RT_TRUE){
-									if(rt_strcmp(sheet.waterDepth[j].ID,inputID)==0){
-											rt_kprintf("del waterDepth same ID\n");
-											sheet.waterDepth[j].workFlag=RT_FALSE;
-										  return 1;
-									}
-							}
-					}
-				break;
-				case CRACKMETER:
-					for(int j=0;j<CRACKMETER_485_NUM;j++){//核对有没有配置过
-							if(sheet.crackMeter[j].workFlag==RT_TRUE){
-									if(rt_strcmp(sheet.crackMeter[j].ID,inputID)==0){
-											rt_kprintf("del crackMeter same ID\n");
-											sheet.crackMeter[j].workFlag=RT_FALSE;
-										  return 1;
-									}
-							}
-					}
-				break;
-				case COVER:
-					for(int j=0;j<COVER_485_NUM;j++){//核对有没有配置过
-							if(sheet.cover[j].workFlag==RT_TRUE){
-									if(rt_strcmp(sheet.cover[j].ID,inputID)==0){
-											rt_kprintf("del cover same ID\n");
-											sheet.cover[j].workFlag=RT_FALSE;
-										  return 1;
-									}
-							}
-					}
-				break;
-				default:
-				break;
-			}
-		}
-		
-		
-		
-		return 0;
-}
+//				break;
+//				case THREEAXIS:
+//					for(int j=0;j<THREEAXIS_485_NUM;j++){//核对有没有配置过
+//							if(sheet.threeAxiss[j].workFlag==RT_TRUE){
+//									if(rt_strcmp(sheet.threeAxiss[j].ID,inputID)==0){
+//											rt_kprintf("del threeAxiss same ID\n");
+//											sheet.threeAxiss[j].workFlag=RT_FALSE;
+//										  return 1;
+//									}
+//							}
+//					}
+//				break;
+//	#ifdef 	 USE_4GAS 	
+//				case CH4:
+////					for(int j=0;j<CH4_485_NUM;j++){//核对有没有配置过
+////							if(sheet.ch4[j].workFlag==RT_TRUE){
+////									if(rt_strcmp(sheet.ch4[j].ID,inputID)==0){
+////											rt_kprintf("del ch4 same ID\n");
+////											sheet.ch4[j].workFlag=RT_FALSE;
+////										  return 1;
+////									}
+////								}
+////					}
+//				break;
+//				case O2:
+////					for(int j=0;j<O2_485_NUM;j++){//核对有没有配置过
+////							if(sheet.o2[j].workFlag==RT_TRUE){
+////									if(rt_strcmp(sheet.o2[j].ID,inputID)==0){
+////											rt_kprintf("del o2 same ID\n");
+////											sheet.o2[j].workFlag=RT_FALSE;
+////										  return 1;
+////									}
+////							}
+////					}
+//				break;
+//				case H2S:
+////					for(int j=0;j<H2S_485_NUM;j++){//核对有没有配置过
+////							if(sheet.h2s[j].workFlag==RT_TRUE){
+////									if(rt_strcmp(sheet.h2s[j].ID,inputID)==0){
+////											rt_kprintf("del h2s same ID\n");
+////											sheet.h2s[j].workFlag=RT_FALSE;
+////										  return 1;
+////									}
+////							}
+////					}
+//				break;
+//				case CO:
+////					for(int j=0;j<CO_485_NUM;j++){//核对有没有配置过
+////							if(sheet.co[j].workFlag==RT_TRUE){
+////									if(rt_strcmp(sheet.co[j].ID,inputID)==0){
+////											rt_kprintf("del co same ID\n");
+////											sheet.co[j].workFlag=RT_FALSE;
+////										  return 1;
+////									}
+////							}
+////					}
+//				break;
+//	#endif
+//				case TEMPHUM:
+//					for(int j=0;j<TEMPHUM_485_NUM;j++){//核对有没有配置过
+//							if(sheet.tempHum[j].workFlag==RT_TRUE){
+//									if(rt_strcmp(sheet.tempHum[j].ID,inputID)==0){
+//											rt_kprintf("del TEMPHUM same ID\n");
+//											sheet.tempHum[j].workFlag=RT_FALSE;
+//										  return 1;
+//									}
+//							}
+//					}
+//				break;
+//				case WATERDEPTH:
+//					for(int j=0;j<WATERDEPTH_485_NUM;j++){//核对有没有配置过
+//							if(sheet.waterDepth[j].workFlag==RT_TRUE){
+//									if(rt_strcmp(sheet.waterDepth[j].ID,inputID)==0){
+//											rt_kprintf("del waterDepth same ID\n");
+//											sheet.waterDepth[j].workFlag=RT_FALSE;
+//										  return 1;
+//									}
+//							}
+//					}
+//				break;
+//				case CRACKMETER:
+//					for(int j=0;j<CRACKMETER_485_NUM;j++){//核对有没有配置过
+//							if(sheet.crackMeter[j].workFlag==RT_TRUE){
+//									if(rt_strcmp(sheet.crackMeter[j].ID,inputID)==0){
+//											rt_kprintf("del crackMeter same ID\n");
+//											sheet.crackMeter[j].workFlag=RT_FALSE;
+//										  return 1;
+//									}
+//							}
+//					}
+//				break;
+//				case COVER:
+//					for(int j=0;j<COVER_485_NUM;j++){//核对有没有配置过
+//							if(sheet.cover[j].workFlag==RT_TRUE){
+//									if(rt_strcmp(sheet.cover[j].ID,inputID)==0){
+//											rt_kprintf("del cover same ID\n");
+//											sheet.cover[j].workFlag=RT_FALSE;
+//										  return 1;
+//									}
+//							}
+//					}
+//				break;
+//				default:
+//				break;
+//			}
+//		}
+//		
+//		
+//		
+//		return 0;
+//}
 //相同种类的传感器必须挂到同一个port下边
 //每种传感器最后一次输入的采集时间为最终采集时间
 //modbus   局放 port2 2 60
@@ -961,6 +961,12 @@ static void modbus(int argc, char *argv[])
 		{
 				rt_kprintf("%sERR input argc\n",sign);
 				goto ERR;
+		}
+		if(devIDOKCheck(argv[2])!=true){
+			if((strcmp(argv[5],"0")!=0)&&(strcmp(argv[5],"255")!=0)){
+				rt_kprintf("%sERR input the same ID\n",sign);
+			  return;
+			}
 		}
 		if(argc==2){
 				if(0==rt_strcmp((char *)"list", argv[1])){
@@ -1013,9 +1019,188 @@ static void modbus(int argc, char *argv[])
 		}
 		
 		ERR:
-		rt_kprintf("%sfor example:modbus+设备名称(波特率)+ID+model+端口(port1-port4)+设备地址(0/255-关闭设备)+采集间隔(秒)\n",sign);
+		rt_kprintf("%sfor example:modbus+设备名称(波特率)+ID+model+端口(port1-port%d)+设备地址(0/255-关闭设备)+采集间隔(秒)\n",sign,UART_NUM);
 		rt_kprintf("%sNOTE:括号内对参数进行解释,不需要输入\n",sign);
 		rt_kprintf("%smodbus list\n",sign);
 }
 //FINSH_FUNCTION_EXPORT(modbus, offline finsh);//FINSH_FUNCTION_EXPORT_CMD
 MSH_CMD_EXPORT(modbus,port slaveaddr config);//FINSH_FUNCTION_EXPORT_CMD
+
+
+#if 1
+//检查ID号是否重复  true -无重复  false-重复
+//函数作用 为了保值ID配置的唯一性
+bool  devIDOKCheck(char *inputID)
+{
+		for(int i=0;i<MODBUS_NUM;i++){
+			switch(i)
+			{
+				case CIRCULA:
+					for(int j=0;j<CIRCULA_485_NUM;j++){//核对有没有配置过
+							if(sheet.cirCula[j].workFlag==RT_TRUE){
+									if(strcmp(inputID,sheet.cirCula[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				case PARTDISCHAG:
+					for(int j=0;j<PARTDISCHAG_485_NUM;j++){//核对有没有配置过
+							if(sheet.partDischag[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.partDischag[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				case PRESSSETTL:
+					for(int j=0;j<PRESSSETTL_485_NUM;j++){//核对有没有配置过
+							if(sheet.pressSetl[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.pressSetl[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				case THREEAXIS:
+					for(int j=0;j<THREEAXIS_485_NUM;j++){//核对有没有配置过
+							if(sheet.threeAxiss[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.threeAxiss[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+#ifdef USE_4GAS
+				case CH4:
+					for(int j=0;j<CH4_485_NUM;j++){//核对有没有配置过
+							if(sheet.ch4[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.ch4[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				case O2:
+					for(int j=0;j<O2_485_NUM;j++){//核对有没有配置过
+							if(sheet.o2[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.o2[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				case H2S:
+					for(int j=0;j<H2S_485_NUM;j++){//核对有没有配置过
+							if(sheet.h2s[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.h2s[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				case CO:
+					for(int j=0;j<CO_485_NUM;j++){//核对有没有配置过
+							if(sheet.co[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.co[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+#endif
+				case TEMPHUM:
+					for(int j=0;j<TEMPHUM_485_NUM;j++){//核对有没有配置过
+							if(sheet.tempHum[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.tempHum[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				case WATERDEPTH:
+					for(int j=0;j<WATERDEPTH_485_NUM;j++){//核对有没有配置过
+							if(sheet.waterDepth[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.waterDepth[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				case CRACKMETER:
+					for(int j=0;j<CRACKMETER_485_NUM;j++){//核对有没有配置过
+							if(sheet.crackMeter[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.crackMeter[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				case COVER:
+					for(int j=0;j<COVER_485_NUM;j++){//核对有没有配置过
+							if(sheet.cover[j].workFlag==RT_TRUE){
+								if(strcmp(inputID,sheet.cover[j].ID)==0)
+										return false;
+							}
+					}
+				break;
+				default:
+				break;
+			}	
+		}
+
+		int i;
+//		bool  add=true;
+////////////////////////////////////////////////模拟数据打包////////////////////////////////////////////////////
+#ifndef     ANA_MASK
+		for(i=0;i<ANALOG_NUM;i++){
+			  add=true;
+				if(i>=1){
+						for(j=0;j<i;j++){
+								if(rt_strcmp(sheet.analog[i].ID,sheet.analog[j].ID)==0){
+										add=false;//找到了重复的 跳过此次i的计数
+									  break;
+								}
+						}
+				}
+				if(add==false){
+					  continue;//跳过此次循环 执行下一次
+				}
+				if(sheet.analog[i].workFlag==RT_TRUE){
+						nodeobj = cJSON_CreateObject();
+						cJSON_AddItemToArray(Array, nodeobj);
+						cJSON_AddItemToObject(nodeobj,"model",cJSON_CreateString(sheet.analog[i].model));
+						cJSON_AddItemToObject(nodeobj,"name",cJSON_CreateString(sheet.analog[i].name));
+						cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.analog[i].ID));
+				}
+		 }
+#endif
+////////////////////////////////////////////////数字输入打包////////////////////////////////////////////////////
+		 for(i=0;i<DI_NUM;i++){
+				if(packFlash.diginput[i].workFlag==RT_TRUE){
+						if(strcmp(inputID,packFlash.diginput[i].devID)==0)
+								return false;
+	
+				}
+		 }
+////////////////////////////////////////////////数字输出打包////////////////////////////////////////////////////
+		 for(i=0;i<DO_NUM;i++){
+				if(packFlash.digoutput[i].workFlag==RT_TRUE){
+						if(strcmp(inputID,packFlash.digoutput[i].devID)==0)
+								return false;
+				}
+		 }
+////////////////////////////////////////////////输出3V3打包////////////////////////////////////////////////////
+		 for(i=0;i<V33O_NUM;i++){
+				if(packFlash.v33output[i].workFlag==RT_TRUE){
+						if(strcmp(inputID,packFlash.v33output[i].devID)==0)
+								return false;
+				}
+		 }
+////////////////////////////////////////////////输出5V注册打包////////////////////////////////////////////////////
+		 for(i=0;i<V5O_NUM;i++){
+				if(packFlash.v5output[i].workFlag==RT_TRUE){
+						if(strcmp(inputID,packFlash.v5output[i].devID)==0)
+								return false;
+				}
+		 }
+////////////////////////////////////////////////输出12V注册打包////////////////////////////////////////////////////
+		 for(i=0;i<SWITCH_NUM;i++){
+				if(packFlash.switchoutput[i].workFlag==RT_TRUE){
+						if(strcmp(inputID,packFlash.switchoutput[i].devID)==0)
+								return false;
+				}
+		 }
+		 return true;
+}
+#endif
+

@@ -14,7 +14,7 @@
 //#define   rt_log(...)  rt_kprintf(const char *fmt, ...)
 
 #define 	ANALOG_NUM   	        8
-#define   UART_NUM        4//一共4路串口
+#define   UART_NUM        3//一共4路串口  剩余了三个
 #define   ACUID_LEN       18
 #define 	DEVID_LEN       20
 #define   MODEL_LEN       8
@@ -24,27 +24,26 @@
 #define   DO_NUM          8
 #define   V33O_NUM        2
 #define   V5O_NUM         2
-#define   V12O_NUM        4
+#define   SWITCH_NUM        3
 #define  	MODBID_LEN  		20
 #define  	INNAME_NUM    	3
 #define  	OUTNAME_NUM   	4
 #define   USE_4GAS
-
+#define   LCD_BUF_LEN    100
 #define   ANA_MASK       //屏蔽ana
-
+//#define   USE_RINGBUF    1
 
 //#incude  <iconv.h>
 #include <rtthread.h>
 #include "stdbool.h"
 #include "stdlib.h"
 #include <stm32f4xx.h>
-#include <stm32f407xx.h>
 #include "drv_common.h"
 #include "drv_gpio.h"
 #include "drv_flash.h"
 #include "test_hardware.h"
 #include "main.h"
-//#include "W5500p.h"	
+
 #include "W5500Task.h"
 #include "w5500_conf.h"
 #include "w5500.h"
@@ -62,6 +61,8 @@
 #include "stmflash.h"
 #include "7inchRegist.h"
 #include "ctrlConfig.h"
+#include "ringbuf.h"	
+#include "modbusData.h"	
 //#include "rs485ThreeAxis.h"
 //#include "rs485Circula.h"
 //#include "rs485PartDischag.h"
@@ -72,14 +73,12 @@
 #include "cJSON.h"
 #include "analogConfig.h"
 #include "modbusConfig.h"
-
-#include "ff_gen_drv.h"
-#include "bsp_sdio_sd.h"
-#include "sdioRW.h"
 //#include "utf_8.h"
 
 //#define  USE_WDT
+#include "bsp_sdio_sd.h"
 
+#include "sdioRW.h"
 #define  PACK_HEAD_LEN  4
 
  
@@ -108,8 +107,6 @@ extern  void MX_USART2_UART_Init(int bps);
 extern  void MX_USART3_UART_Init(int bps);
 extern  void MX_USART6_UART_Init(int bps);
 extern struct rt_mailbox mbNetSendData;
-extern uint64_t utcTime_ms(void);
-extern uint64_t  utcTime_s(void);
 //extern rt_mutex_t cirCurrMutex ;
 //队列的定义
 //extern struct  rt_messagequeue cirCurrmque;

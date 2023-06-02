@@ -12,6 +12,7 @@
 #include "stdio.h"
 #include "w5500.h"
 
+#define   CYCLETIMES   6000  //±‹√‚∫Ø ˝ø®À¿µπº∆ ±   suqi
 /**
 *@brief   This Socket function initialize the channel in perticular mode, 
 					and set the port and wait for W5200 done it.
@@ -46,7 +47,7 @@ uint8 socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
 
       /* wait to process the command... */
 			
-				  int count =60000;
+	 int count =CYCLETIMES;
    while( IINCHIP_READ(Sn_CR(s) ) &&(count--))
       /* ------- */
       ret = 1;
@@ -72,7 +73,7 @@ void close(SOCKET s)
    /* wait to process the command... */
 
        ;/* ------- */
-	  int count =60000;
+	  int count =CYCLETIMES;
    while( IINCHIP_READ(Sn_CR(s) ) &&(count--))
 	IINCHIP_WRITE( Sn_IR(s) , 0xFF);	 /* all clear */
 }
@@ -91,7 +92,7 @@ uint8 listen(SOCKET s)
    {
       IINCHIP_WRITE( Sn_CR(s) ,Sn_CR_LISTEN);
       /* wait to process the command... */
-	  int count =60000;
+	  int count =CYCLETIMES;
    while( IINCHIP_READ(Sn_CR(s) ) &&(count--))
       /* ------- */
       ret = 1;
@@ -136,10 +137,9 @@ uint8 connect(SOCKET s, uint8 * addr, uint16 port)
         IINCHIP_WRITE( Sn_DPORT1(s), (uint8)(port & 0x00ff));
         IINCHIP_WRITE( Sn_CR(s) ,Sn_CR_CONNECT);
         /* wait for completion */
-						int count =60000;
+						int  count =CYCLETIMES;
 					 while( IINCHIP_READ(Sn_CR(s) ) &&(count--))
 						 ;
-
         while ( IINCHIP_READ(Sn_SR(s)) != SOCK_SYNSENT )
         {
             if(IINCHIP_READ(Sn_SR(s)) == SOCK_ESTABLISHED)
@@ -168,7 +168,7 @@ void disconnect(SOCKET s)
    IINCHIP_WRITE( Sn_CR(s) ,Sn_CR_DISCON);
 
    /* wait to process the command... */
-	  int count =60000;
+	  int count =CYCLETIMES;
    while( IINCHIP_READ(Sn_CR(s) ) &&(count--))
       ;
    /* ------- */
@@ -211,9 +211,10 @@ uint16 send(SOCKET s, const uint8 * buf, uint16 len)
   IINCHIP_WRITE( Sn_CR(s) ,Sn_CR_SEND);
   /* wait to process the command... */
 //  while( IINCHIP_READ(Sn_CR(s) ) );
-	  int count =60000;
+	  int count =CYCLETIMES;
    while( IINCHIP_READ(Sn_CR(s) ) &&(count--))
 		 ;
+
   while ( (IINCHIP_READ(Sn_IR(s) ) & Sn_IR_SEND_OK) != Sn_IR_SEND_OK )
   {
     status = IINCHIP_READ(Sn_SR(s));
@@ -252,7 +253,7 @@ uint16 recv(SOCKET s, uint8 * buf, uint16 len)
       recv_data_processing(s, buf, len);
       IINCHIP_WRITE( Sn_CR(s) ,Sn_CR_RECV);
       /* wait to process the command... */
-		 	  int count =60000;
+		 	  int count =CYCLETIMES;
    while( IINCHIP_READ(Sn_CR(s) ) &&(count--))
 		 ;
 //      while( IINCHIP_READ(Sn_CR(s) ));
@@ -298,7 +299,7 @@ uint16 sendto(SOCKET s, const uint8 * buf, uint16 len, uint8 * addr, uint16 port
       send_data_processing(s, (uint8 *)buf, ret);
       IINCHIP_WRITE( Sn_CR(s) ,Sn_CR_SEND);
       /* wait to process the command... */
-		 	 int count =60000;
+		 	 int count =CYCLETIMES;
    while( IINCHIP_READ(Sn_CR(s) ) &&(count--))
 //      while( IINCHIP_READ( Sn_CR(s) ) )
 	  ;

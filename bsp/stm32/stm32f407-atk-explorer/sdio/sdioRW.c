@@ -48,14 +48,14 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define BLOCK_START_ADDR         0     /* Block start address      */
-#define NUM_OF_BLOCKS            5   /* Total number of blocks   */
-#define BUFFER_WORDS_SIZE        ((BLOCKSIZE * NUM_OF_BLOCKS) >> 2) /* Total data size in bytes */
-    
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-uint32_t aTxBuffer[BUFFER_WORDS_SIZE];
-uint32_t aRxBuffer[BUFFER_WORDS_SIZE];
+//#define BLOCK_START_ADDR         0     /* Block start address      */
+//#define NUM_OF_BLOCKS            5   /* Total number of blocks   */
+//#define BUFFER_WORDS_SIZE        ((BLOCKSIZE * NUM_OF_BLOCKS) >> 2) /* Total data size in bytes */
+//    
+///* Private macro -------------------------------------------------------------*/
+///* Private variables ---------------------------------------------------------*/
+//uint32_t aTxBuffer[BUFFER_WORDS_SIZE];
+//uint32_t aRxBuffer[BUFFER_WORDS_SIZE];
 
 /* Private function prototypes -----------------------------------------------*/
 static void Fill_Buffer(uint32_t *pBuffer, uint32_t uwBufferLenght, uint32_t uwOffset);

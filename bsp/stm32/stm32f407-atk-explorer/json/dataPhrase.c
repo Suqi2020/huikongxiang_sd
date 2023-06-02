@@ -71,23 +71,18 @@ rt_bool_t heartRespFun(cJSON  *Json)
 		cJSON  *time =cJSON_GetObjectItem(Json,"timestamp");
 	  rt_kprintf("%stime:%s\n\r",sign,time->valuestring);
 
-	
 		cJSON  *msg =cJSON_GetObjectItem(Json,"msg");
 		rt_kprintf("%sheart msg %s\r\n",sign,msg->valuestring);
-			
-			
-		static uint64_t u64getTick_p;
 
+		static uint64_t u64getTick_p;
 		u64getTick_p =atoll(time->valuestring);
 		rt_kprintf("%stime:[%lu]s \r\n",sign, (uint32_t)((u64getTick_p)/1000));
-
 		rt_kprintf("%stime:[%lu]ms\r\n",sign, (uint32_t)(u64getTick_p)%1000);
 	  extern void  subTimeStampSet(uint64_t time);
 	  if(utcTime_ms()-u64getTick_p>=3000){
         subTimeStampSet(u64getTick_p);
 			  rt_kprintf("%stime:RTC 误差大于3秒 校时\r\n",sign);
 		}
-	
 		cJSON  *mid =cJSON_GetObjectItem(Json,"mid");
     if(mcu.upHeartMessID != mid->valueint){
 				rt_kprintf("%sheart resp messID err %d %d\r\n",sign,mcu.upHeartMessID,mid->valueint);
@@ -99,13 +94,11 @@ rt_bool_t heartRespFun(cJSON  *Json)
 			  rt_kprintf("%sheart code err %d\r\n",sign,code->valueint);
 				return RT_FALSE;
 		}
-
 		cJSON  *devid =cJSON_GetObjectItem(Json,"acuId");
 		if(strcmp(packFlash.acuId,devid->valuestring)!=0){
 				rt_kprintf("%sheart resp acuId err %s\r\n",sign,devid->valuestring);
 			  return RT_FALSE;
 		}
-
 		return RT_TRUE;
 }
 
@@ -114,16 +107,21 @@ rt_bool_t heartRespFun(cJSON  *Json)
 //需要判断devid 和消息ID一致才认为注册成功
 rt_bool_t comRespFun(cJSON  *Json,uint32_t mesgID)
 {
-
+		cJSON  *time =cJSON_GetObjectItem(Json,"timestamp");
+	  rt_kprintf("%stime:%s\n\r",sign,time->valuestring);
+		static uint64_t u64getTick_p;
+		u64getTick_p =atoll(time->valuestring);
+	  extern void  subTimeStampSet(uint64_t time);
+	  if(utcTime_ms()-u64getTick_p>=3000){
+        subTimeStampSet(u64getTick_p);
+			  rt_kprintf("%stime:RTC 误差大于3秒 校时\r\n",sign);
+		}
 		cJSON  *msg =cJSON_GetObjectItem(Json,"msg");
-		rt_kprintf("%sheart msg %s\r\n",sign,msg->valuestring);
-	
-
+		rt_kprintf("%sreg msg %s\r\n",sign,msg->valuestring);
 		cJSON  *mid =cJSON_GetObjectItem(Json,"mid");
     if(mesgID!= mid->valueint){
 				rt_kprintf("%sreg resp messID err %d %d\r\n",sign,mid->valueint,mesgID);
 			  return RT_FALSE;
-			
 		}
 		cJSON  *code =cJSON_GetObjectItem(Json,"code");
 		rt_kprintf("%sreg code  %d\r\n",sign,code->valueint);
@@ -131,7 +129,6 @@ rt_bool_t comRespFun(cJSON  *Json,uint32_t mesgID)
 			  rt_kprintf("%sreg code err\r\n",sign);
 				return RT_FALSE;
 		}
-
 		return RT_TRUE;
 }
 //下行数据解析
@@ -143,10 +140,6 @@ void AllDownPhrase(char *data,int lenth)
 		}
 		char *buf=data+HEAD_LEN+LENTH_LEN;//偏移后是真实的json数据
 		int  len=lenth-HEAD_LEN-LENTH_LEN-TAIL_LEN-CRC_LEN;//获取真实的json数据长度
-		
-//		rt_kprintf("Jsonlen: %d\r\n",len);
-		
-		
 		char *Buffer=(char *)rt_malloc(len+1);
 		rt_strncpy(Buffer,buf,len);
     Buffer[len]=0;
@@ -207,42 +200,42 @@ void AllDownPhrase(char *data,int lenth)
 						break;
 					case	PROPERTIES_485TIM_GET:
 						senseTimeReadJsonResp(pkIdentf->valuestring,true);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_485TIM_SET:
 						senseTimeJsonSet(Json,true);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_ANATIM_GET:
 						senseTimeReadJsonResp(pkIdentf->valuestring,false);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_ANATIM_SET:
 						senseTimeJsonSet(Json,false);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_485TH_GET:
 						senseTHGetJsonResp(Json,true);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_485TH_SET:
 						senseTHSetJsonResp(Json,true);
-					  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+					  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_ANATH_GET:
 						senseTHGetJsonResp(Json,false);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_ANATH_SET:
 						senseTHSetJsonResp(Json,false);
-					  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+					  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_INPUT_REP_RESP:
 						rt_kprintf("%sdi rep response\r\n",sign);
 						break;
 					case	PROPERTIES_INPUT_GET:
 					  digitalInputGetResp(Json);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_OUTPUT_REP_RESP:
 						rt_kprintf("%sdo rep response\r\n",sign);
@@ -250,31 +243,31 @@ void AllDownPhrase(char *data,int lenth)
 					case	PROPERTIES_OUTPUT_GET:
 						
 						digitalOutputGetResp(Json,pkIdentf->valuestring);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	PROPERTIES_OUTPUT_SET:
 					  digitalOutputSetResp(Json,pkIdentf->valuestring);
-					  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+					  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	SERVICES_CTRLCFG_READ:
 						logCrtlReadResp(Json);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	SERVICES_CTRLCFG_ADD:
 						logCrtlAddResp(Json);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	SERVICES_CTRLCFG_DEL:
 					  logCtrlDel(Json);
-					 	rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+					 	rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	SERVICES_DEV_REBOOT:
 					  resetDeviceResp(Json,pkIdentf->valuestring);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						break;
 					case	SERVICES_ACU_REBOOT:
 						resetMcuResp(Json);
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&packBuf,RT_WAITING_FOREVER); 
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 						rt_thread_delay(500);//1秒后重启
 						rt_hw_cpu_reset();
 	

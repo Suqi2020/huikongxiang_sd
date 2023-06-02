@@ -71,6 +71,12 @@ static void digInput(int argc, char *argv[])
 		if(argc!=5){
 				goto ERR;
 		}
+		if(devIDOKCheck(argv[2])!=true){
+			if((strcmp(argv[5],"0")!=0)&&(strcmp(argv[5],"255")!=0)){
+				rt_kprintf("%sERR input the same ID\n",sign);
+			  return;
+			}
+		}
 		port = atoi16(argv[4],10);
 
 		if((port<=DI_NUM)&&(port>0)){//Ìí¼Ó

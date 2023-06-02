@@ -63,7 +63,7 @@ void uartReconfig()
 				rt_kprintf("%sport%d bps[%d]\n",sign,i+1,packFlash.uartBps[i]);
 		}
 	
-		MX_USART2_UART_Init(packFlash.uartBps[0]);
+//		MX_USART2_UART_Init(packFlash.uartBps[0]);
 		MX_USART3_UART_Init(packFlash.uartBps[1]);
 		MX_USART6_UART_Init(packFlash.uartBps[2]);
 		MX_UART4_Init(packFlash.uartBps[3]);
@@ -75,10 +75,10 @@ void uartSingConf(int num,int bps)
 {
 	//rt_kprintf("%sUART single conf\n");
 	switch(num){
-		case USE_UART2:
-			MX_USART2_UART_Init(bps	);
-		  rt_kprintf("%sUART conf uart2 bps=%d\n",sign,packFlash.uartBps[0]);
-			break;
+//		case USE_UART2:
+////			MX_USART2_UART_Init(bps	);
+////		  rt_kprintf("%sUART conf uart2 bps=%d\n",sign,packFlash.uartBps[0]);
+//			break;
 		case USE_UART3:
 			MX_USART3_UART_Init(bps	);
 		  rt_kprintf("%sUART conf uart3 bps=%d\n",sign,packFlash.uartBps[1]);

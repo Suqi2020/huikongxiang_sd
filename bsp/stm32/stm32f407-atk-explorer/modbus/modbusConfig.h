@@ -3,12 +3,36 @@
 //#include "uartReconf.h"
 #include  "board.h"
 
-
+/*
+		AIR_ENVIRONMENT(1, "空气环境"),  //包括温湿度 气体
+    WATER_LEVEL(2, "水位"),
+    DISCHARGE(3, "局放"),
+    GROUNDING_CURRENT(4, "环流"),
+    OPTICAL_FIBER(5, "光纤测温"),
+    VIBRATION(6, "外破"),
+    SETTLEMENT(7, "沉降"),
+    SWITCH_CONTROL(8, "风机/水泵");
+		CRACK_TESTER(9,"裂缝仪");
+		MANHOLE_COVER(10,"井盖");
+*/
 #define  MODL_LEN     8
 
+
+typedef  enum{
+		AIR_ENVIRONMENT=1,//(1, "空气环境"),  //包括温湿度 气体
+    WATER_LEVEL,//(2, "水位"),
+    DISCHARGE,//(3, "局放"),
+    GROUNDING_CURRENT,//(4, "环流"),
+    OPTICAL_FIBER,//(5, "光纤测温"),
+    VIBRATION,//(6, "外破"),
+    SETTLEMENT,//(7, "沉降"),
+    SWITCH_CONTROL,//(8, "风机/水泵");
+	  CRACK_TESTER,//(9,"裂缝仪");
+	  MANHOLE_COVER//(10,"井盖");
+}regTypeEnum;
 typedef enum{
-		USE_UART2=0,
-	  USE_UART3,
+//		USE_UART2=0,
+	  USE_UART3=0,
 	  USE_UART6,
 	  USE_UART4,
 	  USE_DIS_UART=0XFF
@@ -77,11 +101,12 @@ typedef struct{
 typedef struct{
 	  uint8_t inclineUpLimit;
 	  uint8_t inclineLowLimit;
-	  uint8_t switchUpLimit;
-	  uint8_t switchLowLimit;
+	  uint8_t switch1UpLimit;
+	  uint8_t switch1LowLimit;
 	  uint8_t vibrationUpLimit;
 	  uint8_t vibrationLowLimit;
-	  uint8_t rev[2];
+	  uint8_t switch2UpLimit;
+	  uint8_t switch2LowLimit;
 }coverStru_p;
 typedef struct{
 		uint32_t  tempUpFlag;//阈值超限的标记
@@ -102,11 +127,13 @@ typedef struct{
 typedef struct{
 	  uint8_t inclineUpFlag;
 	  uint8_t inclineLowFlag;
-	  uint8_t switchUpFlag;
-	  uint8_t switchLowFlag;
+	  uint8_t switch2UpFlag;
+	  uint8_t switch2LowFlag;
 	  uint8_t vibrationUpFlag;
 	  uint8_t vibrationLowFlag;
-	  uint8_t rev[2];
+	
+	  uint8_t switch1UpFlag;
+	  uint8_t switch1LowFlag;
 }coverFlagStru;
 typedef struct
 {
@@ -369,11 +396,11 @@ typedef struct{
 			uint32_t  pressSetlColTime;
 	    uint32_t  threeAxissColTime;
 #ifdef  USE_4GAS
-	    uint32_t  REV[3]; //此处不能省略 为了lcd显示指针自增来配置
-//			uint32_t  ch4ColTime;
-//	    uint32_t  o2ColTime;
-//			uint32_t  h2sColTime;
-			uint32_t  gasColTime;//用co的定时器来采集信息  去掉其他三个气体定时器  合并打包上传
+
+			uint32_t  ch4ColTime;
+	    uint32_t  o2ColTime;
+			uint32_t  h2sColTime;
+			uint32_t  coColTime;//用co的定时器来采集信息  去掉其他三个气体定时器  合并打包上传
 #endif
 			uint32_t  tempHumColTime;
 			uint32_t  waterDepthColTime;
@@ -441,7 +468,7 @@ typedef struct{
 	    digputFlagStru     digOutput[DO_NUM];
 	    digputFlagStru     v33Output[V33O_NUM];
 	    digputFlagStru     v5Output[V5O_NUM];
-	    digputFlagStru     v12Output[V12O_NUM];
+	    digputFlagStru     switchOutput[SWITCH_NUM];
 }inoutDevStru;
 //DI配置高有效
 extern rt_err_t uartDataRec( uartEnum uartNum,uint8_t dat);

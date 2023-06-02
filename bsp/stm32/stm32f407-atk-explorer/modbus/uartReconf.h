@@ -9,7 +9,7 @@
 //								 3/数字,模拟传感器阈值存储
 
 
-#define  LENTH   500
+#define  LENTH   300
 #define  MSGPOOL_LEN   LENTH //485数据最大量  大于1k需要修改此处
 
 //typedef struct{
@@ -74,14 +74,14 @@ typedef struct{
 	  digitStru digoutput[DO_NUM];   //数字输出
 		digitStru v33output[V33O_NUM]; //3V3电源输出
 		digitStru v5output[V5O_NUM];   //5V电源输出
-		digitStru v12output[V12O_NUM]; //12V电源输出
+		digitStru switchoutput[SWITCH_NUM]; //12V电源输出
 	  uint64_t  utcTime;
 //			//配置的输入输出高低电平有效需要存储
 //		digitStru_p        digInput[DI_NUM];
 //		digitStru_p        digOutput[DO_NUM];
 //		digitStru_p        digV33Out[V33O_NUM];
 //		digitStru_p        digV5out[V5O_NUM];
-//		digitStru_p        digV12out[V12O_NUM];
+//		digitStru_p        digV12out[SWITCH_NUM];
 }packIpUartStru;
 extern packIpUartStru packFlash;
 
