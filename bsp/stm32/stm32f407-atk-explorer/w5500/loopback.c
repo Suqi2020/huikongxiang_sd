@@ -4,8 +4,8 @@
 uint8 I_STATUS[MAX_SOCK_NUM];
 uint8 ch_status[MAX_SOCK_NUM] = {0};/** 0:close, 1:ready, 2:connected */
 
-uint8_t  NetTxBuffer[TX_RX_MAX_BUF_SIZE] __attribute__((at(0x10000000))); //使用STM32F4中的CCM的另外64K内存  记录好偏移地址
-uint8_t  NetRxBuffer[TX_RX_MAX_BUF_SIZE] __attribute__((at(0x10000000+TX_RX_MAX_BUF_SIZE)));//使用STM32F4中的CCM的另外64K内存  记录好偏移地址
+uint8_t  NetTxBuffer[TX_RX_MAX_BUF_SIZE]  CCMRAM;//__attribute__((at(0x10000000))); //使用STM32F4中的CCM的另外64K内存  记录好偏移地址
+uint8_t  NetRxBuffer[TX_RX_MAX_BUF_SIZE]  CCMRAM;//__attribute__((at(0x10000000+TX_RX_MAX_BUF_SIZE)));//使用STM32F4中的CCM的另外64K内存  记录好偏移地址
 const static char sign[]="[lookback]"; 
 void rstCh_status()
 {
@@ -230,9 +230,9 @@ void loopback_tcp(uint16 port)
 					rt_kprintf("SOCK_ESTABLISHED\n");
 				  if(regFlag==false){
 								regFlag=true;//联网后只注册一次  后期由定时器实现反复注册
-								extern uint16_t devRegJsonPack();
-								devRegJsonPack();//devRegJsonPack();
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+//								extern uint16_t devRegJsonPack();
+//								devRegJsonPack();//devRegJsonPack();
+//								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					}
 			}
 		  break;
@@ -413,9 +413,11 @@ void w5500Init()
 	  SOCK_DISCON(SOCK_TCPC);
 		reset_w5500();											/*硬复位W5500*/
 		set_w5500_mac();										/*配置MAC地址*/
-		setRTR(2000);/*设置溢出时间值*/
-		setRCR(3);/*设置最大重新发送次数*/
+
 		socket_buf_init(txsize, rxsize);		/*初始化8个Socket的发送接收缓存大小*/
+	
+			setRTR(2000);/*设置溢出时间值*/
+		setRCR(3);/*设置最大重新发送次数*/
 		IINCHIP_WRITE(Sn_MR(7), 0x20);//TCP模式下开启无延时ACK
 		IINCHIP_WRITE(Sn_IMR(7), 0x0F);
 		IINCHIP_WRITE(IMR, 0xF0);

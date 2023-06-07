@@ -11,8 +11,8 @@
 #include "W5500_conf.h"
 #include "stdio.h"
 #include "w5500.h"
-
-#define   CYCLETIMES   6000  //避免函数卡死倒计时   suqi
+#include "board.h"
+#define   CYCLETIMES   60000  //避免函数卡死倒计时   suqi
 /**
 *@brief   This Socket function initialize the channel in perticular mode, 
 					and set the port and wait for W5200 done it.
@@ -183,37 +183,45 @@ void disconnect(SOCKET s)
 */
 uint16 send(SOCKET s, const uint8 * buf, uint16 len)
 {
+	rt_mutex_take(w5500Spi_mutex,RT_WAITING_FOREVER);
   uint8 status=0;
   uint16 ret=0;
   uint16 freesize=0;
 
   if (len > getIINCHIP_TxMAX(s)) ret = getIINCHIP_TxMAX(s); // check size not to exceed MAX size.
   else ret = len;
-
+printf("SEND 000 %d %d  %d\r\n",getIINCHIP_TxMAX(s),ret,len);//0 2048
+	int count =CYCLETIMES*10;
   // if freebuf is available, start.
   do
   {
+		
+		
+//		          IINCHIP_WRITE( (Sn_TXMEM_SIZE(i)), tx_size[i]);
+//          IINCHIP_WRITE( (Sn_RXMEM_SIZE(i)), rx_size[i]);
+		
+
     freesize = getSn_TX_FSR(s);
     status = IINCHIP_READ(Sn_SR(s));
     if ((status != SOCK_ESTABLISHED) && (status != SOCK_CLOSE_WAIT))
     {
       ret = 0;
-			printf("SEND_ERR\r\n");
+			printf("SEND_ERR %d\r\n",status);
       break;
     }
+	//	rt_thread_mdelay(1);
 //		#if(MAX_SOCK_NUM!=8)
 //		 break;//不管有多大就跳出  add by suqi 20221017
 //		#endif
-  } while (freesize < ret);
-//printf("SEND 001 %d %d\r\n",freesize,ret);//0 2048
+  } while ((freesize < ret) &&(count--));
+printf("SEND 001 %d %d\r\n",freesize,ret);//0 2048
   // copy data
   send_data_processing(s, (uint8 *)buf, ret);
   IINCHIP_WRITE( Sn_CR(s) ,Sn_CR_SEND);
   /* wait to process the command... */
-//  while( IINCHIP_READ(Sn_CR(s) ) );
-	  int count =CYCLETIMES;
-   while( IINCHIP_READ(Sn_CR(s) ) &&(count--))
-		 ;
+  while( IINCHIP_READ(Sn_CR(s) ) );//发送32k需要长时间  去掉倒计时
+	 // count =CYCLETIMES;
+	//while( IINCHIP_READ(Sn_CR(s) ) );//发送32k需要长时间  去掉倒计时
 
   while ( (IINCHIP_READ(Sn_IR(s) ) & Sn_IR_SEND_OK) != Sn_IR_SEND_OK )
   {
@@ -233,7 +241,9 @@ uint16 send(SOCKET s, const uint8 * buf, uint16 len)
 #else
    IINCHIP_WRITE( Sn_IR(s) , Sn_IR_SEND_OK);
 #endif
-
+//
+	
+	rt_mutex_release(w5500Spi_mutex);
    return ret;
 }
 
@@ -413,7 +423,7 @@ uint16 recvfrom(SOCKET s, uint8 * buf, uint16 len, uint8 * addr, uint16 *port)
       IINCHIP_WRITE( Sn_CR(s) ,Sn_CR_RECV);
 
       /* wait to process the command... */
-				  int count =10000;
+			int count =CYCLETIMES;
    while( IINCHIP_READ(Sn_CR(s) ) &&(count--));
 //      while( IINCHIP_READ( Sn_CR(s)) ) ;
       /* ------- */

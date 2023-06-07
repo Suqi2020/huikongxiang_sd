@@ -23,8 +23,8 @@ const static char sign[]="[w5500]";
 
 uint16 SSIZE[MAX_SOCK_NUM]={0}; // Max Tx buffer
 uint16 RSIZE[MAX_SOCK_NUM]={0}; // Max Rx buffer
-uint8 txsize[MAX_SOCK_NUM] = {2*8};//tx buffer set	K bits
-uint8 rxsize[MAX_SOCK_NUM] = {2*8};//rx buffet set  K bits
+uint8 txsize[MAX_SOCK_NUM] = {16};//tx buffer set	K bits
+uint8 rxsize[MAX_SOCK_NUM] = {16};//rx buffet set  K bits
 #elif(MAX_SOCK_NUM==2)
 uint16 SSIZE[MAX_SOCK_NUM]={0,0}; // Max Tx buffer
 uint16 RSIZE[MAX_SOCK_NUM]={0,0}; // Max Rx buffer
@@ -388,7 +388,7 @@ void socket_buf_init( uint8 * tx_size, uint8 * rx_size  )
 {
   int16 i;
   int16 ssum=0,rsum=0;
- 
+ //#define  __DEF_IINCHIP_DBG__
   for (i = 0 ; i < MAX_SOCK_NUM; i++)       // Set the size, masking and base address of Tx & Rx memory by each channel
   {
           IINCHIP_WRITE( (Sn_TXMEM_SIZE(i)), tx_size[i]);
@@ -412,7 +412,7 @@ void socket_buf_init( uint8 * tx_size, uint8 * rx_size  )
     }
 			ssum += SSIZE[i];
 			rsum += RSIZE[i];
-
+//         printf("SSIZE[%d]--RSIZE[%d]\r\n",ssum,rsum);
   }
 }
 

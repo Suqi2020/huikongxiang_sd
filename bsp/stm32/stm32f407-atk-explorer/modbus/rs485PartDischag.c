@@ -427,229 +427,157 @@ uint8_t  partDischgAtlasRead(phaseEnum X,uint8_t slavAddr,uint16_t regAddr,uint8
     return i;
 
 }
-//#define ATLAS 5400
-char pdBuf[5400] __attribute__((at(0x10000000+TX_RX_MAX_BUF_SIZE*2)));//使用STM32F4中的CCM的另外64K内存  记录好偏移地址
-//根据手册“9、	规定可读取的最大记录号为5400，即0x1518。超过该范围将不做应答。” 最大存储5400个数据
-//输入相位号  第几个设备 相位频次 
-//返回 buffer实际数据长度
-#define READ_LEN 100 //每次最多读取的寄存器个数  返回寄存器数据为 READ_LEN*2
-uint16_t partDischagChanlRead(phaseEnum X,int num)
-{
-		int rdTotalNum =0;
-	  //char *bufP=buf;
-	  uint8_t *buf=rt_malloc(LENTH);
-		if(X==A)
-		   rdTotalNum=  partDiscStru_p[num].freqA;
-		else if(X==B)
-		   rdTotalNum=  partDiscStru_p[num].freqB;
-		else if(X==C)
-		   rdTotalNum=  partDiscStru_p[num].freqC;
-	  memset(pdBuf,0,sizeof(pdBuf));//清buf
-	  uint8_t readTimes   = rdTotalNum/READ_LEN;
-	  uint8_t lastTimeLen = rdTotalNum%READ_LEN;
-	  uint8_t readTimesP=0,len,singlReadLen;
-		uint32_t offset;
-	  while(1){
-			    singlReadLen =((readTimesP==readTimes)?lastTimeLen:READ_LEN);
-					len = partDischgAtlasRead(X,sheet.partDischag[num].slaveAddr,READ_LEN*readTimesP,singlReadLen,buf);//读取最后一包
-					partDischagUartSend(num,buf,len);
-					rt_kprintf("%sreadPd2 send:",sign);
-					for(int j=0;j<len;j++){
-							rt_kprintf("%x ",buf[j]);
-					}
-					rt_kprintf("\n");
-					memset(buf,0,LENTH);
-					len=0;
-					if(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 2000) == RT_EOK){//第一次接收时间放长点  相应时间有可能比较久
-							len++;
-					}
-					while(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 10) == RT_EOK){//115200 波特率1ms 10个数据
-							len++;
-					}
-					rt_kprintf("%srec:",sign);
-					for(int j=0;j<len;j++){
-							rt_kprintf("%x ",buf[j]);
-					}
-					rt_kprintf("\n");
-			//		uartDev[modbusFlash[PARTDISCHAG].useUartNum].offline=RT_FALSE;
-					//提取环流值 第一步判断crc 第二部提取
-					int ret2=modbusRespCheck(sheet.partDischag[num].slaveAddr,buf,len,RT_TRUE);
-					if(0 == ret2){//刷新读取到的值
-							rt_kprintf("%satlas OK\r\n",sign);
-							partDiscStru_p[num].respStat=1;
-					} 
-					else{
-							rt_kprintf("%sERR  atlas read\r\n",sign);
-					}
-					if(buf[3]!=(singlReadLen*2+1)){
-							rt_kprintf("%sERR sendlen:%d reclen:%d\r\n",singlReadLen,buf[3]);
-					}
-					else{
-						  memcpy(pdBuf+offset,buf+3,singlReadLen*2);
-						  offset+=singlReadLen*2;
-						  if(offset>sizeof(pdBuf)){
-									rt_kprintf ("%sERR atlas len too long %d>%d",sign,offset,sizeof(pdBuf));
-							}
-					}
-						
-					if(readTimesP==readTimes)
-							break;
-					readTimesP++; 
-		}
-		rt_free(buf);
-		buf=NULL;
-		return offset;
-}
 
 
-//char atlasBufStr[8000];//放置图谱格式化的字符串  2700的至少3倍
-//输入依次为 
-uint16_t partDischagChanlJsonPack(phaseEnum X,int num,bool respFlag)
-{
-		char* out = NULL;
-		//创建数组
-		cJSON* Array = NULL;
-		// 创建JSON Object  
-		cJSON* root = NULL;
-		cJSON* nodeobj = NULL;
-		cJSON* nodeobj_p = NULL;
-		root = cJSON_CreateObject();
-		if (root == NULL) return 0;
-		// 加入节点（键值对）
-	
-		if(respFlag==true){
-				cJSON_AddNumberToObject(root, "mid",respMid);
-				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
-				cJSON_AddNumberToObject(root, "code",0);
-		}
-		else
-		{
-				cJSON_AddNumberToObject(root, "mid",mcu.upMessID);
-				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_REP");
-		}
-		cJSON_AddStringToObject(root, "identifier","partial_discharge_monitor");
-		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
-		char *sprinBuf=RT_NULL;
-		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
-		char *sprinBufP=RT_NULL;
-		sprinBufP=rt_malloc(20);//20个字符串长度 够用了
-		{
-		Array = cJSON_CreateArray();
-		if (Array == NULL) return 0;
-		cJSON_AddItemToObject(root, "params", Array);
-				if(sheet.partDischag[num].workFlag==RT_TRUE){
-					nodeobj = cJSON_CreateObject();
-					cJSON_AddItemToArray(Array, nodeobj);
-					cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.partDischag[num].ID));
-					cJSON_AddNumberToObject(nodeobj,"responseStatus",partDiscStru_p[num].respStat);
-					nodeobj_p= cJSON_CreateObject();
-					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
-					if(X==A){
-							sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeA);
-							cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf));
-							sprintf(sprinBuf,"%d",partDiscStru_p[num].freqA);
-							cJSON_AddItemToObject(nodeobj_p,"freqA",cJSON_CreateString(sprinBuf));
-							sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeA);
-							cJSON_AddItemToObject(nodeobj_p,"dischargeDataA",cJSON_CreateString(sprinBuf));
-						  memset(sprinBuf,0,20);
-					   	memset(sprinBufP,0,20);
-						  strcpy(sprinBuf,"atlasPdA");
-						  strcpy(sprinBufP,"atlasFreqA");
 
-					}
-					else if(X==B){
-							sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeB);
-							cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));
-							sprintf(sprinBuf,"%d",partDiscStru_p[num].freqB);
-							cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));
-							sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeB);
-							cJSON_AddItemToObject(nodeobj_p,"dischargeDataB",cJSON_CreateString(sprinBuf));
-						  memset(sprinBuf,0,20);
-					   	memset(sprinBufP,0,20);
-						  strcpy(sprinBuf,"atlasPdB");
-						  strcpy(sprinBufP,"atlasFreqB");
-					}
-					else if(X==C){
-							sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeC);
-							cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));
-							sprintf(sprinBuf,"%d",partDiscStru_p[num].freqC);
-							cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));
-							sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeC);
-							cJSON_AddItemToObject(nodeobj_p,"dischargeDataC",cJSON_CreateString(sprinBuf));
-						  memset(sprinBuf,0,20);
-					   	memset(sprinBufP,0,20);
-						  strcpy(sprinBuf,"atlasPdC");
-						  strcpy(sprinBufP,"atlasFreqC");
-					
-					}
+////char atlasBufStr[8000];//放置图谱格式化的字符串  2700的至少3倍
+////输入依次为 A/B/C  第几个局放 
+//uint16_t partDischagChanlJsonPack(phaseEnum X,int num)
+//{
+//		char* out = NULL;
+//		//创建数组
+//		cJSON* Array = NULL;
+//		// 创建JSON Object  
+//		cJSON* root = NULL;
+//		cJSON* nodeobj = NULL;
+//		cJSON* nodeobj_p = NULL;
+//		root = cJSON_CreateObject();
+//		if (root == NULL) return 0;
+//		// 加入节点（键值对）
+//	
+////		if(respFlag==true){
+//				cJSON_AddNumberToObject(root, "mid",respMid);
+//				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
+//				cJSON_AddNumberToObject(root, "code",0);
+////		}
+////		else
+////		{
+////				cJSON_AddNumberToObject(root, "mid",mcu.upMessID);
+////				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_REP");
+////		}
+//		cJSON_AddStringToObject(root, "identifier","partial_discharge_monitor");
+//		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
+//		char *sprinBuf=RT_NULL;
+//		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
+//		char *sprinBufP=RT_NULL;
+//		sprinBufP=rt_malloc(20);//20个字符串长度 够用了
+//		{
+//		Array = cJSON_CreateArray();
+//		if (Array == NULL) return 0;
+//		cJSON_AddItemToObject(root, "params", Array);
+//				if(sheet.partDischag[num].workFlag==RT_TRUE){
+//					nodeobj = cJSON_CreateObject();
+//					cJSON_AddItemToArray(Array, nodeobj);
+//					cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.partDischag[num].ID));
+//					cJSON_AddNumberToObject(nodeobj,"responseStatus",partDiscStru_p[num].respStat);
+//					nodeobj_p= cJSON_CreateObject();
+//					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
+//					if(X==A){
+//							sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeA);
+//							cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf));
+//							sprintf(sprinBuf,"%d",partDiscStru_p[num].freqA);
+//							cJSON_AddItemToObject(nodeobj_p,"freqA",cJSON_CreateString(sprinBuf));
+//							sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeA);
+//							cJSON_AddItemToObject(nodeobj_p,"dischargeDataA",cJSON_CreateString(sprinBuf));
+//						  memset(sprinBuf,0,20);
+//					   	memset(sprinBufP,0,20);
+//						  strcpy(sprinBuf,"atlasPdA");
+//						  strcpy(sprinBufP,"atlasFreqA");
 
-					cJSON_AddItemToObject(nodeobj_p,sprinBuf,cJSON_CreateString(""));
-					cJSON_AddItemToObject(nodeobj_p,sprinBufP,cJSON_CreateString(""));
-					
-					//sprinBufP
-					sprintf(sprinBuf,"%llu",utcTime_ms());
-					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
-				}
+//					}
+//					else if(X==B){
+//							sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeB);
+//							cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));
+//							sprintf(sprinBuf,"%d",partDiscStru_p[num].freqB);
+//							cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));
+//							sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeB);
+//							cJSON_AddItemToObject(nodeobj_p,"dischargeDataB",cJSON_CreateString(sprinBuf));
+//						  memset(sprinBuf,0,20);
+//					   	memset(sprinBufP,0,20);
+//						  strcpy(sprinBuf,"atlasPdB");
+//						  strcpy(sprinBufP,"atlasFreqB");
+//					}
+//					else if(X==C){
+//							sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeC);
+//							cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));
+//							sprintf(sprinBuf,"%d",partDiscStru_p[num].freqC);
+//							cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));
+//							sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeC);
+//							cJSON_AddItemToObject(nodeobj_p,"dischargeDataC",cJSON_CreateString(sprinBuf));
+//						  memset(sprinBuf,0,20);
+//					   	memset(sprinBufP,0,20);
+//						  strcpy(sprinBuf,"atlasPdC");
+//						  strcpy(sprinBufP,"atlasFreqC");
+//					
+//					}
 
-		}
-	
-		sprintf(sprinBuf,"%llu",utcTime_ms());
-		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
-		// 打印JSON数据包  
-		//打包
-		int len=0;
-		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=LENTH_LEN;//json长度最后再填写
-		
-		// 释放内存  
-		
-		
-		out = cJSON_Print(root);
-		rt_strcpy((char *)NetTxBuffer+len,out);
-		len+=rt_strlen(out);
-		if(len>(sizeof(NetTxBuffer)-10)){
-				rt_kprintf("%sERR:atlas data too lenth %d  %d\n",sign,len,sizeof(NetTxBuffer));
-		}
-		if(out!=NULL){
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
-				rt_free(out);
-				out=NULL;
-		}
-		if(root!=NULL){
-			cJSON_Delete(root);
-			out=NULL;
-		}
-	
+//					cJSON_AddItemToObject(nodeobj_p,sprinBuf,cJSON_CreateString(""));
+//					cJSON_AddItemToObject(nodeobj_p,sprinBufP,cJSON_CreateString(""));
+//					
+//					//sprinBufP
+//					sprintf(sprinBuf,"%llu",utcTime_ms());
+//					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+//				}
 
-		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-	  //crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
+//		}
+//	
+//		sprintf(sprinBuf,"%llu",utcTime_ms());
+//		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
+//		// 打印JSON数据包  
+//		//打包
+//		int len=0;
+//		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+//		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
+//		len+=LENTH_LEN;//json长度最后再填写
+//		
+//		// 释放内存  
+//		
+//		
+//		out = cJSON_Print(root);
+//		rt_strcpy((char *)NetTxBuffer+len,out);
+//		len+=rt_strlen(out);
+//		if(len>(sizeof(NetTxBuffer)-10)){
+//				rt_kprintf("%sERR:atlas data too lenth %d  %d\n",sign,len,sizeof(NetTxBuffer));
+//		}
+//		if(out!=NULL){
+//				for(int i=0;i<rt_strlen(out);i++)
+//						rt_kprintf("%c",out[i]);
+//				rt_kprintf("\n");
+//				rt_free(out);
+//				out=NULL;
+//		}
+//		if(root!=NULL){
+//			cJSON_Delete(root);
+//			out=NULL;
+//		}
+//	
 
-		//tail
-		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-		NetTxBuffer[len]=0;//len++;//结尾 补0
-		if(respFlag==false){
-				mcu.repDataMessID =mcu.upMessID;
-				//mcu.devRegMessID =mcu.upMessID;
-				upMessIdAdd();
-		}
-		rt_kprintf("%s len:%d\r\n",sign,len);
-		rt_kprintf("\r\n%slen：%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",sign,len,NetTxBuffer[0],NetTxBuffer[1],NetTxBuffer[2],NetTxBuffer[3]);
+//		//lenth
+//	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+//	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+//	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+//	  //crc
+//	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+//	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
 
-		rt_free(sprinBuf);
-		sprinBuf=RT_NULL;
-		rt_free(sprinBufP);
-		sprinBufP=RT_NULL;
-		return len;
-}
+//		//tail
+//		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+//		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+//		NetTxBuffer[len]=0;//len++;//结尾 补0
+////		if(respFlag==false){
+////				mcu.repDataMessID =mcu.upMessID;
+////				//mcu.devRegMessID =mcu.upMessID;
+////				upMessIdAdd();
+////		}
+//		rt_kprintf("%s len:%d\r\n",sign,len);
+//		rt_kprintf("\r\n%slen：%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",sign,len,NetTxBuffer[0],NetTxBuffer[1],NetTxBuffer[2],NetTxBuffer[3]);
+
+//		rt_free(sprinBuf);
+//		sprinBuf=RT_NULL;
+//		rt_free(sprinBufP);
+//		sprinBufP=RT_NULL;
+//		return len;
+//}
 
 
 
@@ -788,36 +716,155 @@ bool modPartDischagWarn2Send()
 }
 
 
+
+
+//局放的json格式打包
+//输入 respFlag 为true就是回应
+//              为false就是report数据
+uint16_t partDischagJsonPack(bool respFlag)
+{
+
+		char* out = NULL;
+		//创建数组
+		cJSON* Array = NULL;
+		// 创建JSON Object  
+		cJSON* root = NULL;
+		cJSON* nodeobj = NULL;
+		cJSON* nodeobj_p = NULL;
+		root = cJSON_CreateObject();
+		if (root == NULL) return 0;
+		// 加入节点（键值对）
+	
+		if(respFlag==true){
+				cJSON_AddNumberToObject(root, "mid",respMid);
+				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
+				cJSON_AddNumberToObject(root, "code",0);
+		}
+		else
+		{
+				cJSON_AddNumberToObject(root, "mid",mcu.upMessID);
+				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_REP");
+		}
+		cJSON_AddStringToObject(root, "identifier","partial_discharge_monitor");
+		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
+		char *sprinBuf=RT_NULL;
+		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
+		
+		{
+		Array = cJSON_CreateArray();
+		if (Array == NULL) return 0;
+		cJSON_AddItemToObject(root, "params", Array);
+		for (int i = 0; i < PARTDISCHAG_485_NUM; i++)
+		{		
+			
+			if(sheet.partDischag[i].workFlag==RT_TRUE){
+				nodeobj = cJSON_CreateObject();
+				cJSON_AddItemToArray(Array, nodeobj);
+			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.partDischag[i].ID));
+//				sprintf(sprinBuf,"%d",partDiscStru_p[i].respStat);
+				cJSON_AddNumberToObject(nodeobj,"responseStatus",partDiscStru_p[i].respStat);
+//				sprintf(sprinBuf,"%d",partDiscStru_p[i].respStat);
+//				cJSON_AddItemToObject(nodeobj,"responseStatus",cJSON_CreateString(sprinBuf));
+				nodeobj_p= cJSON_CreateObject();
+				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
+				
+				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeA);
+				cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqA);
+				cJSON_AddItemToObject(nodeobj_p,"freqA",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeA);
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataA",cJSON_CreateString(sprinBuf));
+
+				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeB);
+				cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqB);
+				cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeB);
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataB",cJSON_CreateString(sprinBuf));
+//				cJSON_AddItemToObject(nodeobj_p,"prpdDataB",cJSON_CreateString(""));
+//				cJSON_AddItemToObject(nodeobj_p,"prpsDataB",cJSON_CreateString(""));
+				
+				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeC);
+				cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqC);
+				cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeC);
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataC",cJSON_CreateString(sprinBuf));
+//				cJSON_AddItemToObject(nodeobj_p,"prpdDataC",cJSON_CreateString(""));
+//				cJSON_AddItemToObject(nodeobj_p,"prpsDataC",cJSON_CreateString(""));
+				
+				
+				sprintf(sprinBuf,"%llu",utcTime_ms());
+				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+			}
+		}
+		}
+		sprintf(sprinBuf,"%llu",utcTime_ms());
+		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
+		// 打印JSON数据包  
+		
+		
+		
+		int len=0;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
+		len+=HEAD_LEN;//json长度最后再填写
+		// 释放内存  
+		out = cJSON_Print(root);
+		
+		rt_strcpy((char *)NetTxBuffer+len,out);
+		len+=rt_strlen(out);
+		if(out!=NULL){
+				for(int i=0;i<rt_strlen(out);i++)
+						rt_kprintf("%c",out[i]);
+				rt_kprintf("\n");
+				rt_free(out);
+				out=NULL;
+		}
+		if(root!=NULL){
+			cJSON_Delete(root);
+			out=NULL;
+		}
+		//lenth
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  //crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
+		//tail
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
+	
+		if(respFlag==false){
+				mcu.repDataMessID =mcu.upMessID;
+				upMessIdAdd();
+		}
+
+		rt_free(sprinBuf);
+		sprinBuf=RT_NULL;
+
+		return 1;
+}
 extern int dispJufangTotlNum;
-//局放的读取和发送  供其他函数来调用
+///局放的读取和发送  供其他函数来调用
 void partDischagRead2Send(rt_bool_t netStat,bool respFlag)
 {
 		int workFlag=RT_FALSE;
-	  dispJufangTotlNum=0;
 		for(int i=0;i<PARTDISCHAG_485_NUM;i++){
 			 if(sheet.partDischag[i].workFlag==RT_TRUE){
-				    dispJufangTotlNum++;
 				    rt_thread_mdelay(2000);
 						readPdFreqDischarge(i);
 						workFlag=RT_TRUE;
-				 
-						partDischagChanlRead(A,i);
-						partDischagChanlJsonPack(A,i,respFlag);
-						if(netStat==RT_TRUE)
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
-						rt_thread_mdelay(200);
-						partDischagChanlRead(B,i);
-						partDischagChanlJsonPack(B,i,respFlag);
-						if(netStat==RT_TRUE)
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
-						rt_thread_mdelay(200);
-						partDischagChanlRead(C,i);
-						partDischagChanlJsonPack(C,i,respFlag);
-						if(netStat==RT_TRUE)
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
 				}
 		}
 		if(workFlag==RT_TRUE){
+				rt_kprintf("%s打包采集的PARTDISCHAG数据\r\n",sign);
+				partDischagJsonPack(respFlag);//后期加入
+				if(netStat==RT_TRUE)
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
+				rt_thread_mdelay(500);
 				if(modPartDischagWarn2Send()==true){
 						resetPartDischagWarnFlag();//每次判断后复位warnflag状态值
 						//rt_thread_mdelay(500);
@@ -825,4 +872,450 @@ void partDischagRead2Send(rt_bool_t netStat,bool respFlag)
 								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
 				}
 		}
+}
+/////////////////////////////////////////////////////////////读取////////////////////////////////////////////////////////////////
+
+
+//#define ATLAS 5400
+char pdBuf[5400*2] CCMRAM;//读取modbus图谱数据放到这里
+//__attribute__((at(0x10000000+TX_RX_MAX_BUF_SIZE*2)));//使用STM32F4中的CCM的另外64K内存  记录好偏移地址
+//根据手册“9、	规定可读取的最大记录号为5400，即0x1518。超过该范围将不做应答。” 最大存储5400个数据
+//输入相位号  第几个设备 相位频次 
+//返回 buffer实际数据长度  最大 10800 最小5400
+#define READ_LEN 100 //每次最多读取的寄存器个数  返回寄存器数据为 READ_LEN*2
+//调用本函数前必须调用readPdFreqDischarge
+static int partDischagChanlRead(phaseEnum X,int num)
+{
+		int rdTotalNum =0;
+	  //char *bufP=buf;
+	  uint8_t *buf=rt_malloc(LENTH);
+		if(X==A)
+		   rdTotalNum=  partDiscStru_p[num].freqA;
+		else if(X==B)
+		   rdTotalNum=  partDiscStru_p[num].freqB;
+		else if(X==C)
+		   rdTotalNum=  partDiscStru_p[num].freqC;
+	  memset(pdBuf,0,sizeof(pdBuf));//清buf
+	  uint8_t readTimes   = rdTotalNum/READ_LEN;
+	  uint8_t lastTimeLen = rdTotalNum%READ_LEN;
+	  uint8_t readTimesP=0,len,singlReadLen;
+		uint32_t offset=0;
+	  while(1){
+			    singlReadLen =((readTimesP==readTimes)?lastTimeLen:READ_LEN);
+					len = partDischgAtlasRead(X,sheet.partDischag[num].slaveAddr,READ_LEN*readTimesP,singlReadLen,buf);//读取最后一包
+					partDischagUartSend(num,buf,len);
+					rt_kprintf("%sreadPd2 send:",sign);
+					for(int j=0;j<len;j++){
+							rt_kprintf("%x ",buf[j]);
+					}
+					rt_kprintf("\n");
+					memset(buf,0,LENTH);
+					len=0;
+					if(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 2000) == RT_EOK){//第一次接收时间放长点  相应时间有可能比较久
+							len++;
+					}
+					while(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 10) == RT_EOK){//115200 波特率1ms 10个数据
+							len++;
+					}
+					rt_kprintf("%srec:",sign);
+					for(int j=0;j<len;j++){
+							rt_kprintf("%x ",buf[j]);
+					}
+					rt_kprintf("\n");
+			//		uartDev[modbusFlash[PARTDISCHAG].useUartNum].offline=RT_FALSE;
+					//提取环流值 第一步判断crc 第二部提取
+					int ret2=modbusRespCheck(sheet.partDischag[num].slaveAddr,buf,len,RT_TRUE);
+					if(0 == ret2){//刷新读取到的值
+							rt_kprintf("%satlas OK\r\n",sign);
+							partDiscStru_p[num].respStat=1;
+					} 
+					else{
+							rt_kprintf("%sERR  atlas read\r\n",sign);
+					}
+					if(buf[3]!=(singlReadLen*2+1)){
+							rt_kprintf("%sERR sendlen:%d reclen:%d\r\n",singlReadLen,buf[3]);
+					}
+					else{
+						  memcpy(pdBuf+offset,buf+3,singlReadLen*2);
+						  offset+=singlReadLen*2;
+						  if(offset>=sizeof(pdBuf)){
+									rt_kprintf ("%sERR atlas len too long %d>%d",sign,offset,sizeof(pdBuf));
+							}
+					}
+					if(readTimesP==readTimes){
+						  
+							break;
+					}
+					readTimesP++; 
+		}
+		rt_free(buf);
+		buf=NULL;
+		return offset;
+}
+
+static  int atlasJsonNodataPack(phaseEnum X,int num)
+{
+
+		char* out = NULL;
+		//创建数组
+		cJSON* Array = NULL;
+		// 创建JSON Object  
+		cJSON* root = NULL;
+		cJSON* nodeobj = NULL;
+		cJSON* nodeobj_p = NULL;
+		root = cJSON_CreateObject();
+		if (root == NULL) return 0;
+		// 加入节点（键值对）
+
+
+		cJSON_AddNumberToObject(root, "mid",respMid);
+		cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
+		cJSON_AddNumberToObject(root, "code",0);
+
+		cJSON_AddStringToObject(root, "identifier","partial_discharge_monitor");
+		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
+		char *sprinBuf=RT_NULL;
+		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
+		
+		{
+		Array = cJSON_CreateArray();
+		if (Array == NULL) return 0;
+		cJSON_AddItemToObject(root, "params", Array);
+
+		nodeobj = cJSON_CreateObject();
+		cJSON_AddItemToArray(Array, nodeobj);
+		cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.partDischag[num].ID));
+		cJSON_AddNumberToObject(nodeobj,"responseStatus",partDiscStru_p[num].respStat);
+		nodeobj_p= cJSON_CreateObject();
+		cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
+		if(X==A){
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeA);
+				cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].freqA);
+				cJSON_AddItemToObject(nodeobj_p,"freqA",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeA);
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataA",cJSON_CreateString(sprinBuf));
+
+				cJSON_AddItemToObject(nodeobj_p,"atlasPdA",cJSON_CreateString(""));
+				cJSON_AddItemToObject(nodeobj_p,"atlasFreqA",cJSON_CreateString(""));
+				cJSON_AddNumberToObject(nodeobj_p,"totalNum",0);
+				cJSON_AddNumberToObject(nodeobj_p,"currentNum",0);
+		}
+		else if(X==B){
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeB);
+				cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].freqB);
+				cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeB);
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataB",cJSON_CreateString(sprinBuf));
+
+				cJSON_AddItemToObject(nodeobj_p,"atlasPdB",cJSON_CreateString(""));
+				cJSON_AddItemToObject(nodeobj_p,"atlasFreqB",cJSON_CreateString(""));
+				cJSON_AddNumberToObject(nodeobj_p,"totalNum",0);
+				cJSON_AddNumberToObject(nodeobj_p,"currentNum",0);
+		}
+		else if(X==C){
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeC);
+				cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].freqC);
+				cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeC);
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataC",cJSON_CreateString(sprinBuf));
+
+				cJSON_AddItemToObject(nodeobj_p,"atlasPdC",cJSON_CreateString(""));
+				cJSON_AddItemToObject(nodeobj_p,"atlasFreqC",cJSON_CreateString(""));
+				cJSON_AddNumberToObject(nodeobj_p,"totalNum",0);
+				cJSON_AddNumberToObject(nodeobj_p,"currentNum",0);
+		}
+		cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+
+		}
+		sprintf(sprinBuf,"%llu",utcTime_ms());
+		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
+		// 打印JSON数据包  
+		
+		
+		
+		int len=0;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
+		len+=HEAD_LEN;//json长度最后再填写
+		// 释放内存  
+		out = cJSON_Print(root);
+		
+		rt_strcpy((char *)NetTxBuffer+len,out);
+		len+=rt_strlen(out);
+		if(out!=NULL){
+				for(int i=0;i<rt_strlen(out);i++)
+						rt_kprintf("%c",out[i]);
+				rt_kprintf("\n");
+				rt_free(out);
+				out=NULL;
+		}
+		if(root!=NULL){
+			cJSON_Delete(root);
+			out=NULL;
+		}
+		//lenth
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  //crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
+		//tail
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
+	
+
+
+		rt_free(sprinBuf);
+		sprinBuf=RT_NULL;
+
+		return 1;
+}
+
+//char sprintPdBuf[5400*3]    CCMRAM;
+//json格式打包   
+//输入 phaseEnum X, A B C三相中一个
+//输入int num, 输入局放传感器的数目
+//int totalLen,总的记录号个数占2个字节  pdBuf个数需要除掉2
+//int offset, 记录号偏移地址占2个字节 pdBuf个数需要除掉2
+//int readLen 读取的长度 1个记录号占2个字节  记录号的长度  pdBuf个数需要除掉2
+static  int atlasJsonReadPack(phaseEnum X,int num,int totalLen,int offset,int readLen)
+{
+
+		char* out = NULL;
+		//创建数组
+		cJSON* Array = NULL;
+		// 创建JSON Object  
+		cJSON* root = NULL;
+		cJSON* nodeobj = NULL;
+		cJSON* nodeobj_p = NULL;
+		root = cJSON_CreateObject();
+		if (root == NULL) return 0;
+		// 加入节点（键值对）
+
+
+		cJSON_AddNumberToObject(root, "mid",respMid);
+		cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
+		cJSON_AddNumberToObject(root, "code",0);
+
+		cJSON_AddStringToObject(root, "identifier","partial_discharge_monitor");
+		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
+		char *sprinBuf=RT_NULL;
+		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
+		
+		{
+		Array = cJSON_CreateArray();
+		if (Array == NULL) return 0;
+		cJSON_AddItemToObject(root, "params", Array);
+
+		nodeobj = cJSON_CreateObject();
+		cJSON_AddItemToArray(Array, nodeobj);
+		cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.partDischag[num].ID));
+		cJSON_AddNumberToObject(nodeobj,"responseStatus",partDiscStru_p[num].respStat);
+		nodeobj_p= cJSON_CreateObject();
+		cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
+		if(X==A){
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeA);
+				cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].freqA);
+				cJSON_AddItemToObject(nodeobj_p,"freqA",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeA);
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataA",cJSON_CreateString(sprinBuf));
+			  for(int j=0;j<readLen/2;j++){
+						sprintf((char *)NetTxBuffer+j*5,"%02X%02X%c",pdBuf[offset+4*j],pdBuf[offset+4*j+1],',');
+				}
+				NetTxBuffer[readLen/2*5]=0;//追加0
+				if(strlen((char *)NetTxBuffer)!=readLen){
+					rt_kprintf("%sERR:readlen[%d] strlen[%d]\n",sign,strlen((char *)NetTxBuffer),readLen);
+				}
+				cJSON_AddItemToObject(nodeobj_p,"atlasPdA",cJSON_CreateString((char *)NetTxBuffer));
+			  for(int j=0;j<readLen/2;j++){
+						sprintf((char *)NetTxBuffer+j*5,"%02X%02X%c",pdBuf[offset+4*j+2],pdBuf[offset+4*j+3],',');
+				}
+				NetTxBuffer[readLen/2*5]=0;//追加0
+				cJSON_AddItemToObject(nodeobj_p,"atlasFreqA",cJSON_CreateString((char *)NetTxBuffer));
+				cJSON_AddNumberToObject(nodeobj_p,"totalNum",totalLen);
+				cJSON_AddNumberToObject(nodeobj_p,"currentNum",readLen);
+		}
+		else if(X==B){
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeB);
+				cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].freqB);
+				cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeB);
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataB",cJSON_CreateString(sprinBuf));
+			  for(int j=0;j<readLen/2;j++){
+						sprintf((char *)NetTxBuffer+j*5,"%02X%02X%c",pdBuf[offset+4*j],pdBuf[offset+4*j+1],',');
+				}
+				NetTxBuffer[readLen/2*5]=0;//追加0
+				if(strlen((char *)NetTxBuffer)!=readLen){
+					rt_kprintf("%sERR:readlen[%d] strlen[%d]\n",sign,strlen((char *)NetTxBuffer),readLen);
+				}
+				cJSON_AddItemToObject(nodeobj_p,"atlasPdB",cJSON_CreateString((char *)NetTxBuffer));
+			  for(int j=0;j<readLen/2;j++){
+						sprintf((char *)NetTxBuffer+j*5,"%02X%02X%c",pdBuf[offset+4*j+2],pdBuf[offset+4*j+3],',');
+				}
+				NetTxBuffer[readLen/2*5]=0;//追加0
+				cJSON_AddItemToObject(nodeobj_p,"atlasFreqB",cJSON_CreateString((char *)NetTxBuffer));
+				cJSON_AddNumberToObject(nodeobj_p,"totalNum",totalLen);
+				cJSON_AddNumberToObject(nodeobj_p,"currentNum",readLen);
+		}
+		else if(X==C){
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeC);
+				cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].freqC);
+				cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));
+				sprintf(sprinBuf,"%d",partDiscStru_p[num].dischargeC);
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataC",cJSON_CreateString(sprinBuf));
+			  for(int j=0;j<readLen/2;j++){
+						sprintf((char *)NetTxBuffer+j*5,"%02X%02X%c",pdBuf[offset+4*j],pdBuf[offset+4*j+1],',');
+				}
+				NetTxBuffer[readLen/2*5]=0;//追加0
+				if(strlen((char *)NetTxBuffer)!=readLen){
+					rt_kprintf("%sERR:readlen[%d] strlen[%d]\n",sign,strlen((char *)NetTxBuffer),readLen);
+				}
+				cJSON_AddItemToObject(nodeobj_p,"atlasPdC",cJSON_CreateString((char *)NetTxBuffer));
+			  for(int j=0;j<readLen/2;j++){
+						sprintf((char *)NetTxBuffer+j*5,"%02X%02X%c",pdBuf[offset+4*j+2],pdBuf[offset+4*j+3],',');
+				}
+				NetTxBuffer[readLen/2*5]=0;//追加0
+				cJSON_AddItemToObject(nodeobj_p,"atlasFreqC",cJSON_CreateString((char *)NetTxBuffer));
+				cJSON_AddNumberToObject(nodeobj_p,"totalNum",totalLen);
+				cJSON_AddNumberToObject(nodeobj_p,"currentNum",readLen);
+		}
+		cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+
+		}
+		sprintf(sprinBuf,"%llu",utcTime_ms());
+		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
+		// 打印JSON数据包  
+		
+		
+		
+		int len=0;
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
+		len+=HEAD_LEN;//json长度最后再填写
+		// 释放内存  
+		out = cJSON_Print(root);
+		
+		rt_strcpy((char *)NetTxBuffer+len,out);
+		len+=rt_strlen(out);
+		if(out!=NULL){
+//				for(int i=0;i<rt_strlen(out);i++)
+//						rt_kprintf("%c",out[i]);
+//				rt_kprintf("\n");
+				rt_free(out);
+				out=NULL;
+		}
+		if(root!=NULL){
+			cJSON_Delete(root);
+			out=NULL;
+		}
+		//lenth
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  //crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
+		//tail
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
+	
+//				for(int i=0;i<len;i++)
+//						rt_kprintf("%02x ",NetTxBuffer[i]);
+//				rt_kprintf("\n");
+
+		rt_free(sprinBuf);
+		sprinBuf=RT_NULL;
+		static int times=0;
+    rt_kprintf("atlasJson len =%d\n",len);
+		
+		times++;
+		
+		rt_kprintf("total send len =%d\n",len*times);
+		
+		return len;
+}
+//子站下发读取图谱命令的回应  
+void  partDischgAtlasResp(char *ID)
+{ 
+	  int readNum=0,len=0;
+		for(int i=0;i<PARTDISCHAG_485_NUM;i++){
+			 if(strcmp(sheet.partDischag[i].ID,ID)==0){
+						readPdFreqDischarge(i);
+				    readNum=i;
+				    break;
+				}
+		}
+		partDiscStru_p[readNum].freqA=1000;//test suqi
+				partDiscStru_p[readNum].freqB=2000;//test suqi
+				partDiscStru_p[readNum].freqC=3000;//test suqi
+		if(partDiscStru_p[readNum].freqA==0){
+				atlasJsonNodataPack(A,readNum);
+			  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
+		}
+		else{
+				len=partDischagChanlRead(A,readNum)/2;//除以2 --读取的实际记录号个数
+			  len=2700;//test suqi
+			  if(len<=sizeof(pdBuf)/4){//一包就能发完
+					 atlasJsonReadPack(A,readNum,len,0,len);
+			     rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+				}
+				else{//分两包发
+					 atlasJsonReadPack(A,readNum,len,0,len/2);
+					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					 rt_thread_mdelay(10);
+					 atlasJsonReadPack(A,readNum,len,len/2,len-(len/2));
+					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					 rt_thread_mdelay(10);
+				}
+		}
+		if(partDiscStru_p[readNum].freqB==0){
+				atlasJsonNodataPack(B,readNum);
+			  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
+		}
+		else{
+				len=partDischagChanlRead(B,readNum)/2;//除以2 --读取的实际记录号个数
+				len=2700;//test suqi
+			  if(len<=sizeof(pdBuf)/4){//一包就能发完
+					 atlasJsonReadPack(B,readNum,len,0,len);
+			     rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+				}
+				else{//分两包发
+					 atlasJsonReadPack(B,readNum,len,0,len/2);
+					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					 rt_thread_mdelay(10);
+					 atlasJsonReadPack(B,readNum,len,len/2,len-(len/2));
+					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					 rt_thread_mdelay(10);
+				}
+		}
+		if(partDiscStru_p[readNum].freqC==0){
+				atlasJsonNodataPack(C,readNum);
+			  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
+		}
+		else{
+				len=partDischagChanlRead(C,readNum)/2;//除以2 --读取的实际记录号个数
+				len=2700;//test suqi
+			  if(len<=sizeof(pdBuf)/4){//一包就能发完
+					 atlasJsonReadPack(C,readNum,len,0,len);
+			     rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+				}
+				else{//分两包发
+					 atlasJsonReadPack(C,readNum,len,0,len/2);
+					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					 rt_thread_mdelay(10);
+					 atlasJsonReadPack(C,readNum,len,len/2,len-(len/2));
+					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					 rt_thread_mdelay(10);
+				}
+		}
+		
 }

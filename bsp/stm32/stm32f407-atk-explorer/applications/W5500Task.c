@@ -112,7 +112,9 @@ void  w5500Task(void *parameter)
 			      //ret=rt_sem_take(w5500Iqr_semp,1000);//阻塞1秒 查询中断状态 等中断来//RT_WAITING_FOREVER
 			      static int count=0;      
 						void loopback_tcp(uint16 port);
+				    rt_mutex_take(w5500Spi_mutex,RT_WAITING_FOREVER);
 						loopback_tcp( packFlash.netIpFlash.remotePort);
+				    rt_mutex_release(w5500Spi_mutex);
 						rt_thread_delay(100);
 					  if(gbNetState ==RT_FALSE){//没联网  重新初始化
 								if(count++>20){ //5秒或者连续中断5次 还没联网 重启

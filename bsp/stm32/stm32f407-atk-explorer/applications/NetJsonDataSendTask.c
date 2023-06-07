@@ -12,12 +12,12 @@ uint16_t netDataSendCheck(uint8_t *str)
 	  int lenth=0;
 		if((str[0]==(uint8_t)((uint16_t)HEAD>>8))&&(str[1]==(uint8_t)(HEAD))){
 			  lenth= (str[2]<<8)+str[3]+HEAD_LEN+LENTH_LEN+CRC_LEN+TAIL_LEN;  
-				if(lenth<=2048){
-				}
-				else{
-					rt_kprintf("%slenth  err£º%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",lenth,str[0],str[1],str[2],str[3],task);
+//				if(lenth<=2048){
+//				}
+//				else{
+					rt_kprintf("%slenth £º%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",task,lenth,str[0],str[1],str[2],str[3]);
 						//rt_kprintf("lenth  err %d str[2]:%d  str[3]:%d\r\n",lenth,str[2],str[3]);
-				}
+//				}
 		}
 		else{
 				 rt_kprintf("%ssend head  err\r\n",task);
@@ -50,7 +50,12 @@ void   netDataSendTask(void *para)
         { 
 						int lenth = netDataSendCheck(str);
 						if((lenth!=0)&&(gbNetState ==RT_TRUE)){
+							
 								netSend(str,lenth);
+//								for(int i=0;i<lenth;i++)
+//										rt_kprintf("%c",str[i]);
+//								rt_kprintf("\n");
+
 						}
 						else
 							rt_kprintf("%sERR:net offline drop data\r\n",task);

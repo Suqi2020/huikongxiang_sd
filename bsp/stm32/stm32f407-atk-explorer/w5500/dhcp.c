@@ -20,6 +20,7 @@
 #include "rtthread.h"
 #include "board.h"
 //#define DHCP_DEBUG
+#if 1
 const static char sign[]="[dhcp]";
 DHCP_Get DHCP_GET;
 
@@ -44,7 +45,7 @@ uint8		DHCP_timer;
 uint8 Conflict_flag = 0;
 uint32  DHCP_XID        = DEFAULT_XID;				
 //RIP_MSG DHCPBUF[1024];
-uint8  DHCPBUF[1024]  __attribute__ ((aligned (4))) ;
+uint8  DHCPBUF[1024] CCMRAM;// __attribute__ ((aligned (4))) ;
 RIP_MSG*  pRIPMSG = (RIP_MSG*)DHCPBUF;			/*DHCPœ˚œ¢÷∏’Î*/
 
 
@@ -833,3 +834,4 @@ int  do_dhcp(void)
 
 
 
+#endif

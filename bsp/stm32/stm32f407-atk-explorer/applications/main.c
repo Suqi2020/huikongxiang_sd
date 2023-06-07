@@ -210,10 +210,24 @@
 //V3.03    SDIO_TRANSFER_CLK_DIV改为0 提高写入速度 达到3538992字节/279秒=12.38KB/秒
 //V3.04    增加sd写入时候根据时间保存 以ID号建立二级目录 保存RTC记录。
 //V3.05    使用STM32F4中的CCM的另外64K内存  __attribute__((at(0x10000000)));
-#define APP_VER       ((3<<8)+5)//0x0105 表示1.5版本
+//V3.06    更改ccm用宏定义  #define  CCMRAM __attribute__((section("ccmram"))) 
+//         修改link文件 
+//V3.07    W5500发送最大只能支持2kbuf 怎么设置来支持16kbuf  需要初始化txsize[MAX_SOCK_NUM]   以及socket数字需要与其对应
+//         如果设置MAX_SOCK_NUM=1     SOCK_TCPC必须为0
+//         加入w5500SpiMutex 互斥保护 发送和接收分别再两个进程中 会同时操作spi     20230607
+/*
+		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
+		 .ANY (+RW +ZI)
+		}
+		RW_IRAM1 0x10000000 0x00010000  {  ; RW data
+		 .ANY (ccmram)
+		}
+*/
+//          
+#define APP_VER       ((3<<8)+7)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230602";
+const char date[]="20230607";
 
 //static    rt_thread_t tid 	= RT_NULL;
 static    rt_thread_t tidW5500 	  = RT_NULL;
@@ -224,9 +238,12 @@ static    rt_thread_t tidLCD      = RT_NULL;
 static    rt_thread_t tidAutoCtrl = RT_NULL;
 
 
+
+
 //互斥信号量定义
 rt_mutex_t   read485_mutex=RT_NULL;//防止多个线程同事读取modbus数据
 rt_mutex_t   lcdSend_mutex=RT_NULL;//防止多个线程同事往lcd发数据
+rt_mutex_t   w5500Spi_mutex=RT_NULL;//防止多个线程同时操作spi
 //邮箱的定义
 extern struct  rt_mailbox mbNetSendData;;
 static char 	 mbSendPool[20];//发送缓存20条
@@ -314,9 +331,11 @@ char *strnum="1234.5678";
 extern void creatFolder(void);
 //char testNum[4]={1,2,3,4};
 void  outIOInit(void);
+
+
 int main(void)
 {
-		
+
 	  rt_kprintf("\n%\n",sign,date,(uint8_t)(APP_VER>>8),(uint8_t)APP_VER);
     rt_kprintf("\n%s%s  ver=%02d.%02d\n",sign,date,(uint8_t)(APP_VER>>8),(uint8_t)APP_VER);
 	  rt_err_t result;
@@ -348,6 +367,13 @@ int main(void)
     {
         rt_kprintf("%screate lcdSend_mutex failed\n",sign);
     }
+		w5500Spi_mutex= rt_mutex_create("w5500Spi_mutex", RT_IPC_FLAG_FIFO);
+		if (w5500Spi_mutex == RT_NULL)
+    {
+        rt_kprintf("%screate w5500Spi_mutex failed\n",sign);
+    }	
+		
+		
 #if   USE_RINGBUF
 
 #else
@@ -386,34 +412,34 @@ int main(void)
 
 ////////////////////////////////任务////////////////////////////////////
 
-		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512,3, 10 );
+		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
 		if(tidNetRec!=NULL){
 				rt_thread_startup(tidNetRec);													 
 				rt_kprintf("%sRTcreat netDataRecTask \r\n",sign);
 		}
-		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512,3, 10 );
+		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
 		if(tidNetSend!=NULL){
 				rt_thread_startup(tidNetSend);													 
 				rt_kprintf("%sRTcreat netDataSendTask \r\n",sign);
 		}
 
 		
-		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*2,4, 10 );
+		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
 		if(tidUpkeep!=NULL){
 				rt_thread_startup(tidUpkeep);													 
 				rt_kprintf("%sRTcreat upKeepStateTask \r\n",sign);
 		}
-		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512,2, 10 );
+		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512*2,2, 10 );
 		if(tidLCD!=NULL){
 				rt_thread_startup(tidLCD);													 
 				rt_kprintf("%sRTcreat LCDStateTask \r\n",sign);
 		}
-    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,1024,2, 10 );
+    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
 		if(tidW5500!=NULL){
 				rt_thread_startup(tidW5500);													 
 				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
 		}
-		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512,5, 10 );
+		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
 		if(tidAutoCtrl!=NULL){
 				rt_thread_startup(tidAutoCtrl);													 
 				rt_kprintf("%sRTcreat autoCtrlTask\r\n",sign);

@@ -6,17 +6,17 @@
 #include "Types.h"
 
 /*Socket 端口选择，可按自己的习惯定义*/
-#define SOCK_TCPS             0
-#define SOCK_HUMTEM			  0
-#define SOCK_PING			  0
-#define SOCK_TCPC             1
-#define SOCK_UDPS             2
-#define SOCK_WEIBO      	  2
+//#define SOCK_TCPS             0
+//#define SOCK_HUMTEM			  0
+//#define SOCK_PING			  0
+#define SOCK_TCPC             0
+//#define SOCK_UDPS             2
+//#define SOCK_WEIBO      	  2
 #define SOCK_DHCP             3
-#define SOCK_HTTPS            4
-#define SOCK_DNS              5
-#define SOCK_SMTP             6
-#define SOCK_NTP              7
+//#define SOCK_HTTPS            4
+//#define SOCK_DNS              5
+//#define SOCK_SMTP             6
+//#define SOCK_NTP              7
 //#define NETBIOS_SOCK    6 //在netbios.c已定义
 
 extern uint8 socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag); // Opens a socket(TCP or UDP or IP_RAW mode)

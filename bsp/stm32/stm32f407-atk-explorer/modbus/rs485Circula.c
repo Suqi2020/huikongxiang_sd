@@ -452,7 +452,7 @@ bool modCirCurrWarn2Send()
 		int len=0;
 		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
 		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=LENTH_LEN;//json长度最后再填写
+		len+=HEAD_LEN;//json长度最后再填写
 		// 释放内存  
 		out = cJSON_Print(root);
 		rt_strcpy((char *)NetTxBuffer+len,out);

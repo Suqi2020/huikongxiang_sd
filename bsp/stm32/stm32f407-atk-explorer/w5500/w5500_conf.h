@@ -34,7 +34,7 @@ extern uint8    use_eeprom;                             	  /* 是否使用EEPROM中的
  * STM32F103VET6 -> 野火ISO-MINI-V3开发板
  */
 /*使用野火ISO-MINI-V3开发板*/
-#define STM32F103VET6
+//#define STM32F103VET6
 #undef  STM32F103ZET6
 
 /*定义SPI2作为W5500的硬件接口*/
