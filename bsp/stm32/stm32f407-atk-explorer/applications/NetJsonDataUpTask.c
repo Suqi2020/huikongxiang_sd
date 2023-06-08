@@ -136,7 +136,7 @@ static void  timeOutRunFun()
 //				break;
 			case REG_TIME://注册 注册成功后定时器就关闭 输入输出状态跟谁注册信息上发
 			  if(gbRegFlag==RT_FALSE){
-					partDischgAtlasResp("12345");
+//					partDischgAtlasResp("12345");//test 
 //					 jsonBufPackTest();
 //					rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
       			break;//suqi

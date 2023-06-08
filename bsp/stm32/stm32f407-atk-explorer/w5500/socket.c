@@ -190,17 +190,11 @@ uint16 send(SOCKET s, const uint8 * buf, uint16 len)
 
   if (len > getIINCHIP_TxMAX(s)) ret = getIINCHIP_TxMAX(s); // check size not to exceed MAX size.
   else ret = len;
-printf("SEND 000 %d %d  %d\r\n",getIINCHIP_TxMAX(s),ret,len);//0 2048
+//printf("SEND 000 %d %d  %d\r\n",getIINCHIP_TxMAX(s),ret,len);//0 2048
 	int count =CYCLETIMES*10;
   // if freebuf is available, start.
   do
   {
-		
-		
-//		          IINCHIP_WRITE( (Sn_TXMEM_SIZE(i)), tx_size[i]);
-//          IINCHIP_WRITE( (Sn_RXMEM_SIZE(i)), rx_size[i]);
-		
-
     freesize = getSn_TX_FSR(s);
     status = IINCHIP_READ(Sn_SR(s));
     if ((status != SOCK_ESTABLISHED) && (status != SOCK_CLOSE_WAIT))
@@ -209,12 +203,9 @@ printf("SEND 000 %d %d  %d\r\n",getIINCHIP_TxMAX(s),ret,len);//0 2048
 			printf("SEND_ERR %d\r\n",status);
       break;
     }
-	//	rt_thread_mdelay(1);
-//		#if(MAX_SOCK_NUM!=8)
-//		 break;//不管有多大就跳出  add by suqi 20221017
-//		#endif
+
   } while ((freesize < ret) &&(count--));
-printf("SEND 001 %d %d\r\n",freesize,ret);//0 2048
+
   // copy data
   send_data_processing(s, (uint8 *)buf, ret);
   IINCHIP_WRITE( Sn_CR(s) ,Sn_CR_SEND);

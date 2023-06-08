@@ -879,7 +879,8 @@ void LCDRstDispSameID(uint16_t addr)
 
 
 #define PASSWORD_LEN   8
-char passWord[PASSWORD_LEN]="gy2023";
+static char passWord1[PASSWORD_LEN]="gy2023";
+static char passWord2[PASSWORD_LEN]="666666";
 bool pwssWdRet=false;
 bool checkPassWord(char *rec)
 {
@@ -891,7 +892,10 @@ bool checkPassWord(char *rec)
 						break;
 				}
 		}
-		if(strcmp(passWord,passWord_p)==0){
+		if(strcmp(passWord1,passWord_p)==0){
+				return true;
+		}
+		if(strcmp(passWord2,passWord_p)==0){
 				return true;
 		}
 		return false;

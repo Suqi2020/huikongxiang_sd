@@ -854,7 +854,7 @@ void partDischagRead2Send(rt_bool_t netStat,bool respFlag)
 		int workFlag=RT_FALSE;
 		for(int i=0;i<PARTDISCHAG_485_NUM;i++){
 			 if(sheet.partDischag[i].workFlag==RT_TRUE){
-				    rt_thread_mdelay(2000);
+				    rt_thread_mdelay(200);
 						readPdFreqDischarge(i);
 						workFlag=RT_TRUE;
 				}
@@ -884,6 +884,7 @@ char pdBuf[5400*2] CCMRAM;//读取modbus图谱数据放到这里
 //返回 buffer实际数据长度  最大 10800 最小5400
 #define READ_LEN 100 //每次最多读取的寄存器个数  返回寄存器数据为 READ_LEN*2
 //调用本函数前必须调用readPdFreqDischarge
+//记录号不能是单数 
 static int partDischagChanlRead(phaseEnum X,int num)
 {
 		int rdTotalNum =0;
@@ -911,11 +912,15 @@ static int partDischagChanlRead(phaseEnum X,int num)
 					rt_kprintf("\n");
 					memset(buf,0,LENTH);
 					len=0;
-					if(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 2000) == RT_EOK){//第一次接收时间放长点  相应时间有可能比较久
+					if(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 3000) == RT_EOK){//第一次接收时间放长点  相应时间有可能比较久
 							len++;
 					}
 					while(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 10) == RT_EOK){//115200 波特率1ms 10个数据
 							len++;
+					}
+					if(len==0){
+							rt_kprintf("%s partDis read atlas not resp ,break \n",sign);
+							break;
 					}
 					rt_kprintf("%srec:",sign);
 					for(int j=0;j<len;j++){
@@ -943,7 +948,6 @@ static int partDischagChanlRead(phaseEnum X,int num)
 							}
 					}
 					if(readTimesP==readTimes){
-						  
 							break;
 					}
 					readTimesP++; 
@@ -1140,6 +1144,7 @@ static  int atlasJsonReadPack(phaseEnum X,int num,int totalLen,int offset,int re
 				cJSON_AddItemToObject(nodeobj_p,"atlasFreqA",cJSON_CreateString((char *)NetTxBuffer));
 				cJSON_AddNumberToObject(nodeobj_p,"totalNum",totalLen);
 				cJSON_AddNumberToObject(nodeobj_p,"currentNum",readLen);
+				cJSON_AddNumberToObject(nodeobj_p,"startNum",offset);
 		}
 		else if(X==B){
 				sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeB);
@@ -1163,6 +1168,7 @@ static  int atlasJsonReadPack(phaseEnum X,int num,int totalLen,int offset,int re
 				cJSON_AddItemToObject(nodeobj_p,"atlasFreqB",cJSON_CreateString((char *)NetTxBuffer));
 				cJSON_AddNumberToObject(nodeobj_p,"totalNum",totalLen);
 				cJSON_AddNumberToObject(nodeobj_p,"currentNum",readLen);
+				cJSON_AddNumberToObject(nodeobj_p,"startNum",offset);
 		}
 		else if(X==C){
 				sprintf(sprinBuf,"%d",partDiscStru_p[num].amplitudeC);
@@ -1186,7 +1192,9 @@ static  int atlasJsonReadPack(phaseEnum X,int num,int totalLen,int offset,int re
 				cJSON_AddItemToObject(nodeobj_p,"atlasFreqC",cJSON_CreateString((char *)NetTxBuffer));
 				cJSON_AddNumberToObject(nodeobj_p,"totalNum",totalLen);
 				cJSON_AddNumberToObject(nodeobj_p,"currentNum",readLen);
+				cJSON_AddNumberToObject(nodeobj_p,"startNum",offset);
 		}
+		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 
 		}
@@ -1234,16 +1242,17 @@ static  int atlasJsonReadPack(phaseEnum X,int num,int totalLen,int offset,int re
 
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
-		static int times=0;
-    rt_kprintf("atlasJson len =%d\n",len);
+//		static int times=0;
+//    rt_kprintf("atlasJson len =%d\n",len);
+//		
+//		times++;
 		
-		times++;
-		
-		rt_kprintf("total send len =%d\n",len*times);
+//		rt_kprintf("total send len =%d\n",len*times);
 		
 		return len;
 }
 //子站下发读取图谱命令的回应  
+//输入 局放的ID号  输出 无
 void  partDischgAtlasResp(char *ID)
 { 
 	  int readNum=0,len=0;
@@ -1254,25 +1263,27 @@ void  partDischgAtlasResp(char *ID)
 				    break;
 				}
 		}
-		partDiscStru_p[readNum].freqA=1000;//test suqi
-				partDiscStru_p[readNum].freqB=2000;//test suqi
-				partDiscStru_p[readNum].freqC=3000;//test suqi
+//		partDiscStru_p[readNum].freqA=1000;//test suqi
+//		partDiscStru_p[readNum].freqB=2000;//test suqi
+//		partDiscStru_p[readNum].freqC=3000;//test suqi
 		if(partDiscStru_p[readNum].freqA==0){
 				atlasJsonNodataPack(A,readNum);
 			  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
+			  
 		}
 		else{
 				len=partDischagChanlRead(A,readNum)/2;//除以2 --读取的实际记录号个数
-			  len=2700;//test suqi
+//			  len=2699;//test suqi
 			  if(len<=sizeof(pdBuf)/4){//一包就能发完
 					 atlasJsonReadPack(A,readNum,len,0,len);
 			     rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					 rt_kprintf("%s send atlas--A\n",sign);
 				}
 				else{//分两包发
 					 atlasJsonReadPack(A,readNum,len,0,len/2);
 					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					 rt_thread_mdelay(10);
-					 atlasJsonReadPack(A,readNum,len,len/2,len-(len/2));
+					 atlasJsonReadPack(A,readNum,len,len/2,(len/2));
 					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					 rt_thread_mdelay(10);
 				}
@@ -1283,16 +1294,17 @@ void  partDischgAtlasResp(char *ID)
 		}
 		else{
 				len=partDischagChanlRead(B,readNum)/2;//除以2 --读取的实际记录号个数
-				len=2700;//test suqi
+//				len=2702;//test suqi
 			  if(len<=sizeof(pdBuf)/4){//一包就能发完
 					 atlasJsonReadPack(B,readNum,len,0,len);
 			     rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					 rt_kprintf("%s send atlas--B\n",sign);
 				}
 				else{//分两包发
 					 atlasJsonReadPack(B,readNum,len,0,len/2);
 					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					 rt_thread_mdelay(10);
-					 atlasJsonReadPack(B,readNum,len,len/2,len-(len/2));
+					 atlasJsonReadPack(B,readNum,len,len/2,(len/2));
 					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					 rt_thread_mdelay(10);
 				}
@@ -1303,16 +1315,17 @@ void  partDischgAtlasResp(char *ID)
 		}
 		else{
 				len=partDischagChanlRead(C,readNum)/2;//除以2 --读取的实际记录号个数
-				len=2700;//test suqi
+//				len=5400;//test suqi
 			  if(len<=sizeof(pdBuf)/4){//一包就能发完
 					 atlasJsonReadPack(C,readNum,len,0,len);
 			     rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					 rt_kprintf("%s send atlas--C\n",sign);
 				}
 				else{//分两包发
 					 atlasJsonReadPack(C,readNum,len,0,len/2);
 					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					 rt_thread_mdelay(10);
-					 atlasJsonReadPack(C,readNum,len,len/2,len-(len/2));
+					 atlasJsonReadPack(C,readNum,len,len/2,(len/2));
 					 rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					 rt_thread_mdelay(10);
 				}
