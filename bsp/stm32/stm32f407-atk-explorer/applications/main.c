@@ -414,38 +414,38 @@ int main(void)
 
 ////////////////////////////////任务////////////////////////////////////
 
-//		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
-//		if(tidNetRec!=NULL){
-//				rt_thread_startup(tidNetRec);													 
-//				rt_kprintf("%sRTcreat netDataRecTask \r\n",sign);
-//		}
-//		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
-//		if(tidNetSend!=NULL){
-//				rt_thread_startup(tidNetSend);													 
-//				rt_kprintf("%sRTcreat netDataSendTask \r\n",sign);
-//		}
+		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
+		if(tidNetRec!=NULL){
+				rt_thread_startup(tidNetRec);													 
+				rt_kprintf("%sRTcreat netDataRecTask \r\n",sign);
+		}
+		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
+		if(tidNetSend!=NULL){
+				rt_thread_startup(tidNetSend);													 
+				rt_kprintf("%sRTcreat netDataSendTask \r\n",sign);
+		}
 
-//		
-//		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
-//		if(tidUpkeep!=NULL){
-//				rt_thread_startup(tidUpkeep);													 
-//				rt_kprintf("%sRTcreat upKeepStateTask \r\n",sign);
-//		}
-//		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512*2,2, 10 );
-//		if(tidLCD!=NULL){
-//				rt_thread_startup(tidLCD);													 
-//				rt_kprintf("%sRTcreat LCDStateTask \r\n",sign);
-//		}
-//    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
-//		if(tidW5500!=NULL){
-//				rt_thread_startup(tidW5500);													 
-//				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
-//		}
-//		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
-//		if(tidAutoCtrl!=NULL){
-//				rt_thread_startup(tidAutoCtrl);													 
-//				rt_kprintf("%sRTcreat autoCtrlTask\r\n",sign);
-//		}
+		
+		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
+		if(tidUpkeep!=NULL){
+				rt_thread_startup(tidUpkeep);													 
+				rt_kprintf("%sRTcreat upKeepStateTask \r\n",sign);
+		}
+		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512*2,2, 10 );
+		if(tidLCD!=NULL){
+				rt_thread_startup(tidLCD);													 
+				rt_kprintf("%sRTcreat LCDStateTask \r\n",sign);
+		}
+    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
+		if(tidW5500!=NULL){
+				rt_thread_startup(tidW5500);													 
+				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
+		}
+		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
+		if(tidAutoCtrl!=NULL){
+				rt_thread_startup(tidAutoCtrl);													 
+				rt_kprintf("%sRTcreat autoCtrlTask\r\n",sign);
+		}
 #ifdef  USE_WDT
 		extern IWDG_HandleTypeDef hiwdg;
 		static    rt_thread_t tidWDT      = RT_NULL;
@@ -462,7 +462,7 @@ int main(void)
 //			sprintf(test,"long:%u", a);//"monitoringTime":"1655172531937"
 //			rt_kprintf("%s %s \r\n",sign,test);
 //////////////////////////////结束//////////////////////////////////////
-    while (1)//task用于测试 以及闪灯操作
+    while (0)//task用于测试 以及闪灯操作
     {
 				hardWareDriverTest();
 				HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
