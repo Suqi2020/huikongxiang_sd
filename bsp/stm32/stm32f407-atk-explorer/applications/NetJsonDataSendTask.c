@@ -25,21 +25,6 @@ uint16_t netDataSendCheck(uint8_t *str)
 void   netDataSendTask(void *para)
 {
 		uint8_t *str=RT_NULL;
-		while(0){//suqi
-			//rt_thread_mdelay(1000000);
-			  if (rt_mb_recv(&mbNetSendData, (rt_ubase_t *)&str, 1000) == RT_EOK)
-        { 
-						int lenth = strlen((char*)str);
-					//	if((lenth!=0)&&(gbNetState ==RT_TRUE)){
-								netSend(str,lenth);
-//						}
-//						else
-//							rt_kprintf("%sERR:net offline drop data\r\n",task);
-				}
-#ifdef  USE_WDT
-			rt_event_send(&WDTEvent,EVENT_WDT_SENDTASK);
-#endif
-		}
 		while(1){
 			  if (rt_mb_recv(&mbNetSendData, (rt_ubase_t *)&str, 1000) == RT_EOK)
         { 

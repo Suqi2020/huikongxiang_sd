@@ -221,7 +221,8 @@ extern void huanLiuTxtSaveSD(char *id,char *data);
 //char data[100];
 uint16_t circulaJsonPack(bool respFlag)
 {
-
+		char *data;
+		data =rt_malloc(200); // suqi 根据实际长度来调整
 		char* out = NULL;
 		//创建数组
 		cJSON* Array = NULL;
@@ -268,21 +269,32 @@ uint16_t circulaJsonPack(bool respFlag)
 					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 					
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurA);
-					cJSON_AddItemToObject(nodeobj_p,"earthCurA",cJSON_CreateString(sprinBuf));
-					cJSON_AddItemToObject(nodeobj_p,"runCurA",cJSON_CreateString(""));
-					cJSON_AddItemToObject(nodeobj_p,"loadRatioA",cJSON_CreateString(""));
+					
+					cJSON_AddItemToObject(nodeobj_p,"earthCurA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"runCurA",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"loadRatioA",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
 					
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurB);
-					cJSON_AddItemToObject(nodeobj_p,"earthCurB",cJSON_CreateString(sprinBuf));
-					cJSON_AddItemToObject(nodeobj_p,"runCurB",cJSON_CreateString(""));
-					cJSON_AddItemToObject(nodeobj_p,"loadRatioB",cJSON_CreateString(""));
+					cJSON_AddItemToObject(nodeobj_p,"earthCurB",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"runCurB",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"loadRatioB",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
 					
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurC);
-					cJSON_AddItemToObject(nodeobj_p,"earthCurC",cJSON_CreateString(sprinBuf));
-					cJSON_AddItemToObject(nodeobj_p,"runCurC",cJSON_CreateString(""));
-					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));
+					cJSON_AddItemToObject(nodeobj_p,"earthCurC",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"runCurC",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
 					sprintf(sprinBuf,"%llu",utcTime_ms());
-					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"\r\n");
+//					huanLiuTxtReadSD(sheet.cirCula[i].ID);
+					//uint32_t time =65000;
+					//while(time--){
+					huanLiuTxtSaveSD(sheet.cirCula[i].ID,data);//suqi
+						rt_thread_delay(10);
+					//}
+					rt_kprintf("%sSD data：%s",sign,data);//自带换行
+					memset(data,0,sizeof((char *)data));
+//					rt_free(data);
+//					data=NULL;
 				}
 			}
 		}
@@ -339,10 +351,10 @@ uint16_t circulaJsonPack(bool respFlag)
 
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
-
+		rt_free(data);
+		data=NULL;
 		return len;
 }
-
 
 
 //判断是否有报警 需要在readCirCurrAndWaring()后边使用
