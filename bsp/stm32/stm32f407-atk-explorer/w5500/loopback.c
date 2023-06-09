@@ -230,9 +230,9 @@ void loopback_tcp(uint16 port)
 					rt_kprintf("SOCK_ESTABLISHED\n");
 				  if(regFlag==false){
 								regFlag=true;//联网后只注册一次  后期由定时器实现反复注册
-//								extern uint16_t devRegJsonPack();
-//								devRegJsonPack();//devRegJsonPack();
-//								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+								extern uint16_t devRegJsonPack();
+								devRegJsonPack();//devRegJsonPack();
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					}
 			}
 		  break;

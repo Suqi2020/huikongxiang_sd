@@ -140,7 +140,7 @@ static uint16_t h2sPack(bool respFlag)
 			if(sheet.h2s[i].workFlag==RT_TRUE){
 				nodeobj = cJSON_CreateObject();
 				cJSON_AddItemToArray(Array, nodeobj);
-			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.co[i].ID));
+			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.h2s[i].ID));
 				cJSON_AddNumberToObject(nodeobj,"responseStatus",respStat[i]);
 				
 				nodeobj_p= cJSON_CreateObject();

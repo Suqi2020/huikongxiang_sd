@@ -40,23 +40,23 @@ uint16_t Get_Adc_Average(uint16_t ch,uint16_t times)
 //¶ÔÓ¦¶Ë¿Ú1-8
 uint32_t chanl[8]={ADC_CHANNEL_10,ADC_CHANNEL_11,ADC_CHANNEL_12,ADC_CHANNEL_13,\
 										ADC_CHANNEL_14,ADC_CHANNEL_15,ADC_CHANNEL_8,ADC_CHANNEL_9};
-void adcGetTest()
-{
+//void adcGetTest()
+//{
 
-				int rt=Get_Adc_Average(ADC_CHANNEL_8,10);
-				rt_kprintf("ADC_CHANNEL_8 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
-				 rt=Get_Adc_Average(ADC_CHANNEL_9,10);
-				rt_kprintf("ADC_CHANNEL_9 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_10,10);
-				rt_kprintf("ADC_CHANNEL_10 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_11,10);
-				rt_kprintf("ADC_CHANNEL_11 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_12,10);
-				rt_kprintf("ADC_CHANNEL_12 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_13,10);
-				rt_kprintf("ADC_CHANNEL_13 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_14,10);
-				rt_kprintf("ADC_CHANNEL_14 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_15,10);
-				rt_kprintf("ADC_CHANNEL_15 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n\r\n\r\n",rt,rt*330/4096);
-}
+//				int rt=Get_Adc_Average(ADC_CHANNEL_8,10);
+//				rt_kprintf("ADC_CHANNEL_8 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
+//				 rt=Get_Adc_Average(ADC_CHANNEL_9,10);
+//				rt_kprintf("ADC_CHANNEL_9 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
+//					 rt=Get_Adc_Average(ADC_CHANNEL_10,10);
+//				rt_kprintf("ADC_CHANNEL_10 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
+//					 rt=Get_Adc_Average(ADC_CHANNEL_11,10);
+//				rt_kprintf("ADC_CHANNEL_11 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
+//					 rt=Get_Adc_Average(ADC_CHANNEL_12,10);
+//				rt_kprintf("ADC_CHANNEL_12 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
+//					 rt=Get_Adc_Average(ADC_CHANNEL_13,10);
+//				rt_kprintf("ADC_CHANNEL_13 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
+//					 rt=Get_Adc_Average(ADC_CHANNEL_14,10);
+//				rt_kprintf("ADC_CHANNEL_14 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n",rt,rt*330/4096);
+//					 rt=Get_Adc_Average(ADC_CHANNEL_15,10);
+//				rt_kprintf("ADC_CHANNEL_15 ,adc tick:%d,voltgge À©´ó100±¶:%dV\n\r\n\r\n",rt,rt*330/4096);
+//}

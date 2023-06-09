@@ -1,4 +1,4 @@
-#include "uartReconf.h"
+#include "board.h"
 
 //配置每个串口对应的波特率 以及modbus传感器
 //从网口端数来依次是 UART2(1) UART3(2) UART6(3) UART1(debug) UART4(4)
@@ -63,10 +63,15 @@ void uartReconfig()
 				rt_kprintf("%sport%d bps[%d]\n",sign,i+1,packFlash.uartBps[i]);
 		}
 	
-//		MX_USART2_UART_Init(packFlash.uartBps[0]);
-		MX_USART3_UART_Init(packFlash.uartBps[1]);
-		MX_USART6_UART_Init(packFlash.uartBps[2]);
-		MX_UART4_Init(packFlash.uartBps[3]);
+//		MX_USART2_UART_Init(packFlash.uartBps[USE_UART2]);
+//		MX_USART3_UART_Init(packFlash.uartBps[USE_UART3]);
+//		MX_USART6_UART_Init(packFlash.uartBps[USE_UART6]);
+//		MX_UART4_Init(packFlash.uartBps[USE_UART4]);
+		
+
+		MX_USART3_UART_Init(packFlash.uartBps[USE_UART3]);
+		MX_USART6_UART_Init(packFlash.uartBps[USE_UART6]);
+		MX_UART4_Init(packFlash.uartBps[USE_UART4]);
 	  rt_kprintf("%sUART re config\n",sign);
 
 }
@@ -114,20 +119,20 @@ void uartSingConf(int num,int bps)
 
 
 //485根据串口发送
-void rs485UartSend(uint8_t chanl,uint8_t *buf,int len)
+void rs485UartSend(uartEnum chanl,uint8_t *buf,int len)
 {
 //UART2(1) UART3(2) UART6(3) UART1(debug) UART4(4)
 		switch(chanl){
-			case 0:
-				HAL_UART_Transmit(&huart2,(uint8_t *)buf,len,1000);
-				break;
-			case 1:
+//			case USE_UART2:
+//				HAL_UART_Transmit(&huart2,(uint8_t *)buf,len,1000);
+//				break;
+			case USE_UART3:
 				HAL_UART_Transmit(&huart3,(uint8_t *)buf,len,1000);
 				break;
-			case 2:
+			case USE_UART6:
 				HAL_UART_Transmit(&huart6,(uint8_t *)buf,len,1000);
 				break;
-			case 3:
+			case USE_UART4:
 				HAL_UART_Transmit(&huart4,(uint8_t *)buf,len,1000);
 				break;
 			default:

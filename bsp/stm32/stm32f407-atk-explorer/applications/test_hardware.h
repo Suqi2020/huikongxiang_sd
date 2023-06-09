@@ -2,12 +2,12 @@
 #define  __TEST_HARDWARE_H__
 #include  "board.h"
 
-//#define TEST_ADC
+#define TEST_ADC
 //#define TEST_UART
-//#define  TEST_IOIN
-//#define  TEST_IOOUT
-//#define  TEST_SPAKER
-//#define   TEST_RELAY
+#define  TEST_IOIN
+#define  TEST_IOOUT
+#define  TEST_SPAKER
+#define   TEST_RELAY
 //#define  TEST_W5500
 
 

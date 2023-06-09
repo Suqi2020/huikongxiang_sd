@@ -147,10 +147,10 @@ static uint16_t o2Pack(bool respFlag)
 		for (int i = 0; i < O2_485_NUM; i++)
 		{		
 
-			if(sheet.co[i].workFlag==RT_TRUE){
+			if(sheet.o2[i].workFlag==RT_TRUE){
 				nodeobj = cJSON_CreateObject();
 				cJSON_AddItemToArray(Array, nodeobj);
-			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.co[i].ID));
+			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.o2[i].ID));
 				cJSON_AddNumberToObject(nodeobj,"responseStatus",respStat[i]);
 				
 				nodeobj_p= cJSON_CreateObject();
@@ -269,19 +269,13 @@ bool modO2Warn2Send()
 						if(sheet.o2[i].workFlag==RT_TRUE){
 							nodeobj = cJSON_CreateObject();
 							cJSON_AddItemToArray(Array, nodeobj);
-							cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.co[i].ID));
+							cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.o2[i].ID));
 							cJSON_AddNumberToObject(nodeobj,"alarmStatus",1);
 							nodeobj_p= cJSON_CreateObject();
 							cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 		
 							cJSON_AddNumberToObject(nodeobj_p,"oxy_low_alarm",inpoutpFlag.modbusO2[i].o2LowFlag );//cJSON_CreateNumber("10"));
 							cJSON_AddNumberToObject(nodeobj_p,"oxy_high_alarm",inpoutpFlag.modbusO2[i].o2UpFlag);
-//							cJSON_AddNumberToObject(nodeobj_p,"monoxide_low_alarm",inpoutpFlag.modbusCo[i].coLowFlag);
-//							cJSON_AddNumberToObject(nodeobj_p,"monoxide_high_alarm",inpoutpFlag.modbusCo[i].coUpFlag );		
-//							cJSON_AddNumberToObject(nodeobj_p,"hydrogenSulfide_low_alarm",inpoutpFlag.modbusH2s[i].h2sLowFlag);
-//							cJSON_AddNumberToObject(nodeobj_p,"hydrogenSulfide_high_alarm",inpoutpFlag.modbusH2s[i].h2sUpFlag);		
-//							cJSON_AddNumberToObject(nodeobj_p,"methane_low_alarm",inpoutpFlag.modbusCh4[i].ch4LowFlag );//cJSON_CreateNumber("10"));
-//							cJSON_AddNumberToObject(nodeobj_p,"methane_high_alar",inpoutpFlag.modbusCh4[i].ch4UpFlag);
 														
 							sprintf(sprinBuf,"%llu",utcTime_ms());
 							cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));

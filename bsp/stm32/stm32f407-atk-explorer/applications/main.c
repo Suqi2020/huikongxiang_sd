@@ -215,6 +215,8 @@
 //V3.07    W5500发送最大只能支持2kbuf 怎么设置来支持16kbuf  需要初始化txsize[MAX_SOCK_NUM]   以及socket数字需要与其对应
 //         如果设置MAX_SOCK_NUM=1     SOCK_TCPC必须为0
 //         加入w5500SpiMutex 互斥保护 发送和接收分别再两个进程中 会同时操作spi     20230607
+//V3.08    调整气体打包上传好H2S附带co的id的错误 修改更改串口后导致串口读取异常的问题 20230609
+//         
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
 		 .ANY (+RW +ZI)
@@ -224,7 +226,7 @@
 		}
 */
 //          
-#define APP_VER       ((3<<8)+7)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+8)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
 const char date[]="20230607";
@@ -412,38 +414,38 @@ int main(void)
 
 ////////////////////////////////任务////////////////////////////////////
 
-		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
-		if(tidNetRec!=NULL){
-				rt_thread_startup(tidNetRec);													 
-				rt_kprintf("%sRTcreat netDataRecTask \r\n",sign);
-		}
-		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
-		if(tidNetSend!=NULL){
-				rt_thread_startup(tidNetSend);													 
-				rt_kprintf("%sRTcreat netDataSendTask \r\n",sign);
-		}
+//		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
+//		if(tidNetRec!=NULL){
+//				rt_thread_startup(tidNetRec);													 
+//				rt_kprintf("%sRTcreat netDataRecTask \r\n",sign);
+//		}
+//		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
+//		if(tidNetSend!=NULL){
+//				rt_thread_startup(tidNetSend);													 
+//				rt_kprintf("%sRTcreat netDataSendTask \r\n",sign);
+//		}
 
-		
-		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
-		if(tidUpkeep!=NULL){
-				rt_thread_startup(tidUpkeep);													 
-				rt_kprintf("%sRTcreat upKeepStateTask \r\n",sign);
-		}
-		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512*2,2, 10 );
-		if(tidLCD!=NULL){
-				rt_thread_startup(tidLCD);													 
-				rt_kprintf("%sRTcreat LCDStateTask \r\n",sign);
-		}
-    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
-		if(tidW5500!=NULL){
-				rt_thread_startup(tidW5500);													 
-				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
-		}
-		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
-		if(tidAutoCtrl!=NULL){
-				rt_thread_startup(tidAutoCtrl);													 
-				rt_kprintf("%sRTcreat autoCtrlTask\r\n",sign);
-		}
+//		
+//		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
+//		if(tidUpkeep!=NULL){
+//				rt_thread_startup(tidUpkeep);													 
+//				rt_kprintf("%sRTcreat upKeepStateTask \r\n",sign);
+//		}
+//		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512*2,2, 10 );
+//		if(tidLCD!=NULL){
+//				rt_thread_startup(tidLCD);													 
+//				rt_kprintf("%sRTcreat LCDStateTask \r\n",sign);
+//		}
+//    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
+//		if(tidW5500!=NULL){
+//				rt_thread_startup(tidW5500);													 
+//				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
+//		}
+//		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
+//		if(tidAutoCtrl!=NULL){
+//				rt_thread_startup(tidAutoCtrl);													 
+//				rt_kprintf("%sRTcreat autoCtrlTask\r\n",sign);
+//		}
 #ifdef  USE_WDT
 		extern IWDG_HandleTypeDef hiwdg;
 		static    rt_thread_t tidWDT      = RT_NULL;
@@ -460,7 +462,7 @@ int main(void)
 //			sprintf(test,"long:%u", a);//"monitoringTime":"1655172531937"
 //			rt_kprintf("%s %s \r\n",sign,test);
 //////////////////////////////结束//////////////////////////////////////
-    while (0)//task用于测试 以及闪灯操作
+    while (1)//task用于测试 以及闪灯操作
     {
 				hardWareDriverTest();
 				HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);

@@ -220,7 +220,8 @@ static int circulaConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==CIRCULA_485_NUM){//没有配置过
-			for(int j=0;j<CIRCULA_485_NUM;j++){
+		  int j=0;
+			for(j=0;j<CIRCULA_485_NUM;j++){
 					if(sheet.cirCula[j].workFlag!=RT_TRUE){
 							sheet.cirCula[j].workFlag=RT_TRUE;//打开
 							sheet.cirCula[j].slaveAddr=slaveAddr;	
@@ -232,6 +233,9 @@ static int circulaConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==CIRCULA_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,CIRCULA_485_NUM);
 			}
 	}
 	return ret;
@@ -266,7 +270,8 @@ static int partDischagConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==PARTDISCHAG_485_NUM){//没有配置过
-			for(int j=0;j<PARTDISCHAG_485_NUM;j++){
+		  int j=0;
+			for( j=0;j<PARTDISCHAG_485_NUM;j++){
 					if(sheet.partDischag[j].workFlag!=RT_TRUE){
 							sheet.partDischag[j].workFlag=RT_TRUE;//打开
 							sheet.partDischag[j].slaveAddr=slaveAddr;	
@@ -278,6 +283,9 @@ static int partDischagConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==PARTDISCHAG_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,PARTDISCHAG_485_NUM);
 			}
 	}
 	return ret;
@@ -312,7 +320,8 @@ static int pressSettlConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==PRESSSETTL_485_NUM){//没有配置过
-			for(int j=0;j<PRESSSETTL_485_NUM;j++){
+		  int j=0;
+			for(j=0;j<PRESSSETTL_485_NUM;j++){
 					if(sheet.pressSetl[j].workFlag!=RT_TRUE){
 							sheet.pressSetl[j].workFlag=RT_TRUE;//打开
 							sheet.pressSetl[j].slaveAddr=slaveAddr;	
@@ -324,6 +333,9 @@ static int pressSettlConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==PRESSSETTL_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,PRESSSETTL_485_NUM);
 			}
 	}
 	return ret;
@@ -358,7 +370,8 @@ static int crackMeterConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==CRACKMETER_485_NUM){//没有配置过
-			for(int j=0;j<CRACKMETER_485_NUM;j++){
+		  int j=0;
+			for(j=0;j<CRACKMETER_485_NUM;j++){
 					if(sheet.crackMeter[j].workFlag!=RT_TRUE){
 							sheet.crackMeter[j].workFlag=RT_TRUE;//打开
 							sheet.crackMeter[j].slaveAddr=slaveAddr;	
@@ -370,6 +383,9 @@ static int crackMeterConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==CRACKMETER_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,CRACKMETER_485_NUM);
 			}
 	}
 	return ret;
@@ -406,7 +422,8 @@ static int coverConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==COVER_485_NUM){//没有配置过
-			for(int j=0;j<COVER_485_NUM;j++){
+		  int j=0;
+			for(j=0;j<COVER_485_NUM;j++){
 					if(sheet.cover[j].workFlag!=RT_TRUE){
 							sheet.cover[j].workFlag=RT_TRUE;//打开
 							sheet.cover[j].slaveAddr=slaveAddr;	
@@ -418,6 +435,9 @@ static int coverConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==COVER_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,COVER_485_NUM);
 			}
 	}
 	return ret;
@@ -452,7 +472,8 @@ static int threeAxisConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==THREEAXIS_485_NUM){//没有配置过
-			for(int j=0;j<THREEAXIS_485_NUM;j++){
+		  int j;
+			for(j=0;j<THREEAXIS_485_NUM;j++){
 					if(sheet.threeAxiss[j].workFlag!=RT_TRUE){
 							sheet.threeAxiss[j].workFlag=RT_TRUE;//打开
 							sheet.threeAxiss[j].slaveAddr=slaveAddr;	
@@ -464,6 +485,9 @@ static int threeAxisConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==THREEAXIS_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,THREEAXIS_485_NUM);
 			}
 	}
 	return ret;
@@ -499,6 +523,7 @@ static int ch4Conf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==CH4_485_NUM){//没有配置过
+		  int j;
 			for(int j=0;j<CH4_485_NUM;j++){
 					if(sheet.ch4[j].workFlag!=RT_TRUE){
 							sheet.ch4[j].workFlag=RT_TRUE;//打开
@@ -511,6 +536,9 @@ static int ch4Conf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==CH4_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,CH4_485_NUM);
 			}
 	}
 	return ret;
@@ -545,7 +573,8 @@ static int coConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==CO_485_NUM){//没有配置过
-			for(int j=0;j<CO_485_NUM;j++){
+		  int j;
+			for(j=0;j<CO_485_NUM;j++){
 					if(sheet.co[j].workFlag!=RT_TRUE){
 							sheet.co[j].workFlag=RT_TRUE;//打开
 							sheet.co[j].slaveAddr=slaveAddr;	
@@ -557,6 +586,9 @@ static int coConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==CO_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,CO_485_NUM);
 			}
 	}
 	return ret;
@@ -591,7 +623,8 @@ static int h2sConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==H2S_485_NUM){//没有配置过
-			for(int j=0;j<H2S_485_NUM;j++){
+		  int j=0;
+			for(j=0;j<H2S_485_NUM;j++){
 					if(sheet.h2s[j].workFlag!=RT_TRUE){
 							sheet.h2s[j].workFlag=RT_TRUE;//打开
 							sheet.h2s[j].slaveAddr=slaveAddr;	
@@ -603,6 +636,9 @@ static int h2sConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==H2S_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,H2S_485_NUM);
 			}
 	}
 	return ret;
@@ -638,7 +674,8 @@ static int o2Conf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==O2_485_NUM){//没有配置过
-			for(int j=0;j<O2_485_NUM;j++){
+		  int j;
+			for(j=0;j<O2_485_NUM;j++){
 					if(sheet.o2[j].workFlag!=RT_TRUE){
 							sheet.o2[j].workFlag=RT_TRUE;//打开
 							sheet.o2[j].slaveAddr=slaveAddr;	
@@ -650,6 +687,9 @@ static int o2Conf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==O2_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,O2_485_NUM);
 			}
 	}
 	return ret;
@@ -685,7 +725,8 @@ static int waterDepthConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==WATERDEPTH_485_NUM){//没有配置过
-			for(int j=0;j<WATERDEPTH_485_NUM;j++){
+		  int j;
+			for(j=0;j<WATERDEPTH_485_NUM;j++){
 					if(sheet.waterDepth[j].workFlag!=RT_TRUE){
 							sheet.waterDepth[j].workFlag=RT_TRUE;//打开
 							sheet.waterDepth[j].slaveAddr=slaveAddr;	
@@ -697,6 +738,9 @@ static int waterDepthConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==WATERDEPTH_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,WATERDEPTH_485_NUM);
 			}
 	}
 	return ret;
@@ -731,7 +775,8 @@ static int tempHumConf(int uartnum,char *argv[])
 			return 0;
 	}
 	if(i==TEMPHUM_485_NUM){//没有配置过
-			for(int j=0;j<TEMPHUM_485_NUM;j++){
+		  int j;
+			for( j=0;j<TEMPHUM_485_NUM;j++){
 					if(sheet.tempHum[j].workFlag!=RT_TRUE){
 							sheet.tempHum[j].workFlag=RT_TRUE;//打开
 							sheet.tempHum[j].slaveAddr=slaveAddr;	
@@ -743,6 +788,9 @@ static int tempHumConf(int uartnum,char *argv[])
 							ret =1;
 							break;
 					}
+			}
+			if(j==TEMPHUM_485_NUM){
+					rt_kprintf("%sERR totalNum=%d\n",sign,TEMPHUM_485_NUM);
 			}
 	}
 	return ret;

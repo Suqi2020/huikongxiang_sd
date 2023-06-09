@@ -124,22 +124,22 @@ static void  timeOutRunFun()
 
 		rt_mutex_take(read485_mutex,RT_WAITING_FOREVER);
 		switch(timeOut()){
-//			case HEART_TIME://心跳
-//				heartUpJsonPack();
-//			
-//			
-//			  
-//				//jsonBufPackTest();
-//			  if(gbNetState==RT_TRUE)
-//						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-//			  rt_kprintf("%sheart timer out\r\n",task);
-//				break;
+			case HEART_TIME://心跳
+				heartUpJsonPack();
+			
+			
+			  
+				//jsonBufPackTest();
+			  if(gbNetState==RT_TRUE)
+						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+			  rt_kprintf("%sheart timer out\r\n",task);
+				break;
 			case REG_TIME://注册 注册成功后定时器就关闭 输入输出状态跟谁注册信息上发
 			  if(gbRegFlag==RT_FALSE){
 //					partDischgAtlasResp("12345");//test 
 //					 jsonBufPackTest();
 //					rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-      			break;//suqi
+					break;//suqi
 					  devRegJsonPack();//devRegJsonPack();
 					  if(gbNetState==RT_TRUE)
 								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
@@ -167,50 +167,50 @@ static void  timeOutRunFun()
 						timeStop(REG_TIME);
 				rt_kprintf("%sreg timer out\r\n",task);
 				break;
-//			case CIRCULA_TIME://读取环流
-//				circulaRead2Send(gbNetState,false);
-//				rt_kprintf("%sCIRCULA_TIME out\r\n",task);
-//				break;
-//			case PARTDISCHAG_TIME://读取局放
-//				partDischagRead2Send(gbNetState,false);
-//				rt_kprintf("%sPARTDISCHAG_TIME out\r\n",task);
-//				break;
-//			case PRESSSETTL_TIME:
-//        pressSettRead2Send(gbNetState,false);
-//				rt_kprintf("%sPRESSSETTL_TIME out\r\n",task);
-//				break;
-//			case THREEAXIS_TIME:
-//				threeAxisRead2Send(gbNetState,false);
-//				rt_kprintf("%sTHREEAXIS_TIMEout\r\n",task);
-//				break;
+			case CIRCULA_TIME://读取环流
+				circulaRead2Send(gbNetState,false);
+				rt_kprintf("%sCIRCULA_TIME out\r\n",task);
+				break;
+			case PARTDISCHAG_TIME://读取局放
+				partDischagRead2Send(gbNetState,false);
+				rt_kprintf("%sPARTDISCHAG_TIME out\r\n",task);
+				break;
+			case PRESSSETTL_TIME:
+        pressSettRead2Send(gbNetState,false);
+				rt_kprintf("%sPRESSSETTL_TIME out\r\n",task);
+				break;
+			case THREEAXIS_TIME:
+				threeAxisRead2Send(gbNetState,false);
+				rt_kprintf("%sTHREEAXIS_TIMEout\r\n",task);
+				break;
 
-//			case  CH4_TIME:
-//				ch4Read2Send(gbNetState,false);
-//				break;
-//			case  O2_TIME:
-//				o2Read2Send(gbNetState,false);
-//				break;
-//			case  H2S_TIME:
-//				h2sRead2Send(gbNetState,false);
-//				break;
-//			case  CO_TIME://4种气体在一起读取 所以前三个不使用 只在此处读取并打包发送  关闭时候只需要关闭CO就可以把所有气体全部关闭
+			case  CH4_TIME:
+				ch4Read2Send(gbNetState,false);
+				break;
+			case  O2_TIME:
+				o2Read2Send(gbNetState,false);
+				break;
+			case  H2S_TIME:
+				h2sRead2Send(gbNetState,false);
+				break;
+			case  CO_TIME://4种气体在一起读取 所以前三个不使用 只在此处读取并打包发送  关闭时候只需要关闭CO就可以把所有气体全部关闭
 
-//			  coRead2Send(gbNetState,false);
-//				break;
-//			case  TEMPHUM_TIME:
-//				tempHumRead2Send(gbNetState,false);
-//				break;
-//			case  WATERDEPTH_TIME:
-//				waterDepthRead2Send(gbNetState,false);
-//				break;
-//			case CRACKMETER_TIME:
-//				crackMeterRead2Send(gbNetState,false);
-//				rt_kprintf("%sTHREEAXIS_TIMEout\r\n",task);
-//				break;
-//			case COVER_TIME:
-//				coverRead2Send(gbNetState,false);
-//				rt_kprintf("%sCOVER_TIME out\r\n",task);
-//				break;
+			  coRead2Send(gbNetState,false);
+				break;
+			case  TEMPHUM_TIME:
+				tempHumRead2Send(gbNetState,false);
+				break;
+			case  WATERDEPTH_TIME:
+				waterDepthRead2Send(gbNetState,false);
+				break;
+			case CRACKMETER_TIME:
+				crackMeterRead2Send(gbNetState,false);
+				rt_kprintf("%sTHREEAXIS_TIMEout\r\n",task);
+				break;
+			case COVER_TIME:
+				coverRead2Send(gbNetState,false);
+				rt_kprintf("%sCOVER_TIME out\r\n",task);
+				break;
 #ifndef     ANA_MASK
 			case  ANA_TEMPHUM_TIME:
 //				analogTempHumJsonPack(analogTemChanl);

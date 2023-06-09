@@ -221,12 +221,6 @@ void resetCh4WarnFlag()
 {
 		for (int i = 0; i < CH4_485_NUM; i++)
 		{		
-//				inpoutpFlag.modbusCo[i].coLowFlag =false;
-//			  inpoutpFlag.modbusCo[i].coUpFlag  =false;
-//				inpoutpFlag.modbusO2[i].o2LowFlag =false;
-//			  inpoutpFlag.modbusO2[i].o2UpFlag  =false;
-//				inpoutpFlag.modbusH2s[i].h2sLowFlag =false;
-//			  inpoutpFlag.modbusH2s[i].h2sUpFlag  =false;
 				inpoutpFlag.modbusCh4[i].ch4LowFlag =false;
 			  inpoutpFlag.modbusCh4[i].ch4UpFlag  =false;
 		}
