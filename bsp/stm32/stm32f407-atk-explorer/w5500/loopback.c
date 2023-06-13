@@ -196,11 +196,11 @@ void loopback_tcp(uint16 port)
 		case SOCK_CLOSED:											        		         /*socket处于关闭状态*/
 			socket(SOCK_TCPC,Sn_MR_TCP,port,Sn_MR_ND);
 		  gbNetState=RT_FALSE;
-		  rt_kprintf("SOCK_CLOSED\n");
+		  rt_kprintf("%sSOCK_CLOSED\n",sign);
 		  break;
 		case SOCK_INIT:													        	         /*socket处于初始化状态*/
 			connect(SOCK_TCPC,packFlash.netIpFlash.remoteIp,packFlash.netIpFlash.remotePort);               /*socket连接服务器*/ 
-		  rt_kprintf("SOCK_INIT\n");
+		  rt_kprintf("%sSOCK_INIT\n",sign);
 		  break;
 		case SOCK_ESTABLISHED: 												             /*socket处于连接建立状态*/
 			if(getSn_IR(SOCK_TCPC) & Sn_IR_CON)
@@ -227,7 +227,7 @@ void loopback_tcp(uint16 port)
       static bool regFlag=false;			
 			if(gbNetState!=RT_TRUE){
 					gbNetState =RT_TRUE;	
-					rt_kprintf("SOCK_ESTABLISHED\n");
+					rt_kprintf("%sSOCK_ESTABLISHED\n",sign);
 				  if(regFlag==false){
 								regFlag=true;//联网后只注册一次  后期由定时器实现反复注册
 								extern uint16_t devRegJsonPack();
@@ -238,7 +238,7 @@ void loopback_tcp(uint16 port)
 		  break;
 		case SOCK_CLOSE_WAIT: 											    	         /*socket处于等待关闭状态*/
 			close(SOCK_TCPC);
-		  rt_kprintf("SOCK_CLOSE_WAIT\n");
+		  rt_kprintf("%sSOCK_CLOSE_WAIT\n",sign);
 		  break;
 	}
 }

@@ -470,7 +470,7 @@
 
 
 #define  KEY_ADDR  			0X0000
-
+#define  LCD_RTC_ADDR   0X0010
 
 
 
@@ -497,8 +497,22 @@ extern int LCDWtite(uint16_t addr,uint8_t *data,uint8_t dataLen);
 //extern modbusPositStru  modPosit[TOTOLA_485_NUM]; 
 //extern modbusPositStru  modPositErr[TOTOLA_485_NUM];
 
-
-
+typedef struct
+{
+		uint8_t year;
+		uint8_t month;
+		uint8_t day;
+		uint8_t hour;
+		uint8_t minute;
+		uint8_t second;
+}RTC_TimeTypeDef;
+RTC_TimeTypeDef utc_to_beijingTime(uint32_t time);
+uint32_t beijingTime_to_utc(RTC_TimeTypeDef t_location);
+void  writeRTCToLcd(RTC_TimeTypeDef time);
+void  readLcdRTC(void);
+extern RTC_TimeTypeDef readRtc;
+RTC_TimeTypeDef copyBufToRtc(char *buf);
+void  correctLcdTime(uint32_t time);
 
 
 uint64_t  utcTime_ms(void);

@@ -216,7 +216,14 @@
 //         如果设置MAX_SOCK_NUM=1     SOCK_TCPC必须为0
 //         加入w5500SpiMutex 互斥保护 发送和接收分别再两个进程中 会同时操作spi     20230607
 //V3.08    调整气体打包上传好H2S附带co的id的错误 修改更改串口后导致串口读取异常的问题 20230609
-//         
+//V3.09    增加存储log到sd卡功能，增加log打印和存储的单独task
+//         增加上电后从显示屏读取RTC时钟函数，从服务器同步rtc后会和lcd显示屏比较 如果相差3秒 同步lcd时钟
+//         修改sd卡内写入文件记录的创建时间函数 
+//         增加启动软件定时器的配置 #define RT_USING_TIMER_SOFT 0
+//         增加log存储时候写入时间，同步之前显示20年1月1日 0:0:0
+//         [20-1-1-0:0:0]ACU RESET>>>>>>>>>>>>>>
+//         [20-1-1-0:0:0][main]20230607  ver=03.08
+//         加入SD卡存储log最大数为10天 超过需要自动删除早起的log
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
 		 .ANY (+RW +ZI)
@@ -226,10 +233,10 @@
 		}
 */
 //          
-#define APP_VER       ((3<<8)+8)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+9)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230607";
+const char date[]="20230613";
 
 //static    rt_thread_t tid 	= RT_NULL;
 static    rt_thread_t tidW5500 	  = RT_NULL;
@@ -239,19 +246,23 @@ static    rt_thread_t tidUpkeep 	= RT_NULL;
 static    rt_thread_t tidLCD      = RT_NULL;
 static    rt_thread_t tidAutoCtrl = RT_NULL;
 
-
+static    rt_thread_t tidSaveLogSd =RT_NULL;
 
 
 //互斥信号量定义
 rt_mutex_t   read485_mutex=RT_NULL;//防止多个线程同事读取modbus数据
 rt_mutex_t   lcdSend_mutex=RT_NULL;//防止多个线程同事往lcd发数据
 rt_mutex_t   w5500Spi_mutex=RT_NULL;//防止多个线程同时操作spi
+rt_mutex_t   sdWrite_mutex=RT_NULL;
+rt_mutex_t   printf_mutex=RT_NULL;
 //邮箱的定义
 extern struct  rt_mailbox mbNetSendData;;
 static char 	 mbSendPool[20];//发送缓存20条
 static char 	 mbRecPool[20];//发送缓存20条
 extern struct rt_mailbox mbNetRecData;
 
+static char 	 sdWritePool[100];//发送缓存100条
+extern struct rt_mailbox mbsdWriteData;
 
 
 /* 事件控制块 */
@@ -274,6 +285,12 @@ struct rt_event WDTEvent;
 	struct  rt_messagequeue LCDmque;//= {RT_NULL} ;//创建LCD队列
 	uint8_t LCDQuePool[LCD_BUF_LEN];  //创建lcd队列池
 #endif
+
+
+
+
+//struct  rt_messagequeue SDLogmque;//= {RT_NULL} ;//创建LCD队列
+//uint8_t SDLogQuePool[100];  //创建lcd队列池
 //任务的定义
 extern  void   netDataRecTask(void *para);//网络数据接收
 extern  void   netDataSendTask(void *para);//网络数据发送
@@ -282,7 +299,7 @@ extern  void   w5500Task(void *parameter);//w5500网络状态的维护
 extern  void   hardWareDriverTest(void);
 extern  void   LCDTask(void *parameter);
 extern  void   autoCtrlTask(void *para);
-
+extern  void   logSaveSDTask(void *para);
 extern  void   WDTTask(void *parameter);
 const  static char sign[]="[main]";
 extern rt_bool_t gbNetState;
@@ -291,7 +308,7 @@ extern rt_bool_t gbNetState;
 static rt_timer_t timer1;
 
 //static int cnt = 0;
-/* 定时器1超时函数 */
+/* 定时器1超时函数 每100ms进去一次*/
 //10秒提醒一次 uart offline状态
 static void timeout1(void *parameter)
 {
@@ -299,11 +316,17 @@ static void timeout1(void *parameter)
 	  static int alarmTick=10;
 		extern rt_bool_t gbNetState;
 	  extern void timeInc();
+	  extern void FatReadDirDelEarlyTxt();
+	  extern bool fountFlag;
 	  //extern void modbusWorkErrCheck(void);
 	  count++;  
 	  if(gbSDExit==false){
 				if(count%(100)==0)//10秒提醒一下
 						rt_kprintf("%s请插入TF卡并重启设备\n",sign);
+		}
+		if(count%TXT_LOG_TIME==(0)){
+			  if(fountFlag==true)//挂载u盘成功
+						FatReadDirDelEarlyTxt();//每隔TXT_LOG_TIME/10秒时间检查一次
 		}
 	  if(count%10==0)
 				timeInc();
@@ -334,12 +357,14 @@ extern void creatFolder(void);
 //char testNum[4]={1,2,3,4};
 void  outIOInit(void);
 
-
+//bool  log_save_sdFlag =false;  
+char  printVer[50];
 int main(void)
 {
 
-	  rt_kprintf("\n%\n",sign,date,(uint8_t)(APP_VER>>8),(uint8_t)APP_VER);
-    rt_kprintf("\n%s%s  ver=%02d.%02d\n",sign,date,(uint8_t)(APP_VER>>8),(uint8_t)APP_VER);
+
+    printf("\n%s%s  ver=%02d.%02d\n",sign,date,(uint8_t)(APP_VER>>8),(uint8_t)APP_VER);
+	  sprintf(printVer,"%s%s  ver=%02d.%02d\n",sign,date,(uint8_t)(APP_VER>>8),(uint8_t)APP_VER);
 	  rt_err_t result;
 		stm32_flash_read(FLASH_IP_SAVE_ADDR,    (uint8_t*)&packFlash,sizeof(packFlash));
 		stm32_flash_read(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,    sizeof(sheet));
@@ -347,10 +372,8 @@ int main(void)
 		if(packFlash.acuId[0]>=0x7F){
 				rt_strcpy(packFlash.acuId,"000000000000001");//必须加上 执行cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		}    
-		if(packFlash.utcTime==0xffffffffffffffff){
-				packFlash.utcTime=0;
-		}
-		creatFolder();
+		
+	
 		
 		  /* 创建定时器 周期定时器 */
     timer1 = rt_timer_create("timer1", timeout1,
@@ -362,45 +385,69 @@ int main(void)
 		read485_mutex= rt_mutex_create("read485_mutex", RT_IPC_FLAG_FIFO);
 		if (read485_mutex == RT_NULL)
     {
-        rt_kprintf("%screate read485_mutex failed\n",sign);
+        printf("%screate read485_mutex failed\n",sign);
     }
 		lcdSend_mutex= rt_mutex_create("lcdSend_mutex", RT_IPC_FLAG_FIFO);
 		if (lcdSend_mutex == RT_NULL)
     {
-        rt_kprintf("%screate lcdSend_mutex failed\n",sign);
+        printf("%screate lcdSend_mutex failed\n",sign);
     }
 		w5500Spi_mutex= rt_mutex_create("w5500Spi_mutex", RT_IPC_FLAG_FIFO);
 		if (w5500Spi_mutex == RT_NULL)
     {
-        rt_kprintf("%screate w5500Spi_mutex failed\n",sign);
+        printf("%screate w5500Spi_mutex failed\n",sign);
     }	
-		
-		
+		sdWrite_mutex= rt_mutex_create("sdWrite_mutex", RT_IPC_FLAG_FIFO);
+		if (sdWrite_mutex == RT_NULL)
+    {
+        printf("%screate sdWrite_mutex failed\n",sign);
+    }		
+		printf_mutex= rt_mutex_create("printf_mutex", RT_IPC_FLAG_FIFO);
+		if (printf_mutex == RT_NULL)
+    {
+        printf("%screate sdWrite_mutex failed\n",sign);
+    }		
 #if   USE_RINGBUF
 
 #else
 		int ret = rt_mq_init(&LCDmque,"LCDrecBuf",&LCDQuePool[0],1,LCD_BUF_LEN,RT_IPC_FLAG_FIFO);       
 		if (ret != RT_EOK)
 		{
-				rt_kprintf("%sinit LCD msgque failed.\n",sign);
+				printf("%sinit LCD msgque failed.\n",sign);
 				return -1;
 		}
 #endif
 		extern void 	uartMutexQueueCreate();
 		uartMutexQueueCreate();
-////////////////////////////////////邮箱//////////////////////////////////
+		
+//	 ret = rt_mq_init(&SDLogmque,"SDLogmque",&SDLogQuePool[0],1,sizeof(SDLogQuePool),RT_IPC_FLAG_FIFO);       
+//	if (ret != RT_EOK)
+//	{
+//			rt_kprintf("%sinit SDLogmque  failed.\n",sign);
+//			return -1;
+//	}
+		
 		
 
+
+////////////////////////////////////邮箱//////////////////////////////////
+		
+    result = rt_mb_init(&mbsdWriteData,"sdsend",&sdWritePool[0],sizeof(sdWritePool)/4,RT_IPC_FLAG_FIFO);         
+    if (result != RT_EOK)
+    {
+        printf("%sinit mailbox mbsdWriteData failed.\n",sign);
+        return -1;
+    }
     result = rt_mb_init(&mbNetRecData,"mbRec",&mbRecPool[0],sizeof(mbRecPool)/4,RT_IPC_FLAG_FIFO);         
     if (result != RT_EOK)
     {
-        rt_kprintf("%sinit mailbox NetRecData failed.\n",sign);
+        printf("%sinit mailbox NetRecData failed.\n",sign);
         return -1;
     }
     result = rt_mb_init(&mbNetSendData,"mbSend",&mbSendPool[0],sizeof(mbSendPool)/4,RT_IPC_FLAG_FIFO);         
     if (result != RT_EOK)
     {
-        rt_kprintf("%sinit mailbox NetSend failed.\n",sign);
+        printf("%sinit mailbox NetSend failed.\n",sign);
         return -1;
     }
 #ifdef  USE_WDT   
@@ -413,39 +460,43 @@ int main(void)
 		
 
 ////////////////////////////////任务////////////////////////////////////
-
-		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
-		if(tidNetRec!=NULL){
-				rt_thread_startup(tidNetRec);													 
-				rt_kprintf("%sRTcreat netDataRecTask \r\n",sign);
-		}
-		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
-		if(tidNetSend!=NULL){
-				rt_thread_startup(tidNetSend);													 
-				rt_kprintf("%sRTcreat netDataSendTask \r\n",sign);
-		}
-
-		
-		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
-		if(tidUpkeep!=NULL){
-				rt_thread_startup(tidUpkeep);													 
-				rt_kprintf("%sRTcreat upKeepStateTask \r\n",sign);
+		tidSaveLogSd=  rt_thread_create("logSaveSDTask",logSaveSDTask,RT_NULL,512*2,6, 10 );
+		if(tidSaveLogSd!=NULL){
+				rt_thread_startup(tidSaveLogSd);													 
+				printf("%sRTcreat tidSaveLogSd\r\n",sign);
 		}
 		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512*2,2, 10 );
 		if(tidLCD!=NULL){
 				rt_thread_startup(tidLCD);													 
-				rt_kprintf("%sRTcreat LCDStateTask \r\n",sign);
+				printf("%sRTcreat LCDStateTask \r\n",sign);
+		}
+		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
+		if(tidNetRec!=NULL){
+				rt_thread_startup(tidNetRec);													 
+				printf("%sRTcreat netDataRecTask \r\n",sign);
+		}
+		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
+		if(tidNetSend!=NULL){
+				rt_thread_startup(tidNetSend);													 
+				printf("%sRTcreat netDataSendTask \r\n",sign);
+		}
+		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
+		if(tidUpkeep!=NULL){
+				rt_thread_startup(tidUpkeep);													 
+				printf("%sRTcreat upKeepStateTask \r\n",sign);
 		}
     tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
 		if(tidW5500!=NULL){
 				rt_thread_startup(tidW5500);													 
-				rt_kprintf("%sRTcreat w5500Task task\r\n",sign);
+				printf("%sRTcreat w5500Task task\r\n",sign);
 		}
 		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
 		if(tidAutoCtrl!=NULL){
 				rt_thread_startup(tidAutoCtrl);													 
-				rt_kprintf("%sRTcreat autoCtrlTask\r\n",sign);
+				printf("%sRTcreat autoCtrlTask\r\n",sign);
 		}
+
+		
 #ifdef  USE_WDT
 		extern IWDG_HandleTypeDef hiwdg;
 		static    rt_thread_t tidWDT      = RT_NULL;

@@ -13,11 +13,9 @@ void senseTimeReadJsonResp(char *string,bool  modbusFlag)
 	  uint32_t caltime =0;
 		char* out = NULL;
 		//创建数组
-//		cJSON* Array = NULL;
 		// 创建JSON Object  
 		cJSON* root = NULL;
-//		cJSON* nodeobj = NULL;
-//		cJSON* nodeobj_p = NULL;
+
 		root = cJSON_CreateObject();
 		if (root == NULL) return;
 	

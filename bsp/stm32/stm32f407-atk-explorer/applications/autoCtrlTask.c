@@ -449,11 +449,14 @@ void  autoCtrlTask(void *para)
 //		inpoutpFlag.analogTempHum.tempUpFlag=1;
 //		inpoutpFlag.modbusCh4[0].ch4UpFlag=1;
 //		inpoutpFlag.modbusH2s[0].h2sUpFlag=1;
+//    extern void FatReadDirDelEarlyTxt( );
+//		void FatReadDirDelEarlyTxt();
 		while(1){	
 			  diIOSetFlag();
 			  autoCtrlRun();
 			  ctrlOutSetIO();
 				rt_thread_mdelay(1000);
+//			FatReadDirDelEarlyTxt( );
 #ifdef  USE_WDT
 			  rt_event_send(&WDTEvent,EVENT_WDT_AUTOCTRL);
 #endif

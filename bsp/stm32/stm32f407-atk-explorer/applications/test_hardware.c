@@ -459,13 +459,17 @@ void  hardWareDriverTest(void)
 //不能打印 uint64_t 数据  拆分成32位打印
 int tick()
 {
-
+    RTC_TimeTypeDef read;
 	  uint64_t time =utcTime_ms();
 
 	  uint32_t rtc_s=time/1000;
 	  uint32_t rtc_ms=time%1000;
+		read=utc_to_beijingTime(rtc_s);
 		rt_kprintf("[tick][%lu]-s\r\n",rtc_s);//不能同时打印需要分开打印才正确
 		rt_kprintf("[tick][%lu]-ms\r\n",rtc_ms);
+	  rt_kprintf("[tick]%d年%d月%d日%d时%d分%d秒\r\n",read.year,read.month,read.day,\
+  	read.hour,read.minute,read.second );
+	
 	  return 0;
 }
 //FINSH_FUNCTION_EXPORT(tick, tick finsh);//FINSH_FUNCTION_EXPORT_CMD
@@ -496,9 +500,10 @@ int tickSet(int argc, char *argv[])
 	  extern void  subTimeStampSet(uint64_t time);
 	  if(utcTime_ms()-u64getTick_p>=3000){
         subTimeStampSet(u64getTick_p);
+        correctLcdTime(u64getTick_p/1000);
 			  rt_kprintf("%stime:RTC 误差大于3秒 校时\r\n","[TEST]");
 		}
-		
+	  
 
 	  return 0;
 }

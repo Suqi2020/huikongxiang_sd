@@ -15,23 +15,20 @@ uint32_t upMessIdAdd()
 }
 
 
-//static uint64_t subTimeStamp=0;
+static uint64_t subTimeStamp=1577808000000;//2020 1-1 0:0:0
 
 //获取到服务器时间戳差值
 uint64_t subTimeStampGet()
 {
-		return packFlash.utcTime;
+		return subTimeStamp;
 }
 //存储服务器的时间戳差值  
- void  subTimeStampSet(uint64_t time)
+void  subTimeStampSet(uint64_t time)
 {
 	  if(time>=rt_tick_get())
-				packFlash.utcTime=time-rt_tick_get();//服务器rtc值-当前tick值
+				subTimeStamp=time-rt_tick_get();//服务器rtc值-当前tick值
 		else
-				packFlash.utcTime = 0;
-		stm32_flash_erase(FLASH_IP_SAVE_ADDR, sizeof(packFlash));//每次擦除128k字节数据 存储时候需要一起存储
-		stm32_flash_write(FLASH_IP_SAVE_ADDR,(uint8_t*)&packFlash,sizeof(packFlash));
-		stm32_flash_write(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,sizeof(sheet));
+				subTimeStamp = 0;
 }
 //获取当前的utc时间8个字节长度 精确到ms
 uint64_t  utcTime_ms()
@@ -612,8 +609,8 @@ uint16_t devRegJsonPack()
 //				cJSON_AddItemToObject(nodeobj,"name",cJSON_CreateString(sheet.analog[analogTemChanl].name));
 //				cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.analog[analogTemChanl].ID));
 //		}
-		int i,j;
-		bool  add=true;
+		int i;
+//		bool  add=true;
 ////////////////////////////////////////////////模拟数据打包////////////////////////////////////////////////////
 #ifndef     ANA_MASK
 		for(i=0;i<ANALOG_NUM;i++){

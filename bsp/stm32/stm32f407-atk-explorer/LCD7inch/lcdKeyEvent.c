@@ -91,7 +91,7 @@ void coverLastDisp(void);
 void coverNextDisp(void);
 void coverNowDisp(void);
 void LCDDispNetErrState(void);
-bool surePassWord(void);
+void surePassWord(void);
 void LCDRstPw(void);
 
 void dispChooseModbusName(void);
@@ -709,7 +709,7 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 				packFlash.uartBps[2]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
 				break;     		 			
 			case PORT4_ADDR:
-				packFlash.uartBps[3]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
+			//	packFlash.uartBps[3]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
 				break;     		 			
 
 			//MCUID
@@ -794,7 +794,11 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 			case DISP_OUTPUT_PORT_ADDR:
 				lcdCopyOutputPort(recBuf);
 				break;
+			case LCD_RTC_ADDR:
+				readRtc= copyBufToRtc((char *)recBuf);
 
+				
+			  break;
 #ifndef     ANA_MASK
 			case DISP_ANA_ID_ADDR:
 				lcdCopyAnaID(recBuf);
@@ -928,7 +932,7 @@ void LCDRstPw()
 
 
 //password 确认按键
-bool  surePassWord()
+void  surePassWord()
 {
 	  //uint8_t buf[10]={0X5A,0XA5,0X07,0X82,0,0X84,0X5A,0X01,0,2};//最后一个0002 表示切换到02图
 		if(pwssWdRet==true){	
@@ -948,6 +952,7 @@ bool  surePassWord()
 //			  LCDDispErrPasswd();
 		}
 }
+
 
 
 void changeBmp(int num)

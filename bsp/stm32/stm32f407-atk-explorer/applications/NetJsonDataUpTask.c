@@ -292,6 +292,8 @@ void startTimeList()
 
 #if 1
 //上行数据的维护以及重发
+
+
 void   upKeepStateTask(void *para)
 {
 		//extern void modbusPrintRead();
@@ -300,6 +302,8 @@ void   upKeepStateTask(void *para)
 	  extern void clearUartData();
 //	  extern void printModbusDevList();
 	  extern void readMultiCirCulaPoint();
+
+	
 //	  extern void prinfAnalogList();
 //	  extern void printfDIList();
 //	  extern void printfOutputList();
@@ -312,9 +316,14 @@ void   upKeepStateTask(void *para)
     startTimeList();//开启计时器列表
 	  clearUartData();
 	  readMultiCirCulaPoint();//对于环流来讲 运行前需要提取扩大方式
+	
+  
+	  
+		
+
 		while(1){
 				timeOutRunFun();
-				
+//				logSaveToSD(acuRst,strlen(acuRst));
 
 				rt_thread_mdelay(500);
 #ifdef  USE_WDT

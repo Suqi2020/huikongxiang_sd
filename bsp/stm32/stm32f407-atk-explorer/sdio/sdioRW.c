@@ -58,8 +58,8 @@
 //uint32_t aRxBuffer[BUFFER_WORDS_SIZE];
 
 /* Private function prototypes -----------------------------------------------*/
-static void Fill_Buffer(uint32_t *pBuffer, uint32_t uwBufferLenght, uint32_t uwOffset);
-static uint8_t Buffercmp(uint32_t* pBuffer1, uint32_t* pBuffer2, uint16_t BufferLength);
+//static void Fill_Buffer(uint32_t *pBuffer, uint32_t uwBufferLenght, uint32_t uwOffset);
+//static uint8_t Buffercmp(uint32_t* pBuffer1, uint32_t* pBuffer2, uint16_t BufferLength);
 
 /* Private functions ---------------------------------------------------------*/
 static const char sign[]="[SD]";
@@ -79,23 +79,36 @@ extern rt_bool_t gbSDExit;
 DWORD  get_fattime (void)
 {
 	DWORD Value;
-	Value = ((23 + 20) << 25) | (5 << 21) | (22 << 16) |
-				 (9 << 11) | (0 << 5) | (0 >> 1);
+
+
+	RTC_TimeTypeDef read;
+	uint64_t time =utcTime_ms();
+
+	uint32_t rtc_s=time/1000;
+	read=utc_to_beijingTime(rtc_s);
+
+
+	Value = ((read.year + 20) << 25) | (read.month << 21) | (read.day << 16) |
+	(read.hour << 11) | (read.minute << 5) | (read.second >> 1);
 
   return Value;
-  return 0;//(DWORD )+254275200;//utcTime_s()
+ // return 0;//(DWORD )+254275200;//utcTime_s()
 }
 
 
 
-
+static char logName[]="log";
 //创建2级别目录ID目录
 void creatIDFolder(int i)
 {
+	  
 		char *txtName;
-	  uint32_t fnum;
-	  int ret;
+//	  uint32_t fnum;
+//	  int ret;
 		txtName =rt_malloc(50);
+		strcpy(txtName,logName);
+		f_mkdir(txtName);//创建目录
+		memset(txtName,0,sizeof((char *)txtName));
 		switch(i)
 		{
 			case CIRCULA:
@@ -147,10 +160,40 @@ void creatIDFolder(int i)
 			break;
 #ifdef 	 USE_4GAS 	
 			case CH4:
+					for(int j=0;j<CH4_485_NUM;j++){//核对有没有配置过
+							if(sheet.ch4[j].workFlag==RT_TRUE){
+							strcpy(txtName,modbusName[i]);
+							strcat(txtName,"/");
+							strcat(txtName,sheet.ch4[j].ID);
+							strcat(txtName,".txt");
+							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							memset(txtName,0,sizeof((char *)txtName));
+							}
+					}
 			break;
 			case O2:
+					for(int j=0;j<O2_485_NUM;j++){//核对有没有配置过
+							if(sheet.o2[j].workFlag==RT_TRUE){
+							strcpy(txtName,modbusName[i]);
+							strcat(txtName,"/");
+							strcat(txtName,sheet.o2[j].ID);
+							strcat(txtName,".txt");
+							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							memset(txtName,0,sizeof((char *)txtName));
+							}
+					}
 			break;
 			case H2S:
+					for(int j=0;j<H2S_485_NUM;j++){//核对有没有配置过
+							if(sheet.h2s[j].workFlag==RT_TRUE){
+							strcpy(txtName,modbusName[i]);
+							strcat(txtName,"/");
+							strcat(txtName,sheet.h2s[j].ID);
+							strcat(txtName,".txt");
+							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							memset(txtName,0,sizeof((char *)txtName));
+							}
+					}
 			break;
 			case CO:
 					for(int j=0;j<CO_485_NUM;j++){//核对有没有配置过
@@ -222,6 +265,7 @@ void creatIDFolder(int i)
 }
 
 //上电后创建jinggai yangqi huanliu等传感器命令的文件夹 一级目录
+bool fountFlag=false;
 void creatFolder()
 {
 	 volatile int ret;
@@ -230,6 +274,7 @@ void creatFolder()
    //在外部SD卡挂载文件系统，文件系统挂载时会对SD卡初始化
    res_sd = f_mount(&fs,"0:",1);  
    if(res_sd==FR_OK){
+		  fountFlag=true;
 		  for(int j=0;j<MODBUS_NUM;j++){
 					ret=f_mkdir(modbusName[j]);//创建目录
 				  if((ret==FR_OK)||(ret==FR_EXIST)){
@@ -247,5 +292,104 @@ void creatFolder()
 		}
 }
 
+
+
+
+//1685592000  2023 06 01 4:00:00
+
+//log 存入sd卡
+//extern bool log_save_sdFlag;
+//static char *logName="log.txt";
+
+
+//按照时间tick存储log到txt文件中
+void  logSaveToSD(char *buf,char lenth)
+{
+
+	  extern rt_mutex_t sdWrite_mutex;
+		rt_mutex_take(sdWrite_mutex,RT_WAITING_FOREVER);
+		
+	
+		char *timeBuf;
+	  uint32_t fnum;
+	  int ret;
+		timeBuf =rt_malloc(100);
+	  char *txtName;
+		char timeSign[12];
+		txtName =rt_malloc(50);
+		strcpy(txtName,"log");
+		strcat(txtName,"/");
+		sprintf(timeSign,"%llu",(utcTime_s()/TXT_LOG_TIME)*TXT_LOG_TIME);//1小时创建一个新目录 为了清除1小时内的数字为0
+		strcat(txtName,timeSign);
+		strcat(txtName,".txt");
+		ret=f_open(&fnew,txtName, FA_WRITE);
+	
+		if(lenth>1){
+				RTC_TimeTypeDef read;
+				uint64_t time =utcTime_ms();
+				uint32_t rtc_s=time/1000; 
+				read=utc_to_beijingTime(rtc_s);
+				int len2=sprintf(timeBuf,"[%d-%d-%d-%d:%d:%d]",read.year,read.month,read.day,\
+				read.hour,read.minute,read.second );
+		}
+		if(ret!=FR_OK){
+		    ret=f_open(&fnew,txtName, FA_CREATE_NEW |FA_WRITE);//suqi
+		}
+		if((ret==FR_OK)||(ret==FR_EXIST)){
+				f_lseek(&fnew,f_size(&fnew));
+				if(lenth>1){//长度比较长才写入时间
+					ret=f_write(&fnew,timeBuf,strlen(timeBuf),&fnum);
+				}
+		    ret=f_write(&fnew,buf,lenth,&fnum);
+		}
+		else{
+				rt_kprintf("%sERR:f_open  write %s,ret=%d\n",sign,txtName,ret);
+		}
+		f_close(&fnew);
+		rt_free(txtName);
+		txtName=NULL;
+		rt_free(timeBuf);
+	  timeBuf=NULL;
+		rt_mutex_release(sdWrite_mutex);
+}
+
+
+
+
+//删除早期的txt文件
+void FatReadDirDelEarlyTxt()
+{
+		FILINFO fileinfo;
+		DIR Dir;
+	  char dirName[10]="0:/";
+	  strcat(dirName,logName);
+	  int txtCount=0;
+	  char delPath[30]="";
+	  strcat(delPath,dirName);
+	  strcat(delPath,"/");
+    if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir结构体中保存 */
+    {
+        while(f_readdir(&Dir, &fileinfo) == FR_OK)  /* 读文件信息到文件状态结构体中 */
+        {
+						if(txtCount==0){
+								strcat(delPath,fileinfo.fname );//每次提取第一个txtname
+						}
+            if(!fileinfo.fname[0]) break; /* 如果文件名为‘\0'，说明读取完成结束 */
+//            printf("%s/",dirName);//打印路径
+//            printf("文件名：%s\r\n",fileinfo.fname );//打印信息到串口
+		        txtCount++;
+        }
+    }
+		if(txtCount>TXT_LOG_NUM){//上次读取后				
+				printf("count[%d]del：%s\r\n",txtCount,delPath );
+				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir结构体中保存 */
+				{
+						f_unlink(delPath);
+				}
+		}
+}
+
+
+//按照时间删除logtxt文件接口在软件定时器中调用
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

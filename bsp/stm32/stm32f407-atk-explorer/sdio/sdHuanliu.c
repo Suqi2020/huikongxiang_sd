@@ -1,14 +1,14 @@
 #include "board.h"
 static const char sign[]="[SDHuanLiu]";
 const char huanliuText[]="earthCurA runCurA loadRatioA earthCurB runCurB loadRatioB earthCurC runCurC loadRatioC time(ms)\r\n";
-#define HUANLIU_DATA_LEN 200
+#define  HUANLIU_DATA_LEN   200
 //在 creatFolder/ID号创建的文件夹下边创建带有时间的txt文件
 //创建txt文件 以utc时间戳为基准/3600*24 得到每天的时间戳作为txt文件的名称
 void huanLiuTxtReadSD(char *id)
 {
 		char *txtName;
 	  char *readData;
-		uint32_t fnum;
+//		uint32_t fnum;
     int ret;
 		if(gbSDExit==false){
 				return;
@@ -82,12 +82,17 @@ uint32_t writetime=0;
 //创建txt文件 以utc时间戳为基准/3600*24 得到每天的时间戳作为txt文件的名称
 void huanLiuTxtSaveSD(char *id,char *data)
 {
-		char *txtName;
-		uint32_t fnum;
-    int ret;
+	  extern rt_mutex_t sdWrite_mutex;
+		rt_mutex_take(sdWrite_mutex,RT_WAITING_FOREVER);
+
 		if(gbSDExit==false){
 				return;
 		 }
+
+		char *txtName;
+		uint32_t fnum;
+    int ret;
+
 		char timeSign[12];
 		txtName =rt_malloc(50);
 		strcpy(txtName,modbusName[CIRCULA]);
@@ -95,7 +100,7 @@ void huanLiuTxtSaveSD(char *id,char *data)
 		strcat(txtName,id);
 
 		strcat(txtName,"/");
-		sprintf(timeSign,"%llu",utcTime_s()/3600);//1分钟创建一个新目录
+		sprintf(timeSign,"%llu",(utcTime_s()/TXT_RW_TIME)*TXT_RW_TIME);//1小时创建一个新目录 为了清除1小时内的数字为0
 		strcat(txtName,timeSign);
 		strcat(txtName,".txt");
 		ret=f_open(&fnew,txtName, FA_WRITE);
@@ -103,7 +108,7 @@ void huanLiuTxtSaveSD(char *id,char *data)
 		    ret=f_open(&fnew,txtName, FA_CREATE_NEW |FA_WRITE);//suqi
 			  res_sd=f_write(&fnew,huanliuText,strlen(huanliuText),&fnum);//写入name列表
 			  f_lseek(&fnew,f_size(&fnew));
-			  f_close(&fnew);
+			  //f_close(&fnew);
 		}
 		if((ret==FR_OK)||(ret==FR_EXIST)){
 				f_lseek(&fnew,f_size(&fnew));
@@ -126,4 +131,6 @@ void huanLiuTxtSaveSD(char *id,char *data)
 		f_close(&fnew);
 		rt_free(txtName);
 		txtName=NULL;
+    rt_mutex_release(sdWrite_mutex);
 }
+

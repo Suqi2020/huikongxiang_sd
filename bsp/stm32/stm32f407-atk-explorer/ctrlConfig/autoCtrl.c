@@ -617,7 +617,7 @@ static bool  ctrlCoverConf(char **argv)
 //ÊäÈëµÄÖ¸ÕëÅäÖÃ
 void autoctrlInputcfg(char*argv[])
 {
-	  int i,j;
+	  int i;
 	  uint8_t limit ;
 	  bool ret=false;
 		for(i=0;i<sizeof(inName)/sizeof(inName[0]);i++){

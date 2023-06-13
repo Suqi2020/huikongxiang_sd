@@ -79,7 +79,26 @@ int LCDWtite(uint16_t addr,uint8_t *data,uint8_t dataLen)
 		return 0;
 }
 
+int LCDRead(uint16_t addr,uint8_t *data,uint8_t dataLen)
+{
+		extern rt_mutex_t   lcdSend_mutex;
+		rt_mutex_take(lcdSend_mutex,RT_WAITING_FOREVER);
+	  int len=0;
+		rt_memset(sendLCDBuf,0,LCD_BUF_LEN);
+		sendLCDBuf[len++]=(uint8_t)(LCD_HEAD>>8);
+	  sendLCDBuf[len++]=(uint8_t)LCD_HEAD;		
+	  sendLCDBuf[len++]=dataLen+2+1;						//长度暂时填充0  2-headlen 1-writelen
+	  sendLCDBuf[len++]=LCD_READ;  						
+		sendLCDBuf[len++]=(uint8_t)(addr>>8);	
+		sendLCDBuf[len++]=(uint8_t)addr;		
+	  for (int i=0;i<dataLen;i++){
+				sendLCDBuf[len++]=data[i];
+		}
+		LCDDataSend(sendLCDBuf,len);
+		rt_mutex_release(lcdSend_mutex);
 
+		return 0;
+}
 
 //网络配置显示
 void LCDDispIP()
@@ -147,11 +166,11 @@ void LCDDispUart()
 		buf[3]=(uint8_t)(packFlash.uartBps[2]>>0);
 		LCDWtite(PORT3_ADDR,buf,2*2);
 		//显示端口4波特率
-		buf[0]=(uint8_t)(packFlash.uartBps[3]>>24);
-		buf[1]=(uint8_t)(packFlash.uartBps[3]>>16);
-		buf[2]=(uint8_t)(packFlash.uartBps[3]>>8);
-		buf[3]=(uint8_t)(packFlash.uartBps[3]>>0);
-		LCDWtite(PORT4_ADDR,buf,2*2);
+//		buf[0]=(uint8_t)(packFlash.uartBps[3]>>24);
+//		buf[1]=(uint8_t)(packFlash.uartBps[3]>>16);
+//		buf[2]=(uint8_t)(packFlash.uartBps[3]>>8);
+//		buf[3]=(uint8_t)(packFlash.uartBps[3]>>0);
+//		LCDWtite(PORT4_ADDR,buf,2*2);
 }
 
 

@@ -82,20 +82,20 @@ void uartSingConf(int num,int bps)
 	switch(num){
 //		case USE_UART2:
 ////			MX_USART2_UART_Init(bps	);
-////		  rt_kprintf("%sUART conf uart2 bps=%d\n",sign,packFlash.uartBps[0]);
+////		  rt_kprintf("%sUART conf uart2 bps=%d\n",sign,packFlash.uartBps[USE_UART2]);
 //			break;
 		case USE_UART3:
 			MX_USART3_UART_Init(bps	);
-		  rt_kprintf("%sUART conf uart3 bps=%d\n",sign,packFlash.uartBps[1]);
+		  rt_kprintf("%sUART conf uart3 bps=%d\n",sign,packFlash.uartBps[USE_UART3]);
 			break;
 
 		case USE_UART6:
 			MX_USART6_UART_Init(bps	);
-		  rt_kprintf("%sUART conf uart6 bps=%d\n",sign,packFlash.uartBps[2]);
+		  rt_kprintf("%sUART conf uart6 bps=%d\n",sign,packFlash.uartBps[USE_UART6]);
 			break;
 		case USE_UART4:
 			MX_UART4_Init(bps	);
-		  rt_kprintf("%sUART conf uart4 bps=%d\n",sign,packFlash.uartBps[3]);
+		  rt_kprintf("%sUART conf uart4 bps=%d\n",sign,packFlash.uartBps[USE_UART4]);
 			break;
 	}
 }

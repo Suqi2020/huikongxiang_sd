@@ -56,7 +56,7 @@ packTypeEnum  downLinkPackTpyeGet(cJSON  *TYPE)
 	
 	  for(int i=0;i<size;i++){
 				if(rt_strcmp(TYPE->valuestring,typeHeadDown[i])==0){
-						return i;
+						return (packTypeEnum)i;
 				}
 		}
 		rt_kprintf("%serr:type head [%s] listsize=%d\n",sign,TYPE->valuestring,size);	
@@ -81,6 +81,7 @@ rt_bool_t heartRespFun(cJSON  *Json)
 	  extern void  subTimeStampSet(uint64_t time);
 	  if(utcTime_ms()-u64getTick_p>=3000){
         subTimeStampSet(u64getTick_p);
+			  correctLcdTime(u64getTick_p/1000);
 			  rt_kprintf("%stime:RTC 误差大于3秒 校时\r\n",sign);
 		}
 		cJSON  *mid =cJSON_GetObjectItem(Json,"mid");
@@ -114,6 +115,7 @@ rt_bool_t comRespFun(cJSON  *Json,uint32_t mesgID)
 	  extern void  subTimeStampSet(uint64_t time);
 	  if(utcTime_ms()-u64getTick_p>=3000){
         subTimeStampSet(u64getTick_p);
+			  correctLcdTime(u64getTick_p/1000);
 			  rt_kprintf("%stime:RTC 误差大于3秒 校时\r\n",sign);
 		}
 		cJSON  *msg =cJSON_GetObjectItem(Json,"msg");

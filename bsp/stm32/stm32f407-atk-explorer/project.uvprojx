@@ -923,6 +923,11 @@
               <FileType>1</FileType>
               <FilePath>.\LCD7inch\lcdDispChoose.c</FilePath>
             </File>
+            <File>
+              <FileName>lcdUtcTime.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LCD7inch\lcdUtcTime.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

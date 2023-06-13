@@ -64,7 +64,7 @@ rt_bool_t  gbNetState =RT_FALSE;   //ÁªÍø×´Ì¬  false ¶ÏÍø  trueÁªÍø
 
 void  w5500Task(void *parameter)
 {
-	static rt_err_t ret=0;
+//	static rt_err_t ret=0;
 	W5500_enum W5500State=W5500InitEnum;
   static uint8_t dhcpTick=0;
 	static uint8_t rstW5500Ct=0;

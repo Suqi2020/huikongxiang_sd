@@ -212,7 +212,7 @@ static uint16_t coverJsonPack(bool respFlag)
 				cJSON_AddNumberToObject(nodeobj_p,"switch2"   ,cover[i].switch2p);
 				cJSON_AddNumberToObject(nodeobj_p,"vibration",cover[i].vibration);
 				cJSON_AddNumberToObject(nodeobj_p,"switch1"   ,cover[i].switch1p);
-				sprintf(sprinBuf,"%ll",utcTime_ms());
+				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 			}
 		}
