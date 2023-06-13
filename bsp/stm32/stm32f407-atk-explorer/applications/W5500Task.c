@@ -147,7 +147,10 @@ void  w5500Task(void *parameter)
 //封装外部调用发送 函数接口
 void netSend(uint8_t *data,int len)
 {
-		if(send(SOCK_TCPC,	data,len)==0){//启动个定时器来实现重发  2s内收不到回复
+	  rt_mutex_take(w5500Spi_mutex,RT_WAITING_FOREVER);
+	  int ret=send(SOCK_TCPC,	data,len);
+	  rt_mutex_release(w5500Spi_mutex);
+		if(ret==0){//启动个定时器来实现重发  2s内收不到回复
 				gbNetState=RT_FALSE;//发送身边 重新联网
 				
 			  if(offLine.times<(sizeof(offLine.relayTimer)/sizeof(offLine.relayTimer[0]))){

@@ -183,7 +183,7 @@ void disconnect(SOCKET s)
 */
 uint16 send(SOCKET s, const uint8 * buf, uint16 len)
 {
-	rt_mutex_take(w5500Spi_mutex,RT_WAITING_FOREVER);
+	
   uint8 status=0;
   uint16 ret=0;
   uint16 freesize=0;
@@ -234,7 +234,7 @@ uint16 send(SOCKET s, const uint8 * buf, uint16 len)
 #endif
 //
 	
-	rt_mutex_release(w5500Spi_mutex);
+	
    return ret;
 }
 

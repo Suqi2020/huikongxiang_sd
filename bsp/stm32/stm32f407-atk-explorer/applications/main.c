@@ -219,10 +219,10 @@
 //V3.09    增加存储log到sd卡功能，增加log打印和存储的单独task
 //         增加上电后从显示屏读取RTC时钟函数，从服务器同步rtc后会和lcd显示屏比较 如果相差3秒 同步lcd时钟
 //         修改sd卡内写入文件记录的创建时间函数 
-//         增加启动软件定时器的配置 #define RT_USING_TIMER_SOFT 0
+//         增加启动软件定时器的配置 rt_config.h #define RT_USING_TIMER_SOFT 0 提高了定时器优先级 避免被task打乱
 //         增加log存储时候写入时间，同步之前显示20年1月1日 0:0:0
 //         [20-1-1-0:0:0]ACU RESET>>>>>>>>>>>>>>
-//         [20-1-1-0:0:0][main]20230607  ver=03.08
+//         [20-1-1-0:0:0][main]20230607  ver=03.08   20230613
 //         加入SD卡存储log最大数为10天 超过需要自动删除早起的log
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
@@ -457,7 +457,7 @@ int main(void)
 		
 
 ////////////////////////////////任务////////////////////////////////////
-		tidSaveLogSd=  rt_thread_create("logSaveSDTask",logSaveSDTask,RT_NULL,512*2,6, 10 );
+		tidSaveLogSd=  rt_thread_create("logSaveSDTask",logSaveSDTask,RT_NULL,512*3,6, 10 );
 		if(tidSaveLogSd!=NULL){
 				rt_thread_startup(tidSaveLogSd);													 
 				printf("%sRTcreat tidSaveLogSd\r\n",sign);

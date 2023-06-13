@@ -35,6 +35,7 @@ extern void creatFolder(void);
 uint64_t timeRead1,timeRead2;
 uint32_t lcdUtcTime_beijing();
 void  subTimeStampSet(uint64_t time);
+extern void FatReadDirDelEarlyTxt(void);
 static int count=0;
 void   logSaveSDTask(void *parameter)
 {
@@ -53,11 +54,10 @@ void   logSaveSDTask(void *parameter)
 		while(1){
 				bufLen=0;
 			  while(true==Read_RingBuff2((uint8_t *)printBuf+bufLen)){
-						
 					  if(printBuf[bufLen]=='\n'){
 							  printBuf[bufLen+1]=0;
 								printf("%s",printBuf);
-								//logSaveToSD(printBuf,strlen(printBuf));
+								logSaveToSD(printBuf,strlen(printBuf));
 							  bufLen=0;
 							  break;
 						}
@@ -71,9 +71,6 @@ void   logSaveSDTask(void *parameter)
 						bufLen++;
 				}
 				rt_thread_mdelay(50);
-				
-				
-				
 				if(count++%100==0){
 						FatReadDirDelEarlyTxt();//每隔TXT_LOG_TIME/10秒时间检查一次
 				}

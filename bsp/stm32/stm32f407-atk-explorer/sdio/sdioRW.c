@@ -74,7 +74,7 @@ extern Diskio_drvTypeDef  SD_Driver;
 extern rt_bool_t gbSDExit;
 //extern uint64_t utcTime_ms();
 
-
+extern rt_mutex_t sdWrite_mutex;
 //后期需要用时间戳转换函数来实现
 DWORD  get_fattime (void)
 {
@@ -307,11 +307,8 @@ void  logSaveToSD(char *buf,char lenth)
 {
 		if(gbSDExit==false){
 				return;
-		 }
-	  extern rt_mutex_t sdWrite_mutex;
+		}
 		rt_mutex_take(sdWrite_mutex,RT_WAITING_FOREVER);
-		
-	
 		char *timeBuf;
 	  uint32_t fnum;
 	  int ret;
@@ -362,8 +359,9 @@ void  logSaveToSD(char *buf,char lenth)
 void FatReadDirDelEarlyTxt()
 {
 		if(gbSDExit==false){
-				return;
-		 }
+			return;
+		}
+		rt_mutex_take(sdWrite_mutex,RT_WAITING_FOREVER);
 		FILINFO fileinfo;
 		DIR Dir;
 	  char dirName[10]="0:/";
@@ -390,6 +388,7 @@ void FatReadDirDelEarlyTxt()
 						f_unlink(delPath);
 				}
 		}
+		rt_mutex_release(sdWrite_mutex);
 }
 
 
