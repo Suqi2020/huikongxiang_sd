@@ -358,13 +358,12 @@ void  logSaveToSD(char *buf,char lenth)
 
 
 
-//删除早期的txt文件
+//删除早期的log的txt文件
 void FatReadDirDelEarlyTxt()
 {
 		if(gbSDExit==false){
 				return;
 		 }
-
 		FILINFO fileinfo;
 		DIR Dir;
 	  char dirName[10]="0:/";
@@ -382,11 +381,10 @@ void FatReadDirDelEarlyTxt()
 						}
 						txtCount++;
             if(!fileinfo.fname[0]) break; /* 如果文件名为‘\0'，说明读取完成结束 */
-		        
         }
     }
 		if(txtCount>TXT_LOG_NUM){//上次读取后				
-				printf("count[%d]del：%s\r\n",txtCount,delPath );
+				rt_kprintf("count[%d]del：%s\r\n",txtCount,delPath );
 				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir结构体中保存 */
 				{
 						f_unlink(delPath);
