@@ -317,17 +317,14 @@ static void timeout1(void *parameter)
 		extern rt_bool_t gbNetState;
 	  extern void timeInc();
 	  extern void FatReadDirDelEarlyTxt();
-	  extern bool fountFlag;
+//	  extern bool fountFlag;
 	  //extern void modbusWorkErrCheck(void);
 	  count++;  
 	  if(gbSDExit==false){
 				if(count%(100)==0)//10秒提醒一下
-						rt_kprintf("%s请插入TF卡并重启设备\n",sign);
+						printf("%s请插入TF卡并重启设备\n",sign);
 		}
-		if(count%TXT_LOG_TIME==(0)){
-			  if(fountFlag==true)//挂载u盘成功
-						FatReadDirDelEarlyTxt();//每隔TXT_LOG_TIME/10秒时间检查一次
-		}
+
 	  if(count%10==0)
 				timeInc();
 		if(gbNetState==RT_TRUE){
@@ -347,7 +344,7 @@ static void timeout1(void *parameter)
 //				errConfigCheck();//	modbusWorkErrCheck();//errConfigCheck();
 				//modbusPrintRead();
 //				if(gbNetState ==RT_FALSE){
-//						rt_kprintf("%sERR:网络故障\n",sign);
+//						kprintf("%sERR:网络故障\n",sign);
 //				}
 		}
 }

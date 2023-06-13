@@ -82,13 +82,13 @@ uint32_t writetime=0;
 //创建txt文件 以utc时间戳为基准/3600*24 得到每天的时间戳作为txt文件的名称
 void huanLiuTxtSaveSD(char *id,char *data)
 {
-	  extern rt_mutex_t sdWrite_mutex;
-		rt_mutex_take(sdWrite_mutex,RT_WAITING_FOREVER);
+
 
 		if(gbSDExit==false){
 				return;
 		 }
-
+	  extern rt_mutex_t sdWrite_mutex;
+		rt_mutex_take(sdWrite_mutex,RT_WAITING_FOREVER);
 		char *txtName;
 		uint32_t fnum;
     int ret;

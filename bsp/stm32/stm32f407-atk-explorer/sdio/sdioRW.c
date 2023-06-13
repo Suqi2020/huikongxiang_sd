@@ -265,7 +265,7 @@ void creatIDFolder(int i)
 }
 
 //上电后创建jinggai yangqi huanliu等传感器命令的文件夹 一级目录
-bool fountFlag=false;
+//bool fountFlag=false;
 void creatFolder()
 {
 	 volatile int ret;
@@ -274,7 +274,7 @@ void creatFolder()
    //在外部SD卡挂载文件系统，文件系统挂载时会对SD卡初始化
    res_sd = f_mount(&fs,"0:",1);  
    if(res_sd==FR_OK){
-		  fountFlag=true;
+//		  fountFlag=true;
 		  for(int j=0;j<MODBUS_NUM;j++){
 					ret=f_mkdir(modbusName[j]);//创建目录
 				  if((ret==FR_OK)||(ret==FR_EXIST)){
@@ -305,7 +305,9 @@ void creatFolder()
 //按照时间tick存储log到txt文件中
 void  logSaveToSD(char *buf,char lenth)
 {
-
+		if(gbSDExit==false){
+				return;
+		 }
 	  extern rt_mutex_t sdWrite_mutex;
 		rt_mutex_take(sdWrite_mutex,RT_WAITING_FOREVER);
 		
@@ -359,6 +361,10 @@ void  logSaveToSD(char *buf,char lenth)
 //删除早期的txt文件
 void FatReadDirDelEarlyTxt()
 {
+		if(gbSDExit==false){
+				return;
+		 }
+
 		FILINFO fileinfo;
 		DIR Dir;
 	  char dirName[10]="0:/";
@@ -375,8 +381,6 @@ void FatReadDirDelEarlyTxt()
 								strcat(delPath,fileinfo.fname );//每次提取第一个txtname
 						}
             if(!fileinfo.fname[0]) break; /* 如果文件名为‘\0'，说明读取完成结束 */
-//            printf("%s/",dirName);//打印路径
-//            printf("文件名：%s\r\n",fileinfo.fname );//打印信息到串口
 		        txtCount++;
         }
     }
