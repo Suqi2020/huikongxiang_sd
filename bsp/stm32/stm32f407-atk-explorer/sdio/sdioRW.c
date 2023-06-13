@@ -380,8 +380,9 @@ void FatReadDirDelEarlyTxt()
 						if(txtCount==0){
 								strcat(delPath,fileinfo.fname );//每次提取第一个txtname
 						}
+						txtCount++;
             if(!fileinfo.fname[0]) break; /* 如果文件名为‘\0'，说明读取完成结束 */
-		        txtCount++;
+		        
         }
     }
 		if(txtCount>TXT_LOG_NUM){//上次读取后				
