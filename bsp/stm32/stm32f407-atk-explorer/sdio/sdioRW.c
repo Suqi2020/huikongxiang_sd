@@ -333,6 +333,7 @@ void  logSaveToSD(char *buf,char lenth)
 		}
 		if(ret!=FR_OK){
 		    ret=f_open(&fnew,txtName, FA_CREATE_NEW |FA_WRITE);//suqi
+			  rt_kprintf("creat：%s\r\n",txtName );
 		}
 		if((ret==FR_OK)||(ret==FR_EXIST)){
 				f_lseek(&fnew,f_size(&fnew));
@@ -356,6 +357,17 @@ void  logSaveToSD(char *buf,char lenth)
 
 
 //删除早期的log的txt文件
+uint32_t logSaveTime[TXT_LOG_NUM+1]={0};
+char logTime[12];
+//找到logSaveTime中的最小时间 
+uint32_t findMiniTime()
+{
+	  uint32 mini=logSaveTime[0];//先装载一个值 利于找到最小值
+		for(int i=1;i<sizeof(logSaveTime)/sizeof(logSaveTime[0]);i++){
+				mini=(mini<logSaveTime[i]?mini:logSaveTime[i]);
+		}
+		return mini;
+}
 void FatReadDirDelEarlyTxt()
 {
 		if(gbSDExit==false){
@@ -370,22 +382,43 @@ void FatReadDirDelEarlyTxt()
 	  char delPath[30]="";
 	  strcat(delPath,dirName);
 	  strcat(delPath,"/");
+		for(int i=0;i<TXT_LOG_NUM;i++){
+				logSaveTime[i]=0;
+		}
     if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir结构体中保存 */
     {
         while(f_readdir(&Dir, &fileinfo) == FR_OK)  /* 读文件信息到文件状态结构体中 */
         {
-						if(txtCount==0){
-								strcat(delPath,fileinfo.fname );//每次提取第一个txtname
+            if(!fileinfo.fname[0]) break; /* 如果文件名为‘\0'，说明读取完成结束 */
+					  
+						for(int j=0;j<strlen(fileinfo.fname);j++){
+							 if(fileinfo.fname[j]=='.'){
+									logTime[j]=0;
+								  break;
+							 }
+							 logTime[j]=fileinfo.fname[j];//提取名字 不要.txt
+						}
+						//printf("提取时间 %s\n",logTime);
+						if(txtCount<=TXT_LOG_NUM+1){
+								logSaveTime[txtCount]=atoi32(logTime,10);//时间字符串格式化为32位整数		
 						}
 						txtCount++;
-            if(!fileinfo.fname[0]) break; /* 如果文件名为‘\0'，说明读取完成结束 */
         }
     }
-		if(txtCount>TXT_LOG_NUM){//上次读取后				
-				rt_kprintf("count[%d]del：%s\r\n",txtCount,delPath );
-				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir结构体中保存 */
+		if(txtCount>TXT_LOG_NUM){//上次读取后		
+				for(int i=0;i<=TXT_LOG_NUM;i++){
+						rt_kprintf("log[%d] time：%d\n",i+1,logSaveTime[i]);
+				}			
+				rt_kprintf("find mini:[%d]\n",findMiniTime());
+				sprintf(delPath+strlen(delPath),"%d.txt",findMiniTime());
+				rt_kprintf("count[%d]del:%s\r\n",txtCount,delPath );
+				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir[0]=结构体中保存 */
 				{
-						f_unlink(delPath);
+						int ret=f_unlink(delPath);
+					  if(ret!=FR_OK){
+								rt_kprintf("del err:[%d]\n",ret);
+						}
+						
 				}
 		}
 		rt_mutex_release(sdWrite_mutex);

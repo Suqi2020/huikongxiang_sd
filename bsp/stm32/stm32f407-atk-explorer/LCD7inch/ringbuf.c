@@ -83,6 +83,7 @@ uint8_t Write_RingBuff2(uint8_t data)
 
 		write_ringbufnum++;
 		ringBuff2.Ring_Buff[ringBuff2.Tail] = data;
+	//	printf(">%c",ringBuff2.Ring_Buff[ringBuff2.Tail]);
 		ringBuff2.Tail = (ringBuff2.Tail + 1) % PRINTF_BUF_LEN;//
 		ringBuff2.Lenght++;
 		return true;
@@ -98,6 +99,7 @@ uint8_t Read_RingBuff2(uint8_t *rData)
 		}
 		read_ringbufnum++;
 		*rData = ringBuff2.Ring_Buff[ringBuff2.Head];//
+//		printf("/%c",ringBuff2.Ring_Buff[ringBuff2.Head]);
 		ringBuff2.Head++;
 		if(ringBuff2.Head>=PRINTF_BUF_LEN)
 		{

@@ -1317,19 +1317,26 @@ RT_WEAK int rt_kprintf(const char *fmt, ...)
     if (length > RT_CONSOLEBUF_SIZE - 1)
         length = RT_CONSOLEBUF_SIZE - 1;
 		
-		for(int j=0;j<length;j++){
-				Write_RingBuff2((uint8_t)rt_log_buf[j]);
-		}
+		  for(int j=0;j<length;j++){
+					Write_RingBuff2((uint8_t)rt_log_buf[j]);
+				  
+			}
 #ifdef RT_USING_DEVICE
-//    if (_console_device == RT_NULL)
-//    {
-//        rt_hw_console_output(rt_log_buf);
-//    }
-//    else
-//    {
-//        rt_device_write(_console_device, 0, rt_log_buf, length);
+//		extern rt_bool_t gbSDExit;
+//		if(gbSDExit==1){
+
+//		}
+//	else{
+//		if (_console_device == RT_NULL)
+//		{
+//				rt_hw_console_output(rt_log_buf);
+//		}
+//		else
+//		{
+//				rt_device_write(_console_device, 0, rt_log_buf, length);
 ////			
-//    }
+//		}
+//	}
 #else
     rt_hw_console_output(rt_log_buf);
 #endif /* RT_USING_DEVICE */

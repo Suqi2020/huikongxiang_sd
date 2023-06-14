@@ -449,29 +449,17 @@ void coverJsonOnOff(cJSON   *Json)
 {
 		char* out = NULL;
 		//创建数组
-//		cJSON* Array = NULL;
-		// 创建JSON Object  
 		cJSON* root = NULL;
-//		cJSON* nodeobj = NULL;
-//		cJSON* nodeobj_p = NULL;
 		root = cJSON_CreateObject();
 		if (root == NULL) return;
-
 	  cJSON_AddNumberToObject(root,"mid",respMid);
-
 	  cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
-
 		cJSON_AddStringToObject(root, "identifier","cover_monitor");
 		char *sprinBuf=RT_NULL;
 		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
-
-			
 		cJSON_AddNumberToObject(root, "code",0);
 		cJSON   *array=cJSON_GetObjectItem(Json,"params");
-//	  cJSON  *pkIdentf = cJSON_GetObjectItem(Json,"identifier");
 		int array_size = cJSON_GetArraySize(array);
-		
-		
 		cJSON  *Arrayadd = cJSON_CreateArray();
 		if (Arrayadd == NULL) return ;
 		cJSON_AddItemToObject(root, "params", Arrayadd);
@@ -482,26 +470,17 @@ void coverJsonOnOff(cJSON   *Json)
 		{
 				cJSON *item=cJSON_GetArrayItem(array,i);
 				cJSON  *id =cJSON_GetObjectItem(item,"deviceId");
-
 			  cJSON  *switchp=cJSON_GetObjectItem(item,"switch2");
-
-			
 				cJSON_AddStringToObject(nodeobj,"deviceId",id->string);
-			  int ret=0;
-			  if((ret=coverUartOnOff(id->string,switchp->valueint))==true){
+			  if((coverUartOnOff(id->string,switchp->valueint))==true){
 						cJSON_AddNumberToObject(nodeobj,"result",1);
 				}
 				else
 						cJSON_AddNumberToObject(nodeobj,"result",0);
-
 		}
-
 		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
-		
-		
-		
-		
+
 		//打包
 		int len=0;
 		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;

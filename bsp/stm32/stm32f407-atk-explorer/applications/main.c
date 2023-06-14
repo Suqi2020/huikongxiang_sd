@@ -224,6 +224,8 @@
 //         [20-1-1-0:0:0]ACU RESET>>>>>>>>>>>>>>
 //         [20-1-1-0:0:0][main]20230607  ver=03.08   20230613
 //         加入SD卡存储log最大数为10天 超过需要自动删除早起的log
+//V3.10    增加log日志读取时间戳名称后进行比较函数  找到最小值进行删除
+//         ringbuf大小定义不能用 *乘法 会导致异常
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
 		 .ANY (+RW +ZI)
@@ -233,10 +235,10 @@
 		}
 */
 //          
-#define APP_VER       ((3<<8)+9)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+10)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230613";
+const char date[]="20230614";
 
 //static    rt_thread_t tid 	= RT_NULL;
 static    rt_thread_t tidW5500 	  = RT_NULL;
@@ -454,10 +456,10 @@ int main(void)
 
     }
 #endif
-		
+
 
 ////////////////////////////////任务////////////////////////////////////
-		tidSaveLogSd=  rt_thread_create("logSaveSDTask",logSaveSDTask,RT_NULL,512*3,6, 10 );
+		tidSaveLogSd=  rt_thread_create("logSaveSDTask",logSaveSDTask,RT_NULL,512*4,6, 10 );
 		if(tidSaveLogSd!=NULL){
 				rt_thread_startup(tidSaveLogSd);													 
 				printf("%sRTcreat tidSaveLogSd\r\n",sign);
@@ -500,7 +502,7 @@ int main(void)
 		tidWDT =  rt_thread_create("WDT",WDTTask,RT_NULL,256,10, 10 );
 		if(tidWDT!=NULL){
 				rt_thread_startup(tidWDT);													 
-				rt_kprintf("%sRTcreat WDTTask\r\n",sign);
+				printf("%sRTcreat WDTTask\r\n",sign);
 		}
 		HAL_IWDG_Refresh(&hiwdg);
 #endif	

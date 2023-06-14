@@ -41,9 +41,8 @@ void   logSaveSDTask(void *parameter)
 {
 //		uint32_t e;
 		//	  char *str=RT_NULL;
-	  
 		RingBuff2_Init();
-	  rt_thread_mdelay(2000);//延时2秒 不能去掉 需要等待lcd启动稳定并且同步时钟完毕再写入sd卡
+	  rt_thread_mdelay(2500);//延时2秒 不能去掉 需要等待lcd启动稳定并且同步时钟完毕再写入sd卡
     timeRead1=lcdUtcTime_beijing();//不能简化
 		timeRead2=(timeRead1*1000)+500;//不能简化
 	  subTimeStampSet(timeRead2);//不能简化直接带入形参 带入会导致计算错误
@@ -54,11 +53,12 @@ void   logSaveSDTask(void *parameter)
 		while(1){
 				bufLen=0;
 			  while(true==Read_RingBuff2((uint8_t *)printBuf+bufLen)){
+					  //printf("/%c",printBuf[bufLen]);
 					  if(printBuf[bufLen]=='\n'){
 							  printBuf[bufLen+1]=0;
 								printf("%s",printBuf);
 								logSaveToSD(printBuf,strlen(printBuf));
-							  bufLen=0;
+							 // bufLen=0;
 							  break;
 						}
 						if((bufLen+1)==sizeof(printBuf)){
@@ -71,7 +71,7 @@ void   logSaveSDTask(void *parameter)
 						bufLen++;
 				}
 				rt_thread_mdelay(50);
-				if(count++%100==0){
+				if(count++%(TXT_LOG_TIME*10)==0){
 						FatReadDirDelEarlyTxt();//每隔TXT_LOG_TIME/10秒时间检查一次
 				}
 //			  if (rt_mb_recv(&mbsdWriteData, (rt_ubase_t *)&str, 100) == RT_EOK)

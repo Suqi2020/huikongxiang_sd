@@ -75,7 +75,7 @@ static void readWaterDepth(int num)
         uint32_t read	=(buf[offset]<<24)+(buf[offset+1]<<16)+(buf[offset+2]<<8)+buf[offset+3];offset+=4;
         extern float write_hex_to_float(uint32_t number);
 			  float waterDepth_p= write_hex_to_float(read);
-        waterDepth[num]=(float)(waterDepth_p	/9.8);
+        waterDepth[num]=(float)(waterDepth_p*10/98);
 			  rt_kprintf("%sË®Éî:%0.4fÃ×\n",sign,waterDepth[num]);  
 			  respStat[num]=1;
 				waterLevCheckSetFlag(num);
