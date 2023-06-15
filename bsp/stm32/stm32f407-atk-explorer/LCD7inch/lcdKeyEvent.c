@@ -626,6 +626,7 @@ void lcdCopyAnaPort(uint8_t *rec);
 void lcdCopyAnaTime(uint8_t *rec);
 bool checkPassWord(char *rec);
 void LCDHidePssd(void);
+extern rt_bool_t getUTCFlag;
 //lcd 发来的配置解析
 void LCDDispConfig(uint8_t *recBuf,int len)
 {
@@ -796,7 +797,8 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 				break;
 			case LCD_RTC_ADDR:
 				readRtc= copyBufToRtc((char *)recBuf);
-
+			
+				getUTCFlag=RT_TRUE;
 				
 			  break;
 #ifndef     ANA_MASK

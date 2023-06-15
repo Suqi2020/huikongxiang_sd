@@ -152,6 +152,38 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
+          <LineNumber>346</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134353892</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>.\sdio\sdioRW.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\rt_thread\sdio/sdioRW.c\346</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>61</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134353462</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>.\applications\wdtTask.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\rt_thread\applications/wdtTask.c\61</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
           <LineNumber>417</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>134235718</Address>
@@ -166,7 +198,7 @@
           <Expression>\\rt_thread\sdio/sdioRW.c\417</Expression>
         </Bp>
         <Bp>
-          <Number>1</Number>
+          <Number>3</Number>
           <Type>0</Type>
           <LineNumber>415</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -182,57 +214,25 @@
           <Expression>\\rt_thread\sdio/sdioRW.c\415</Expression>
         </Bp>
         <Bp>
-          <Number>2</Number>
+          <Number>4</Number>
           <Type>0</Type>
           <LineNumber>59</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134353372</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>.\applications\wdtTask.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\rt_thread\applications/wdtTask.c\59</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>1321</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134421386</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\src\kservice.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\rt_thread\../../../src/kservice.c\1321</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>1352</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134421400</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\src\kservice.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\rt_thread\../../../src/kservice.c\1352</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>5</Number>
           <Type>0</Type>
-          <LineNumber>60</LineNumber>
+          <LineNumber>68</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -248,7 +248,7 @@
         <Bp>
           <Number>6</Number>
           <Type>0</Type>
-          <LineNumber>1353</LineNumber>
+          <LineNumber>69</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -257,12 +257,28 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\src\kservice.c</Filename>
+          <Filename>.\applications\wdtTask.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
         <Bp>
           <Number>7</Number>
+          <Type>0</Type>
+          <LineNumber>70</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>.\applications\wdtTask.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>8</Number>
           <Type>0</Type>
           <LineNumber>58</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -273,7 +289,23 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>.\applications\wdtTask.c</Filename>
+          <Filename>.\rtconfig.h</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>9</Number>
+          <Type>0</Type>
+          <LineNumber>60</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>.\rtconfig.h</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -2561,7 +2593,7 @@
 
   <Group>
     <GroupName>SDIO</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

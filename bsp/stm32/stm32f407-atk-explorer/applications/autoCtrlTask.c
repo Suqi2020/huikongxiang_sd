@@ -409,6 +409,7 @@ void  autoCtrlTask(void *para)
 		extern void printfThresholdList();
 		extern void printfCtrl();
 	  extern void printAcuid();
+	  extern void sdAndRtcCheck();
 	  printAcuid();
 		printModbusDevList();
 	#ifndef     ANA_MASK
@@ -456,6 +457,7 @@ void  autoCtrlTask(void *para)
 			  autoCtrlRun();
 			  ctrlOutSetIO();
 				rt_thread_mdelay(1000);
+			  sdAndRtcCheck();
 //			FatReadDirDelEarlyTxt( );
 #ifdef  USE_WDT
 			  rt_event_send(&WDTEvent,EVENT_WDT_AUTOCTRL);

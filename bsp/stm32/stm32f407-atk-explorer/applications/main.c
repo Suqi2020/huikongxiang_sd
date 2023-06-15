@@ -226,6 +226,7 @@
 //         加入SD卡存储log最大数为10天 超过需要自动删除早起的log
 //V3.10    增加log日志读取时间戳名称后进行比较函数  找到最小值进行删除
 //         ringbuf大小定义不能用 *乘法 会导致异常
+//V3.11    增加回调钩子函数来打印log  增加同步LCD rtc时钟失败情况下  每隔10秒来继续同步时钟
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
 		 .ANY (+RW +ZI)
@@ -235,10 +236,10 @@
 		}
 */
 //          
-#define APP_VER       ((3<<8)+10)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+11)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230614";
+const char date[]="20230615";
 
 //static    rt_thread_t tid 	= RT_NULL;
 static    rt_thread_t tidW5500 	  = RT_NULL;
@@ -368,6 +369,7 @@ int main(void)
 		stm32_flash_read(FLASH_IP_SAVE_ADDR,    (uint8_t*)&packFlash,sizeof(packFlash));
 		stm32_flash_read(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,    sizeof(sheet));
 	  outIOInit();
+	  RingBuff2_Init();
 		if(packFlash.acuId[0]>=0x7F){
 				rt_strcpy(packFlash.acuId,"000000000000001");//必须加上 执行cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		}    
@@ -459,11 +461,11 @@ int main(void)
 
 
 ////////////////////////////////任务////////////////////////////////////
-		tidSaveLogSd=  rt_thread_create("logSaveSDTask",logSaveSDTask,RT_NULL,512*4,6, 10 );
-		if(tidSaveLogSd!=NULL){
-				rt_thread_startup(tidSaveLogSd);													 
-				printf("%sRTcreat tidSaveLogSd\r\n",sign);
-		}
+//		tidSaveLogSd=  rt_thread_create("logSaveSDTask",logSaveSDTask,RT_NULL,512*4,6, 10 );
+//		if(tidSaveLogSd!=NULL){
+//				rt_thread_startup(tidSaveLogSd);													 
+//				printf("%sRTcreat tidSaveLogSd\r\n",sign);
+//		}
 		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512*2,2, 10 );
 		if(tidLCD!=NULL){
 				rt_thread_startup(tidLCD);													 
@@ -494,8 +496,8 @@ int main(void)
 				rt_thread_startup(tidAutoCtrl);													 
 				printf("%sRTcreat autoCtrlTask\r\n",sign);
 		}
-
-		
+    extern void sdAndRtcInit();
+		sdAndRtcInit();
 #ifdef  USE_WDT
 		extern IWDG_HandleTypeDef hiwdg;
 		static    rt_thread_t tidWDT      = RT_NULL;
