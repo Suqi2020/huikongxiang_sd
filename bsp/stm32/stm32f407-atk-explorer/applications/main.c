@@ -227,6 +227,7 @@
 //V3.10    增加log日志读取时间戳名称后进行比较函数  找到最小值进行删除
 //         ringbuf大小定义不能用 *乘法 会导致异常
 //V3.11    增加回调钩子函数来打印log  增加同步LCD rtc时钟失败情况下  每隔10秒来继续同步时钟
+//V3.12    修正局放显示异常				 增加   dispJufangTotlNum++; 20230616
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
 		 .ANY (+RW +ZI)
@@ -236,10 +237,10 @@
 		}
 */
 //          
-#define APP_VER       ((3<<8)+11)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+12)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230615";
+const char date[]="20230616";
 
 //static    rt_thread_t tid 	= RT_NULL;
 static    rt_thread_t tidW5500 	  = RT_NULL;

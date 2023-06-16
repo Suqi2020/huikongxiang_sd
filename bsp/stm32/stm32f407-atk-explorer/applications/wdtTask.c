@@ -133,7 +133,7 @@ void  sdAndRtcCheck()
 		static int count =0;
 	  
 		count++;
-		if(count%(TXT_LOG_TIME*10)==0){
+		if(count%(TXT_LOG_TIME/10)==0){
 				FatReadDirDelEarlyTxt();//每隔TXT_LOG_TIME/10秒时间检查一次删除比较早的txt文件
 		}
 		if(getUTCFlag==RT_FALSE){//没有同步RTC时钟 每隔1分钟同步一次

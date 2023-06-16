@@ -144,12 +144,7 @@ void readCirCurrAndWaring(int num)
 			  rt_kprintf("%s提取电流、报警值fail\r\n",sign);
 		}
 
-//		circulaCheckSetFlag(num);
-		//recFlag = RT_FALSE;
-//	  rt_mutex_release(uartDev[sheet.cirCula[num].useUartNum].uartMutex);
-	//	 rt_kprintf("release\r\n");
 		rt_free(buf);
-	//	 rt_kprintf("free\r\n");
 	  buf=RT_NULL;
 		
 }
