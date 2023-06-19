@@ -138,6 +138,8 @@ void  lastLiefengIndex(void);
 void  nextJinggaiIndex(void);
 void  lastJinggaiIndex(void);
 void  dispJinggaiData(void);
+void  LCDDispSDState(uint8_t state);
+void  LCDDispSoftVer(void);
 extern int modbusChosIndex;
 #ifndef     ANA_MASK
 void lcdAnaConfig(void);
@@ -550,6 +552,12 @@ void  keyReturn(uint16_t keyAddr)
 				LCDClearRstOK();
 				LCDClearClose();
 				LCDClearOpen();
+				break;
+			case KEY_SOFT_VER_ADDR:
+				LCDDispSoftVer();
+				break;
+			case KEY_SD_STATE_ADDR:
+				LCDDispSDState((uint8_t)gbSDExit );
 				break;
 			///////////output_end///////////////
 //#define        KEY_ANA_SUBNAME_INTERFACE_ADDR     0x522C
@@ -968,3 +976,14 @@ void changeBmp(int num)
 		rt_mutex_release(lcdSend_mutex);
 }
 
+
+
+//ÏÔÊ¾sd¿¨×´Ì¬
+void LCDDispSDState(uint8_t state )
+{
+	 uint8_t buf[2];
+	 buf[0]=0;
+	 buf[1]=state;
+
+	 LCDWtite(SD_STATE_ADDR,(uint8_t *)buf,2);
+}

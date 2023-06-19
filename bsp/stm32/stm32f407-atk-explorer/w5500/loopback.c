@@ -200,7 +200,7 @@ void loopback_tcp(uint16 port)
 		  break;
 		case SOCK_INIT:													        	         /*socket处于初始化状态*/
 			connect(SOCK_TCPC,packFlash.netIpFlash.remoteIp,packFlash.netIpFlash.remotePort);               /*socket连接服务器*/ 
-		  rt_kprintf("%sSOCK_INIT\n",sign);
+		  rt_kprintf("%sSOCK_CONNECT\n",sign);
 		  break;
 		case SOCK_ESTABLISHED: 												             /*socket处于连接建立状态*/
 			if(getSn_IR(SOCK_TCPC) & Sn_IR_CON)

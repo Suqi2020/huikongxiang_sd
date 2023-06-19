@@ -90,7 +90,8 @@ uint8_t Write_RingBuff2(uint8_t data)
 		}
 
 
-
+//
+//		bool readFlag=false;
 uint8_t Read_RingBuff2(uint8_t *rData)
 {
 		if (ringBuff2.Head== ringBuff2.Tail)//
@@ -99,6 +100,11 @@ uint8_t Read_RingBuff2(uint8_t *rData)
 		}
 		read_ringbufnum++;
 		*rData = ringBuff2.Ring_Buff[ringBuff2.Head];//
+//		if(readFlag==false){
+//			readFlag =true;
+//			printf("ringbuf %d %d\n",write_ringbufnum,read_ringbufnum);
+//		}
+			
 //		printf("/%c",ringBuff2.Ring_Buff[ringBuff2.Head]);
 		ringBuff2.Head++;
 		if(ringBuff2.Head>=PRINTF_BUF_LEN)

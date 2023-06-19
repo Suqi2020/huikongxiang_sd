@@ -318,7 +318,7 @@ void  logSaveToSD(char *buf,char lenth)
 		txtName =rt_malloc(50);
 		strcpy(txtName,"log");
 		strcat(txtName,"/");
-		sprintf(timeSign,"%llu",(utcTime_s()/TXT_LOG_TIME)*TXT_LOG_TIME);//1小时创建一个新目录 为了清除1小时内的数字为0
+		sprintf(timeSign,"%llu",(utcTime_s()/TXT_LOG_TIME)*TXT_LOG_TIME-28800);//1小时创建一个新目录 为了清除1小时内的数字为0 减去28800 缩小8个小时 为了log正好是头天晚上12点的
 		strcat(txtName,timeSign);
 		strcat(txtName,".txt");
 		ret=f_open(&fnew,txtName, FA_WRITE);
@@ -333,7 +333,7 @@ void  logSaveToSD(char *buf,char lenth)
 		}
 		if(ret!=FR_OK){
 		    ret=f_open(&fnew,txtName, FA_CREATE_NEW |FA_WRITE);//suqi
-			  rt_kprintf("creat：%s\r\n",txtName );
+			  rt_kprintf("create：%s\r\n",txtName );
 		}
 		if((ret==FR_OK)||(ret==FR_EXIST)){
 				f_lseek(&fnew,f_size(&fnew));

@@ -431,7 +431,8 @@
 #define   KEY_COVER_LAST_ADDR         0X192A
 #define   KEY_COVER_NEXT_ADDR         0X192C
 
-
+#define   SOFT_VER_ADDR        			  0X1930  
+#define   SD_STATE_ADDR         			0X193A
 //[09:27:21.942]收←◆[LCD] fa:5a a5 15 82 19 0 47 59 4e 4a 4c 58 53 44 30 30 30 30 30 30 36 38 34 ff 
 // [LCD] fa:5a a5 5 82 19 20 0 1 
 // [LCD] fa:5a a5 5 82 19 26 ff ff 
@@ -450,6 +451,10 @@
 
 #define   KEY_MODUBS_DATA_ADDR  		0X1A10
 #define   KEY_COVER_DISPLAY_ADDR    0x1A16
+
+#define   KEY_SOFT_VER_ADDR  				0X1A30
+#define   KEY_SD_STATE_ADDR    		  0x1A32
+
 #define   NET_ERR_DISPLAY_ADDR      0X1A20
 #define   MODBUS_ERR_DISPLAY_ADDR   0X1A22
 //密码输入界面
