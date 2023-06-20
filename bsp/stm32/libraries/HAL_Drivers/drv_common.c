@@ -180,11 +180,13 @@ RT_WEAK void rt_hw_board_init(void)
 
     /* HAL_Init() function is called at the beginning of the program */
     HAL_Init();
-
+    HAL_RCC_DeInit();
     /* System clock initialization */
     SystemClock_Config();
+	  //HAL_NVIC_DeInit();
 		extern int cubeHardWareInit(void);
 	  cubeHardWareInit();//copy by cube main
+	 // HAL_NVIC_SetVectorTable (0X08000000, 0x00020000);
     /* Heap initialization */
 #if defined(RT_USING_HEAP)
     rt_system_heap_init((void *)HEAP_BEGIN, (void *)HEAP_END);

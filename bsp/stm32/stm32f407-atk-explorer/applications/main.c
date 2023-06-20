@@ -230,6 +230,9 @@
 //V3.12    修正局放显示异常			增加dispJufangTotlNum++;     20230616
 //V3.13    增加记录rtc时间为utc时间减去8小时刚好为北京时间的0点
 //         增加lcd显示版本号和SD卡异常状态        20230619
+//V3.14    增加定义 defined(USER_VECT_TAB_ADDRESS)  修改VECT_TAB_OFFSET 为0x20000实现跳转
+
+
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
 		 .ANY (+RW +ZI)
@@ -239,10 +242,10 @@
 		}
 */
 //          
-#define APP_VER       ((3<<8)+13)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+14)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230619";
+const char date[]="20230620";
 
 
 
@@ -474,11 +477,7 @@ int main(void)
 
 
 ////////////////////////////////任务////////////////////////////////////
-//		tidSaveLogSd=  rt_thread_create("logSaveSDTask",logSaveSDTask,RT_NULL,512*4,6, 10 );
-//		if(tidSaveLogSd!=NULL){
-//				rt_thread_startup(tidSaveLogSd);													 
-//				printf("%sRTcreat tidSaveLogSd\r\n",sign);
-//		}
+
 		tidLCD    =  rt_thread_create("LCD",LCDTask,RT_NULL,512*2,2, 10 );
 		if(tidLCD!=NULL){
 				rt_thread_startup(tidLCD);													 

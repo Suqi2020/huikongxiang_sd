@@ -231,6 +231,8 @@ void rt_application_init(void)
  */
 int rtthread_startup(void)
 {
+//	sys_nvic_set_vector_table(0x8000000, 0x20000);
+//	SCB->VTOR = 0x8000000 | (0x20000 & (uint32_t)0xFFFFFE00);
     rt_hw_interrupt_disable();
 
     /* board level initialization
