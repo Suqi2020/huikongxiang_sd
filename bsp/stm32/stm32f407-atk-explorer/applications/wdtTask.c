@@ -150,7 +150,7 @@ void  sdAndRtcCheck()
 
 void  sdAndRtcInit()
 {
-		rt_thread_mdelay(2000);//延时2秒 不能去掉 需要等待lcd启动稳定并且同步时钟完毕再写入sd卡
+		rt_thread_mdelay(350);//延时2秒 不能去掉 需要等待lcd启动稳定并且同步时钟完毕再写入sd卡
     getUTCFromLCD();
   	creatFolder();
 	  rt_thread_idle_sethook(logPrint);

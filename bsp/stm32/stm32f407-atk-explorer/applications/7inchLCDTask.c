@@ -50,7 +50,7 @@ void  LCDTask(void *parameter)
 		 
 #endif
 		
-	  rt_thread_mdelay(1000);//必须加入延时等待串口屏启动
+//	  rt_thread_mdelay(1000);//必须加入延时等待串口屏启动
 	//testfun();
 	  LCDDispIP();
 	  LCDDispUart();

@@ -148,7 +148,7 @@ uint32_t lcdUtcTime_beijing()
 		readLcdRTC();
 	  rt_thread_mdelay(100);  //延时等待回应
 	
-	 	rt_kprintf("[read]年:%d,月:%d,日:%d,时:%d,分:%d,秒:%d\r\n",readRtc.year,readRtc.month,readRtc.day,\
+	 	rt_kprintf("[read]%d年%d月%d日%d时%d分%d秒\r\n",readRtc.year,readRtc.month,readRtc.day,\
   	readRtc.hour,readRtc.minute,readRtc.second );
 	  return beijingTime_to_utc(readRtc);
 }

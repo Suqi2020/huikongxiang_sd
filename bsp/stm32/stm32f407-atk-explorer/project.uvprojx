@@ -1334,11 +1334,6 @@
           <GroupName>FATFS</GroupName>
           <Files>
             <File>
-              <FileName>cc936.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\FatFs\cc936.c</FilePath>
-            </File>
-            <File>
               <FileName>diskio.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\FatFs\diskio.c</FilePath>
@@ -1362,6 +1357,11 @@
               <FileName>syscall.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\FatFs\option\syscall.c</FilePath>
+            </File>
+            <File>
+              <FileName>cc936.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FatFs\cc936.c</FilePath>
             </File>
           </Files>
         </Group>
