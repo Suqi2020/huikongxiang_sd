@@ -437,7 +437,8 @@ bool modPartDischagWarn2Send()
 //              为false就是report数据
 uint16_t partDischagJsonPack(bool respFlag)
 {
-
+		char *data;
+		data =rt_malloc(200); // suqi 根据实际长度来调整
 		char* out = NULL;
 		//创建数组
 		cJSON* Array = NULL;
@@ -475,39 +476,38 @@ uint16_t partDischagJsonPack(bool respFlag)
 				nodeobj = cJSON_CreateObject();
 				cJSON_AddItemToArray(Array, nodeobj);
 			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.partDischag[i].ID));
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].respStat);
 				cJSON_AddNumberToObject(nodeobj,"responseStatus",partDiscStru_p[i].respStat);
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].respStat);
-//				cJSON_AddItemToObject(nodeobj,"responseStatus",cJSON_CreateString(sprinBuf));
 				nodeobj_p= cJSON_CreateObject();
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 				
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeA);
-				cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqA);
-				cJSON_AddItemToObject(nodeobj_p,"freqA",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"freqA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeA);
-				cJSON_AddItemToObject(nodeobj_p,"dischargeDataA",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
 
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeB);
-				cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqB);
-				cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeB);
-				cJSON_AddItemToObject(nodeobj_p,"dischargeDataB",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataB",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
 //				cJSON_AddItemToObject(nodeobj_p,"prpdDataB",cJSON_CreateString(""));
 //				cJSON_AddItemToObject(nodeobj_p,"prpsDataB",cJSON_CreateString(""));
 				
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeC);
-				cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqC);
-				cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeC);
-				cJSON_AddItemToObject(nodeobj_p,"dischargeDataC",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"dischargeDataC",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
 //				cJSON_AddItemToObject(nodeobj_p,"prpdDataC",cJSON_CreateString(""));
 //				cJSON_AddItemToObject(nodeobj_p,"prpsDataC",cJSON_CreateString(""));
-				
-				
+				extern void juFangTxtSaveSD(char *id,char *data);
+				juFangTxtSaveSD(sheet.partDischag[i].ID,data);
+//					rt_thread_delay(10);
+				rt_kprintf("%sSD data：%s",sign,data);//自带换行
 				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
 			}
@@ -558,7 +558,8 @@ uint16_t partDischagJsonPack(bool respFlag)
 
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
-
+		rt_free(data);
+		data=NULL;
 		return 1;
 }
 extern int dispJufangTotlNum;

@@ -14,10 +14,11 @@ extern FRESULT res_sd;                /* 文件操作结果 */
 
 
 extern rt_bool_t gbSDExit;
-#define  TXT_RW_TIME   3600    //每隔3600秒创建一个新的目录名
-#define  TXT_LOG_TIME  86400    
-#define  TXT_LOG_NUM   10   //最多存储10Tina
+#define  TXT_DATA_TIME    3600    //每隔3600秒创建一个新的目录名  正式使用改为 86400
+#define  TXT_LOG_TIME  		86400    
+#define  TXT_LOG_NUM   		10   //最多存储10Tina
+#define  TXT_DATA_NUM  		30   //最多存储30天的数据
 #endif
 
-
+extern void ReadAndDelEarlyDataTxt(char *dataDirName,char *ID);
 /*****************************END OF FILE**************************/

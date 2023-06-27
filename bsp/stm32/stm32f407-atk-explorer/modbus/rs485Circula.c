@@ -252,19 +252,14 @@ uint16_t circulaJsonPack(bool respFlag)
 			{		
 
 				if(sheet.cirCula[i].workFlag==RT_TRUE){
-//					char *data;
-//					data =rt_malloc(100);
+
 					nodeobj = cJSON_CreateObject();
 					cJSON_AddItemToArray(Array, nodeobj);
 					cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.cirCula[i].ID));
-			
 				  cJSON_AddNumberToObject(nodeobj,"responseStatus",cirCurStru_p[i].respStat);
-					
 					nodeobj_p= cJSON_CreateObject();
 					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
-					
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurA);
-					
 					cJSON_AddItemToObject(nodeobj_p,"earthCurA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"runCurA",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"loadRatioA",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
@@ -280,16 +275,12 @@ uint16_t circulaJsonPack(bool respFlag)
 					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
 					sprintf(sprinBuf,"%llu",utcTime_ms());
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"\r\n");
-//					huanLiuTxtReadSD(sheet.cirCula[i].ID);
-					//uint32_t time =65000;
-					//while(time--){
+
 					huanLiuTxtSaveSD(sheet.cirCula[i].ID,data);//suqi
-						rt_thread_delay(10);
-					//}
+					//rt_thread_delay(10);
 					rt_kprintf("%sSD data：%s",sign,data);//自带换行
 					memset(data,0,sizeof((char *)data));
-//					rt_free(data);
-//					data=NULL;
+
 				}
 			}
 		}
@@ -298,7 +289,6 @@ uint16_t circulaJsonPack(bool respFlag)
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 
-
 		//打包
 		int len=0;
 		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
@@ -306,8 +296,6 @@ uint16_t circulaJsonPack(bool respFlag)
 		len+=LENTH_LEN;//json长度最后再填写
 		
 		// 释放内存  
-		
-		
 		out = cJSON_Print(root);
 		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);

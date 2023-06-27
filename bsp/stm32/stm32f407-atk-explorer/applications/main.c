@@ -233,6 +233,8 @@
 //V3.14    增加定义 defined(USER_VECT_TAB_ADDRESS)  修改VECT_TAB_OFFSET 为0x20000实现跳转
 //V3.15    修改PRINTF_BUF_LEN 为2k 原来为6k 减小上电后延时等待串口屏的时间  
 //         在BootLoader中加入延时等待 可以显示烧录程序时候擦除界面
+//V3.16    增加环流数据存储超过30条的情况下删除txt文件命令
+//         增加局放测试                           20230627
 
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
@@ -243,10 +245,10 @@
 		}
 */
 //          
-#define APP_VER       ((3<<8)+15)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+16)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230626";
+const char date[]="20230627";
 
 
 
@@ -266,7 +268,7 @@ static    rt_thread_t tidUpkeep 	= RT_NULL;
 static    rt_thread_t tidLCD      = RT_NULL;
 static    rt_thread_t tidAutoCtrl = RT_NULL;
 
-static    rt_thread_t tidSaveLogSd =RT_NULL;
+static    rt_thread_t tidSdRTC =RT_NULL;
 
 
 //互斥信号量定义
@@ -321,6 +323,7 @@ extern  void   LCDTask(void *parameter);
 extern  void   autoCtrlTask(void *para);
 extern  void   logSaveSDTask(void *para);
 extern  void   WDTTask(void *parameter);
+extern  void   sdRTCTask(void *parameter);
 const  static char sign[]="[main]";
 extern rt_bool_t gbNetState;
 
@@ -336,7 +339,7 @@ static void timeout1(void *parameter)
 	  static int alarmTick=10;
 		extern rt_bool_t gbNetState;
 	  extern void timeInc();
-	  extern void FatReadDirDelEarlyTxt();
+	  extern void FatReadDirDelEarlyLogTxt();
 //	  extern bool fountFlag;
 	  //extern void modbusWorkErrCheck(void);
 	  count++;  
@@ -509,8 +512,12 @@ int main(void)
 				rt_thread_startup(tidAutoCtrl);													 
 				printf("%sRTcreat autoCtrlTask\r\n",sign);
 		}
-    extern void sdAndRtcInit();
-		sdAndRtcInit();
+		tidSdRTC =  rt_thread_create("sdRTC",sdRTCTask,RT_NULL,512*2,5, 10 );
+		if(tidSdRTC!=NULL){
+				rt_thread_startup(tidSdRTC);													 
+				printf("%sRTcreat sdRTCTask\r\n",sign);
+		}
+
 #ifdef  USE_WDT
 		extern IWDG_HandleTypeDef hiwdg;
 		static    rt_thread_t tidWDT      = RT_NULL;

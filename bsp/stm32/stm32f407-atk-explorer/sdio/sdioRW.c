@@ -128,8 +128,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.partDischag[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_NEW);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 						}
 				}
@@ -140,8 +139,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.pressSetl[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 						}
 				}
@@ -152,8 +150,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.threeAxiss[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 						}
 				}
@@ -165,8 +162,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.ch4[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 							}
 					}
@@ -177,8 +173,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.o2[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 							}
 					}
@@ -189,8 +184,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.h2s[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 							}
 					}
@@ -201,8 +195,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.co[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 							}
 					}
@@ -214,8 +207,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.tempHum[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 						}
 				}
@@ -226,8 +218,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.waterDepth[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 						}
 				}
@@ -238,8 +229,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.crackMeter[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 						}
 				}
@@ -250,8 +240,7 @@ void creatIDFolder(int i)
 							strcpy(txtName,modbusName[i]);
 							strcat(txtName,"/");
 							strcat(txtName,sheet.cover[j].ID);
-							strcat(txtName,".txt");
-							f_open(&fnew,txtName,FA_CREATE_ALWAYS);
+							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
 						}
 				}
@@ -298,8 +287,6 @@ void creatFolder()
 //1685592000  2023 06 01 4:00:00
 
 //log 存入sd卡
-//extern bool log_save_sdFlag;
-//static char *logName="log.txt";
 
 
 //按照时间tick存储log到txt文件中
@@ -355,12 +342,12 @@ void  logSaveToSD(char *buf,char lenth)
 
 
 
-
+//log文件操作
 //删除早期的log的txt文件
-uint32_t logSaveTime[TXT_LOG_NUM+1]={0};
-char logTime[12];
+static uint32_t logSaveTime[TXT_LOG_NUM+1]={0};
+static char logTime[12];
 //找到logSaveTime中的最小时间 
-uint32_t findMiniTime()
+static uint32_t findLogMiniTime()
 {
 	  uint32 mini=logSaveTime[0];//先装载一个值 利于找到最小值
 		for(int i=1;i<sizeof(logSaveTime)/sizeof(logSaveTime[0]);i++){
@@ -368,7 +355,8 @@ uint32_t findMiniTime()
 		}
 		return mini;
 }
-void FatReadDirDelEarlyTxt()
+//读取并删除早起的txt文件
+void FatReadDirDelEarlyLogTxt()
 {
 		if(gbSDExit==false){
 			return;
@@ -409,9 +397,9 @@ void FatReadDirDelEarlyTxt()
 				for(int i=0;i<=TXT_LOG_NUM;i++){
 						rt_kprintf("log[%d] time：%d\n",i+1,logSaveTime[i]);
 				}			
-				rt_kprintf("find mini:[%d]\n",findMiniTime());
-				sprintf(delPath+strlen(delPath),"%d.txt",findMiniTime());
-				rt_kprintf("count[%d]del:%s\r\n",txtCount,delPath );
+				rt_kprintf("find mini:[%d]\n",findLogMiniTime());
+				sprintf(delPath+strlen(delPath),"%d.txt",findLogMiniTime());
+				rt_kprintf("count[%d]log del:%s\r\n",txtCount,delPath );
 				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir[0]=结构体中保存 */
 				{
 						int ret=f_unlink(delPath);
@@ -424,6 +412,85 @@ void FatReadDirDelEarlyTxt()
 		rt_mutex_release(sdWrite_mutex);
 }
 
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////
+/*数据文件处理*/
+
+//删除早期的log的txt文件
+static uint32_t dataSaveTime[TXT_DATA_NUM+1]={0};
+static char   dataTime[20];
+//找到logSaveTime中的最小时间 
+static uint32_t findDataMiniTime()
+{
+	  uint32 mini=dataSaveTime[0];//先装载一个值 利于找到最小值
+		for(int i=1;i<sizeof(dataSaveTime)/sizeof(dataSaveTime[0]);i++){
+				mini=(mini<dataSaveTime[i]?mini:dataSaveTime[i]);
+		}
+		return mini;
+}
+//读取并删除早期的data.txt文件
+//输入文件夹名称  如 huanLiu juFang
+void ReadAndDelEarlyDataTxt(char *dataDirName,char *ID)
+{
+		if(gbSDExit==false){
+			return;
+		}
+		rt_mutex_take(sdWrite_mutex,RT_WAITING_FOREVER);
+		FILINFO fileinfo;
+		DIR Dir;
+	  char dirName[30]="0:/";
+	  strcat(dirName,dataDirName);
+	  int txtCount=0;
+	  char delPath[30]="";
+	  strcat(delPath,dirName);
+	  strcat(delPath,"/");
+	  strcat(delPath,ID);
+	  strcat(delPath,"/");
+		for(int i=0;i<TXT_DATA_NUM;i++){
+				dataSaveTime[i]=0;
+		}
+    if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir结构体中保存 */
+    {
+        while(f_readdir(&Dir, &fileinfo) == FR_OK)  /* 读文件信息到文件状态结构体中 */
+        {
+            if(!fileinfo.fname[0]) break; /* 如果文件名为‘\0'，说明读取完成结束 */
+						for(int j=0;j<strlen(fileinfo.fname);j++){
+							 if(fileinfo.fname[j]=='.'){
+									dataTime[j]=0;
+								  break;
+							 }
+							 dataTime[j]=fileinfo.fname[j];//提取名字 不要.txt
+						}
+						//printf("提取时间 %s\n",logTime);
+						if(txtCount<=TXT_DATA_NUM+1){
+								dataSaveTime[txtCount]=atoi32(dataTime,10);//时间字符串格式化为32位整数		
+						}
+						txtCount++;
+        }
+    }
+		if(txtCount>TXT_DATA_NUM){//上次读取后		
+				for(int i=0;i<=TXT_DATA_NUM;i++){
+						rt_kprintf("data[%d] time：%d\n",i+1,dataSaveTime[i]);
+				}			
+				rt_kprintf("find mini:[%d]\n",findDataMiniTime());
+				sprintf(delPath+strlen(delPath),"%d.txt",findDataMiniTime());
+				rt_kprintf("count[%d]data del:%s\r\n",txtCount,delPath );
+				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir[0]=结构体中保存 */
+				{
+						int ret=f_unlink(delPath);
+					  if(ret!=FR_OK){
+								rt_kprintf("del err:[%d]\n",ret);
+						}
+				}
+		}
+		rt_mutex_release(sdWrite_mutex);
+}
 
 //按照时间删除logtxt文件接口在软件定时器中调用
 
