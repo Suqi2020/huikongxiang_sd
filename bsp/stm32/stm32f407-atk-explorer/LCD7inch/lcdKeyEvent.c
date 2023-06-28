@@ -140,6 +140,20 @@ void  lastJinggaiIndex(void);
 void  dispJinggaiData(void);
 void  LCDDispSDState(uint8_t state);
 void  LCDDispSoftVer(void);
+
+void ledOnOff(uint8_t value)
+{
+		uint8_t buf[2];
+	  buf[0]=0;
+	  buf[1]=value;
+	
+	
+		LCDWtite(0x0ff0,buf,1*2);
+
+}
+
+
+
 extern int modbusChosIndex;
 #ifndef     ANA_MASK
 void lcdAnaConfig(void);
@@ -528,7 +542,12 @@ void  keyReturn(uint16_t keyAddr)
 			case KEY_PASSWD_SURE_ADDR:
 				surePassWord();
 				break;
-
+			case  KEY_LED_ON_ADDR:
+				ledOnOff(0);
+				break;
+			case  KEY_LED_OFF_ADDR:
+				ledOnOff(1);
+				break;
 			case  KEY_OUTPUT_READ_INTERFACE_ADDR://进去接口
 				dispoutputReadInterf();
 				dispOutputRead();

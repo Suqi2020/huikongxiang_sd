@@ -216,7 +216,7 @@ extern void huanLiuTxtSaveSD(char *id,char *data);
 //char data[100];
 uint16_t circulaJsonPack(bool respFlag)
 {
-		char *data;
+		char *data=NULL;
 		data =rt_malloc(200); // suqi 根据实际长度来调整
 		char* out = NULL;
 		//创建数组

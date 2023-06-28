@@ -235,6 +235,7 @@
 //         在BootLoader中加入延时等待 可以显示烧录程序时候擦除界面
 //V3.16    增加环流数据存储超过30条的情况下删除txt文件命令
 //         增加局放测试                           20230627
+//V3.17    修复局放数据写入SD过程出现的问题       20230628
 
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
@@ -245,10 +246,10 @@
 		}
 */
 //          
-#define APP_VER       ((3<<8)+16)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+17)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230627";
+const char date[]="20230628";
 
 
 
@@ -379,6 +380,18 @@ void  outIOInit(void);
 
 //bool  log_save_sdFlag =false;  
 char  printVer[50];
+
+//int  isBigEndian()
+//{
+//	  int a=0x12345678;
+//	  char b= *&a;
+//}
+//class name{
+//	public:
+//		;
+//	private:
+//		;
+//};
 int main(void)
 {
 
@@ -393,8 +406,6 @@ int main(void)
 		if(packFlash.acuId[0]>=0x7F){
 				rt_strcpy(packFlash.acuId,"000000000000001");//必须加上 执行cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		}    
-		
-	
 		
 		  /* 创建定时器 周期定时器 */
     timer1 = rt_timer_create("timer1", timeout1,

@@ -433,6 +433,9 @@
 
 #define   SOFT_VER_ADDR        			  0X1930  
 #define   SD_STATE_ADDR         			0X193A
+
+#define   KEY_LED_ON_ADDR									0X193C
+#define   KEY_LED_OFF_ADDR								0X193E
 //[09:27:21.942]สีก๛ก๔[LCD] fa:5a a5 15 82 19 0 47 59 4e 4a 4c 58 53 44 30 30 30 30 30 30 36 38 34 ff 
 // [LCD] fa:5a a5 5 82 19 20 0 1 
 // [LCD] fa:5a a5 5 82 19 26 ff ff 

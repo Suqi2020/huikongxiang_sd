@@ -437,7 +437,7 @@ bool modPartDischagWarn2Send()
 //              为false就是report数据
 uint16_t partDischagJsonPack(bool respFlag)
 {
-		char *data;
+		char *data=NULL;
 		data =rt_malloc(200); // suqi 根据实际长度来调整
 		char* out = NULL;
 		//创建数组
@@ -502,14 +502,15 @@ uint16_t partDischagJsonPack(bool respFlag)
 				cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeC);
 				cJSON_AddItemToObject(nodeobj_p,"dischargeDataC",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
+				sprintf(sprinBuf,"%llu",utcTime_ms());
+				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"\r\n");
 //				cJSON_AddItemToObject(nodeobj_p,"prpdDataC",cJSON_CreateString(""));
 //				cJSON_AddItemToObject(nodeobj_p,"prpsDataC",cJSON_CreateString(""));
 				extern void juFangTxtSaveSD(char *id,char *data);
 				juFangTxtSaveSD(sheet.partDischag[i].ID,data);
 //					rt_thread_delay(10);
 				rt_kprintf("%sSD data：%s",sign,data);//自带换行
-				sprintf(sprinBuf,"%llu",utcTime_ms());
-				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+
 			}
 		}
 		}

@@ -16,27 +16,10 @@ extern void LDCDispMosbusInfo(void);
 extern void LCDDispConfig(uint8_t *recBuf,int len);
 extern void firstNameDispInit(void);
 extern void LCDDispNetOffline(void);
-//extern uint8_t  recLCDBuf[LCD_BUF_LEN];
 
 
 
-//char te1[5]={0xff,0xff,0xff,0xff,0xff};
-//char te2[5]={0xff,0xff,0xff,0xff,0};
-//char te3[5]={0xff,0xff,0xff,0xff,0};
-//char te4[5]={0xff,0xff,0xff,0xff,0};
-//char test[20];
-//int testfun(void)
-//{
-
-//    strcpy(test,te1);
-//	rt_kprintf("testfun:");
-//		for(int i=0;i<20;i++){
-
-//		rt_kprintf("%02x ",test[i]);
-//	}
-//		rt_kprintf("\n ");
-//}
- uint8_t lcdRecBuf[LCD_BUF_LEN];
+uint8_t lcdRecBuf[LCD_BUF_LEN];
 uint8_t  lcdRecLen;
 void  LCDTask(void *parameter)
 {
@@ -111,6 +94,7 @@ void  LCDTask(void *parameter)
 					
 				}
 				if(++dispCount>=60){
+
 						dispCount=0;
 						LCDDispNetOffline();
 						LCDDispNetErrState();
