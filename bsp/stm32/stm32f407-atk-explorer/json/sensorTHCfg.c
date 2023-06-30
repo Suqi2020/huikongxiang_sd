@@ -417,7 +417,7 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
@@ -748,7 +748,7 @@ void senseTHSetJsonResp(cJSON   *Json,bool  modbusFlag)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度

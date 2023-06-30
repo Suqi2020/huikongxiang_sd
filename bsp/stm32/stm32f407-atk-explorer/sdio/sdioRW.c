@@ -400,15 +400,16 @@ void FatReadDirDelEarlyLogTxt()
 				rt_kprintf("find mini:[%d]\n",findLogMiniTime());
 				sprintf(delPath+strlen(delPath),"%d.txt",findLogMiniTime());
 				rt_kprintf("count[%d]log del:%s\r\n",txtCount,delPath );
-				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir[0]=结构体中保存 */
-				{
+//				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir[0]=结构体中保存 */
+//				{
 						int ret=f_unlink(delPath);
 					  if(ret!=FR_OK){
 								rt_kprintf("del err:[%d]\n",ret);
 						}
 						
-				}
+//				}
 		}
+		f_closedir(&Dir);
 		rt_mutex_release(sdWrite_mutex);
 }
 
@@ -452,6 +453,10 @@ void ReadAndDelEarlyDataTxt(char *dataDirName,char *ID)
 	  strcat(delPath,"/");
 	  strcat(delPath,ID);
 	  strcat(delPath,"/");
+		
+		strcat(dirName,"/");
+	  strcat(dirName,ID);
+
 		for(int i=0;i<TXT_DATA_NUM;i++){
 				dataSaveTime[i]=0;
 		}
@@ -476,19 +481,20 @@ void ReadAndDelEarlyDataTxt(char *dataDirName,char *ID)
     }
 		if(txtCount>TXT_DATA_NUM){//上次读取后		
 				for(int i=0;i<=TXT_DATA_NUM;i++){
-						rt_kprintf("data[%d] time：%d\n",i+1,dataSaveTime[i]);
+					rt_kprintf("data[%d] time:%d\n",i+1,dataSaveTime[i]);
 				}			
 				rt_kprintf("find mini:[%d]\n",findDataMiniTime());
 				sprintf(delPath+strlen(delPath),"%d.txt",findDataMiniTime());
 				rt_kprintf("count[%d]data del:%s\r\n",txtCount,delPath );
-				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir[0]=结构体中保存 */
-				{
+//				if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir[0]=结构体中保存 */
+//				{
 						int ret=f_unlink(delPath);
 					  if(ret!=FR_OK){
 								rt_kprintf("del err:[%d]\n",ret);
 						}
-				}
+//				}
 		}
+		f_closedir(&Dir);
 		rt_mutex_release(sdWrite_mutex);
 }
 

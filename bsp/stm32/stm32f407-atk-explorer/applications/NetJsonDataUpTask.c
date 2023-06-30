@@ -126,9 +126,6 @@ static void  timeOutRunFun()
 		switch(timeOut()){
 			case HEART_TIME://心跳
 				heartUpJsonPack();
-			
-			
-			  
 				//jsonBufPackTest();
 			  if(gbNetState==RT_TRUE)
 						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
@@ -137,30 +134,29 @@ static void  timeOutRunFun()
 			case REG_TIME://注册 注册成功后定时器就关闭 输入输出状态跟谁注册信息上发
 			  if(gbRegFlag==RT_FALSE){
 //					partDischgAtlasResp("12345");//test 
-//					 jsonBufPackTest();
+////					 jsonBufPackTest();
 //					rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-					break;//suqi
+//					break;//suqi
 					  devRegJsonPack();//devRegJsonPack();
 					  if(gbNetState==RT_TRUE)
 								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					//  timeStop(REG_TIME);//正式使用时候需要去掉
 						if(gbNetState==RT_TRUE){
-							  digitalInputReport();//数字输入上报
-								rt_thread_delay(500);
+							  int ret=digitalInputReport();//数字输入上报
+								if(ret!=0) {
+										rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+										rt_thread_delay(500);
+							  }
+								ret=digitalOutputReport("12v_output");
 								
+								if(ret!=0){ rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+										rt_thread_delay(500);
+								}
+								ret=digitalOutputReport("digital_output");
+								if(ret!=0){
 								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-								digitalOutputReport("3v3_output");
 								rt_thread_delay(500);
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-								digitalOutputReport("5v_output");
-								rt_thread_delay(500);
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-								digitalOutputReport("12v_output");
-								rt_thread_delay(500);
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-								digitalOutputReport("digital_output");
-								rt_thread_delay(500);
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+								}
 						}
 				}
 				else

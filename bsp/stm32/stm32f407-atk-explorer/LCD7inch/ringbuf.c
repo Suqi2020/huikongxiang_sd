@@ -5,8 +5,8 @@
 #include "board.h"
 
 
-RingBuff_t ringBuff;
-RingBuff2_t ringBuff2;
+RingBuff_t  ringBuff   CCMRAM;
+RingBuff2_t ringBuff2  CCMRAM;
 
 
 

@@ -1296,7 +1296,7 @@ void rt_kputs(const char *str)
  * @return The number of characters actually written to buffer.
  */
  struct rt_mailbox mbsdWriteData;
-//extern rt_bool_t log_save_sdFlag;
+extern int log_save_sdFlag;
 static char rt_log_buf[RT_CONSOLEBUF_SIZE];
 extern uint8_t Write_RingBuff2(uint8_t data);
 extern rt_mutex_t   printf_mutex;
@@ -1305,7 +1305,7 @@ RT_WEAK int rt_kprintf(const char *fmt, ...)
 {
     va_list args;
     rt_size_t length;
-//    if(log_save_sdFlag==1)
+//   if(log_save_sdFlag==1)
 //		rt_mutex_take(printf_mutex,RT_WAITING_FOREVER);
     va_start(args, fmt);
     /* the return value of vsnprintf is the number of bytes that would be
@@ -1316,30 +1316,30 @@ RT_WEAK int rt_kprintf(const char *fmt, ...)
     length = vsnprintf(rt_log_buf, sizeof(rt_log_buf) - 1, fmt, args);
     if (length > RT_CONSOLEBUF_SIZE - 1)
         length = RT_CONSOLEBUF_SIZE - 1;
-		
+#if  1
 		  for(int j=0;j<length;j++){
 					Write_RingBuff2((uint8_t)rt_log_buf[j]);
 				  
 			}
-#ifdef RT_USING_DEVICE
-//		extern rt_bool_t gbSDExit;
-//		if(gbSDExit==1){
-
-//		}
-//	else{
-//		if (_console_device == RT_NULL)
-//		{
-//				rt_hw_console_output(rt_log_buf);
-//		}
-//		else
-//		{
-//				rt_device_write(_console_device, 0, rt_log_buf, length);
-////			
-//		}
-//	}
 #else
-    rt_hw_console_output(rt_log_buf);
-#endif /* RT_USING_DEVICE */
+	#ifdef RT_USING_DEVICE
+			extern rt_bool_t gbSDExit;
+
+			if (_console_device == RT_NULL)
+			{
+					rt_hw_console_output(rt_log_buf);
+			}
+			else
+			{
+					rt_device_write(_console_device, 0, rt_log_buf, length);
+	//			
+			}
+		
+	#else
+			rt_hw_console_output(rt_log_buf);
+	#endif /* RT_USING_DEVICE */
+		
+#endif
 //		if(length>1){//Êý¾Ý¶ªµô
 //			rt_log_buf[length]=0;
 //			if(log_save_sdFlag){

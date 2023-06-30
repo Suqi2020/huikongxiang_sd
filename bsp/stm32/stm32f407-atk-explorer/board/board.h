@@ -13,6 +13,8 @@
 
 //#define   rt_log(...)  rt_kprintf(const char *fmt, ...)
 
+
+#define   DATA_LEN        300
 #define 	ANALOG_NUM   	        8
 #define   UART_NUM        3//一共4路串口  剩余了三个
 #define   ACUID_LEN       18

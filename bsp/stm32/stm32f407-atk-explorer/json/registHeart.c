@@ -91,7 +91,7 @@ uint16_t heartUpJsonPack()
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 	
 
@@ -373,7 +373,7 @@ uint16_t devRegJsonPack()
 	}
 	if(root!=NULL){
 		cJSON_Delete(root);
-		out=NULL;
+		root=NULL;
 	}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
@@ -399,7 +399,362 @@ uint16_t devRegJsonPack()
 }
 #endif
 
+
+//char  test[9000]="1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//	1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//	1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm\
+//12345789asdfghj";
 //设备注册json格式打包
+#if 1
+//采用sprintf格式节约ram 采用库函数
+uint16_t devRegJsonPack()
+{
+
+	char spBuf[100],spLen;
+	// 加入节点（键值对）
+	int len =HEAD_LEN+LENTH_LEN;
+	NetTxBuffer[0]='1';//填充非0数据  便于使用strcat
+	NetTxBuffer[1]='1';
+	NetTxBuffer[2]='1';
+	NetTxBuffer[3]='1';
+	NetTxBuffer[len]=0;
+	spLen=sprintf(spBuf,"{\"mid\":%d,",mcu.upMessID);
+	strcat((char *)NetTxBuffer,spBuf);
+	strcat((char *)NetTxBuffer,"\"packetType\":\"PROPERTIES_REG\",");
+	sprintf(spBuf,"\"acuId\":\"%s\",",packFlash.acuId);
+	strcat((char *)NetTxBuffer,spBuf);
+	strcat((char *)NetTxBuffer,"\"params\":[");
+	
+	for(int j=0;j<CIRCULA_485_NUM;j++){//核对有没有配置过
+		if(sheet.cirCula[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.cirCula[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[CIRCULA]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.cirCula[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",GROUNDING_CURRENT);
+				strcat((char *)NetTxBuffer,spBuf);
+
+		}
+	}
+	for(int j=0;j<PARTDISCHAG_485_NUM;j++){//核对有没有配置过
+		if(sheet.partDischag[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.partDischag[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[PARTDISCHAG]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.partDischag[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",DISCHARGE);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+	
+
+	
+	
+	for(int j=0;j<PRESSSETTL_485_NUM;j++){//核对有没有配置过
+		if(sheet.pressSetl[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.pressSetl[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[PRESSSETTL]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.pressSetl[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",SETTLEMENT);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+	for(int j=0;j<THREEAXIS_485_NUM;j++){//核对有没有配置过
+		if(sheet.threeAxiss[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.threeAxiss[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[THREEAXIS]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.threeAxiss[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",VIBRATION);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+#ifdef USE_4GAS
+
+ 	for(int j=0;j<CH4_485_NUM;j++){//核对有没有配置过
+		if(sheet.ch4[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.ch4[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[CH4]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.ch4[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",AIR_ENVIRONMENT);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+	for(int j=0;j<O2_485_NUM;j++){//核对有没有配置过
+		if(sheet.o2[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.o2[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[O2]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.o2[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",AIR_ENVIRONMENT);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+	for(int j=0;j<H2S_485_NUM;j++){//核对有没有配置过
+		if(sheet.h2s[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.h2s[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[H2S]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.h2s[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",AIR_ENVIRONMENT);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+	for(int j=0;j<CO_485_NUM;j++){//核对有没有配置过
+		if(sheet.co[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.co[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[CO]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.co[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",AIR_ENVIRONMENT);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+#endif
+ 	for(int j=0;j<TEMPHUM_485_NUM;j++){//核对有没有配置过
+		if(sheet.tempHum[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.tempHum[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[TEMPHUM]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.tempHum[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",AIR_ENVIRONMENT);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+ 	for(int j=0;j<WATERDEPTH_485_NUM;j++){//核对有没有配置过
+		if(sheet.waterDepth[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.waterDepth[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[WATERDEPTH]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.waterDepth[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",AIR_ENVIRONMENT);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+ 	for(int j=0;j<CRACKMETER_485_NUM;j++){//核对有没有配置过
+		if(sheet.crackMeter[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.crackMeter[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[CRACKMETER]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.crackMeter[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",CRACK_TESTER);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+ 	for(int j=0;j<COVER_485_NUM;j++){//核对有没有配置过
+		if(sheet.cover[j].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",sheet.cover[j].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",modbusName[COVER]);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.cover[j].ID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",MANHOLE_COVER);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+ 	for(int i=0;i<DI_NUM;i++){//核对有没有配置过
+		if(packFlash.diginput[i].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",packFlash.diginput[i].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",packFlash.diginput[i].name);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",packFlash.diginput[i].devID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",MANHOLE_COVER);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+ 	for(int i=0;i<DO_NUM;i++){//核对有没有配置过
+		if(packFlash.digoutput[i].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",packFlash.digoutput[i].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",packFlash.digoutput[i].name);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",packFlash.digoutput[i].devID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",SWITCH_CONTROL);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	} 	
+	for(int i=0;i<SWITCH_NUM;i++){//核对有没有配置过
+		if(packFlash.switchoutput[i].workFlag==RT_TRUE){
+				strcat((char *)NetTxBuffer,"{\"device\":{");
+				sprintf(spBuf,"\"model\":\"%s\",",packFlash.switchoutput[i].model);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"name\":\"%s\",",packFlash.switchoutput[i].name);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"deviceId\":\"%s\",",packFlash.switchoutput[i].devID);
+				strcat((char *)NetTxBuffer,spBuf);
+				sprintf(spBuf,"\"type\":%d}},",SWITCH_CONTROL);
+				strcat((char *)NetTxBuffer,spBuf);
+		}
+	}
+	NetTxBuffer[strlen((char *)NetTxBuffer)-1]=0;//去掉最后一个,号
+	
+	
+	sprintf(spBuf,"],\"timestamp\":\"%llu\"}",utcTime_ms());
+	strcat((char *)NetTxBuffer,spBuf);
+	
+	// 打印JSON数据包  
+#endif
+
+
+	
+	// 释放内存  
+	
+
+		len=rt_strlen((char *)NetTxBuffer);
+
+			for(int i=4;i<len;i++)
+					rt_kprintf("%c",NetTxBuffer[i]);
+			rt_kprintf("\n");
+
+		NetTxBuffer[0]= (uint8_t)(HEAD>>8); 
+		NetTxBuffer[1]= (uint8_t)(HEAD);    
+
+
+		//lenth
+	  NetTxBuffer[2]=(uint8_t)((len)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len);
+	  //crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
+
+		//tail
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
+		
+		mcu.devRegMessID =mcu.upMessID;
+		upMessIdAdd();
+		rt_kprintf("%sreg len:%d\r\n",sign,len);
+		
+//		for(int i=0;i<len;i++)
+//				rt_kprintf("%02x",NetTxBuffer[i]);
+		rt_kprintf("\r\n%slen：%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",sign,len,NetTxBuffer[0],NetTxBuffer[1],NetTxBuffer[2],NetTxBuffer[3]);
+		return len;
+}
+
+
+//设备注册json格式打包
+#if 0
 uint16_t devRegJsonPack()
 {
 	char* out = NULL;
@@ -425,6 +780,8 @@ uint16_t devRegJsonPack()
 			for(int i=0;i<MODBUS_NUM;i++){
 			switch(i)
 			{
+
+#if  1
 				case CIRCULA:
 					for(int j=0;j<CIRCULA_485_NUM;j++){//核对有没有配置过
 							if(sheet.cirCula[j].workFlag==RT_TRUE){
@@ -455,7 +812,7 @@ uint16_t devRegJsonPack()
 					}
 				break;
 				case PRESSSETTL:
-					for(int j=0;j<PRESSSETTL_485_NUM;j++){//核对有没有配置过
+					for(int j=0;j<20;j++){//核对有没有配置过PRESSSETTL_485_NUM
 							if(sheet.pressSetl[j].workFlag==RT_TRUE){
 									nodeobj = cJSON_CreateObject();
 									cJSON_AddItemToArray(Array, nodeobj);
@@ -469,7 +826,7 @@ uint16_t devRegJsonPack()
 					}
 				break;
 				case THREEAXIS:
-					for(int j=0;j<THREEAXIS_485_NUM;j++){//核对有没有配置过
+					for(int j=0;j<20;j++){//核对有没有配置过THREEAXIS_485_NUM
 							if(sheet.threeAxiss[j].workFlag==RT_TRUE){
 									nodeobj = cJSON_CreateObject();
 									cJSON_AddItemToArray(Array, nodeobj);
@@ -582,6 +939,8 @@ uint16_t devRegJsonPack()
 							}
 					}
 				break;
+					
+
 				case COVER:
 					for(int j=0;j<COVER_485_NUM;j++){//核对有没有配置过
 							if(sheet.cover[j].workFlag==RT_TRUE){
@@ -598,6 +957,7 @@ uint16_t devRegJsonPack()
 				break;
 				default:
 				break;
+#endif
 			}	
 		}
 //		extern uint8_t analogTemChanl;
@@ -780,7 +1140,7 @@ uint16_t devRegJsonPack()
 			for(int i=0;i<rt_strlen(out);i++)
 					rt_kprintf("%c",out[i]);
 			rt_kprintf("\n");
-		
+		rt_kprintf("reg len %d\n",rt_strlen(out));
 		
 //					for(int i=0;i<rt_strlen(out);i++)
 //					rt_kprintf("%02X",out[i]);
@@ -790,7 +1150,7 @@ uint16_t devRegJsonPack()
 	}
 	if(root!=NULL){
 		cJSON_Delete(root);
-		out=NULL;
+		root=NULL;
 	}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
@@ -815,6 +1175,4 @@ uint16_t devRegJsonPack()
 		return len;
 }
 
-
-
-
+#endif

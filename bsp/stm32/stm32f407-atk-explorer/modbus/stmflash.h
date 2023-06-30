@@ -16,11 +16,28 @@
 ////////////////////////////////////////////////////////////////////////////////// 	
 
 //FLASH起始地址
+/*
+扇区 0 0x0800 0000 – 0x0800 03FF 16KB
+扇区 1 0x0800 4000 – 0x0800 7FFF 16KB
+扇区 2 0x0800 8000 – 0x0800 BFFF 16KB
+扇区 3 0x0800 C000 – 0x0800 FFFF 16KB
+扇区 4 0x0801 0000 – 0x0801 FFFF 64KB        
+扇区 5 0x0802 0000 – 0x0803 FFFF 128KB
+扇区 6 0x0804 0000 – 0x0805 FFFF 128KB
+…… …… ……
+扇区 11 0x080E 0000 – 0x080F FFFF 128KB
+bootloader 占用扇区0-扇区3   64k
+扇区4   存放用户数据   64k
+*/
+//#define  packFlash_LEN             2048
+//#define  ADDR_FLASH_SECTOR_11       ((uint32_t)0x080E0000) /* Base @ of Sector 11, 128 Kbytes */
+//#define  FLASH_IP_SAVE_ADDR    			 ADDR_FLASH_SECTOR_11  //最后一个扇区 128K字节 (STM32_FLASH_BASE+STM_FLASH_SIZE-USE_FLASH_SIZE)  
+//#define  FLASH_MODBUS_SAVE_ADDR     (FLASH_IP_SAVE_ADDR+packFlash_LEN)  //偏移10个1K
 
-#define  ADDR_FLASH_SECTOR_11       ((uint32_t)0x080E0000) /* Base @ of Sector 11, 128 Kbytes */
-#define  FLASH_IP_SAVE_ADDR    			 ADDR_FLASH_SECTOR_11  //最后一个扇区 128K字节 (STM32_FLASH_BASE+STM_FLASH_SIZE-USE_FLASH_SIZE)  
-#define  FLASH_MODBUS_SAVE_ADDR     (FLASH_IP_SAVE_ADDR+0X400*10)  //偏移10个1K
-
+#define  packFlash_LEN             2048
+#define  ADDR_FLASH_SECTOR_4       ((uint32_t)0x08010000) /* Base @ of Sector 4, 64 Kbytes */
+#define  FLASH_IP_SAVE_ADDR    			 ADDR_FLASH_SECTOR_4  //  
+#define  FLASH_MODBUS_SAVE_ADDR     (FLASH_IP_SAVE_ADDR+packFlash_LEN)  //偏移10个1K
 
 
 

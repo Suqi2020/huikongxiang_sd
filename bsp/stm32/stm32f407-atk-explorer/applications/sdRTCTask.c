@@ -1,6 +1,6 @@
 #include <rtthread.h>
 #include <board.h>
-
+char  sdData[DATA_LEN]="";//写入sd的数据  用于保存各个传感器的采集数据
 const static char task[]="[sdRTCTask]";
 extern struct rt_mailbox mbsdWriteData;
 extern void  logSaveToSD(char *buf,char lenth);
@@ -61,7 +61,7 @@ void  sdCheck()
 		static int count =0;
 	  
 		count++;
-		if(count%(60)==0){
+		if(count%60==0){
 				FatReadDirDelEarlyLogTxt();//每隔TXT_LOG_TIME/10秒时间检查一次删除比较早的txt文件
 			  rt_kprintf("%scheck sd delete log\n",task);
 			  
@@ -84,12 +84,13 @@ void  modbusDataCheck()
 {
 			static int count =0;
 	    count++;
-	    if(count%(60)==0){
+	    if(count%60==0){
 					huanLiuDelEarlyTxt();
 				  juFangDelEarlyTxt();
 			}
 			
 }
+int log_save_sdFlag=0;
 void  sdAndRtcInit()
 {
 		rt_thread_mdelay(350);//延时2秒 不能去掉 需要等待lcd启动稳定并且同步时钟完毕再写入sd卡
@@ -98,7 +99,7 @@ void  sdAndRtcInit()
     getUTCFromLCD();
   	creatFolder();
 	  rt_thread_idle_sethook(logPrint);
-
+    log_save_sdFlag=1;
 		logSaveToSD((char *)acuRst, strlen(acuRst));
 		logSaveToSD((char *)printVer, strlen(printVer));
 }
@@ -115,5 +116,6 @@ void   sdRTCTask(void *parameter)
 				rt_thread_mdelay(60000);
 			  sdCheck();
 			  rtcCheck();
+		  	modbusDataCheck();
 		}
 }

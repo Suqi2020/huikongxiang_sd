@@ -236,7 +236,9 @@
 //V3.16    增加环流数据存储超过30条的情况下删除txt文件命令
 //         增加局放测试                           20230627
 //V3.17    修复局放数据写入SD过程出现的问题       20230628
-
+//V3.18    调整flash分区 前64k为BootLoader+64k用户数据+896kb的app  20230629
+//V3.19    采用cjson自带的打包json格式容易导致内存溢出（无提示）打包数据量很少只有10个字节左右
+//         更改打包注册信息格式为sprintf
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
 		 .ANY (+RW +ZI)
@@ -244,12 +246,27 @@
 		RW_IRAM1 0x10000000 0x00010000  {  ; RW data
 		 .ANY (ccmram)
 		}
+		
+		
+		
+扇区 0 0x0800 0000 – 0x0800 03FF 16KB
+扇区 1 0x0800 4000 – 0x0800 7FFF 16KB
+扇区 2 0x0800 8000 – 0x0800 BFFF 16KB
+扇区 3 0x0800 C000 – 0x0800 FFFF 16KB
+扇区 4 0x0801 0000 – 0x0801 FFFF 64KB        
+扇区 5 0x0802 0000 – 0x0803 FFFF 128KB
+扇区 6 0x0804 0000 – 0x0805 FFFF 128KB
+…… …… ……
+扇区 11 0x080E 0000 – 0x080F FFFF 128KB
+bootloader 占用扇区0-扇区3   64k
+扇区4   存放用户数据   64k
+
 */
 //          
-#define APP_VER       ((3<<8)+17)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+19)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230628";
+const char date[]="20230630";
 
 
 
@@ -401,6 +418,13 @@ int main(void)
 	  rt_err_t result;
 		stm32_flash_read(FLASH_IP_SAVE_ADDR,    (uint8_t*)&packFlash,sizeof(packFlash));
 		stm32_flash_read(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,    sizeof(sheet));
+	  printf(" save1=%d save2=%d\n",sizeof(packFlash),sizeof(sheet));
+	  if(packFlash_LEN<sizeof(packFlash)){
+				printf("err:packFlash_LEN too small\n");
+		}
+	  if((packFlash_LEN+sizeof(packFlash)+sizeof(sheet))>65536){
+				printf("err:64k flash to save user data too small\n");
+		}
 	  outIOInit();
 	  RingBuff2_Init();
 		if(packFlash.acuId[0]>=0x7F){

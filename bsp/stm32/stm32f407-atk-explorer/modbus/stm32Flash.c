@@ -16,8 +16,8 @@ const static char sign[]="[flash]";
 //Copyright(C) 广州市星翼电子科技有限公司 2014-2024
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 	
-packIpUartStru packFlash   __attribute__ ((aligned (4)));
-deviceFlashStru sheet    __attribute__ ((aligned (4)))={0};
+packIpUartStru packFlash  CCMRAM __attribute__ ((aligned (4)));
+deviceFlashStru sheet     CCMRAM __attribute__ ((aligned (4)))={0};
 
 extern void uartSingConf(int num,int bps);
 

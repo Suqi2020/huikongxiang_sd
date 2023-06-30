@@ -214,10 +214,11 @@ extern void huanLiuTxtSaveSD(char *id,char *data);
 	//输入 respFlag 为true就是回应
 //              为false就是report数据
 //char data[100];
+
+extern char   sdData[DATA_LEN];
 uint16_t circulaJsonPack(bool respFlag)
 {
-		char *data=NULL;
-		data =rt_malloc(200); // suqi 根据实际长度来调整
+
 		char* out = NULL;
 		//创建数组
 		cJSON* Array = NULL;
@@ -252,7 +253,7 @@ uint16_t circulaJsonPack(bool respFlag)
 			{		
 
 				if(sheet.cirCula[i].workFlag==RT_TRUE){
-
+          sdData[0]=0;
 					nodeobj = cJSON_CreateObject();
 					cJSON_AddItemToArray(Array, nodeobj);
 					cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.cirCula[i].ID));
@@ -260,26 +261,32 @@ uint16_t circulaJsonPack(bool respFlag)
 					nodeobj_p= cJSON_CreateObject();
 					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurA);
-					cJSON_AddItemToObject(nodeobj_p,"earthCurA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"runCurA",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"loadRatioA",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"earthCurA",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"runCurA",cJSON_CreateString(""));         strcat(sdData,"0");strcat(sdData,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"loadRatioA",cJSON_CreateString(""));      strcat(sdData,"0");strcat(sdData,"  ");
 					
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurB);
-					cJSON_AddItemToObject(nodeobj_p,"earthCurB",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"runCurB",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"loadRatioB",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"earthCurB",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"runCurB",cJSON_CreateString(""));         strcat(sdData,"0");strcat(sdData,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"loadRatioB",cJSON_CreateString(""));      strcat(sdData,"0");strcat(sdData,"  ");
 					
 					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurC);
-					cJSON_AddItemToObject(nodeobj_p,"earthCurC",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"runCurC",cJSON_CreateString(""));         strcat(data,"0");strcat(data,"  ");
-					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(data,"0");strcat(data,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"earthCurC",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"runCurC",cJSON_CreateString(""));         strcat(sdData,"0");strcat(sdData,"  ");
+					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(sdData,"0");strcat(sdData,"  ");
 					sprintf(sprinBuf,"%llu",utcTime_ms());
-					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"\r\n");
+					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
 
-					huanLiuTxtSaveSD(sheet.cirCula[i].ID,data);//suqi
+					huanLiuTxtSaveSD(sheet.cirCula[i].ID,sdData);//suqi
 					//rt_thread_delay(10);
-					rt_kprintf("%sSD data：%s",sign,data);//自带换行
-					memset(data,0,sizeof((char *)data));
+					
+					
+					
+					if(strlen(sdData)>=(sizeof(sdData)-2)){
+						rt_kprintf("err:sdData is not enough\n");
+					}
+					rt_kprintf("%sSD data：%s",sign,sdData);//自带换行
+
 
 				}
 			}
@@ -300,15 +307,15 @@ uint16_t circulaJsonPack(bool respFlag)
 		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
-//				for(int i=0;i<rt_strlen(out);i++)
-//						rt_kprintf("%c",out[i]);
-//				rt_kprintf("\n");
+				for(int i=0;i<rt_strlen(out);i++)
+						rt_kprintf("%c",out[i]);
+				rt_kprintf("\n");
 				rt_free(out);
 				out=NULL;
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 	
 
@@ -334,8 +341,7 @@ uint16_t circulaJsonPack(bool respFlag)
 
 		rt_free(sprinBuf);
 		sprinBuf=RT_NULL;
-		rt_free(data);
-		data=NULL;
+
 		return len;
 }
 
@@ -461,7 +467,7 @@ bool modCirCurrWarn2Send()
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度

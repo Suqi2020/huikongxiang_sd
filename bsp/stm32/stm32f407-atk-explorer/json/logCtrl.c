@@ -101,7 +101,7 @@ uint16_t logCrtlReadResp(cJSON *Json)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
@@ -238,7 +238,7 @@ uint16_t logCrtlAddResp(cJSON *Json)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
@@ -320,7 +320,7 @@ uint16_t logCtrlDel(cJSON *Json)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
@@ -448,7 +448,7 @@ uint16_t logCrtlDelResp(cJSON *Json,char *identify)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度

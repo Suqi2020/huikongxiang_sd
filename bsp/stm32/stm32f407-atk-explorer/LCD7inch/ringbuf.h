@@ -11,7 +11,7 @@ typedef struct
 		uint16_t Lenght;
 		uint8_t Ring_Buff[LCD_BUF_LEN];
 }RingBuff_t;
-#define   PRINTF_BUF_LEN    2048  //此次比较奇怪 用1024*6会导致ringbuf异常  suqi
+#define   PRINTF_BUF_LEN    4096  //此次比较奇怪 用1024*6会导致ringbuf异常  suqi
 typedef struct
 {
 		uint16_t Head;

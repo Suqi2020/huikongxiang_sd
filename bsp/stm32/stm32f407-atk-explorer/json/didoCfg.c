@@ -55,7 +55,7 @@ uint16_t digitalInputReport()
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 
-
+		memset(NetTxBuffer,0,sizeof(NetTxBuffer));
 		//打包
 		int len=0;
 		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
@@ -66,6 +66,7 @@ uint16_t digitalInputReport()
 		
 		
 		out = cJSON_Print(root);
+
 		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
@@ -77,7 +78,7 @@ uint16_t digitalInputReport()
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 	
 
@@ -159,6 +160,7 @@ uint16_t digitalInputGetResp(cJSON *Json)
 
 
 		//打包
+		memset(NetTxBuffer,0,sizeof(NetTxBuffer));
 		int len=0;
 		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
 		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
@@ -168,6 +170,7 @@ uint16_t digitalInputGetResp(cJSON *Json)
 		
 		
 		out = cJSON_Print(root);
+
 		rt_strcpy((char *)NetTxBuffer+len,out);
 		len+=rt_strlen(out);
 		if(out!=NULL){
@@ -179,7 +182,7 @@ uint16_t digitalInputGetResp(cJSON *Json)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 	
 
@@ -323,9 +326,10 @@ uint16_t digitalOutputReport(char *identify)
 		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
-
+		memset(NetTxBuffer,0,sizeof(NetTxBuffer));
 		//打包
 		int len=0;
+		
 		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
 		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
 		len+=LENTH_LEN;//json长度最后再填写
@@ -343,7 +347,7 @@ uint16_t digitalOutputReport(char *identify)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
@@ -455,6 +459,7 @@ uint16_t digitalOutputGetResp(cJSON *Json,char *identify)
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		//打包
+		memset(NetTxBuffer,0,sizeof(NetTxBuffer));
 		int len=0;
 		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
 		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
@@ -472,7 +477,7 @@ uint16_t digitalOutputGetResp(cJSON *Json,char *identify)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
@@ -585,6 +590,7 @@ uint16_t digitalOutputSetResp(cJSON *Json,char *identify)
 
 
 		//打包
+		memset(NetTxBuffer,0,sizeof(NetTxBuffer));
 		int len=0;
 		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
 		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
@@ -605,7 +611,7 @@ uint16_t digitalOutputSetResp(cJSON *Json,char *identify)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 	
 

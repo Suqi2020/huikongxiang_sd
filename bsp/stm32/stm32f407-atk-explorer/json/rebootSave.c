@@ -51,7 +51,7 @@ uint16_t resetMcuResp(cJSON *Json)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 		//lenth
 	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
@@ -256,7 +256,7 @@ uint16_t resetDeviceResp(cJSON *Json,char *identify)
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 	
 		//lenth
@@ -329,7 +329,7 @@ uint16_t saveMcuResp()
 		}
 		if(root!=NULL){
 			cJSON_Delete(root);
-			out=NULL;
+			root=NULL;
 		}
 	
 
