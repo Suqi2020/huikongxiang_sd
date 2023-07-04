@@ -48,11 +48,10 @@ uint16_t heartUpJsonPack()
 {
 		char* out = NULL;
 		//创建数组
-//		cJSON* Array = NULL;
+
 		// 创建JSON Object  
 		cJSON* root = NULL;
-		cJSON* nodeobj = NULL;
-//		cJSON* nodeobj_p = NULL;
+
 		root = cJSON_CreateObject();
 		if (root == NULL) return 0;
 		// 加入节点（键值对）
@@ -64,11 +63,8 @@ uint16_t heartUpJsonPack()
 		
 		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
-		nodeobj = cJSON_CreateObject();
+		//nodeobj = cJSON_CreateObject();
 	  cJSON_AddStringToObject(root, "identifier","area_control_unit");
-
-		//cJSON_AddItemToObject(nodeobj,"acuId",cJSON_CreateString((char *)"100000000000001"));
-		//cJSON_AddItemToObject(root, "params", nodeobj);
 
 
 		//打包

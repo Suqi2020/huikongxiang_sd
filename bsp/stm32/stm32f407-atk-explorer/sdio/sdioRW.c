@@ -315,12 +315,13 @@ void  logSaveToSD(char *buf,char lenth)
 				uint64_t time =utcTime_ms();
 				uint32_t rtc_s=time/1000; 
 				read=utc_to_beijingTime(rtc_s);
-				int len2=sprintf(timeBuf,"[%d-%d-%d-%d:%d:%d]",read.year,read.month,read.day,\
+				int len2=sprintf(timeBuf,"[%d-%d-%d %d:%d:%d]",read.year,read.month,read.day,\
 				read.hour,read.minute,read.second );
 		}
 		if(ret!=FR_OK){
 		    ret=f_open(&fnew,txtName, FA_CREATE_NEW |FA_WRITE);//suqi
-				rt_kprintf("create:%s\r\n",txtName );
+			  if(ret==FR_OK)
+						rt_kprintf("create:%s\r\n",txtName );
 		}
 		if((ret==FR_OK)||(ret==FR_EXIST)){
 				f_lseek(&fnew,f_size(&fnew));
@@ -370,7 +371,7 @@ void FatReadDirDelEarlyLogTxt()
 	  char delPath[30]="";
 	  strcat(delPath,dirName);
 	  strcat(delPath,"/");
-		for(int i=0;i<TXT_LOG_NUM;i++){
+		for(int i=0;i<=TXT_LOG_NUM;i++){
 				logSaveTime[i]=0;
 		}
     if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir结构体中保存 */
@@ -378,7 +379,6 @@ void FatReadDirDelEarlyLogTxt()
         while(f_readdir(&Dir, &fileinfo) == FR_OK)  /* 读文件信息到文件状态结构体中 */
         {
             if(!fileinfo.fname[0]) break; /* 如果文件名为‘\0'，说明读取完成结束 */
-					  
 						for(int j=0;j<strlen(fileinfo.fname);j++){
 							 if(fileinfo.fname[j]=='.'){
 									logTime[j]=0;
@@ -387,7 +387,7 @@ void FatReadDirDelEarlyLogTxt()
 							 logTime[j]=fileinfo.fname[j];//提取名字 不要.txt
 						}
 						//printf("提取时间 %s\n",logTime);
-						if(txtCount<=TXT_LOG_NUM+1){
+						if(txtCount<=TXT_LOG_NUM){
 								logSaveTime[txtCount]=atoi32(logTime,10);//时间字符串格式化为32位整数		
 						}
 						txtCount++;
@@ -457,7 +457,7 @@ void ReadAndDelEarlyDataTxt(char *dataDirName,char *ID)
 		strcat(dirName,"/");
 	  strcat(dirName,ID);
 
-		for(int i=0;i<TXT_DATA_NUM;i++){
+		for(int i=0;i<=TXT_DATA_NUM;i++){
 				dataSaveTime[i]=0;
 		}
     if(f_opendir(&Dir,(const TCHAR*)dirName) == FR_OK)/* 打开文件夹目录成功，目录信息已经在dir结构体中保存 */
@@ -473,7 +473,7 @@ void ReadAndDelEarlyDataTxt(char *dataDirName,char *ID)
 							 dataTime[j]=fileinfo.fname[j];//提取名字 不要.txt
 						}
 						//printf("提取时间 %s\n",logTime);
-						if(txtCount<=TXT_DATA_NUM+1){
+						if(txtCount<=TXT_DATA_NUM){
 								dataSaveTime[txtCount]=atoi32(dataTime,10);//时间字符串格式化为32位整数		
 						}
 						txtCount++;

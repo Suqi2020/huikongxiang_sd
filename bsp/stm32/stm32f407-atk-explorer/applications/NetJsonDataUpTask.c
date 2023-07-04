@@ -136,7 +136,7 @@ static void  timeOutRunFun()
 //					partDischgAtlasResp("12345");//test 
 ////					 jsonBufPackTest();
 //					rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-//					break;//suqi
+					break;//suqi
 					  devRegJsonPack();//devRegJsonPack();
 					  if(gbNetState==RT_TRUE)
 								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 

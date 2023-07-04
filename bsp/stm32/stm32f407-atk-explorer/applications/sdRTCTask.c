@@ -37,22 +37,26 @@ void  logPrint()
 				bufLen=0;
 			  while(true==Read_RingBuff2((uint8_t *)printBuf+bufLen)){
 					  //printf("/%c",printBuf[bufLen]);
-					  if(printBuf[bufLen]=='\n'){
-							  printBuf[bufLen+1]=0;
-								printf("%s",printBuf);
-								logSaveToSD(printBuf,strlen(printBuf));
-							 // bufLen=0;
-							  break;
-						}
+
 						if((bufLen+1)==sizeof(printBuf)){
 							printBuf[bufLen-1]='\n';
 							printBuf[bufLen]=0;
-							printf("%s",printBuf);
+							logSaveToSD(printBuf,strlen(printBuf));
+							//printf("%s",printBuf);
 							bufLen=0;
 							break;
 						}
+						//if(printBuf[bufLen]!=0){
+					  if(printBuf[bufLen]=='\n'){
+							  printBuf[bufLen+1]=0;
+								logSaveToSD(printBuf,strlen(printBuf));
+							  //printf("%s",printBuf);
+							  bufLen=0;
+							  break;
+						}
 						bufLen++;
 				}
+
 }
 //1分钟的时钟基准情况下 
 //log和数据记录按天存储的情况西下 
@@ -82,11 +86,12 @@ extern void huanLiuDelEarlyTxt();
 extern void juFangDelEarlyTxt();
 void  modbusDataCheck()
 {
-			static int count =0;
+			static int count =30;
 	    count++;
 	    if(count%60==0){
 					huanLiuDelEarlyTxt();
 				  juFangDelEarlyTxt();
+				  rt_kprintf("%scheck DATA\n",task);
 			}
 			
 }
@@ -98,7 +103,7 @@ void  sdAndRtcInit()
 	  changeBmp(0);
     getUTCFromLCD();
   	creatFolder();
-	  rt_thread_idle_sethook(logPrint);
+//	  rt_thread_idle_sethook(logPrint);
     log_save_sdFlag=1;
 		logSaveToSD((char *)acuRst, strlen(acuRst));
 		logSaveToSD((char *)printVer, strlen(printVer));
@@ -112,10 +117,18 @@ void  sdAndRtcInit()
 void   sdRTCTask(void *parameter)
 {
 		sdAndRtcInit();
+	  int count=0;
 		while(1){
-				rt_thread_mdelay(60000);
-			  sdCheck();
-			  rtcCheck();
-		  	modbusDataCheck();
+#if 1
+			  count++;
+			  if(count>10){//大约1分钟进去一次
+					count=0;
+					sdCheck();
+					rtcCheck();
+					modbusDataCheck();
+				}
+				logPrint();
+#endif
+			  rt_thread_mdelay(20);
 		}
 }

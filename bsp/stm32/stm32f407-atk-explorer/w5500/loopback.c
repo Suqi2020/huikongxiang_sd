@@ -5,7 +5,7 @@ uint8 I_STATUS[MAX_SOCK_NUM];
 uint8 ch_status[MAX_SOCK_NUM] = {0};/** 0:close, 1:ready, 2:connected */
 
 uint8_t  NetTxBuffer[TX_RX_MAX_BUF_SIZE]    CCMRAM;//__attribute__((at(0x10000000))); //使用STM32F4中的CCM的另外64K内存  记录好偏移地址
-uint8_t  NetRxBuffer[TX_RX_MAX_BUF_SIZE/2]  CCMRAM;//__attribute__((at(0x10000000+TX_RX_MAX_BUF_SIZE)));//使用STM32F4中的CCM的另外64K内存  记录好偏移地址
+uint8_t  NetRxBuffer[TX_RX_MAX_BUF_SIZE]  CCMRAM;//__attribute__((at(0x10000000+TX_RX_MAX_BUF_SIZE)));//使用STM32F4中的CCM的另外64K内存  记录好偏移地址
 const static char sign[]="[lookback]"; 
 void rstCh_status()
 {

@@ -33,6 +33,7 @@ uint16_t netDataCheck(uint8_t *data)
 	  uint16_t lenth=0;
 		if((data[0]==(uint8_t)((uint16_t)HEAD>>8))&&(data[1]==(uint8_t)(HEAD))){
 			  lenth = (data[2]<<8)+data[3]+HEAD_LEN+LENTH_LEN+CRC_LEN+TAIL_LEN;  
+			 // lenth=10000;
 				if(lenth<=2048){
 //						for(int i=0;i<lenth;i++)
 //								rt_kprintf("%02x",data[i]);
@@ -52,13 +53,20 @@ void   netDataRecTask(void *para)
 {
 	
 	  uint8_t *str=RT_NULL;
+	  extern uint8_t  NetRxBuffer[TX_RX_MAX_BUF_SIZE];
 		while(1){
 			 if (rt_mb_recv(&mbNetRecData, (rt_ubase_t *)&str, 1000) == RT_EOK)
 			 {
 		#if 1
+				   rt_kprintf("strlen=%d\n",strlen((char *)str));
 					 uint16_t  lenth= netDataCheck(str);
-					 if(lenth>0){
-								AllDownPhrase((char *)str,lenth);
+				   if(lenth>sizeof(NetRxBuffer)){
+							rt_kprintf("err:lenth err > sizeof(NetRxBuffer) %d\n",sizeof(NetRxBuffer));//数据太长 解析时候会导致内存溢出 此处丢掉
+					 }
+					 else{
+						 if(lenth>0){
+									AllDownPhrase((char *)str,lenth);
+						 }
 					 }
 		#else
 					 netDataCheckp(str);

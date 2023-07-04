@@ -121,7 +121,6 @@ void  w5500Task(void *parameter)
 										W5500State=W5500InitEnum;
 									  count=0;
 								}
-								
 						}
 				break;}
 //			case W5500NetOKEnum:

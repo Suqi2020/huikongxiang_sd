@@ -239,6 +239,11 @@
 //V3.18    调整flash分区 前64k为BootLoader+64k用户数据+896kb的app  20230629
 //V3.19    采用cjson自带的打包json格式容易导致内存溢出（无提示）打包数据量很少只有10个字节左右
 //         更改打包注册信息格式为sprintf
+//V3.20    更改打印信息从idletask中移到sdRTCTask.C中来打印 
+//				 因idletask中使用延时函数rt_thread_delay()，rt_sem_take() 等可能会导致线程挂起的函数都不能使用。
+//         并且，由于 malloc、free 等内存相关的函数内部使用了信号量作为临界区保护，因此在钩子函数内部也不允许调用此类函数！
+//V3.21    增加下行数据协议中数据长度大于NetRxBuffer导致内存错误的保护  
+//         修正心跳打包多占用了52字节ram 没有释放掉  20230704
 /*
 		RW_IRAM2 0x20000000 0x00020000  {  ; RW data
 		 .ANY (+RW +ZI)
@@ -263,10 +268,10 @@ bootloader 占用扇区0-扇区3   64k
 
 */
 //          
-#define APP_VER       ((3<<8)+19)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+21)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230630";
+const char date[]="20230704";
 
 
 
@@ -547,7 +552,7 @@ int main(void)
 				rt_thread_startup(tidAutoCtrl);													 
 				printf("%sRTcreat autoCtrlTask\r\n",sign);
 		}
-		tidSdRTC =  rt_thread_create("sdRTC",sdRTCTask,RT_NULL,512*2,5, 10 );
+		tidSdRTC =  rt_thread_create("sdRTC",sdRTCTask,RT_NULL,512*4,8, 10 );
 		if(tidSdRTC!=NULL){
 				rt_thread_startup(tidSdRTC);													 
 				printf("%sRTcreat sdRTCTask\r\n",sign);

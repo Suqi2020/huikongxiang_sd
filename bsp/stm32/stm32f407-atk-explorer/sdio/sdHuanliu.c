@@ -75,8 +75,10 @@ void huanLiuTxtSaveSD(char *id,char *data)
 		ret=f_open(&fnew,txtName, FA_WRITE);
 		if(ret!=FR_OK){
 		    ret=f_open(&fnew,txtName, FA_CREATE_NEW |FA_WRITE);//suqi
-			  res_sd=f_write(&fnew,huanliuText,strlen(huanliuText),&fnum);//写入name列表
-			  f_lseek(&fnew,f_size(&fnew));
+			  if(ret==FR_OK){
+						ret=f_write(&fnew,huanliuText,strlen(huanliuText),&fnum);//写入name列表
+						//f_lseek(&fnew,f_size(&fnew));
+				}
 		}
 		if((ret==FR_OK)||(ret==FR_EXIST)){
 				f_lseek(&fnew,f_size(&fnew));
