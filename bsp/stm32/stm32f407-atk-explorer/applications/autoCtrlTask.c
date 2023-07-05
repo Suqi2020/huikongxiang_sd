@@ -216,26 +216,26 @@ void  outIOInit()
 										rt_kprintf("%s digoutput off %d\n",sign,z);
 								}
 						}
-						for(z=0;z<V33O_NUM;z++){
-								if(sheet.autoctrl[j].output[k].flag==&inpoutpFlag.v33Output[z].lowFlag){
-										v33OutputONFun(z);//默认低有效  初始化高的
-										rt_kprintf("%s v33output on %d\n",sign,z);
-								}
-								if(sheet.autoctrl[j].output[k].flag==&inpoutpFlag.v33Output[z].upFlag){
-										v33OutputOFFFun(z);//默认高有效  初始化低的
-										rt_kprintf("%s v33output off %d\n",sign,z);
-								}
-						}
-						for(z=0;z<V5O_NUM;z++){
-								if(sheet.autoctrl[j].output[k].flag==&inpoutpFlag.v5Output[z].lowFlag){
-										v5OutputONFun(z);//默认低有效  初始化高的
-										rt_kprintf("%s v5output on %d\n",sign,z);
-								}
-								if(sheet.autoctrl[j].output[k].flag==&inpoutpFlag.v5Output[z].upFlag){
-										v5OutputOFFFun(z);//默认高有效  初始化低的
-										rt_kprintf("%s v5output off %d\n",sign,z);
-								}
-						}
+//						for(z=0;z<V33O_NUM;z++){
+//								if(sheet.autoctrl[j].output[k].flag==&inpoutpFlag.v33Output[z].lowFlag){
+//										v33OutputONFun(z);//默认低有效  初始化高的
+//										rt_kprintf("%s v33output on %d\n",sign,z);
+//								}
+//								if(sheet.autoctrl[j].output[k].flag==&inpoutpFlag.v33Output[z].upFlag){
+//										v33OutputOFFFun(z);//默认高有效  初始化低的
+//										rt_kprintf("%s v33output off %d\n",sign,z);
+//								}
+//						}
+//						for(z=0;z<V5O_NUM;z++){
+//								if(sheet.autoctrl[j].output[k].flag==&inpoutpFlag.v5Output[z].lowFlag){
+//										v5OutputONFun(z);//默认低有效  初始化高的
+//										rt_kprintf("%s v5output on %d\n",sign,z);
+//								}
+//								if(sheet.autoctrl[j].output[k].flag==&inpoutpFlag.v5Output[z].upFlag){
+//										v5OutputOFFFun(z);//默认高有效  初始化低的
+//										rt_kprintf("%s v5output off %d\n",sign,z);
+//								}
+//						}
 						for(z=0;z<SWITCH_NUM;z++){
 								if(sheet.autoctrl[j].output[z].flag==&inpoutpFlag.switchOutput[z].lowFlag){
 										switchOutputONFun(z);//默认低有效  初始化高的
@@ -276,8 +276,8 @@ void  inIOInit()
 }
 */
 uint8_t doUpLowFlag[DO_NUM]={0};  //标记给个初值为了判断低电平还是高电平有效，标记失效时候执行相应动作
-uint8_t v33oUpLowFlag[V33O_NUM]={0};
-uint8_t v5oUpLowFlag[V5O_NUM]={0};
+//uint8_t v33oUpLowFlag[V33O_NUM]={0};
+//uint8_t v5oUpLowFlag[V5O_NUM]={0};
 uint8_t switchoUpLowFlag[SWITCH_NUM]={0};
 //输出电平执行
 void  ctrlOutSetIO()
@@ -310,55 +310,55 @@ void  ctrlOutSetIO()
 					}
 			}
 
-			for(i=0;i<V33O_NUM;i++){
-					if(inpoutpFlag.v33Output[i].lowFlag==true){
-							v33OutputOFFFun(i);
-						  //rt_kprintf("%s ctrlOutSetIO v33O off %d\n",sign,i);
-						  v33oUpLowFlag[i]=1;
-						  inpoutpFlag.v33Output[i].lowFlag=false;
-					}
-					else{
-							if(v33oUpLowFlag[i]==1){
-									v33OutputONFun(i);
-							}
-					}
-					if(inpoutpFlag.v33Output[i].upFlag==true){
-							v33OutputONFun(i);
-						  //rt_kprintf("%s ctrlOutSetIO v33O on %d\n",sign,i);
-						  v33oUpLowFlag[i]=2;
-						  inpoutpFlag.v33Output[i].upFlag=false;
-					}
-					else{
-							if(v33oUpLowFlag[i]==2){
-									v33OutputOFFFun(i);
-							}
-					}
-			}
+//			for(i=0;i<V33O_NUM;i++){
+//					if(inpoutpFlag.v33Output[i].lowFlag==true){
+//							v33OutputOFFFun(i);
+//						  //rt_kprintf("%s ctrlOutSetIO v33O off %d\n",sign,i);
+//						  v33oUpLowFlag[i]=1;
+//						  inpoutpFlag.v33Output[i].lowFlag=false;
+//					}
+//					else{
+//							if(v33oUpLowFlag[i]==1){
+//									v33OutputONFun(i);
+//							}
+//					}
+//					if(inpoutpFlag.v33Output[i].upFlag==true){
+//							v33OutputONFun(i);
+//						  //rt_kprintf("%s ctrlOutSetIO v33O on %d\n",sign,i);
+//						  v33oUpLowFlag[i]=2;
+//						  inpoutpFlag.v33Output[i].upFlag=false;
+//					}
+//					else{
+//							if(v33oUpLowFlag[i]==2){
+//									v33OutputOFFFun(i);
+//							}
+//					}
+//			}
 
-			for(i=0;i<V5O_NUM;i++){
-					if(inpoutpFlag.v5Output[i].lowFlag==true){
-							v5OutputOFFFun(i);
-						  //rt_kprintf("%s ctrlOutSetIO v5O off %d\n",sign,i);
-						  v5oUpLowFlag[i]=1;
-						  inpoutpFlag.v5Output[i].lowFlag=false;
-					}
-					else{
-							if(v5oUpLowFlag[i]==1){
-									v5OutputONFun(i);
-							}
-					}
-					if(inpoutpFlag.v5Output[i].upFlag==true){
-							v5OutputONFun(i);
-						  //rt_kprintf("%s ctrlOutSetIO v5O on %d\n",sign,i);
-						  v5oUpLowFlag[i]=2;
-						 inpoutpFlag.v5Output[i].upFlag=false;
-					}
-					else{
-							if(v5oUpLowFlag[i]==2){
-									v5OutputOFFFun(i);
-							}
-					}
-			}
+//			for(i=0;i<V5O_NUM;i++){
+//					if(inpoutpFlag.v5Output[i].lowFlag==true){
+//							v5OutputOFFFun(i);
+//						  //rt_kprintf("%s ctrlOutSetIO v5O off %d\n",sign,i);
+//						  v5oUpLowFlag[i]=1;
+//						  inpoutpFlag.v5Output[i].lowFlag=false;
+//					}
+//					else{
+//							if(v5oUpLowFlag[i]==1){
+//									v5OutputONFun(i);
+//							}
+//					}
+//					if(inpoutpFlag.v5Output[i].upFlag==true){
+//							v5OutputONFun(i);
+//						  //rt_kprintf("%s ctrlOutSetIO v5O on %d\n",sign,i);
+//						  v5oUpLowFlag[i]=2;
+//						 inpoutpFlag.v5Output[i].upFlag=false;
+//					}
+//					else{
+//							if(v5oUpLowFlag[i]==2){
+//									v5OutputOFFFun(i);
+//							}
+//					}
+//			}
 
 			for(i=0;i<SWITCH_NUM;i++){
 					if(inpoutpFlag.switchOutput[i].lowFlag==true){

@@ -35,8 +35,10 @@ inoutDevStru inpoutpFlag __attribute__((at(0x2000D000)))={0};//ÊäÈëÊä³ö³¬ÖµµÄ±ê¼
 //sheet.autoctrl[pindex].output[outputIndex].flagÖĞÖ¸ÕëÖ¸ÏòÁËinpoutpFlag
 const static char sign[]="[autoCtrl]";
 char inName[INNAME_NUM][INOUTNAME_LEN]={"AI","DI","MB",};
-char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","V3O","V5O","SWITCH"};
-char outSwitchNum[OUTNAME_NUM]={DO_NUM,V33O_NUM,V5O_NUM,SWITCH_NUM};
+//char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","V3O","V5O","SWITCH"};
+//char outSwitchNum[OUTNAME_NUM]={DO_NUM,V33O_NUM,V5O_NUM,SWITCH_NUM};
+char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","SSWITCH"};
+char outSwitchNum[OUTNAME_NUM]={DO_NUM,SWITCH_NUM};
 uint8_t inputIndex=0; //±¾´ÎÅäÖÃ¿ØÖÆÂß¼­µÄÊäÈë×ø±êÅäÖÃ   ±»inputFlag Ö¸Õëµ÷ÓÃ
 uint8_t outputIndex=0;//±¾´ÎÅäÖÃ¿ØÖÆÂß¼­µÄÊä³öµÄ×ø±êÅäÖÃ ±»outputFlagÖ¸Õëµ÷ÓÃ
 
@@ -814,37 +816,37 @@ void autoctrlOutputcfg(char*argv[])
 										}
 								}
 								break;
-							case 1:							
-								for(i=0;i<V33O_NUM;i++){
-										if(0==rt_strcmp((char *)packFlash.v33output[i].devID,argv[3])){
-												//packFlash.digoutput[i].levelFlag=limit;//Í¨¹ılevelFlagÀ´ÖÃÎ» lowFlag upFlag
-											  if(limit==0)
-														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v33Output[i].lowFlag;
-												else
-														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v33Output[i].upFlag;
-												rt_kprintf("%saotuctrl V33O OK addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
-												outputIndex++;
-												configFlag=true;
-												
-										}
-								}
-								break;
-							case 2:
-								for(i=0;i<V5O_NUM;i++){
-										if(0==rt_strcmp((char *)packFlash.v5output[i].devID,argv[3])){
-												
-											  if(limit==0)
-														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v5Output[i].lowFlag;
-												else
-														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v5Output[i].upFlag;
-												rt_kprintf("%saotuctrl V5O OK  addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
-												outputIndex++;
-												configFlag=true;
-												
-										}
-								}
-								break;
-							case 3:
+//							case 1:							
+//								for(i=0;i<V33O_NUM;i++){
+//										if(0==rt_strcmp((char *)packFlash.v33output[i].devID,argv[3])){
+//												//packFlash.digoutput[i].levelFlag=limit;//Í¨¹ılevelFlagÀ´ÖÃÎ» lowFlag upFlag
+//											  if(limit==0)
+//														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v33Output[i].lowFlag;
+//												else
+//														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v33Output[i].upFlag;
+//												rt_kprintf("%saotuctrl V33O OK addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
+//												outputIndex++;
+//												configFlag=true;
+//												
+//										}
+//								}
+//								break;
+//							case 2:
+//								for(i=0;i<V5O_NUM;i++){
+//										if(0==rt_strcmp((char *)packFlash.v5output[i].devID,argv[3])){
+//												
+//											  if(limit==0)
+//														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v5Output[i].lowFlag;
+//												else
+//														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v5Output[i].upFlag;
+//												rt_kprintf("%saotuctrl V5O OK  addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
+//												outputIndex++;
+//												configFlag=true;
+//												
+//										}
+//								}
+//								break;
+							case 1:
 								for(i=0;i<SWITCH_NUM;i++){
 										if(0==rt_strcmp((char *)packFlash.switchoutput[i].devID,argv[3])){
 												//packFlash.digoutput[i].levelFlag=limit;//Í¨¹ılevelFlagÀ´ÖÃÎ» lowFlag upFlag

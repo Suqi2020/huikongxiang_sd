@@ -95,6 +95,7 @@ uint16_t resetDeviceResp(cJSON *Json,char *identify)
 		for(int i=0;i<arrayGet_size;i++){
 				cJSON *item=cJSON_GetArrayItem(arrayGet,i);
 				cJSON  *devID =cJSON_GetObjectItem(item,"deviceId");
+			#if 0
 					if(rt_strcmp(identify,"3v3_output")==0){
 						for(int j=0;j<V33O_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 							if(0==rt_strcmp(packFlash.v33output[j].devID ,devID->valuestring)){//打开
@@ -113,16 +114,18 @@ uint16_t resetDeviceResp(cJSON *Json,char *identify)
 							}
 						}
 					}
-					else if(rt_strcmp(identify,"12v_output")==0){
+					else
+#endif
+					if(rt_strcmp(identify,"switch_output")==0){
 						for(int j=0;j<SWITCH_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 							if(0==rt_strcmp(packFlash.switchoutput[j].devID ,devID->valuestring)){//打开
-								rt_kprintf("%s12v rst ok id[%s],port[%d]\n",sign,packFlash.switchoutput[j].devID,packFlash.switchoutput[j].port);
+								rt_kprintf("%sswitch out rst ok id[%s],port[%d]\n",sign,packFlash.switchoutput[j].devID,packFlash.switchoutput[j].port);
 								if((++devRstNum)==arrayGet_size)
 									break;
 							}
 						}
 					}
-					else if(rt_strcmp(identify,"digital_output")==0){
+					else 	if(rt_strcmp(identify,"digital_output")==0){
 						for(int j=0;j<DO_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 							if(0==rt_strcmp(packFlash.digoutput[j].devID ,devID->valuestring)){//打开
 								rt_kprintf("%sdo rst ok id[%s],port[%d]\n",sign,packFlash.digoutput[j].devID,packFlash.digoutput[j].port);
@@ -140,6 +143,7 @@ uint16_t resetDeviceResp(cJSON *Json,char *identify)
 							}
 						}
 					}
+				
 					else if(rt_strcmp(identify,"partial_discharge_monitor")==0){
 							for(int j=0;j<PARTDISCHAG_485_NUM;j++){//核对有没有配置过
 									if(0==rt_strcmp(sheet.partDischag[j].ID,devID->valuestring)){

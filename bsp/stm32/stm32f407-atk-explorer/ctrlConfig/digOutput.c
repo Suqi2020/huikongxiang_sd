@@ -63,7 +63,7 @@ static void digOutput(int argc, char *argv[])
 }
 MSH_CMD_EXPORT(digOutput,digOutput config);//FINSH_FUNCTION_EXPORT_CMD
 
-
+#if 0
 
 //打印3V3的输出配置列表
 void printfPower3V3List()
@@ -186,13 +186,14 @@ static void power5V(int argc, char *argv[])
 
 }
 MSH_CMD_EXPORT(power5V,power5V config);//FINSH_FUNCTION_EXPORT_CMD
+#endif
 
 //打印12V的输出列表
-void printfPower12VList()
+void printfSwitchList()
 {
 		for(int j=0;j<SWITCH_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
-				if(packFlash.v5output[j].workFlag==RT_TRUE){//打开
-						rt_kprintf("%s power12V ",sign);
+				if(packFlash.switchoutput[j].workFlag==RT_TRUE){//打开
+						rt_kprintf("%s switch ",sign);
 						rt_kprintf("%s ",packFlash.switchoutput[j].name);
 						rt_kprintf("%s ",packFlash.switchoutput[j].devID);
 						rt_kprintf("%s ",packFlash.switchoutput[j].model);
@@ -203,11 +204,11 @@ void printfPower12VList()
 
 //按照port来添加 
 //power12V输出控制 输入配置
-static void power12V(int argc, char *argv[])
+static void sswitch(int argc, char *argv[])
 {
 		int port;
 	  if(0==rt_strcmp((char *)"list", argv[1])){
-				printfPower12VList();
+				printfSwitchList();
 				return;
 		}
 		if(argc!=5){
@@ -227,25 +228,25 @@ static void power12V(int argc, char *argv[])
 				rt_strcpy(packFlash.switchoutput[port-1].devID,argv[2]);
 				rt_strcpy(packFlash.switchoutput[port-1].model,argv[3]);
 				packFlash.switchoutput[port-1].port=port;
-				rt_kprintf("%s add 12VOutput chanl %d\n",sign,port);
-			  rt_kprintf("%s 12VOutput OK\n",sign);
+				rt_kprintf("%s add sswitch output chanl %d\n",sign,port);
+			  rt_kprintf("%s switchOutput OK\n",sign);
 		}
 		else{//删除
 			 for(int j=0;j<SWITCH_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 					if(rt_strcmp(packFlash.switchoutput[j].devID,argv[2])==0){
 							packFlash.switchoutput[j].workFlag=RT_FALSE;
-							rt_kprintf("%s delete 12VOutput channel %d\n",sign,j+1);
+							rt_kprintf("%s delete switchOutput channel %d\n",sign,j+1);
 					}
 			 }
 		}
 		return;
 		ERR:
 		rt_kprintf("%sfor example\n",sign);
-		rt_kprintf("%s[power12V 水泵 GYNJLXSD000000162 GY281 1]\n",sign);
+		rt_kprintf("%s[sswitch 水泵 GYNJLXSD000000162 GY281 1]\n",sign);
 		rt_kprintf("%s[port1-4 之外清除对应ID的所有参数]\n",sign);
 
 }
-MSH_CMD_EXPORT(power12V,power12V config);//FINSH_FUNCTION_EXPORT_CMD
+MSH_CMD_EXPORT(sswitch,sswitch config);//FINSH_FUNCTION_EXPORT_CMD
 
 
 //打印控制输出的列表
@@ -256,8 +257,8 @@ MSH_CMD_EXPORT(power12V,power12V config);//FINSH_FUNCTION_EXPORT_CMD
 void printfOutputList()
 {
 		printfDOList();
-	  printfPower3V3List();
-	  printfPower5VList();
-	  printfPower12VList();
+//	  printfPower3V3List();
+//	  printfPower5VList();
+	  printfSwitchList();
 }
 

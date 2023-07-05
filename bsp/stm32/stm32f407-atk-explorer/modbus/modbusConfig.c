@@ -1228,19 +1228,19 @@ bool  devIDOKCheck(char *inputID)
 				}
 		 }
 ////////////////////////////////////////////////输出3V3打包////////////////////////////////////////////////////
-		 for(i=0;i<V33O_NUM;i++){
-				if(packFlash.v33output[i].workFlag==RT_TRUE){
-						if(strcmp(inputID,packFlash.v33output[i].devID)==0)
-								return false;
-				}
-		 }
-////////////////////////////////////////////////输出5V注册打包////////////////////////////////////////////////////
-		 for(i=0;i<V5O_NUM;i++){
-				if(packFlash.v5output[i].workFlag==RT_TRUE){
-						if(strcmp(inputID,packFlash.v5output[i].devID)==0)
-								return false;
-				}
-		 }
+//		 for(i=0;i<V33O_NUM;i++){
+//				if(packFlash.v33output[i].workFlag==RT_TRUE){
+//						if(strcmp(inputID,packFlash.v33output[i].devID)==0)
+//								return false;
+//				}
+//		 }
+//////////////////////////////////////////////////输出5V注册打包////////////////////////////////////////////////////
+//		 for(i=0;i<V5O_NUM;i++){
+//				if(packFlash.v5output[i].workFlag==RT_TRUE){
+//						if(strcmp(inputID,packFlash.v5output[i].devID)==0)
+//								return false;
+//				}
+//		 }
 ////////////////////////////////////////////////输出12V注册打包////////////////////////////////////////////////////
 		 for(i=0;i<SWITCH_NUM;i++){
 				if(packFlash.switchoutput[i].workFlag==RT_TRUE){

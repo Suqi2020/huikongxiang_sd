@@ -123,29 +123,29 @@ void  lcdOutputConfig()
 						rt_kprintf("%s digoutput OK\n",sign);
 				}
 				break;
+//			case 1:
+//				if((port<=V33O_NUM)&&(port>0)){//添加
+//						packFlash.v33output[port-1].workFlag=RT_TRUE;
+//						rt_strcpy(packFlash.v33output[port-1].name, outputLCD.name);
+//						rt_strcpy(packFlash.v33output[port-1].devID,outputLCD.devID);
+//						rt_strcpy(packFlash.v33output[port-1].model,outputLCD.model);
+//						packFlash.v33output[port-1].port=port;
+//						rt_kprintf("%s add v33output chanl %d\n",sign,port);
+//						rt_kprintf("%s digoutput OK\n",sign);
+//				}
+//				break;
+//			case 2:
+//				if((port<=V5O_NUM)&&(port>0)){//添加
+//						packFlash.v5output[port-1].workFlag=RT_TRUE;
+//						rt_strcpy(packFlash.v5output[port-1].name, outputLCD.name);
+//						rt_strcpy(packFlash.v5output[port-1].devID,outputLCD.devID);
+//						rt_strcpy(packFlash.v5output[port-1].model,outputLCD.model);
+//						packFlash.v5output[port-1].port=port;
+//						rt_kprintf("%s add v5output chanl %d\n",sign,port);
+//						rt_kprintf("%s digoutput OK\n",sign);
+//				}
+//				break;
 			case 1:
-				if((port<=V33O_NUM)&&(port>0)){//添加
-						packFlash.v33output[port-1].workFlag=RT_TRUE;
-						rt_strcpy(packFlash.v33output[port-1].name, outputLCD.name);
-						rt_strcpy(packFlash.v33output[port-1].devID,outputLCD.devID);
-						rt_strcpy(packFlash.v33output[port-1].model,outputLCD.model);
-						packFlash.v33output[port-1].port=port;
-						rt_kprintf("%s add v33output chanl %d\n",sign,port);
-						rt_kprintf("%s digoutput OK\n",sign);
-				}
-				break;
-			case 2:
-				if((port<=V5O_NUM)&&(port>0)){//添加
-						packFlash.v5output[port-1].workFlag=RT_TRUE;
-						rt_strcpy(packFlash.v5output[port-1].name, outputLCD.name);
-						rt_strcpy(packFlash.v5output[port-1].devID,outputLCD.devID);
-						rt_strcpy(packFlash.v5output[port-1].model,outputLCD.model);
-						packFlash.v5output[port-1].port=port;
-						rt_kprintf("%s add v5output chanl %d\n",sign,port);
-						rt_kprintf("%s digoutput OK\n",sign);
-				}
-				break;
-			case 3:
 				if((port<=SWITCH_NUM)&&(port>0)){//添加
 						packFlash.switchoutput[port-1].workFlag=RT_TRUE;
 						rt_strcpy(packFlash.switchoutput[port-1].name, outputLCD.name);
@@ -153,7 +153,7 @@ void  lcdOutputConfig()
 						rt_strcpy(packFlash.switchoutput[port-1].model,outputLCD.model);
 						packFlash.switchoutput[port-1].port=port;
 						rt_kprintf("%s add switchoutput chanl %d\n",sign,port);
-						rt_kprintf("%s digoutput OK\n",sign);
+						rt_kprintf("%s swoutput OK\n",sign);
 				}
 				break;
 		}
@@ -188,7 +188,7 @@ void getOutputTotalNum()
 						rt_kprintf("digoutputTotalNum:%d  %d\n",su8OutputTotalNum[0],i);
 				}
 		}
-
+#if 0
 		for(int i=0;i<V33O_NUM;i++){
 				if(packFlash.v33output[i].workFlag==RT_TRUE){
 						su8WorkOutput[1][su8OutputTotalNum[1]]=i;
@@ -203,12 +203,12 @@ void getOutputTotalNum()
 						rt_kprintf("v5outputTotalNum:%d  %d\n",su8OutputTotalNum[2],i);
 				}
 		}
-
+#endif
 		for(int i=0;i<SWITCH_NUM;i++){
 				if(packFlash.switchoutput[i].workFlag==RT_TRUE){
-						su8WorkOutput[3][su8OutputTotalNum[3]]=i;
-					  su8OutputTotalNum[3]++;
-						rt_kprintf("switchoutputTotalNum:%d  %d\n",su8OutputTotalNum[3],i);
+						su8WorkOutput[1][su8OutputTotalNum[1]]=i;//最大数目减1  修改需要注意
+					  su8OutputTotalNum[1]++;
+						rt_kprintf("switchoutputTotalNum:%d  %d\n",su8OutputTotalNum[1],i);
 				}
 		}
 		for(int i=0;i<OUTNAME_NUM;i++){
@@ -326,17 +326,17 @@ void  dispOutputRead()
 						outputp[i]=&packFlash.digoutput[i];
 				}
 				break;
-			case 1://V3O显示
-				for(int i=0;i<V33O_NUM;i++){
-						outputp[i]=&packFlash.v33output[i];
-				}
-				break;
-			case 2://V5O显示
-				for(int i=0;i<V5O_NUM;i++){
-						outputp[i]=&packFlash.v5output[i];
-				}
-				break;
-			case 3://SWITCH显示
+//			case 1://V3O显示
+//				for(int i=0;i<V33O_NUM;i++){
+//						outputp[i]=&packFlash.v33output[i];
+//				}
+//				break;
+//			case 2://V5O显示
+//				for(int i=0;i<V5O_NUM;i++){
+//						outputp[i]=&packFlash.v5output[i];
+//				}
+//				break;
+			case 1://SWITCH显示
 				for(int i=0;i<SWITCH_NUM;i++){
 						outputp[i]=&packFlash.switchoutput[i];
 				}

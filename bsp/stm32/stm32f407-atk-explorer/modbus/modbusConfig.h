@@ -466,8 +466,8 @@ typedef struct{
 			tempHumFlagStru    analogTempHum;//不支持多路模拟温度传感器
 		  digputFlagStru     digInput[DI_NUM];
 	    digputFlagStru     digOutput[DO_NUM];
-	    digputFlagStru     v33Output[V33O_NUM];
-	    digputFlagStru     v5Output[V5O_NUM];
+//	    digputFlagStru     v33Output[V33O_NUM];
+//	    digputFlagStru     v5Output[V5O_NUM];
 	    digputFlagStru     switchOutput[SWITCH_NUM];
 }inoutDevStru;
 //DI配置高有效

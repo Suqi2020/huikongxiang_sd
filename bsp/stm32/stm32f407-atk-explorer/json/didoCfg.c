@@ -229,7 +229,7 @@ uint16_t digitalOutputReport(char *identify)
 		// 创建JSON Object  
 		cJSON* root = NULL;
 		cJSON* nodeobj = NULL;
-	
+	#if 0
 		if(rt_strcmp(identify,"3v3_output")==0){
 				for(int j=0;j<V33O_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 					if(packFlash.v33output[j].workFlag==RT_TRUE){//打开
@@ -246,7 +246,9 @@ uint16_t digitalOutputReport(char *identify)
 				}
 				return 0;
 			}
-			else if(rt_strcmp(identify,"12v_output")==0){
+			else 
+	#endif
+				if(rt_strcmp(identify,"switch_output")==0){
 				for(int j=0;j<SWITCH_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 					if(packFlash.switchoutput[j].workFlag==RT_TRUE){//打开
 											goto PACK;
@@ -277,6 +279,7 @@ uint16_t digitalOutputReport(char *identify)
 			Array = cJSON_CreateArray();
 			if (Array == NULL) return 0;
 			cJSON_AddItemToObject(root, "params", Array);
+			#if 0
 			if(rt_strcmp(identify,"3v3_output")==0){
 				for(int j=0;j<V33O_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 					if(packFlash.v33output[j].workFlag==RT_TRUE){//打开
@@ -310,7 +313,9 @@ uint16_t digitalOutputReport(char *identify)
 					}
 				}
 			}
-			else if(rt_strcmp(identify,"digital_output")==0){
+			else 
+			#endif 
+			if(rt_strcmp(identify,"digital_output")==0){
 				for(int j=0;j<DO_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 					if(packFlash.digoutput[j].workFlag==RT_TRUE){//打开
 						nodeobj = cJSON_CreateObject();
@@ -406,7 +411,7 @@ uint16_t digitalOutputGetResp(cJSON *Json,char *identify)
 				cJSON *item=cJSON_GetArrayItem(arrayGet,i);
 				cJSON  *devID =cJSON_GetObjectItem(item,"deviceId");
 		
-				
+#if 0
 			if(rt_strcmp(identify,"3v3_output")==0){
 				for(int j=0;j<V33O_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 					if(0==rt_strcmp(packFlash.v33output[j].devID ,devID->valuestring)){//打开
@@ -429,7 +434,9 @@ uint16_t digitalOutputGetResp(cJSON *Json,char *identify)
 					}
 				}
 			}
-			else if(rt_strcmp(identify,"12v_output")==0){
+			else
+				#endif
+				if(rt_strcmp(identify,"switch_output")==0){
 				for(int j=0;j<SWITCH_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 					if(0==rt_strcmp(packFlash.switchoutput[j].devID ,devID->valuestring)){//打开
 						nodeobj = cJSON_CreateObject();
@@ -530,6 +537,7 @@ uint16_t digitalOutputSetResp(cJSON *Json,char *identify)
 				cJSON *item=cJSON_GetArrayItem(arrayGet,i);
 				cJSON  *levelStat =cJSON_GetObjectItem(item,"levelStatus");
 				cJSON  *devID =cJSON_GetObjectItem(item,"deviceId");
+			#if 0
 				if(rt_strcmp(identify,"3v3_output")==0){
 						for(int j=0;j<V33O_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 							if(0==rt_strcmp(packFlash.v33output[j].devID ,devID->valuestring)){//打开
@@ -553,7 +561,10 @@ uint16_t digitalOutputSetResp(cJSON *Json,char *identify)
 							}
 						}
 					}
-					else if(rt_strcmp(identify,"12v_output")==0){
+					else 
+				#endif
+				
+				if(rt_strcmp(identify,"12v_output")==0){
 						for(int j=0;j<SWITCH_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 							if(0==rt_strcmp(packFlash.switchoutput[j].devID ,devID->valuestring)){//打开
 								rspFlag=true;
@@ -564,7 +575,7 @@ uint16_t digitalOutputSetResp(cJSON *Json,char *identify)
 							}
 						}
 					}
-					else if(rt_strcmp(identify,"digital_output")==0){
+					else	if(rt_strcmp(identify,"digital_output")==0){
 						for(int j=0;j<DO_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 							if(0==rt_strcmp(packFlash.digoutput[j].devID ,devID->valuestring)){//打开
 								rspFlag=true;

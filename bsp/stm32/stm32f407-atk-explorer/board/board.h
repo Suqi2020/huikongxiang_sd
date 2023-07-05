@@ -24,12 +24,12 @@
 #define   ANA_SUBNAME_LEN  2
 #define   DI_NUM          8
 #define   DO_NUM          8
-#define   V33O_NUM        2
-#define   V5O_NUM         2
+//#define   V33O_NUM        2
+//#define   V5O_NUM         2
 #define   SWITCH_NUM        3
 #define  	MODBID_LEN  		20
 #define  	INNAME_NUM    	3
-#define  	OUTNAME_NUM   	4
+#define  	OUTNAME_NUM   	2
 #define   USE_4GAS
 #define   LCD_BUF_LEN    100
 #define   ANA_MASK       //ÆÁ±Îana

@@ -121,7 +121,7 @@ void   sdRTCTask(void *parameter)
 		while(1){
 #if 1
 			  count++;
-			  if(count>10){//大约1分钟进去一次
+			  if(count>3000){//大约1分钟进去一次
 					count=0;
 					sdCheck();
 					rtcCheck();

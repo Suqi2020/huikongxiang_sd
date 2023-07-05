@@ -377,7 +377,7 @@ uint16_t logCrtlDelResp(cJSON *Json,char *identify)
 		for(int i=0;i<arrayGet_size;i++){
 				cJSON *item=cJSON_GetArrayItem(arrayGet,i);
 				cJSON  *devID =cJSON_GetObjectItem(item,"deviceId");
-		
+#if 0
 				
 			if(rt_strcmp(identify,"3v3_output")==0){
 				for(int j=0;j<V33O_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
@@ -401,7 +401,9 @@ uint16_t logCrtlDelResp(cJSON *Json,char *identify)
 					}
 				}
 			}
-			else if(rt_strcmp(identify,"12v_output")==0){
+			else 
+			#endif
+			if(rt_strcmp(identify,"switch_output")==0){
 				for(int j=0;j<SWITCH_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 					if(0==rt_strcmp(packFlash.switchoutput[j].devID ,devID->valuestring)){//打开
 						nodeobj = cJSON_CreateObject();
