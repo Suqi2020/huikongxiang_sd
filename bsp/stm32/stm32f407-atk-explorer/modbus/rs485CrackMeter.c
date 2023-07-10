@@ -139,6 +139,10 @@ void readCrackMeter(int num)
 
 
 
+
+
+extern char   sdData[DATA_LEN];
+
 //沉降仪json格式打包
 //输入 respFlag 为true就是回应
 //              为false就是report数据
@@ -156,7 +160,7 @@ uint16_t crackMeterJsonPack(bool respFlag)
 		char *sprinBuf=RT_NULL;
 		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
 		// 加入节点（键值对）
-		
+//		memset(sdData,0,DATA_LEN);
 		if(respFlag==true){
 				cJSON_AddNumberToObject(root, "mid",respMid);
 				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
@@ -178,6 +182,7 @@ uint16_t crackMeterJsonPack(bool respFlag)
 			for (int i = 0; i < CRACKMETER_485_NUM; i++)
 			{		
 				if(sheet.crackMeter[i].workFlag==RT_TRUE){
+					sdData[0]=0;
 					nodeobj = cJSON_CreateObject();
 					cJSON_AddItemToArray(Array, nodeobj);
 					cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.crackMeter[i].ID));
@@ -187,12 +192,20 @@ uint16_t crackMeterJsonPack(bool respFlag)
 					nodeobj_p= cJSON_CreateObject();
 					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 					sprintf(sprinBuf,"%02f",crackMeter[i].temp.flotVal);
-					cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf));
+					cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf)); 		strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
 					sprintf(sprinBuf,"%02f",crackMeter[i].distanc.flotVal );
-					cJSON_AddItemToObject(nodeobj_p,"distance",cJSON_CreateString(sprinBuf));
+					cJSON_AddItemToObject(nodeobj_p,"distance",cJSON_CreateString(sprinBuf));  			strcat(sdData,sprinBuf);strcat(sdData,"  ");
 					sprintf(sprinBuf,"%llu",utcTime_ms());
-					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
+					
+					extern void lieFengYiSaveSD(char *id,char *data);
+					lieFengYiSaveSD(sheet.crackMeter[i].ID,sdData);;
+					if(strlen(sdData)>=(sizeof(sdData)-2)){
+							rt_kprintf("err:sdData is not enough\n");
+					}
+					rt_kprintf("%sSD data：%s",sign,sdData);//自带换行
+
 				}
 			}
 		}

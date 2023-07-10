@@ -1316,7 +1316,7 @@ RT_WEAK int rt_kprintf(const char *fmt, ...)
     length = vsnprintf(rt_log_buf, sizeof(rt_log_buf) - 1, fmt, args);
     if (length > RT_CONSOLEBUF_SIZE - 1)
         length = RT_CONSOLEBUF_SIZE - 1;
-#if  0    //调试后用这个suqi
+#if  1   //调试后用这个suqi
 		  for(int j=0;j<length;j++){
 					Write_RingBuff2((uint8_t)rt_log_buf[j]);
 				  

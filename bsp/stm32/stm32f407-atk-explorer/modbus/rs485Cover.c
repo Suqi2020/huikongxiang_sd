@@ -161,7 +161,7 @@ void readCover(int num)
 	  buf=RT_NULL;				
 }
 
-
+extern char   sdData[DATA_LEN];
 //温湿度值通过json格式打包
 //输入 respFlag 为true就是回应
 //              为false就是report数据
@@ -177,7 +177,7 @@ static uint16_t coverJsonPack(bool respFlag)
 		root = cJSON_CreateObject();
 		if (root == NULL) return 0;
 		// 加入节点（键值对）
-		
+//		memset(sdData,0,DATA_LEN);
 	  if(respFlag==true){
 				cJSON_AddNumberToObject(root, "mid",respMid);
 				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
@@ -199,6 +199,7 @@ static uint16_t coverJsonPack(bool respFlag)
 		for (int i = 0; i < COVER_485_NUM; i++)
 		{		
 			if(sheet.cover[i].workFlag==RT_TRUE){
+				sdData[0]=0;
 				nodeobj = cJSON_CreateObject();
 				cJSON_AddItemToArray(Array, nodeobj);
 			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.cover[i].ID));
@@ -208,12 +209,21 @@ static uint16_t coverJsonPack(bool respFlag)
 				nodeobj_p= cJSON_CreateObject();
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 				
-				cJSON_AddNumberToObject(nodeobj_p,"incline"  ,cover[i].incline);
-				cJSON_AddNumberToObject(nodeobj_p,"switch2"   ,cover[i].switch2p);
-				cJSON_AddNumberToObject(nodeobj_p,"vibration",cover[i].vibration);
-				cJSON_AddNumberToObject(nodeobj_p,"switch1"   ,cover[i].switch1p);
+				cJSON_AddNumberToObject(nodeobj_p,"incline"  ,cover[i].incline);      sprintf(sprinBuf,"%d",cover[i].incline);  strcat(sdData,sprinBuf);strcat(sdData,"  ");
+				cJSON_AddNumberToObject(nodeobj_p,"switch2"   ,cover[i].switch2p);  sprintf(sprinBuf,"%d",cover[i].switch2p);  strcat(sdData,sprinBuf);strcat(sdData,"  ");
+  
+				cJSON_AddNumberToObject(nodeobj_p,"vibration",cover[i].vibration);    sprintf(sprinBuf,"%d",cover[i].vibration);  strcat(sdData,sprinBuf);strcat(sdData,"  ");
+
+				cJSON_AddNumberToObject(nodeobj_p,"switch1"   ,cover[i].switch1p);   sprintf(sprinBuf,"%d",cover[i].switch1p);  strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%llu",utcTime_ms());
-				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
+					
+				extern void jingGaiSaveSD(char *id,char *data);
+				jingGaiSaveSD(sheet.cover[i].ID,sdData);;
+				if(strlen(sdData)>=(sizeof(sdData)-2)){
+						rt_kprintf("err:sdData is not enough\n");
+				}
+				rt_kprintf("%sSD data：%s",sign,sdData);//自带换行
 			}
 		}
 		}

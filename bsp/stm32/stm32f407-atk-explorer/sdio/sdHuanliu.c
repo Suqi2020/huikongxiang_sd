@@ -1,6 +1,6 @@
 #include "board.h"
 static const char sign[]="[SDHuanLiu]";
-const char huanliuText[]="earthCurA runCurA loadRatioA earthCurB runCurB loadRatioB earthCurC runCurC loadRatioC time(ms)\r\n";
+static const char huanliuText[]="earthCurA runCurA loadRatioA earthCurB runCurB loadRatioB earthCurC runCurC loadRatioC time(ms)\r\n";
 #define  HUANLIU_DATA_LEN   200
 //在 creatFolder/ID号创建的文件夹下边创建带有时间的txt文件
 //创建txt文件 以utc时间戳为基准/3600*24 得到每天的时间戳作为txt文件的名称

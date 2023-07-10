@@ -1376,6 +1376,11 @@
               <FilePath>.\sdio\sdioRW.c</FilePath>
             </File>
             <File>
+              <FileName>sdioRW.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\sdio\sdioRW.h</FilePath>
+            </File>
+            <File>
               <FileName>sdFangChenJiang.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\sdio\sdFangChenJiang.c</FilePath>
@@ -1389,11 +1394,6 @@
               <FileName>sdHuanliu.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\sdio\sdHuanliu.c</FilePath>
-            </File>
-            <File>
-              <FileName>sdioRW.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\sdio\sdioRW.h</FilePath>
             </File>
             <File>
               <FileName>sdJiaWan.c</FileName>

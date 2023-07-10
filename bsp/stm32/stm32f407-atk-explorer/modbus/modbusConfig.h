@@ -291,9 +291,9 @@ typedef struct{
 
 //modbus+设备名称(波特率)+端口(port1-port4)+设备地址(0-关闭设备)+采集间隔(秒)
 #ifdef  USE_4GAS
-#define   MODBUS_NUM      11+1 //加入井盖
+#define   MODBUS_NUM      (11+1) //加入井盖
 #else 
-#define   MODBUS_NUM      7+1 //加入井盖
+#define   MODBUS_NUM      (7+1) //加入井盖
 #endif
 typedef struct{
 	 void (* modbusRead)(void );
@@ -304,7 +304,7 @@ extern modbusFunStru modbusFun[MODBUS_NUM];
 //extern deviceFlashStru  modbusFlash[MODBUS_NUM];//需要存储到flash的设备配置
 #ifdef  USE_4GAS
 typedef enum{
-     CIRCULA=0, 	PARTDISCHAG,			PRESSSETTL, 			THREEAXIS,		\
+    CIRCULA=0, 	PARTDISCHAG,			PRESSSETTL, 			THREEAXIS,		\
    	CH4,		O2		,H2S,			CO,			\
 	  TEMPHUM,			WATERDEPTH,CRACKMETER,COVER
 }modbNumEnum;

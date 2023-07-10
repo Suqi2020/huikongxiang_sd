@@ -104,7 +104,7 @@ void readCH4(int num)
 
 
 
-
+extern char   sdData[DATA_LEN];
 //4中气体打包
 //输入 respFlag 为true就是回应
 //              为false就是report数据
@@ -123,7 +123,7 @@ static uint16_t ch4Pack(bool respFlag)
 		char *sprinBuf=RT_NULL;
 		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
 		// 加入节点（键值对）
-		
+		//memset(sdData,0,DATA_LEN);
 	  if(respFlag==true){
 				cJSON_AddNumberToObject(root, "mid",respMid);
 				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
@@ -137,7 +137,6 @@ static uint16_t ch4Pack(bool respFlag)
 		cJSON_AddStringToObject(root, "identifier","ch4_monitor");
 		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		
-		
 		{
 		Array = cJSON_CreateArray();
 		if (Array == NULL) return 0;
@@ -146,6 +145,7 @@ static uint16_t ch4Pack(bool respFlag)
 		{		
 
 			if(sheet.ch4[i].workFlag==RT_TRUE){
+				sdData[0]=0;
 				nodeobj = cJSON_CreateObject();
 				cJSON_AddItemToArray(Array, nodeobj);
 			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.ch4[i].ID));
@@ -155,10 +155,15 @@ static uint16_t ch4Pack(bool respFlag)
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 
 				sprintf(sprinBuf,"%02f",ch4[i]);
-				cJSON_AddItemToObject(nodeobj_p,"methane",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"methane",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
 				sprintf(sprinBuf,"%llu",utcTime_ms());
-				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
+					if(strlen(sdData)>=(sizeof(sdData)-2)){
+						rt_kprintf("err:sdData is not enough\n");
+				}
+				extern void ch4SaveSD(char *id,char *data);
+				ch4SaveSD(sheet.ch4[i].ID,sdData);
 			}
 			}
 		

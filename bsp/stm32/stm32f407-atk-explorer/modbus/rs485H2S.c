@@ -95,8 +95,7 @@ void readH2S(int num)
 	  buf=RT_NULL;
 
 }
-
-
+extern char   sdData[DATA_LEN];
 //4中气体打包
 //输入 respFlag 为true就是回应
 //              为false就是report数据
@@ -115,7 +114,7 @@ static uint16_t h2sPack(bool respFlag)
 		char *sprinBuf=RT_NULL;
 		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
 		// 加入节点（键值对）
-		
+//		memset(sdData,0,DATA_LEN);
 	  if(respFlag==true){
 				cJSON_AddNumberToObject(root, "mid",respMid);
 				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
@@ -138,6 +137,7 @@ static uint16_t h2sPack(bool respFlag)
 		{		
 
 			if(sheet.h2s[i].workFlag==RT_TRUE){
+				sdData[0]=0;
 				nodeobj = cJSON_CreateObject();
 				cJSON_AddItemToArray(Array, nodeobj);
 			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.h2s[i].ID));
@@ -147,10 +147,15 @@ static uint16_t h2sPack(bool respFlag)
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 
 					sprintf(sprinBuf,"%02f",h2s[i]);
-					cJSON_AddItemToObject(nodeobj_p,"hydrogenSulfide",cJSON_CreateString(sprinBuf));
+					cJSON_AddItemToObject(nodeobj_p,"hydrogenSulfide",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
 			
 				sprintf(sprinBuf,"%llu",utcTime_ms());
-				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
+					if(strlen(sdData)>=(sizeof(sdData)-2)){
+						rt_kprintf("err:sdData is not enough\n");
+				}
+				extern void h2sSaveSD(char *id,char *data);
+				h2sSaveSD(sheet.h2s[i].ID,sdData);
 			}
 			}
 		

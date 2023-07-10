@@ -134,7 +134,7 @@ void readTempHum(int num)
 	  buf=RT_NULL;				
 }
 
-
+extern char   sdData[DATA_LEN];
 //温湿度值通过json格式打包
 //输入 respFlag 为true就是回应
 //              为false就是report数据
@@ -150,7 +150,7 @@ static uint16_t tempHumJsonPack(bool respFlag)
 		root = cJSON_CreateObject();
 		if (root == NULL) return 0;
 		// 加入节点（键值对）
-		
+		//memset(sdData,0,DATA_LEN);
 	  if(respFlag==true){
 				cJSON_AddNumberToObject(root, "mid",respMid);
 				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
@@ -172,6 +172,7 @@ static uint16_t tempHumJsonPack(bool respFlag)
 		for (int i = 0; i < TEMPHUM_485_NUM; i++)
 		{		
 			if(sheet.tempHum[i].workFlag==RT_TRUE){
+				sdData[0]=0;
 				nodeobj = cJSON_CreateObject();
 				cJSON_AddItemToArray(Array, nodeobj);
 			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.tempHum[i].ID));
@@ -181,12 +182,19 @@ static uint16_t tempHumJsonPack(bool respFlag)
 				nodeobj_p= cJSON_CreateObject();
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 				sprintf(sprinBuf,"%02f",thum[i].temp);
-				cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
 				sprintf(sprinBuf,"%02f",thum[i].hum );
-				cJSON_AddItemToObject(nodeobj_p,"humidity",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"humidity",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%llu",utcTime_ms());
-				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
+				extern void wenShiDuSaveSD(char *id,char *data);
+				wenShiDuSaveSD(sheet.tempHum[i].ID,sdData);//suqi
+					
+				if(strlen(sdData)>=(sizeof(sdData)-2)){
+					rt_kprintf("err:sdData is not enough\n");
+				}
+				rt_kprintf("%sSD data：%s",sign,sdData);//自带换行
 			}
 		}
 		}

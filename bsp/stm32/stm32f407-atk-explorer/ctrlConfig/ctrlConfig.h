@@ -9,7 +9,7 @@
 
 
 
-#define INOUTNAME_LEN    8
+#define INOUTNAME_LEN    9
 
 //typedef struct{
 //	

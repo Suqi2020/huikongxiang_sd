@@ -229,7 +229,7 @@ uint16_t circulaJsonPack(bool respFlag)
 		root = cJSON_CreateObject();
 		if (root == NULL) return 0;
 		// 加入节点（键值对）
-		
+		memset(sdData,0,DATA_LEN);
 		if(respFlag==true){
 			  cJSON_AddNumberToObject(root, "mid",respMid);
 				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
@@ -278,9 +278,6 @@ uint16_t circulaJsonPack(bool respFlag)
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
 
 					huanLiuTxtSaveSD(sheet.cirCula[i].ID,sdData);//suqi
-					//rt_thread_delay(10);
-					
-					
 					
 					if(strlen(sdData)>=(sizeof(sdData)-2)){
 						rt_kprintf("err:sdData is not enough\n");

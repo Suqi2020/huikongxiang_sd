@@ -92,11 +92,11 @@ void  dispoutputNameInterf()
 				buf[i]=outName[su8OutNameCfgIndex][i];
 		}
 		int j=0;
-		while((Len+j)<INOUTNAME_LEN){
+		while((j)<2){
 				buf[Len+j]=0xff;
 				j++;
 		}
-		LCDWtite(DISP_OUTPUT_INTERFACE_ADDR,buf,NAME_LEN);
+		LCDWtite(DISP_OUTPUT_INTERFACE_ADDR,buf,Len+2);
 		
 		//显示输出接口 {"DO","V3O","V5O","SWITCH"}中的一个
 }

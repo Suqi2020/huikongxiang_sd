@@ -36,21 +36,19 @@ void  logPrint()
 {
 				bufLen=0;
 			  while(true==Read_RingBuff2((uint8_t *)printBuf+bufLen)){
-					  //printf("/%c",printBuf[bufLen]);
 
 						if((bufLen+1)==sizeof(printBuf)){
 							printBuf[bufLen-1]='\n';
 							printBuf[bufLen]=0;
 							logSaveToSD(printBuf,strlen(printBuf));
-							//printf("%s",printBuf);
+							printf("%s",printBuf);
 							bufLen=0;
 							break;
 						}
-						//if(printBuf[bufLen]!=0){
 					  if(printBuf[bufLen]=='\n'){
 							  printBuf[bufLen+1]=0;
 								logSaveToSD(printBuf,strlen(printBuf));
-							  //printf("%s",printBuf);
+							  printf("%s",printBuf);
 							  bufLen=0;
 							  break;
 						}
@@ -82,8 +80,18 @@ void  rtcCheck()
 }
 
 
-extern void huanLiuDelEarlyTxt();
-extern void juFangDelEarlyTxt();
+extern void huanLiuDelEarlyTxt(void);
+extern void juFangDelEarlyTxt(void);
+extern void fCJiangDelEarlyTxt(void);
+extern void fWaiPoDelEarlyTxt(void);
+extern void coDelEarlyTxt(void);
+extern void o2DelEarlyTxt(void);
+extern void wenShiDuDelEarlyTxt(void);
+extern void shuiWeiDelEarlyTxt(void);
+extern void h2sDelEarlyTxt(void);
+extern void lieFengYiDelEarlyTxt(void);
+extern void jingGaiDelEarlyTxt(void);
+extern void ch4DelEarlyTxt(void);
 void  modbusDataCheck()
 {
 			static int count =30;
@@ -91,6 +99,16 @@ void  modbusDataCheck()
 	    if(count%60==0){
 					huanLiuDelEarlyTxt();
 				  juFangDelEarlyTxt();
+					fCJiangDelEarlyTxt();
+				  fWaiPoDelEarlyTxt();
+					coDelEarlyTxt();
+					o2DelEarlyTxt();
+					wenShiDuDelEarlyTxt();
+					shuiWeiDelEarlyTxt();
+					h2sDelEarlyTxt();
+					lieFengYiDelEarlyTxt();
+					jingGaiDelEarlyTxt();
+					ch4DelEarlyTxt();
 				  rt_kprintf("%scheck DATA\n",task);
 			}
 			

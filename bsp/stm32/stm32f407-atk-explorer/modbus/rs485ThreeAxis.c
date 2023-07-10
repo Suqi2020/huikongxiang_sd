@@ -179,6 +179,9 @@ void readThreeTempAcc(int num)
 //三轴相关值通过json打包
 
 
+
+extern char   sdData[DATA_LEN];
+
 //输入 respFlag 为true就是回应
 //              为false就是report数据
 static uint16_t threeAxisJsonPack(bool respFlag)
@@ -198,7 +201,7 @@ static uint16_t threeAxisJsonPack(bool respFlag)
 		// 加入节点（键值对）
 		
 		
-	
+	// memset(sdData,0,DATA_LEN);
 		if(respFlag==true){
 			  cJSON_AddNumberToObject(root, "mid",respMid);
 				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
@@ -223,6 +226,7 @@ static uint16_t threeAxisJsonPack(bool respFlag)
 		{		
 
 			if(sheet.threeAxiss[i].workFlag==RT_TRUE){
+				sdData[0]=0;
 				nodeobj = cJSON_CreateObject();
 				cJSON_AddItemToArray(Array, nodeobj);
 			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.threeAxiss[i].ID));
@@ -234,16 +238,23 @@ static uint16_t threeAxisJsonPack(bool respFlag)
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 				
 				sprintf(sprinBuf,"%02f",threeAxisp[i].temp);
-				cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf));   strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",threeAxisp[i].acclrationX);
-				cJSON_AddItemToObject(nodeobj_p,"accelerationX",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"accelerationX",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",threeAxisp[i].acclrationY);
-				cJSON_AddItemToObject(nodeobj_p,"accelerationY",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"accelerationY",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",threeAxisp[i].acclrationZ);
-				cJSON_AddItemToObject(nodeobj_p,"accelerationZ",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"accelerationZ",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
 				sprintf(sprinBuf,"%llu",utcTime_ms());
-				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));
+				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
+				if(strlen(sdData)>=(sizeof(sdData)-2)){
+					rt_kprintf("err:sdData is not enough\n");
+				}
+				extern void fWaiPoSaveSD(char *id,char *data);
+				fWaiPoSaveSD(sheet.threeAxiss[i].ID,sdData);
+//					rt_thread_delay(10);
+				rt_kprintf("%sSD sdData：%s",sign,sdData);//自带换行
 			}
 		}
 		}

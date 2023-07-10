@@ -108,6 +108,7 @@ rt_bool_t heartRespFun(cJSON  *Json)
 //需要判断devid 和消息ID一致才认为注册成功
 rt_bool_t comRespFun(cJSON  *Json,uint32_t mesgID)
 {
+	#if 0
 		cJSON  *time =cJSON_GetObjectItem(Json,"timestamp");
 	  rt_kprintf("%stime:%s\n\r",sign,time->valuestring);
 		static uint64_t u64getTick_p;
@@ -118,6 +119,7 @@ rt_bool_t comRespFun(cJSON  *Json,uint32_t mesgID)
 			  correctLcdTime(u64getTick_p/1000);
 			  rt_kprintf("%stime:RTC 误差大于3秒 校时\r\n",sign);
 		}
+	#endif   //suqi  只用心跳回应来校时
 		cJSON  *msg =cJSON_GetObjectItem(Json,"msg");
 		rt_kprintf("%sreg msg %s\r\n",sign,msg->valuestring);
 		cJSON  *mid =cJSON_GetObjectItem(Json,"mid");

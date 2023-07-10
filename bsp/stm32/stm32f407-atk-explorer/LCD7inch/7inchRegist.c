@@ -23,13 +23,13 @@ uint8_t  sendLCDBuf[LCD_BUF_LEN];
 //往LCD屏幕发送数据 调用底层串口发送函数
  void LCDDataSend(uint8_t *buf,int lenth)
 {
-	 //rt_kprintf("%s LCD send:",sign);
+//	 rt_kprintf("%s LCD send:",sign);
 	 for(int i=0;i<lenth;i++){
 		 HAL_UART_Transmit(&huart2,buf+i,1,1000); //串口5被sd卡占用  改成了串口2
-		 //rt_kprintf("%02x ",buf[i]);
+//		 rt_kprintf("%02x ",buf[i]);
 	 }
 	 rt_thread_mdelay(5);//两个相邻数据包 分包
-	 //rt_kprintf("\n");
+//	 rt_kprintf("\n");
 	
 }
 //结果 return 0-回应错误  1-回复正确

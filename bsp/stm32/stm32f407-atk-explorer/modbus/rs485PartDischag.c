@@ -458,7 +458,7 @@ uint16_t partDischagJsonPack(bool respFlag)
 		root = cJSON_CreateObject();
 		if (root == NULL) return 0;
 		// 加入节点（键值对）
-	
+//		memset(sdData,0,DATA_LEN);
 		if(respFlag==true){
 				cJSON_AddNumberToObject(root, "mid",respMid);
 				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
@@ -491,29 +491,29 @@ uint16_t partDischagJsonPack(bool respFlag)
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 				
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeA);
-				cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
+				cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf));   strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqA);
 				cJSON_AddItemToObject(nodeobj_p,"freqA",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeA);
 				cJSON_AddItemToObject(nodeobj_p,"dischargesdDataA",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeB);
-				cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
+				cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));		strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqB);
-				cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
+				cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));	strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeB);
-				cJSON_AddItemToObject(nodeobj_p,"dischargesdDataB",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
+				cJSON_AddItemToObject(nodeobj_p,"dischargesdDataB",cJSON_CreateString(sprinBuf));	strcat(sdData,sprinBuf);strcat(sdData,"  ");
 //				cJSON_AddItemToObject(nodeobj_p,"prpdsdDataB",cJSON_CreateString(""));
 //				cJSON_AddItemToObject(nodeobj_p,"prpssdDataB",cJSON_CreateString(""));
 				
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeC);
-				cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
+				cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));	strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqC);
-				cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
+				cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));	strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeC);
-				cJSON_AddItemToObject(nodeobj_p,"dischargesdDataC",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
+				cJSON_AddItemToObject(nodeobj_p,"dischargesdDataC",cJSON_CreateString(sprinBuf));	strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%llu",utcTime_ms());
-				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
+				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); 	strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
 				if(strlen(sdData)>=(sizeof(sdData)-2)){
 					rt_kprintf("err:sdData is not enough\n");
 				}
