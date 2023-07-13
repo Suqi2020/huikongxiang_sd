@@ -41,14 +41,14 @@ void  logPrint()
 							printBuf[bufLen-1]='\n';
 							printBuf[bufLen]=0;
 							logSaveToSD(printBuf,strlen(printBuf));
-							printf("%s",printBuf);
+							//printf("%s",printBuf);
 							bufLen=0;
 							break;
 						}
 					  if(printBuf[bufLen]=='\n'){
 							  printBuf[bufLen+1]=0;
 								logSaveToSD(printBuf,strlen(printBuf));
-							  printf("%s",printBuf);
+							  //printf("%s",printBuf);
 							  bufLen=0;
 							  break;
 						}

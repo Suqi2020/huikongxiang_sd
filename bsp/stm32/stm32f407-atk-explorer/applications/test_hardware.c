@@ -544,3 +544,57 @@ int offline()
 //FINSH_FUNCTION_EXPORT(offline, offline finsh);//FINSH_FUNCTION_EXPORT_CMD
 MSH_CMD_EXPORT(offline,offline stamp);//FINSH_FUNCTION_EXPORT_CMD
 
+
+
+void sdSize_p(int *tot,int *fre)
+{
+	DWORD fre_clust;
+	FATFS *pfs;
+//	int tot_sect,fre_sect;
+  int res_flash = f_getfree("0:", &fre_clust, &pfs); 
+	
+  if(FR_OK==0){
+  /* 计算得到总的扇区个数和空扇区个数 */
+		 *tot = (pfs->n_fatent - 2) * pfs->csize;
+		 *fre = fre_clust * pfs->csize;
+	}
+	else{
+		rt_kprintf("err:sdSize read %d\n",FR_OK);
+	}
+}
+int SDSize()
+{
+	if(gbSDExit==false){
+				goto ERROR;
+	}
+//	DWORD fre_clust;
+//	FATFS *pfs;
+	int tot_sect,fre_sect;
+//  int res_flash = f_getfree("0:", &fre_clust, &pfs); 
+//	
+//  if(FR_OK==0){
+//  /* 计算得到总的扇区个数和空扇区个数 */
+//		 tot_sect = (pfs->n_fatent - 2) * pfs->csize;
+//		 fre_sect = fre_clust * pfs->csize;
+//	}
+//	else{
+//		rt_kprintf("err:sdSize read %d\n",FR_OK);
+//	}
+  sdSize_p(&tot_sect,&fre_sect);
+  /* 打印信息(4096 字节/扇区) */
+	ERROR:
+	if(gbSDExit==true){
+		  rt_kprintf("设备总空间:%ukB 可用空间:%ukB。\n", (tot_sect>>1), (fre_sect>>1));
+			rt_kprintf("设备总空间:%.2fGB 可用空间:%.2fGB。\n", (float)tot_sect/2/1024/1024, (float)fre_sect/2/1024/1024);
+	}
+	else{
+			rt_kprintf("err:sd not exit\n");
+	}
+	return 0;
+}
+//FINSH_FUNCTION_EXPORT(offline, offline finsh);//FINSH_FUNCTION_EXPORT_CMD
+MSH_CMD_EXPORT(SDSize,SDSize stamp);//FINSH_FUNCTION_EXPORT_CMD
+
+
+
+

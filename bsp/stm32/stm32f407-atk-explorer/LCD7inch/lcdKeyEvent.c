@@ -140,7 +140,7 @@ void  lastJinggaiIndex(void);
 void  dispJinggaiData(void);
 void  LCDDispSDState(uint8_t state);
 void  LCDDispSoftVer(void);
-
+void LCDDispSDSize();
 void ledOnOff(uint8_t value)
 {
 		uint8_t buf[2];
@@ -577,6 +577,7 @@ void  keyReturn(uint16_t keyAddr)
 				break;
 			case KEY_SD_STATE_ADDR:
 				LCDDispSDState((uint8_t)gbSDExit );
+			  LCDDispSDSize();
 				break;
 			///////////output_end///////////////
 //#define        KEY_ANA_SUBNAME_INTERFACE_ADDR     0x522C
@@ -869,7 +870,7 @@ void LCDDispSaveOK()
 	 buf[11]=0xff;
 	 buf[10]=0xff;
 	
-	 LCDWtite(KEY_SAVEOK_ADDR,buf,10);
+	 LCDWtite(KEY_SAVEOK_ADDR,buf,11);
 }
 
 void LCDClearRstOK()
@@ -884,10 +885,11 @@ void LCDClearRstOK()
 void LCDDispRstOK()
 {
 	 uint8_t buf[13]="RESET SUCC";
-	 buf[11]=0xff;
-	 buf[12]=0xff;
+	 int len =strlen((char *)buf);
+	 buf[len++]=0xff;
+	 buf[len++]=0xff;
 	
-	 LCDWtite(KEY_RESETOK_ADDR,buf,10);
+	 LCDWtite(KEY_RESETOK_ADDR,buf,len);
 }
 
 
@@ -896,6 +898,7 @@ void LCDDispRstOK()
 void LCDDispSameID(uint16_t addr)
 {
 		uint8_t buf[14]="ERR:SAME ID";
+	  
 		buf[12]=0xff;
 		buf[13]=0xff;
 	
@@ -1006,3 +1009,54 @@ void LCDDispSDState(uint8_t state )
 
 	 LCDWtite(SD_STATE_ADDR,(uint8_t *)buf,2);
 }
+
+
+
+void sdSize_p(int *tot,int *fre);
+typedef union{
+	float fVal;
+	int   iVal;
+}floIntUn;
+floIntUn SDtotal,SDfree;
+//ÏÔÊ¾¿¨µÄÊ£ÓàÁ¿
+void LCDDispSDSize()
+{
+		int tot_sect,fre_sect;
+		sdSize_p(&tot_sect,&fre_sect);
+	  SDtotal.fVal=(float)tot_sect/2/1024/1024;
+	  SDfree.fVal =(float)fre_sect/2/1024/1024;
+	
+    uint8_t buf[4];
+		buf[0]=(uint8_t)(SDtotal.iVal>>24);
+		buf[1]=(uint8_t)(SDtotal.iVal>>16);
+		buf[2]=(uint8_t)(SDtotal.iVal>>8);
+		buf[3]=(uint8_t)(SDtotal.iVal>>0);
+		LCDWtite(SD_TOTOAL_SIZE_ADDR,(uint8_t *)buf,4);
+	
+
+		buf[0]=(uint8_t)(SDfree.iVal>>24);
+		buf[1]=(uint8_t)(SDfree.iVal>>16);
+		buf[2]=(uint8_t)(SDfree.iVal>>8);
+		buf[3]=(uint8_t)(SDfree.iVal>>0);
+		LCDWtite(SD_REMAIN_SIZE_ADDR,(uint8_t *)buf,4);
+	
+}
+//ÏÔÊ¾sd¿¨×´Ì¬
+//void LCDDispSDState(uint8_t state )
+//{
+//	 uint8_t buf[2];
+//	 buf[0]=0;
+//	 buf[1]=state;
+
+//	 LCDWtite(SD_STATE_ADDR,(uint8_t *)buf,2);
+//}
+
+////ÏÔÊ¾sd¿¨×´Ì¬
+//void LCDDispSDState(uint8_t state )
+//{
+//	 uint8_t buf[2];
+//	 buf[0]=0;
+//	 buf[1]=state;
+
+//	 LCDWtite(SD_STATE_ADDR,(uint8_t *)buf,2);
+//}
