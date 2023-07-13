@@ -550,6 +550,8 @@ void sdSize_p(int *tot,int *fre)
 {
 	DWORD fre_clust;
 	FATFS *pfs;
+	extern rt_mutex_t sdWrite_mutex;
+	rt_mutex_take(sdWrite_mutex,RT_WAITING_FOREVER);
 //	int tot_sect,fre_sect;
   int res_flash = f_getfree("0:", &fre_clust, &pfs); 
 	
@@ -561,6 +563,7 @@ void sdSize_p(int *tot,int *fre)
 	else{
 		rt_kprintf("err:sdSize read %d\n",FR_OK);
 	}
+	rt_mutex_release(sdWrite_mutex);
 }
 int SDSize()
 {
