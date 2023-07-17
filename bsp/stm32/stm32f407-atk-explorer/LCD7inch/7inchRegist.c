@@ -230,69 +230,24 @@ void LCDDispMCUID()
 //5A A5 05 82 1A0C 0001 停止
 //5A A5 05 82 1A0C 0000  开始
 //更新lcd网络状态 上下线或者触摸按键时候调用
-void LCDDispNetErrState()
-{
-	  extern rt_bool_t gbNetState;
-//	  static rt_bool_t state =RT_FALSE;//屏幕上电后默认显示也是掉线的
-//	  if(state!=gbNetState){//状态变更时候再去更新
-				uint8_t buf[10]={0};
-				buf[0]=0;
-				buf[1]=gbNetState;
-				LCDWtite(NET_ERR_DISPLAY_ADDR,buf,1*2);
 
-}
 //串口显示掉线次数
-int offLineIndex=1;
+//int offLineIndex=1;
 void  LCDDispNetOffline()
 {
 	  uint8_t buf[10]={0};
 		extern rt_bool_t gbNetState;
+		extern rt_bool_t gbNetResp;
 		//显示总共掉线次数
-		buf[0]=(uint8_t)(offLine.times>>24);
-		buf[1]=(uint8_t)(offLine.times>>16);
-		buf[2]=(uint8_t)(offLine.times>>8);
-		buf[3]=(uint8_t)(offLine.times>>0);
-		LCDWtite(NET_OFFLINE_TOTALTIMES_ADDR,buf,2*2);
-		if(offLine.times==0){
-				//显示第几次掉线
-				buf[0]=0;
-				buf[1]=0;
-				buf[2]=0;
-				buf[3]=0;
-				LCDWtite(NET_OFFLINE_TIMES_ADDR,buf,2*2);
-						//显示总共掉线的时长
-				if(gbNetState==RT_FALSE){
-					  int tick = rt_tick_get()/1000;
-						buf[0]=(uint8_t)(tick>>24);
-						buf[1]=(uint8_t)(tick>>16);
-						buf[2]=(uint8_t)(tick>>8);
-						buf[3]=(uint8_t)(tick>>0);
-				}
-				LCDWtite(NET_OFFLINE_RELAYTIME_ADDR,buf,2*2);
-		}
-		else{ 
-				buf[0]=(uint8_t)(offLineIndex>>24);
-				buf[1]=(uint8_t)(offLineIndex>>16);
-				buf[2]=(uint8_t)(offLineIndex>>8);
-				buf[3]=(uint8_t)(offLineIndex>>0);
-				LCDWtite(NET_OFFLINE_TIMES_ADDR,buf,2*2);
-			  int offTime;
-				if(gbNetState==RT_FALSE){
-						//rt_kprintf("[offLine]a the %d Time,relayTimer %d %d秒\r\n",offLineIndex,rt_tick_get()/1000,offLine.relayTimer[offLineIndex]);
-						if(offLineIndex==offLine.times)
-								offTime=(rt_tick_get()/1000-offLine.relayTimer[offLineIndex]);//掉线了此次计数一直++
-						else
-								offTime=offLine.relayTimer[offLineIndex];
-				}
-				else{
-						//rt_kprintf("[offLine]b the %d Times,relayTimer %d 秒\r\n",offLineIndex,offLine.relayTimer[offLineIndex]);
-						offTime=offLine.relayTimer[offLineIndex];
-				}
-				buf[0]=(uint8_t)(offTime>>24);
-				buf[1]=(uint8_t)(offTime>>16);
-				buf[2]=(uint8_t)(offTime>>8);
-				buf[3]=(uint8_t)(offTime>>0);
-				LCDWtite(NET_OFFLINE_RELAYTIME_ADDR,buf,2*2);
-		}
+		buf[0]=0;
+		buf[1]=0;
+		buf[2]=0;
+		buf[3]=gbNetState;
+		LCDWtite(NET_ONLINE_ADDR,buf,2*2);
+    if(gbNetState==RT_FALSE)
+			gbNetResp=RT_FALSE;
+		buf[3]=gbNetResp;
+		LCDWtite(NET_RESP_ADDR,buf,2*2);
+		
 		
 }

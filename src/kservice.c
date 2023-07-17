@@ -1296,7 +1296,7 @@ void rt_kputs(const char *str)
  * @return The number of characters actually written to buffer.
  */
  struct rt_mailbox mbsdWriteData;
-extern int log_save_sdFlag;
+//extern int log_save_sdFlag;
 static char rt_log_buf[RT_CONSOLEBUF_SIZE];
 extern uint8_t Write_RingBuff2(uint8_t data);
 extern rt_mutex_t   printf_mutex;

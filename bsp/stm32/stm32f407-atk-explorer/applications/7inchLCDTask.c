@@ -24,7 +24,7 @@ uint8_t  lcdRecLen;
 void  LCDTask(void *parameter)
 {
 	  extern void LCDDispErrMosbusState();
-    extern void LCDDispNetErrState();
+//    extern void LCDDispNetErrState();
 	  extern void LCDDispErrModbusGet();
 		extern void LDCDispErrMosbusInfo();
 #if   USE_RINGBUF
@@ -47,8 +47,6 @@ void  LCDTask(void *parameter)
     extern void LCDDispRstOK();
 		LCDDispRstOK();
 		while(1){
-			//rt_thread_delay(1000);
-
 			
 			
 #if   USE_RINGBUF
@@ -67,10 +65,11 @@ void  LCDTask(void *parameter)
 			
 				if(rt_mq_recv(&LCDmque, lcdRecBuf+lcdRecLen, 1, 1000) == RT_EOK){
 						lcdRecLen++;
-						while(rt_mq_recv(&LCDmque, lcdRecBuf+lcdRecLen, 1, 2) == RT_EOK){
+						while(rt_mq_recv(&LCDmque, lcdRecBuf+lcdRecLen, 1, 1000) == RT_EOK){
 								lcdRecLen++;
 								if(((uint16_t)(lcdRecBuf[0]<<8)+lcdRecBuf[1])==LCD_HEAD){
 									 if(lcdRecLen>=3+lcdRecBuf[02])//一包数据收满 跳出
+										 rt_kprintf("break %d %d\n",lcdRecLen,lcdRecBuf[02]);
 										 break;
 								
 								}
@@ -93,11 +92,11 @@ void  LCDTask(void *parameter)
 						lcdRecLen=0;
 					
 				}
-				if(++dispCount>=60){
+				if(++dispCount>=1200){
 
 						dispCount=0;
 						LCDDispNetOffline();
-						LCDDispNetErrState();
+						//LCDDispNetErrState();
 						LCDDispErrModbusGet();
 						LDCDispErrMosbusInfo();
 						LCDDispErrMosbusState();

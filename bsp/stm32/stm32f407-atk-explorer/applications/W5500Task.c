@@ -152,15 +152,15 @@ void netSend(uint8_t *data,int len)
 		if(ret==0){//启动个定时器来实现重发  2s内收不到回复
 				gbNetState=RT_FALSE;//发送身边 重新联网
 				
-			  if(offLine.times<(sizeof(offLine.relayTimer)/sizeof(offLine.relayTimer[0]))){
-					  offLine.times++;
-						offLine.relayTimer[offLine.times]=rt_tick_get()/1000;
-				}
-				rt_kprintf("%snet send fail %d %d\n",task,offLine.times,sizeof(offLine.relayTimer)/sizeof(offLine.relayTimer[0]));
+//			  if(offLine.times<(sizeof(offLine.relayTimer)/sizeof(offLine.relayTimer[0]))){
+//					  offLine.times++;
+//						offLine.relayTimer[offLine.times]=rt_tick_get()/1000;
+//				}
+//				rt_kprintf("%snet send fail %d %d\n",task,offLine.times,sizeof(offLine.relayTimer)/sizeof(offLine.relayTimer[0]));
 				extern void  LCDDispNetOffline();
-				extern void  LCDDispNetErrState();
+			//	extern void  LCDDispNetErrState();
 				LCDDispNetOffline();
-			  LCDDispNetErrState();
+			  //LCDDispNetErrState();
 		}
 		else{
 				rt_kprintf("%snet send succ\n",task);

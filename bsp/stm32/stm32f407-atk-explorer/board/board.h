@@ -34,7 +34,7 @@
 #define   LCD_BUF_LEN    100
 #define   ANA_MASK       //ÆÁ±Îana
 //#define   LOG_SAVE_SD    
-//#define   USE_RINGBUF    1
+#define   USE_RINGBUF    1
 
 //#incude  <iconv.h>
 #include <rtthread.h>

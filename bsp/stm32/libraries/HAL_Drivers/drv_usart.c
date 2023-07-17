@@ -566,10 +566,19 @@ void USART2_IRQHandler(void)
 		if((__HAL_UART_GET_FLAG(&huart2,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 		{
 				HAL_UART_Receive(&huart2,&Res,1,1000); 
-			 // uartDataRec(USE_UART2,Res);
+//			  uartDataRec(USE_UART2,Res);
+			 // rt_kprintf("[%x]",Res);
+			
+			
+			#if   USE_RINGBUF
+					Write_RingBuff(Res);
+			#else
 			   rt_mq_send(&LCDmque,&Res,1);
+			#endif
+		//	 rt_kprintf("[%x]",Res);
 		}
 		HAL_UART_IRQHandler(&huart2);	
+		
 		#endif
     /* leave interrupt */
     rt_interrupt_leave();

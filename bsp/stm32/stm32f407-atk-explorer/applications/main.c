@@ -15,10 +15,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((3<<8)+24)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+25)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230713";
+const char date[]="20230717";
 
 
 
@@ -182,7 +182,6 @@ int main(void)
 		if(packFlash.acuId[0]>=0x7F){
 				rt_strcpy(packFlash.acuId,"000000000000001");//必须加上 执行cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		}    
-		
 		  /* 创建定时器 周期定时器 */
     timer1 = rt_timer_create("timer1", timeout1,
                              RT_NULL, 100,
@@ -294,17 +293,17 @@ int main(void)
 				rt_thread_startup(tidW5500);													 
 				printf("%sRTcreat w5500Task task\r\n",sign);
 		}
-		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
-		if(tidAutoCtrl!=NULL){
-				rt_thread_startup(tidAutoCtrl);													 
-				printf("%sRTcreat autoCtrlTask\r\n",sign);
-		}
+
 		tidSdRTC =  rt_thread_create("sdRTC",sdRTCTask,RT_NULL,512*4,8, 10 );
 		if(tidSdRTC!=NULL){
 				rt_thread_startup(tidSdRTC);													 
 				printf("%sRTcreat sdRTCTask\r\n",sign);
 		}
-
+		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
+		if(tidAutoCtrl!=NULL){
+				rt_thread_startup(tidAutoCtrl);													 
+				printf("%sRTcreat autoCtrlTask\r\n",sign);
+		}
 #ifdef  USE_WDT
 		extern IWDG_HandleTypeDef hiwdg;
 		static    rt_thread_t tidWDT      = RT_NULL;

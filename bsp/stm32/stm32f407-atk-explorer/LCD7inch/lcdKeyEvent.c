@@ -90,7 +90,7 @@ void coverOpen(void);
 void coverLastDisp(void);
 void coverNextDisp(void);
 void coverNowDisp(void);
-void LCDDispNetErrState(void);
+//void LCDDispNetErrState(void);
 void surePassWord(void);
 void LCDRstPw(void);
 
@@ -356,7 +356,7 @@ void  keyReturn(uint16_t keyAddr)
 			case  KEY_NETERROR_ADDR:
 				//rt_kprintf("%s°´¼ü°´ÏÂ\n",sign);
 				LCDDispNetOffline();
-		  	LCDDispNetErrState();
+//		  	LCDDispNetErrState();
 				break;
 			case  KEY_MODBUSERR_ADDR:{
 				LCDDispErrModbusGet();
@@ -364,16 +364,7 @@ void  keyReturn(uint16_t keyAddr)
 				void  LCDDispErrMosbusState();
 				LCDDispErrMosbusState();}
 				break;
-			case	NET_OFFLINE_LAST_ADDR:
-				offLineIndexLow();
-				LCDDispNetOffline();
-			  LCDDispNetErrState();
-				break;
-			case  NET_OFFLINE_NEXT_ADDR:
-				offLineIndexAdd();
-				LCDDispNetOffline();
-			  LCDDispNetErrState();
-				break;
+
 			case  KEY_SWITCH_INTERFACE_ADDR:
 				rt_kprintf("%sKEY_SWITCH_INTERFACE_ADDR \n",sign);
 				dispInterFaceIndexFun();

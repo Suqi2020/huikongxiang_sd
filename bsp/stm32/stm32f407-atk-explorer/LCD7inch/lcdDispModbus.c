@@ -896,10 +896,10 @@ modbusStru *singlConfDev=RT_NULL;//
 //modbus设备数量的映射表 需要跟modbNumEnum的列表一一对应
 #ifdef	USE_4GAS
 uint8_t numTable[]={CIRCULA_485_NUM,PARTDISCHAG_485_NUM ,PRESSSETTL_485_NUM,THREEAXIS_485_NUM,\
-										CH4_485_NUM,CO_485_NUM,H2S_485_NUM,O2_485_NUM ,WATERDEPTH_485_NUM,TEMPHUM_485_NUM,CRACKMETER_485_NUM };
+										CH4_485_NUM,CO_485_NUM,H2S_485_NUM,O2_485_NUM ,WATERDEPTH_485_NUM,TEMPHUM_485_NUM,CRACKMETER_485_NUM,COVER_485_NUM };
 #else
 uint8_t numTable[]={CIRCULA_485_NUM,PARTDISCHAG_485_NUM ,PRESSSETTL_485_NUM,THREEAXIS_485_NUM,\
-										WATERDEPTH_485_NUM,TEMPHUM_485_NUM,CRACKMETER_485_NUM  };
+										WATERDEPTH_485_NUM,TEMPHUM_485_NUM,CRACKMETER_485_NUM ,COVER_485_NUM };
 #endif
 
 //单种modbus设备分别配置  思路 做好映射关系表
@@ -1013,20 +1013,20 @@ void  	modbErrDevReadIndexLow()
 		else
 			 modbErrDevReadIndex--;
 }
-void  offLineIndexLow()  
-{
-		offLineIndex--;
-		if(offLineIndex==0){
-				offLineIndex = offLine.times;
-		}
-}
-void  offLineIndexAdd()  
-{
-		offLineIndex++;
-		if(offLineIndex>offLine.times){
-				offLineIndex = 1;
-		}
-}
+//void  offLineIndexLow()  
+//{
+//		offLineIndex--;
+//		if(offLineIndex==0){
+//				offLineIndex = offLine.times;
+//		}
+//}
+//void  offLineIndexAdd()  
+//{
+//		offLineIndex++;
+//		if(offLineIndex>offLine.times){
+//				offLineIndex = 1;
+//		}
+//}
 
 
 
@@ -1035,7 +1035,7 @@ void keyModbusCfgSure()
 {
 		if(devIDOKCheck(LCDInput.ID)!=true){//核对ID
 				LCDDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
-				rt_kprintf("%sERR:same ID\n",sign);
+				rt_kprintf("%sERR:same ID[%s]\n",sign,LCDInput.ID);
 
 		}
 		else{

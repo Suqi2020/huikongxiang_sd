@@ -26,13 +26,13 @@ void getUTCFromLCD()
 		timeRead2=(timeRead1*1000)+500;//不能简化
 	  subTimeStampSet(timeRead2);//不能简化直接带入形参 带入会导致计算错误	
 }
-void  logPrint();
+void  logSave();
 
 
 
 
 //log打印函数  注册进idle钩子函数里
-void  logPrint()
+void  logSave()
 {
 				bufLen=0;
 			  while(true==Read_RingBuff2((uint8_t *)printBuf+bufLen)){
@@ -113,7 +113,7 @@ void  modbusDataCheck()
 			}
 			
 }
-int log_save_sdFlag=0;
+
 void  sdAndRtcInit()
 {
 		rt_thread_mdelay(350);//延时2秒 不能去掉 需要等待lcd启动稳定并且同步时钟完毕再写入sd卡
@@ -121,8 +121,6 @@ void  sdAndRtcInit()
 	  changeBmp(0);
     getUTCFromLCD();
   	creatFolder();
-//	  rt_thread_idle_sethook(logPrint);
-    log_save_sdFlag=1;
 		logSaveToSD((char *)acuRst, strlen(acuRst));
 		logSaveToSD((char *)printVer, strlen(printVer));
 }
@@ -145,7 +143,7 @@ void   sdRTCTask(void *parameter)
 					rtcCheck();
 					modbusDataCheck();
 				}
-				logPrint();
+				logSave();
 #endif
 			  rt_thread_mdelay(20);
 		}

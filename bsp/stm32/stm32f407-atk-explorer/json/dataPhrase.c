@@ -136,12 +136,15 @@ rt_bool_t comRespFun(cJSON  *Json,uint32_t mesgID)
 		return RT_TRUE;
 }
 //下行数据解析
+rt_bool_t gbNetResp=RT_FALSE;
 void AllDownPhrase(char *data,int lenth)
 {
 		rt_kprintf("%sphrase len:%d\r\n",sign,lenth);
 	  if(dataCheck(data,lenth)==RT_FALSE){
+			
 				return;
 		}
+		gbNetResp=RT_TRUE;
 		char *buf=data+HEAD_LEN+LENTH_LEN;//偏移后是真实的json数据
 		int  len=lenth-HEAD_LEN-LENTH_LEN-TAIL_LEN-CRC_LEN;//获取真实的json数据长度
 		char *Buffer=(char *)rt_malloc(len+1);

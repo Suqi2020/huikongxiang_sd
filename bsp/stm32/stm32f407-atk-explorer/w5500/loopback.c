@@ -224,9 +224,11 @@ void loopback_tcp(uint16 port)
 //        netRecSendEvent();				//mqttLoopData();						     	         /*向Server发送数据*/
 			}		 
       extern rt_bool_t 	gbNetState;	
+			extern rt_bool_t  gbNetResp;
       static bool regFlag=false;			
 			if(gbNetState!=RT_TRUE){
 					gbNetState =RT_TRUE;	
+				  gbNetResp=RT_FALSE;
 					rt_kprintf("%sSOCK_ESTABLISHED\n",sign);
 				  if(regFlag==false){
 								regFlag=true;//联网后只注册一次  后期由定时器实现反复注册
