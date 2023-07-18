@@ -336,18 +336,15 @@ bool modCh4Warn2Send()
 
 //}
 
-extern int dispCH4TotlNum;
 //ch4气体json打包的二次封装
 void  ch4Read2Send(rt_bool_t netStat,bool respFlag)
 {
 		rt_kprintf("%s打包采集的ch4数据\r\n",sign);
 		 int workFlag=RT_FALSE;
-	 dispCH4TotlNum=0;
 	 for(int i=0;i<CH4_485_NUM;i++){
 		if(sheet.ch4[i].workFlag==RT_TRUE){
 					readCH4(i);
 					workFlag=RT_TRUE;
-			    dispCH4TotlNum++;
 			}
 	}
 	if(workFlag==RT_TRUE){

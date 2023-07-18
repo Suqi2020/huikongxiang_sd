@@ -7,7 +7,7 @@ extern  CIRCURStru  cirCurStru_p[CIRCULA_485_NUM];
 
 
 static int dispHuanliuIndex=0;
-int dispHuanliuTotlNum=0;
+static int dispHuanliuTotlNum=0;
 
 
 
@@ -15,6 +15,11 @@ int dispHuanliuTotlNum=0;
 void  dispHuanliuData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		for(int i=0;i<CIRCULA_485_NUM;i++){
+			if(sheet.cirCula[i].workFlag==RT_TRUE){
+				    dispHuanliuTotlNum++;
+				}
+		}
 		if(dispHuanliuTotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;

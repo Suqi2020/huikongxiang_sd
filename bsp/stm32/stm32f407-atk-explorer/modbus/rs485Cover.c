@@ -374,17 +374,14 @@ bool modCoverWarn2Send()
 
 
 
-extern int dispJinggaiTotlNum;
 //井盖状态读取并打包json格式
 void coverRead2Send(rt_bool_t netStat,bool respFlag)
 {
 	 int workFlag=RT_FALSE;
-	  dispJinggaiTotlNum=0;
 	 for(int i=0;i<COVER_485_NUM;i++){
 		if(sheet.cover[i].workFlag==RT_TRUE){
 					readCover(i);
 					workFlag=RT_TRUE;
-			    dispJinggaiTotlNum++;
 			}
 		}
 		if(workFlag==RT_TRUE){

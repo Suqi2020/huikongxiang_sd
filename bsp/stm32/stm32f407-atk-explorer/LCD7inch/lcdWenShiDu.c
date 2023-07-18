@@ -6,7 +6,7 @@ extern thStru thum[TEMPHUM_485_NUM];
 
 
 static int dispWenshiduIndex=0;
-int dispWenshiduTotlNum=0;
+static int dispWenshiduTotlNum=0;
 
 
 
@@ -14,6 +14,11 @@ int dispWenshiduTotlNum=0;
 void  dispWenshiduData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+	 for(int i=0;i<TEMPHUM_485_NUM;i++){
+		if(sheet.tempHum[i].workFlag==RT_TRUE){
+			    dispWenshiduTotlNum++;
+			}
+	}
 		if(dispWenshiduTotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;

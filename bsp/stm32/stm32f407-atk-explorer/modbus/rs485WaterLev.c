@@ -311,17 +311,16 @@ bool modPWaterLevWarn2Send()
 		sprinBuf=RT_NULL;
 		return true;
 }
-extern int dispWaterTotlNum;
+
 //水位值的读取和打包发送  仅仅做封装 供别的函数来调用
 void waterDepthRead2Send(rt_bool_t netStat,bool respFlag)
 {
 	 int workFlag=RT_FALSE;
-	 dispWaterTotlNum=0;
+
 			for(int i=0;i<WATERDEPTH_485_NUM;i++){
 					if(sheet.waterDepth[i].workFlag==RT_TRUE){
 							readWaterDepth(i);
 							workFlag=RT_TRUE;
-						  dispWaterTotlNum++;
 					}
 			}
 			if(workFlag==RT_TRUE){

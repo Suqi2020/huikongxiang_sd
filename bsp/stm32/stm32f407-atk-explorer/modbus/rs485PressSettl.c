@@ -393,17 +393,16 @@ bool modPressSetlWarn2Send()
 }
 
 
-extern int dispChenjiangTotlNum;
+
 
 //沉降仪读取并打包  供别的函数调用
 void pressSettRead2Send(rt_bool_t netStat,bool respFlag)
 {
-	  dispChenjiangTotlNum=0;
+
 	  int workFlag=RT_FALSE;
 		for(int i=0;i<PRESSSETTL_485_NUM;i++){
 				if(sheet.pressSetl[i].workFlag==RT_TRUE){
 						readPSTempHeight(i);
-					  dispChenjiangTotlNum++;
 						workFlag=RT_TRUE;
 				}
 		}

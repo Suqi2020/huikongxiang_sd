@@ -491,17 +491,14 @@ bool modThreeAxisWarn2Send()
 
 
 
-extern int dispWaipoTotlNum;
 
 //三轴读取modbus数据并打包发送 给其它函数调用
 void threeAxisRead2Send(rt_bool_t netStat,bool respFlag)
 {					
 		int workFlag=RT_FALSE;
-	  dispWaipoTotlNum=0;
 		for(int i=0;i<THREEAXIS_485_NUM;i++){
 				if(sheet.threeAxiss[i].workFlag==RT_TRUE){
 							readThreeTempAcc(i);
-					    dispWaipoTotlNum++;
 							workFlag=RT_TRUE;
 					}
 			}

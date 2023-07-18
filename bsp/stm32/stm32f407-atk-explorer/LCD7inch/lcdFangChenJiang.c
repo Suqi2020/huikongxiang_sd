@@ -5,7 +5,7 @@ extern pressSettlStru pressSettle[PRESSSETTL_485_NUM];
 
 
 static int dispChenjiangIndex=0;
-int dispChenjiangTotlNum=0;
+static int dispChenjiangTotlNum=0;
 
 
 
@@ -14,6 +14,11 @@ void  dispChenjiangData()
 {
 	
 	  uint8_t buf[MODBID_LEN+2]={0};
+		for(int i=0;i<PRESSSETTL_485_NUM;i++){
+				if(sheet.pressSetl[i].workFlag==RT_TRUE){
+						dispChenjiangTotlNum++;
+				}
+		}
 		if(dispChenjiangTotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;

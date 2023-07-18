@@ -5,7 +5,7 @@
 extern  crackMeterStru crackMeter[CRACKMETER_485_NUM];
 
 static int dispLiefengIndex=0;
-int dispLiefengTotlNum=0;
+static int dispLiefengTotlNum=0;
 
 
 
@@ -13,6 +13,11 @@ int dispLiefengTotlNum=0;
 void  dispLiefengData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		for(int i=0;i<CRACKMETER_485_NUM;i++){
+				if(sheet.crackMeter[i].workFlag==RT_TRUE){
+					  dispLiefengTotlNum++;
+				}
+		}
 		if(dispLiefengTotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;

@@ -373,17 +373,15 @@ bool modCrackMeterWarn2Send()
 
 
 
-extern int dispLiefengTotlNum;
+
 //沉降仪读取并打包  供别的函数调用
 void crackMeterRead2Send(rt_bool_t netStat,bool respFlag)
 {
 	  int workFlag=RT_FALSE;
-  	dispLiefengTotlNum=0;
 		for(int i=0;i<CRACKMETER_485_NUM;i++){
 				if(sheet.crackMeter[i].workFlag==RT_TRUE){
 						readCrackMeter(i);
 						workFlag=RT_TRUE;
-					  dispLiefengTotlNum++;
 				}
 		}
 		if(workFlag==RT_TRUE){

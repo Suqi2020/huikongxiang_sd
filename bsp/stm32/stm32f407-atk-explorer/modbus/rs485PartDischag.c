@@ -722,17 +722,15 @@ uint16_t partDischagJsonPack(bool respFlag)
 //		data=NULL;
 //		return 1;
 //}
-extern int dispJufangTotlNum;
+
 ///局放的读取和发送  供其他函数来调用
 void partDischagRead2Send(rt_bool_t netStat,bool respFlag)
 {
 		int workFlag=RT_FALSE;
-	  dispJufangTotlNum=0;
 		for(int i=0;i<PARTDISCHAG_485_NUM;i++){
 			 if(sheet.partDischag[i].workFlag==RT_TRUE){
 				    rt_thread_mdelay(200);
 						readPdFreqDischarge(i);
-				    dispJufangTotlNum++;
 						workFlag=RT_TRUE;
 				}
 		}

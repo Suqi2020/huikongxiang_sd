@@ -7,7 +7,7 @@ extern coverStru cover[COVER_485_NUM];
 
 
 static int dispJinggaiIndex=0;
-int dispJinggaiTotlNum=0;
+static int dispJinggaiTotlNum=0;
 
 
 
@@ -15,6 +15,11 @@ int dispJinggaiTotlNum=0;
 void  dispJinggaiData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		for(int i=0;i<COVER_485_NUM;i++){
+			if(sheet.cover[i].workFlag==RT_TRUE){
+			    dispJinggaiTotlNum++;
+			}
+		}
 		if(dispJinggaiTotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;

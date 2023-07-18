@@ -3,11 +3,16 @@
 
 extern float ch4[CH4_485_NUM];
 static int dispCH4Index=0;
-int dispCH4TotlNum=0;
+static int dispCH4TotlNum=0;
 //显示环流界面71.bmp的所有数据
 void  dispCH4Data()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+	  for(int i=0;i<CH4_485_NUM;i++){
+			if(sheet.ch4[i].workFlag==RT_TRUE){
+						dispCH4TotlNum++;
+				}
+		}
 		if(dispCH4TotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;

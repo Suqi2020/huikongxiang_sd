@@ -7,7 +7,7 @@ extern  CIRCURStru  cirCurStru_p[CIRCULA_485_NUM];
 
 
 static int dispJufangIndex=0;
-int dispJufangTotlNum=0;
+static int dispJufangTotlNum=0;
 
 extern partDischargeStru partDiscStru_p[PARTDISCHAG_485_NUM];
 
@@ -15,6 +15,11 @@ extern partDischargeStru partDiscStru_p[PARTDISCHAG_485_NUM];
 void  dispJufangData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		for(int i=0;i<PARTDISCHAG_485_NUM;i++){
+			 if(sheet.partDischag[i].workFlag==RT_TRUE){
+				    dispJufangTotlNum++;
+				}
+		}
 		if(dispJufangTotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;

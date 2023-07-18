@@ -7,7 +7,7 @@ extern threeAxisStru threeAxisp[THREEAXIS_485_NUM];
 
 
 static int dispWaipoIndex=0;
-int dispWaipoTotlNum=0;
+static int dispWaipoTotlNum=0;
 
 
 
@@ -15,6 +15,11 @@ int dispWaipoTotlNum=0;
 void  dispWaipoData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		for(int i=0;i<THREEAXIS_485_NUM;i++){
+				if(sheet.threeAxiss[i].workFlag==RT_TRUE){
+					  dispWaipoTotlNum++;
+				}
+		}
 		if(dispWaipoTotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;

@@ -489,18 +489,18 @@ bool modCirCurrWarn2Send()
 
 
 
-extern int dispHuanliuTotlNum;
+
 //环流读取并打包发送  仅仅做封装而已
 	//输入 respFlag 为true就是回应
 //              为false就是report数据
 void circulaRead2Send(rt_bool_t netStat,bool respFlag)
 {					
-	  dispHuanliuTotlNum=0;
+	 
 		int workFlag=RT_FALSE;
 		for(int i=0;i<CIRCULA_485_NUM;i++){
 			if(sheet.cirCula[i].workFlag==RT_TRUE){
 						readCirCurrAndWaring(i);
-				    dispHuanliuTotlNum++;
+
 						workFlag=RT_TRUE;
 				}
 		}

@@ -2,11 +2,16 @@
 
 extern float waterDepth[WATERDEPTH_485_NUM];
 static int dispWaterIndex=0;
-int dispWaterTotlNum=0;
+static int dispWaterTotlNum=0;
 //显示环流界面71.bmp的所有数据
 void  dispWaterData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+			for(int i=0;i<WATERDEPTH_485_NUM;i++){
+					if(sheet.waterDepth[i].workFlag==RT_TRUE){
+						  dispWaterTotlNum++;
+					}
+			}
 		if(dispWaterTotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;
