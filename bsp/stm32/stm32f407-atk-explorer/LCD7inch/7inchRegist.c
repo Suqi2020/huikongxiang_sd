@@ -236,15 +236,16 @@ void LCDDispMCUID()
 void  LCDDispNetOffline()
 {
 	  uint8_t buf[10]={0};
-		extern rt_bool_t gbNetState;
+
 		extern rt_bool_t gbNetResp;
+		extern rt_bool_t gbNetState_p;
 		//显示总共掉线次数
 		buf[0]=0;
 		buf[1]=0;
 		buf[2]=0;
-		buf[3]=gbNetState;
+		buf[3]=gbNetState_p;
 		LCDWtite(NET_ONLINE_ADDR,buf,2*2);
-    if(gbNetState==RT_FALSE)
+    if(gbNetState_p==RT_FALSE)
 			gbNetResp=RT_FALSE;
 		buf[3]=gbNetResp;
 		LCDWtite(NET_RESP_ADDR,buf,2*2);

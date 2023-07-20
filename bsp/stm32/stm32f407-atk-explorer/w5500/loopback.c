@@ -186,7 +186,8 @@ void loopback_tcps(SOCKET s, uint16 port)
 #endif
 
 
-//extern int mqttRet;
+//extern int mqttRet;ACR_BYTE0_ADDRESS
+
 void loopback_tcp(uint16 port)
 {
 	 uint16 netRxBufLen=0;	
@@ -196,6 +197,7 @@ void loopback_tcp(uint16 port)
 		case SOCK_CLOSED:											        		         /*socket处于关闭状态*/
 			socket(SOCK_TCPC,Sn_MR_TCP,port,Sn_MR_ND);
 		  gbNetState=RT_FALSE;
+
 		  rt_kprintf("%sSOCK_CLOSED\n",sign);
 		  break;
 		case SOCK_INIT:													        	         /*socket处于初始化状态*/

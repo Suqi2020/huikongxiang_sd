@@ -130,7 +130,7 @@ void  correctLcdTime(uint32_t time)
 	  uint32_t ret=0;
 	  memset(&readRtc,0,sizeof(readRtc));
 		readLcdRTC();
-	  rt_thread_mdelay(100);  //延时等待回应
+	  rt_thread_mdelay(200);  //延时等待回应
 		if(readRtc.year!=0){
 				if((ret=abs(time-beijingTime_to_utc(readRtc)))>3){
 					  rt_kprintf("time corret[%d]\n",ret);
@@ -146,7 +146,7 @@ uint32_t lcdUtcTime_beijing()
 
 	  memset(&readRtc,0,sizeof(readRtc));
 		readLcdRTC();
-	  rt_thread_mdelay(100);  //延时等待回应
+	  rt_thread_mdelay(200);  //延时等待回应
 	
 	 	rt_kprintf("[read]%d年%d月%d日%d时%d分%d秒\r\n",readRtc.year,readRtc.month,readRtc.day,\
   	readRtc.hour,readRtc.minute,readRtc.second );

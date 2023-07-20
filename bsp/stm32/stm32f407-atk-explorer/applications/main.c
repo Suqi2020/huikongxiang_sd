@@ -15,10 +15,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((3<<8)+26)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+27)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230718";
+const char date[]="20230720";
 
 
 
@@ -99,14 +99,43 @@ extern rt_bool_t gbNetState;
 
 /* 定时器的控制块 */
 static rt_timer_t timer1;
-
+rt_bool_t gbNetState_p=RT_TRUE;
+static  int netTick=0;
+static void netStateSet()
+{
+		if(gbNetState==RT_TRUE){
+			if(gbNetState_p==RT_FALSE){
+						netTick++;
+						if(netTick>=30){
+								gbNetState_p=RT_TRUE;	
+						}
+				}
+  	}
+		else{
+					gbNetState_p=RT_FALSE;
+				  netTick=0;
+		}
+}
+void  netLedLight()
+{
+	  static int count=0;
+    count++;
+		if(gbNetState_p==RT_TRUE){
+				if(count%10==0){
+						HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+				}
+		}
+		else{
+				HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		}
+}
 //static int cnt = 0;
 /* 定时器1超时函数 每100ms进去一次*/
 //10秒提醒一次 uart offline状态
 static void timeout1(void *parameter)
 {
 		static int count=0;
-	  static int alarmTick=10;
+//	  static int alarmTick=10;
 		extern rt_bool_t gbNetState;
 	  extern void timeInc();
 	  extern void FatReadDirDelEarlyLogTxt();
@@ -117,29 +146,11 @@ static void timeout1(void *parameter)
 				if(count%(100)==0)//10秒提醒一下
 						printf("%s请插入TF卡并重启设备\n",sign);
 		}
-
-	  if(count%10==0)
+	  if(count%10==0){
 				timeInc();
-		if(gbNetState==RT_TRUE){
-				if(count%10==0){
-						HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-				}
 		}
-		else
-				HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-		if(count%alarmTick==0){
-			  alarmTick+=20;
-			  if(alarmTick>=100){
-						alarmTick=100;// 1 2 3 最终10秒提醒一次
-				}
-
-//				modbusWorkErrCheck();//modbus 错误工作状态打印
-//				errConfigCheck();//	modbusWorkErrCheck();//errConfigCheck();
-				//modbusPrintRead();
-//				if(gbNetState ==RT_FALSE){
-//						kprintf("%sERR:网络故障\n",sign);
-//				}
-		}
+		netStateSet();
+		netLedLight();
 }
 char *strnum="1234.5678";
 //double atof(const char *s);
