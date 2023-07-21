@@ -19,33 +19,24 @@ void  autoCtrlRun()
 		volatile int i,j,k;
 	  bool inputflag;
 		for(i=0;i<CRTL_TOTAL_NUM;i++){
-			  //rt_kprintf("%srun %d\n",sign,i);
 			  inputflag=true;;
 				if(sheet.autoctrl[i].workFlag==true){
 						for(j=0;j<CRTL_IN_NUM;j++){
 								if((sheet.autoctrl[i].input[j].flag!=NULL)&&((uint32_t)(uint32_t*)(sheet.autoctrl[i].input[j].flag)!=0xFFFFFFFF)){//指针全部不为空
 										if(*sheet.autoctrl[i].input[j].flag==false){//如果有一个标记不成立 跳出（因为所有标记的关系是与）
-												//rt_kprintf("%s ctrl[%d] input[%d] flag not ok \n",sign,i+1,j+1);
 												inputflag=false;//有一个条件不符合就标记false
 											  break;
 										}
-										//else
-											//rt_kprintf("%s ctrl[%d]  input[%d] flag ok\n",sign,i+1,j+1);
 								}
 						}
 						if(inputflag==true){//输入条件全部满足了  执行输出 此处仅仅是置位标记位  需要在另一个函数中调用
 							  for(k=0;k<CRTL_OUT_NUM;k++){
 										if((sheet.autoctrl[i].output[k].flag!=NULL)&&((uint32_t)(uint32_t*)(sheet.autoctrl[i].output[k].flag)!=0xFFFFFFFF)){//指针不为空
 												*sheet.autoctrl[i].output[k].flag=true;//执行  调用指针执行的flag标记
-											  //rt_kprintf("%s ctrl[%d]  output[%d] flag is set \n",sign,i+1,k+1);
 										}
-//										else
-//												*sheet.autoctrl[i].output[k].flag=false;
 								}
 						}
-						
 				}
-				
 		}
 }
 
@@ -286,19 +277,16 @@ void  ctrlOutSetIO()
 			for(i=0;i<DO_NUM;i++){
 					if(inpoutpFlag.digOutput[i].lowFlag==true){
 							digOutputOFFFun(i);
-						  //rt_kprintf("%s ctrlOutSetIO DO off %d\n",sign,i);
 						  doUpLowFlag[i]=1;
 						  inpoutpFlag.digOutput[i].lowFlag=false;//z执行完就清掉 下一轮重新判断执行设置IO
 					}
 					else{
 							if(doUpLowFlag[i]==1){
 									digOutputONFun(i);
-								 // rt_kprintf("%s DO on %d\n",sign,i);
 							}
 					}
 					if(inpoutpFlag.digOutput[i].upFlag==true){
 							digOutputONFun(i);
-						  //rt_kprintf("%s ctrlOutSetIO DO on %d\n",sign,i);
 						  doUpLowFlag[i]=2;
 						  inpoutpFlag.digOutput[i].upFlag=false;
 					}

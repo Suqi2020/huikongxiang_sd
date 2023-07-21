@@ -40,8 +40,9 @@ void lcdCopyOutputID(uint8_t *rec)
 			LCDDispSameID(DISP_OUTPUT_SAME_ID_MSG_ADDR);
 		  rt_kprintf("%sERR:same ID\n",sign);
 	}
-	else 
+	else{ 
 		  LCDRstDispSameID(DISP_OUTPUT_SAME_ID_MSG_ADDR);
+	}
 }
 //拷贝输入的type到outputLCD中
 void lcdCopyOutputModel(uint8_t *rec)
@@ -109,7 +110,11 @@ void  lcdOutputConfig()
 		if(devIDOKCheck(outputLCD.devID)!=true){//核对ID
 				LCDDispSameID(DISP_OUTPUT_SAME_ID_MSG_ADDR);
 				rt_kprintf("%sERR:same ID\n",sign);
+			  return;
 		}
+//		else{
+
+//		}
 		switch(su8OutNameCfgIndex)
 		{
 			case 0:
@@ -157,6 +162,10 @@ void  lcdOutputConfig()
 				}
 				break;
 		}
+			extern void LCDDispIDcfgOK(uint16_t addr);
+			LCDDispIDcfgOK(DISP_OUTPUT_SAME_ID_MSG_ADDR);
+			rt_thread_mdelay(2000);
+			LCDRstDispSameID(DISP_OUTPUT_SAME_ID_MSG_ADDR);
 }
 
 

@@ -28,7 +28,6 @@ char  modCurrtID[20];
 //通过ID删除modbus列表
 void delModbusDevbyID(char *ID)
 {
-		//if(rt_strcmp(sheet.cirCula[modPosit[modbDevReadIndex].Y].ID,ID)==0){
 				switch(modPosit[modbDevReadIndex].X){
 					case CIRCULA:	
 						sheet.cirCula[modPosit[modbDevReadIndex].Y].workFlag=RT_FALSE;
@@ -77,10 +76,6 @@ void delModbusDevbyID(char *ID)
 				}
 				rt_kprintf("%sfind ID\n",sign);
 				modPosit[modbDevReadIndex].flag=0;
-		//}
-//		else{
-//			rt_kprintf("%sID[%s][%s]\n",sign,sheet.cirCula[modPosit[modbDevReadIndex].Y].ID,ID);
-//		}
 }	
 typedef struct{
 		char  name[25];
@@ -129,7 +124,6 @@ void LCDDispErrModbusGet()
 											modPositErr[modbErrTotalIndex].Y=j;
 											modPositErr[modbErrTotalIndex].flag=1;
 											modbErrTotalIndex++;
-//										  rt_kprintf("err cirCula %d\n",j);
 									}
 							}
 					}
@@ -276,12 +270,7 @@ void LCDDispErrModbusGet()
 		}
 		rt_kprintf("%s errmodbus device num[%d]get\n",sign,modbErrTotalIndex);
 }
-//char name[25]={0};
-//char  ID[20]={0};
-//char  model[8]={0};
-//uint8_t   port=0;
-//uint8_t   addr=0;
-//uint32_t  colTime=0;
+
 LCDDispModInfoStru  modbusLCDRead={0};
 
 
@@ -907,7 +896,6 @@ uint8_t numTable[]={CIRCULA_485_NUM,PARTDISCHAG_485_NUM ,PRESSSETTL_485_NUM,THRE
 //不同种类modbus设备配置 输入为modbus种类
 static int singlModbConf(int num)
 {
-//		int i=0;
 		int ret=0;
 		singlConfDev=sheet.cirCula;//指针指向
 		for(int z=0;z<num;z++){
@@ -916,33 +904,19 @@ static int singlModbConf(int num)
 		singlConcalTime=&sheet.cirCulaColTime+num*1;//指针指向 
 		*singlConcalTime=LCDInputTime;
 		rt_kprintf("%saddr 0x%08X 0x%08X 0x%08X 0x%08X \n",sign,&sheet.cirCulaColTime,singlConcalTime,&sheet.crackMeterColTime);
-//		for( i=0;i<numTable[num];i++){//核对有没有配置过
-//				if(rt_strcmp(singlConfDev[i].ID,LCDInput.ID)==0){//配置过
-//						singlConfDev[i].workFlag=RT_TRUE;//打开
-//						singlConfDev[i].slaveAddr=LCDInput.slaveAddr;	
-//						singlConfDev[i].useUartNum=UartNum[LCDInput.useUartNum];
-//						rt_strcpy(singlConfDev[i].model,LCDInput.model);
-//						rt_kprintf("%s %s reconfig %d\n",sign,modbusName[num],i+1);
-//						ret =1;
-//						LCDDispModbusGet();
-//						break;
-//				}
-//		}
-//		if(i==numTable[num]){//没有配置过
-				for(int j=0;j<numTable[num];j++){
-						if(singlConfDev[j].workFlag!=RT_TRUE){
-								singlConfDev[j].workFlag=RT_TRUE;//打开
-								singlConfDev[j].slaveAddr=LCDInput.slaveAddr;	
-								singlConfDev[j].useUartNum=UartNum[LCDInput.useUartNum];
-								rt_strcpy(singlConfDev[j].model,LCDInput.model);
-								rt_strcpy(singlConfDev[j].ID,LCDInput.ID);
-								rt_kprintf("%s %s config %d\n",sign,modbusName[num],j);
-								ret =1;
-								LCDDispModbusGet();
-								break;
-						}
+		for(int j=0;j<numTable[num];j++){
+				if(singlConfDev[j].workFlag!=RT_TRUE){
+						singlConfDev[j].workFlag=RT_TRUE;//打开
+						singlConfDev[j].slaveAddr=LCDInput.slaveAddr;	
+						singlConfDev[j].useUartNum=UartNum[LCDInput.useUartNum];
+						rt_strcpy(singlConfDev[j].model,LCDInput.model);
+						rt_strcpy(singlConfDev[j].ID,LCDInput.ID);
+						rt_kprintf("%s %s config %d\n",sign,modbusName[num],j);
+						ret =1;
+						LCDDispModbusGet();
+						break;
 				}
-//		}
+		}
 		return ret;
 }
 
@@ -967,7 +941,6 @@ void dispCinaName(uint8_t *buf)
 				j++;
 		}
 		LCDWtite(MODBUS_CFG_NAME2_ADDR,buf,sizeof(modbusName[chinaNameIndex]));
-//		LCDWtite(MODBUS_CFG_NAME_ADDR,buf,sizeof(modbusName[chinaNameIndex])); 
 }
 void dispChinaNameIndexLow()
 {
@@ -1013,21 +986,6 @@ void  	modbErrDevReadIndexLow()
 		else
 			 modbErrDevReadIndex--;
 }
-//void  offLineIndexLow()  
-//{
-//		offLineIndex--;
-//		if(offLineIndex==0){
-//				offLineIndex = offLine.times;
-//		}
-//}
-//void  offLineIndexAdd()  
-//{
-//		offLineIndex++;
-//		if(offLineIndex>offLine.times){
-//				offLineIndex = 1;
-//		}
-//}
-
 
 
 int modbusConfIDCheck(char *inputID);
@@ -1039,12 +997,13 @@ void keyModbusCfgSure()
 
 		}
 		else{
+				extern void LCDDispIDcfgOK(uint16_t addr);
+				LCDDispIDcfgOK(DISP_MODBUS_SAME_ID_MSG_ADDR);
+				singlModbConf(chinaNameIndex);
+			  rt_thread_mdelay(2000);
 				LCDRstDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
-			  singlModbConf(chinaNameIndex);
-		}
-
-		//modbusConfIDCheck(LCDInput.ID);
-		
+			  
+		}	
 }
 
 

@@ -756,11 +756,9 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 						rt_kprintf("%sERR:same ID\n",sign);
 				}
 				else{
-							LCDRstDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
+						LCDRstDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
 				}
-				//lcdCopyInputID(recBuf);
 				break;    		
-//
 			case MODBUS_CFG_TYPE_ADDR:
 				for(int i=0;i<8;i++){
 					LCDInput.model[i]=recBuf[7+i];
@@ -903,7 +901,14 @@ void LCDRstDispSameID(uint16_t addr)
 	
 	 LCDWtite(addr,buf,4);
 }
-
+void LCDDispIDcfgOK(uint16_t addr)
+{
+		uint8_t buf[8]="SET OK";
+		buf[6]=0xff;
+		buf[7]=0xff;
+	
+	 LCDWtite(addr,buf,8);
+}
 
 #define PASSWORD_LEN   8
 static char passWord1[PASSWORD_LEN]="gy2023";

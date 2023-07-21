@@ -44,8 +44,9 @@ void lcdCopyInputID(uint8_t *rec)
 			LCDDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
 		  rt_kprintf("%sERR:same ID\n",sign);
 	}
-	else 
+	else {
 		  LCDRstDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
+	}
 }
 //拷贝输入的type到digInputLCD中
 void lcdCopyInputModel(uint8_t *rec)
@@ -84,6 +85,10 @@ void  lcdInputConfig()
 				rt_kprintf("%s add diginput chanl %d\n",sign,port);
         rt_kprintf("%s digInput OK\n",sign);
 		}
+		extern void LCDDispIDcfgOK(uint16_t addr);
+		LCDDispIDcfgOK(DISP_INPUT_SAME_ID_MSG_ADDR);
+		rt_thread_delay(2000);
+		LCDRstDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
 }
 
 

@@ -15,9 +15,9 @@ extern void 	readPSTempHeight(int num);
 extern void  	PSTempHeightPack(void);
 extern void  	readThreeTempAcc(int num);
 extern void		t3AxisTempAccPack(void);
-//extern void 	devIDFlashRead(void);
+
 extern void 	cirCurrConf(void);
-#define TIM_NUM  MODBUS_NUM+3+10 //目前支持6路定时器  
+#define TIM_NUM  (MODBUS_NUM+2) //目前支持定时器个数+heart+reg
 typedef struct 
 {
 		uint16_t count;     //计数
@@ -69,10 +69,6 @@ static void timeQuckIncSet()
 {
 		tim[num].count=0xFFFF;
 }
-//void stopModbusDev(upDataTimEnum num)
-//{
-//	   timeStop(num);//偏移地址2
-//}
 
 //定时时间到
 static int timeOut()
@@ -249,7 +245,7 @@ void startTimeList()
 		timeInit(HEART_TIME,      120,2);//心跳定时  定时30秒 第一次28秒就来
 		timeInit(REG_TIME,        60,0);//注册 注册成功后定时器就关闭
 
-		timeInit(CIRCULA_TIME, 		2,5); //suqi
+
 
 		timeInit(CIRCULA_TIME, 		sheet.cirCulaColTime,5);//suqi
 		timeInit(PARTDISCHAG_TIME,sheet.partDischagColTime,10);
@@ -282,8 +278,6 @@ void startTimeList()
 		timeQuckIncSet();
 }
 
-//char nihao[]="你好局放防沉降防外破";
-//
 
 
 #if 1
@@ -292,21 +286,10 @@ void startTimeList()
 
 void   upKeepStateTask(void *para)
 {
-		//extern void modbusPrintRead();
 		extern void uartReconfig();
 		extern void uartIrqEnaAfterQueue();
 	  extern void clearUartData();
-//	  extern void printModbusDevList();
 	  extern void readMultiCirCulaPoint();
-
-	
-//	  extern void prinfAnalogList();
-//	  extern void printfDIList();
-//	  extern void printfOutputList();
-//		extern void printfThresholdList();
-//		extern void printfCtrl();
-	//  uartMutexQueueCfg();//根据flash存储重新配置串口
-//		modbusPrintRead();//modbus配置从flash中读取
 	  uartReconfig();//串口重新配置
 		uartIrqEnaAfterQueue();//串口中断中用到了队列  开启中断需要放到后边
     startTimeList();//开启计时器列表
@@ -319,8 +302,6 @@ void   upKeepStateTask(void *para)
 
 		while(1){
 				timeOutRunFun();
-//				logSaveToSD(acuRst,strlen(acuRst));
-
 				rt_thread_mdelay(500);
 #ifdef  USE_WDT
 			  rt_event_send(&WDTEvent,EVENT_WDT_UPTASK);

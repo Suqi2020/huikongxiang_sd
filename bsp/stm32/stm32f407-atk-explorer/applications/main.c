@@ -15,10 +15,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((3<<8)+27)//0x0105 表示1.5版本
+#define APP_VER       ((3<<8)+28)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230720";
+const char date[]="20230721";
 
 
 
@@ -135,12 +135,7 @@ void  netLedLight()
 static void timeout1(void *parameter)
 {
 		static int count=0;
-//	  static int alarmTick=10;
-		extern rt_bool_t gbNetState;
 	  extern void timeInc();
-	  extern void FatReadDirDelEarlyLogTxt();
-//	  extern bool fountFlag;
-	  //extern void modbusWorkErrCheck(void);
 	  count++;  
 	  if(gbSDExit==false){
 				if(count%(100)==0)//10秒提醒一下
@@ -152,26 +147,12 @@ static void timeout1(void *parameter)
 		netStateSet();
 		netLedLight();
 }
-char *strnum="1234.5678";
-//double atof(const char *s);
-extern void creatFolder(void);
-//char testNum[4]={1,2,3,4};
-void  outIOInit(void);
 
-//bool  log_save_sdFlag =false;  
+extern void creatFolder(void);
+void  outIOInit(void);
 char  printVer[50];
 
-//int  isBigEndian()
-//{
-//	  int a=0x12345678;
-//	  char b= *&a;
-//}
-//class name{
-//	public:
-//		;
-//	private:
-//		;
-//};
+
 int main(void)
 {
 
