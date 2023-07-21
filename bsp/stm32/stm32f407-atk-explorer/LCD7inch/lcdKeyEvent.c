@@ -152,8 +152,13 @@ void ledOnOff(uint8_t value)
 
 }
 
+void rstLCD()
+{
+		uint8_t buf[4]={0x55,0xAA,0x5A,0xA5};
+	
+		LCDWtite(0x0004,buf,4);
 
-
+}
 extern int modbusChosIndex;
 #ifndef     ANA_MASK
 void lcdAnaConfig(void);
@@ -316,6 +321,8 @@ void  keyReturn(uint16_t keyAddr)
 			case KEY_RESET_ADDR://¸´Î»
 				
 			  //LCDDispRstOK();
+			  rstLCD();
+			  rt_thread_mdelay(500);
 			  rt_hw_cpu_reset();
 				break;
 			case KEY_MODBUS_CFG_WATCH_ADDR:
