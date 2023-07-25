@@ -8,6 +8,7 @@
 RingBuff_t  ringBuff   CCMRAM;
 RingBuff2_t ringBuff2  CCMRAM;
 
+RingBuff3_t ringBuff3  CCMRAM;
 
 
 void RingBuff_Init(void)
@@ -83,15 +84,13 @@ uint8_t Write_RingBuff2(uint8_t data)
 
 		write_ringbufnum++;
 		ringBuff2.Ring_Buff[ringBuff2.Tail] = data;
-	//	printf(">%c",ringBuff2.Ring_Buff[ringBuff2.Tail]);
+
 		ringBuff2.Tail = (ringBuff2.Tail + 1) % PRINTF_BUF_LEN;//
 		ringBuff2.Lenght++;
 		return true;
-		}
+}
 
 
-//
-//		bool readFlag=false;
 uint8_t Read_RingBuff2(uint8_t *rData)
 {
 		if (ringBuff2.Head== ringBuff2.Tail)//
@@ -100,12 +99,7 @@ uint8_t Read_RingBuff2(uint8_t *rData)
 		}
 		read_ringbufnum++;
 		*rData = ringBuff2.Ring_Buff[ringBuff2.Head];//
-//		if(readFlag==false){
-//			readFlag =true;
-//			printf("ringbuf %d %d\n",write_ringbufnum,read_ringbufnum);
-//		}
-			
-//		printf("/%c",ringBuff2.Ring_Buff[ringBuff2.Head]);
+
 		ringBuff2.Head++;
 		if(ringBuff2.Head>=PRINTF_BUF_LEN)
 		{
@@ -115,3 +109,57 @@ uint8_t Read_RingBuff2(uint8_t *rData)
 		return true;
 
 }
+
+
+
+
+
+
+void RingBuff3_Init(void)
+{
+
+		ringBuff3.Head = 0;
+		ringBuff3.Tail = 0;
+		ringBuff3.Lenght = 0;
+		memset(ringBuff3.Ring_Buff, 0, MODBUS_LENTH);
+}
+
+
+
+uint8_t Write_RingBuff3(uint8_t data)
+{
+
+		if ((ringBuff3.Head - ringBuff3.Tail == 1)\
+		||((ringBuff3.Head == 0)&&(ringBuff3.Tail == (MODBUS_LENTH-1))))
+		{
+				return false;
+		}
+
+		write_ringbufnum++;
+		ringBuff3.Ring_Buff[ringBuff3.Tail] = data;
+
+		ringBuff3.Tail = (ringBuff3.Tail + 1) % MODBUS_LENTH;//
+		ringBuff3.Lenght++;
+		return true;
+}
+
+
+uint8_t Read_RingBuff3(uint8_t *rData)
+{
+		if (ringBuff3.Head== ringBuff3.Tail)//
+		{
+				return false;
+		}
+		read_ringbufnum++;
+		*rData = ringBuff3.Ring_Buff[ringBuff3.Head];//
+
+		ringBuff3.Head++;
+		if(ringBuff3.Head>=MODBUS_LENTH)
+		{
+				ringBuff3.Head=0;
+		}
+		ringBuff3.Lenght--;
+		return true;
+
+}
+

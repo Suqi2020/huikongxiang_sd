@@ -776,7 +776,7 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 				}
 				break;  		
 			case MODBUS_CFG_PORT_ADDR:
-				LCDInput.useUartNum=(uartEnum)recBuf[8]-1;
+				LCDInput.useUartNum=recBuf[8]-1;
 				break;  		
 			case MODBUS_CFG_ADDR_ADDR:
 				LCDInput.slaveAddr=recBuf[8];

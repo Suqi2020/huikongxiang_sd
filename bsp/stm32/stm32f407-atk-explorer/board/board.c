@@ -29,8 +29,8 @@ UART_HandleTypeDef huart6;
 void uartIrqEnaAfterQueue()
 {
 	 __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
-	 __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
-	 __HAL_UART_ENABLE_IT(&huart4, UART_IT_RXNE);
+//	 __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
+//	 __HAL_UART_ENABLE_IT(&huart4, UART_IT_RXNE);
 	 __HAL_UART_ENABLE_IT(&huart5, UART_IT_RXNE);//´®¿ÚÆÁ ÆäËümodbu
 	 __HAL_UART_ENABLE_IT(&huart6, UART_IT_RXNE);
 }
@@ -67,10 +67,10 @@ void cubeHardWareInit(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-//  MX_UART4_Init(9600);
+  MX_UART4_Init(115200);
 //  MX_UART5_Init();
   MX_USART2_UART_Init(115200);
-//  MX_USART3_UART_Init(115200);
+  MX_USART3_UART_Init(115200);
 //  MX_USART6_UART_Init(9600);
   MX_ADC1_Init();
   MX_SPI1_Init();
@@ -515,20 +515,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, W5500_CS_Pin|IO_OUT8_Pin|IO_OUT7_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, W5500_CS_Pin|RESET1234_Pin|IO_OUT8_Pin|IO_OUT7_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, W5500_RST_Pin|IO_OUT6_Pin|IO_OUT5_Pin|IO_OUT4_Pin
-                          |IO_OUT3_Pin|IO_OUT2_Pin|IO_OUT1_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, W5500_RST_Pin|RESET5678_Pin|IO_OUT6_Pin|IO_OUT5_Pin
+                          |IO_OUT4_Pin|IO_OUT3_Pin|IO_OUT2_Pin|IO_OUT1_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, REALAY_CTRL2_Pin|REALAY_CTRL1_Pin|REALAY_CTRL3_Pin|REALAY_CTRL4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, SPAKER1_Pin|SPAKER3_Pin|SPAKER4_Pin|SPAKER2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : IO_IN5_Pin IO_IN4_Pin IO_IN3_Pin IO_IN2_Pin
                            IO_IN1_Pin IO_IN7_Pin IO_IN6_Pin */
@@ -566,25 +563,29 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : W5500_IRQ_Pin */
-  GPIO_InitStruct.Pin = W5500_IRQ_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(W5500_IRQ_GPIO_Port, &GPIO_InitStruct);
+  /*Configure GPIO pin : IRQ1234_Pin */
+  GPIO_InitStruct.Pin = IRQ1234_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(IRQ1234_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SPAKER1_Pin SPAKER3_Pin SPAKER4_Pin SPAKER2_Pin
-                           IO_OUT6_Pin IO_OUT5_Pin IO_OUT4_Pin IO_OUT3_Pin
-                           IO_OUT2_Pin IO_OUT1_Pin */
-  GPIO_InitStruct.Pin = SPAKER1_Pin|SPAKER3_Pin|SPAKER4_Pin|SPAKER2_Pin
-                          |IO_OUT6_Pin|IO_OUT5_Pin|IO_OUT4_Pin|IO_OUT3_Pin
-                          |IO_OUT2_Pin|IO_OUT1_Pin;
+  /*Configure GPIO pins : RESET5678_Pin IO_OUT6_Pin IO_OUT5_Pin IO_OUT4_Pin
+                           IO_OUT3_Pin IO_OUT2_Pin IO_OUT1_Pin */
+  GPIO_InitStruct.Pin = RESET5678_Pin|IO_OUT6_Pin|IO_OUT5_Pin|IO_OUT4_Pin
+                          |IO_OUT3_Pin|IO_OUT2_Pin|IO_OUT1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : IO_OUT8_Pin IO_OUT7_Pin */
-  GPIO_InitStruct.Pin = IO_OUT8_Pin|IO_OUT7_Pin;
+  /*Configure GPIO pin : IRQ5678_Pin */
+  GPIO_InitStruct.Pin = IRQ5678_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(IRQ5678_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : RESET1234_Pin IO_OUT8_Pin IO_OUT7_Pin */
+  GPIO_InitStruct.Pin = RESET1234_Pin|IO_OUT8_Pin|IO_OUT7_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -597,9 +598,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(IO_IN8_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
-//  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 1, 0);
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 1, 0);
 //  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 }
-
 

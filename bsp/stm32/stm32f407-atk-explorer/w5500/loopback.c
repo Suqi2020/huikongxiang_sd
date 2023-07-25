@@ -414,21 +414,21 @@ void loopback_udp(SOCKET s, uint16 port)
 void w5500Init()
 {
 
-	  SOCK_DISCON(SOCK_TCPC);
+//	  SOCK_DISCON(SOCK_TCPC);
 		reset_w5500();											/*硬复位W5500*/
 		set_w5500_mac();										/*配置MAC地址*/
 
 		socket_buf_init(txsize, rxsize);		/*初始化8个Socket的发送接收缓存大小*/
 	
-			setRTR(2000);/*设置溢出时间值*/
-		setRCR(3);/*设置最大重新发送次数*/
-		IINCHIP_WRITE(Sn_MR(7), 0x20);//TCP模式下开启无延时ACK
-		IINCHIP_WRITE(Sn_IMR(7), 0x0F);
-		IINCHIP_WRITE(IMR, 0xF0);
-		IINCHIP_WRITE(SIMR, 0xFE);
+//			setRTR(2000);/*设置溢出时间值*/
+//		setRCR(3);/*设置最大重新发送次数*/
+//		IINCHIP_WRITE(Sn_MR(7), 0x20);//TCP模式下开启无延时ACK
+//		IINCHIP_WRITE(Sn_IMR(7), 0x0F);
+//		IINCHIP_WRITE(IMR, 0xF0);
+//		IINCHIP_WRITE(SIMR, 0xFE);
 	 
-	  extern void rstDhcp();
-	  rstDhcp();
+//	  extern void rstDhcp();
+//	  rstDhcp();
 
 		rstCh_status();
 }

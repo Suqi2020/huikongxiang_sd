@@ -1295,6 +1295,16 @@
               <FileType>1</FileType>
               <FilePath>.\modbus\rs485Cover.c</FilePath>
             </File>
+            <File>
+              <FileName>wk1xxx_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\modbus\wk1xxx_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>wk2xxx_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\modbus\wk2xxx_uart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -876,7 +876,7 @@ void LCDDispModbusGet()
 			}
 		}
 }
-extern  const  uartEnum UartNum[UART_NUM];
+
 modbusStru LCDInput;
 uint32_t   LCDInputTime=0;
 uint32_t   *singlConcalTime=RT_NULL;//
@@ -908,7 +908,7 @@ static int singlModbConf(int num)
 				if(singlConfDev[j].workFlag!=RT_TRUE){
 						singlConfDev[j].workFlag=RT_TRUE;//´ò¿ª
 						singlConfDev[j].slaveAddr=LCDInput.slaveAddr;	
-						singlConfDev[j].useUartNum=UartNum[LCDInput.useUartNum];
+						singlConfDev[j].useUartNum=LCDInput.useUartNum;
 						rt_strcpy(singlConfDev[j].model,LCDInput.model);
 						rt_strcpy(singlConfDev[j].ID,LCDInput.ID);
 						rt_kprintf("%s %s config %d\n",sign,modbusName[num],j);

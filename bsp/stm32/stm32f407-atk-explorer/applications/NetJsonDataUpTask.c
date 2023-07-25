@@ -290,10 +290,14 @@ void   upKeepStateTask(void *para)
 		extern void uartIrqEnaAfterQueue();
 	  extern void clearUartData();
 	  extern void readMultiCirCulaPoint();
+	  extern void RingBuff3_Init();
+	  
 	  uartReconfig();//串口重新配置
 		uartIrqEnaAfterQueue();//串口中断中用到了队列  开启中断需要放到后边
     startTimeList();//开启计时器列表
-	  clearUartData();
+	  //clearUartData();
+	  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);//开启中断 清除串口冗余数据
+	  RingBuff3_Init();//清除buf 清除串口冗余数据
 	  readMultiCirCulaPoint();//对于环流来讲 运行前需要提取扩大方式
 	
   

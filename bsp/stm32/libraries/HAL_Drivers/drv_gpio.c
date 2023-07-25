@@ -731,7 +731,8 @@ void EXTI9_5_IRQHandler(void)
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_9);
     rt_interrupt_leave();
 }
-
+extern rt_sem_t   uart1234_sem;
+extern rt_sem_t   uart5678_sem;
 
 void EXTI15_10_IRQHandler(void)
 {
@@ -740,10 +741,19 @@ void EXTI15_10_IRQHandler(void)
 	
 	
 //	  rt_sem_release(w5500Iqr_semp);
-
+    if(HAL_GPIO_ReadPin(RESET5678_GPIO_Port,RESET5678_Pin)==GPIO_PIN_RESET){
+			 HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_12);
+			 rt_sem_release(uart5678_sem);
+		}
+			
+		
+		if(HAL_GPIO_ReadPin(RESET1234_GPIO_Port,RESET1234_Pin)==GPIO_PIN_RESET){
+			 HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
+			 rt_sem_release(uart1234_sem);
+		}
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_10);
-    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
-    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_12);
+    
+    
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_14);
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);

@@ -15,10 +15,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((3<<8)+28)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+0)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230721";
+const char date[]="20230725";
 
 
 
@@ -47,6 +47,8 @@ rt_mutex_t   lcdSend_mutex=RT_NULL;//防止多个线程同事往lcd发数据
 rt_mutex_t   w5500Spi_mutex=RT_NULL;//防止多个线程同时操作spi
 rt_mutex_t   sdWrite_mutex=RT_NULL;
 rt_mutex_t   printf_mutex=RT_NULL;
+rt_sem_t   uart1234_sem=RT_NULL;
+rt_sem_t   uart5678_sem=RT_NULL;
 //邮箱的定义
 extern struct  rt_mailbox mbNetSendData;;
 static char 	 mbSendPool[20];//发送缓存20条
@@ -204,7 +206,17 @@ int main(void)
 		printf_mutex= rt_mutex_create("printf_mutex", RT_IPC_FLAG_FIFO);
 		if (printf_mutex == RT_NULL)
     {
-        printf("%screate sdWrite_mutex failed\n",sign);
+        printf("%screate printf_mutex failed\n",sign);
+    }		
+		uart1234_sem= rt_sem_create("uart1234_sem",0, RT_IPC_FLAG_FIFO);
+		if (uart1234_sem == RT_NULL)
+    {
+        printf("%screate uart1234_sem failed\n",sign);
+    }	
+		uart5678_sem= rt_sem_create("uart5678_sem",0, RT_IPC_FLAG_FIFO);
+		if (uart5678_sem == RT_NULL)
+    {
+        printf("%screate uart5678_sem failed\n",sign);
     }		
 #if   USE_RINGBUF
 
@@ -216,8 +228,8 @@ int main(void)
 				return -1;
 		}
 #endif
-		extern void 	uartMutexQueueCreate();
-		uartMutexQueueCreate();
+//		extern void 	uartMutexQueueCreate();
+//		uartMutexQueueCreate();
 		
 //	 ret = rt_mq_init(&SDLogmque,"SDLogmque",&SDLogQuePool[0],1,sizeof(SDLogQuePool),RT_IPC_FLAG_FIFO);       
 //	if (ret != RT_EOK)

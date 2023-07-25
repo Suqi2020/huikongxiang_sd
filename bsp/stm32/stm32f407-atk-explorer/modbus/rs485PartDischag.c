@@ -121,7 +121,7 @@ void readPdFreqDischarge(int num)
 {
 	  uint8_t offset=3;//add+regadd+len
 	  uint8_t  *buf = RT_NULL;
-		buf = rt_malloc(LENTH);
+		buf = rt_malloc(MODBUS_LENTH);
 	  uint16_t len = modbusReadReg(sheet.partDischag[num].slaveAddr,0x0300,READ_03,18,buf);
 //		rt_mutex_take(uartDev[sheet.partDischag[num].useUartNum].uartMutex,RT_WAITING_FOREVER);
 	  //485发送buf  len  等待modbus回应
@@ -131,14 +131,9 @@ void readPdFreqDischarge(int num)
 				rt_kprintf("%x ",buf[j]);
 		}
 		rt_kprintf("\n");
-		memset(buf,0,LENTH);
+		memset(buf,0,MODBUS_LENTH);
     len=0;
-		if(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 3000) == RT_EOK){//第一次接收时间放长点  相应时间有可能比较久
-				len++;
-		}
-		while(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 10) == RT_EOK){//115200 波特率1ms 10个数据
-				len++;
-		}
+		len=  rs485UartRec(sheet.partDischag[num].useUartNum,buf,500);
 		if(len!=0){
 				rt_kprintf("%srec:",sign);
 				for(int j=0;j<len;j++){
@@ -197,7 +192,7 @@ rt_bool_t readPartDischgWarning(int num)
 {
 	  uint8_t offset=3;//add+regadd+len
 	  uint8_t  *buf = RT_NULL;
-		buf = rt_malloc(LENTH);
+		buf = rt_malloc(MODBUS_LENTH);
 	  uint16_t len = modbusReadBitReg(sheet.partDischag[num].slaveAddr,0x0001,8,buf);//读取8个bit
 //		rt_mutex_take(uartDev[sheet.partDischag[num].useUartNum].uartMutex,RT_WAITING_FOREVER);
 	  //485发送buf  len  等待modbus回应
@@ -207,14 +202,9 @@ rt_bool_t readPartDischgWarning(int num)
 				rt_kprintf("%x ",buf[j]);
 		}
 		rt_kprintf("\n");
-		memset(buf,0,LENTH);
+		memset(buf,0,MODBUS_LENTH);
     len=0;
-		if(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 2000) == RT_EOK){//第一次接收时间放长点  相应时间有可能比较久
-				len++;
-		}
-		while(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 10) == RT_EOK){//115200 波特率1ms 10个数据
-				len++;
-		}
+		len=  rs485UartRec(sheet.partDischag[num].useUartNum,buf,500);
 		rt_kprintf("%srec:",sign);
 		for(int j=0;j<len;j++){
 				rt_kprintf("%x ",buf[j]);
@@ -764,7 +754,7 @@ static int partDischagChanlRead(phaseEnum X,int num)
 {
 		int rdTotalNum =0;
 	  //char *bufP=buf;
-	  uint8_t *buf=rt_malloc(LENTH);
+	  uint8_t *buf=rt_malloc(MODBUS_LENTH);
 		if(X==A)
 		   rdTotalNum=  partDiscStru_p[num].freqA;
 		else if(X==B)
@@ -785,14 +775,10 @@ static int partDischagChanlRead(phaseEnum X,int num)
 							rt_kprintf("%x ",buf[j]);
 					}
 					rt_kprintf("\n");
-					memset(buf,0,LENTH);
+					memset(buf,0,MODBUS_LENTH);
 					len=0;
-					if(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 3000) == RT_EOK){//第一次接收时间放长点  相应时间有可能比较久
-							len++;
-					}
-					while(rt_mq_recv(&uartmque[sheet.partDischag[num].useUartNum], buf+len, 1, 10) == RT_EOK){//115200 波特率1ms 10个数据
-							len++;
-					}
+		      len=  rs485UartRec(sheet.partDischag[num].useUartNum,buf,500);
+
 					if(len==0){
 							rt_kprintf("%s partDis read atlas not resp ,break \n",sign);
 							break;

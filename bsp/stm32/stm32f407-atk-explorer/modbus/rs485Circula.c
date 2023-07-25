@@ -84,7 +84,7 @@ void readCirCurrAndWaring(int num)
 {
 	  uint8_t offset=3;//add+regadd+len
 	  uint8_t  *buf = RT_NULL;
-		buf = rt_malloc(LENTH);
+		buf = rt_malloc(MODBUS_LENTH);
 	  //uint8_t   buf[100]
 	  uint16_t len = modbusReadReg(sheet.cirCula[num].slaveAddr,0x0023,READ_03,12,buf);
 	  //485发送buf  len  等待modbus回应
@@ -97,11 +97,9 @@ void readCirCurrAndWaring(int num)
 		}
 		rt_kprintf("\n");
 //	  rt_mutex_take(uartDev[sheet.cirCula[num].useUartNum].uartMutex,RT_WAITING_FOREVER);
-		memset(buf,0,LENTH);
+		memset(buf,0,MODBUS_LENTH);
     len=0;
-		while(rt_mq_recv(&uartmque[sheet.cirCula[num].useUartNum], buf+len, 1, 500) == RT_EOK){//115200 波特率1ms 10个数据
-				len++;
-		}
+		len=  rs485UartRec(sheet.cirCula[num].useUartNum,buf,500);
 		if(len!=0){
 				rt_kprintf("%srec:",sign);
 				for(int j=0;j<len;j++){
@@ -154,7 +152,7 @@ static uint16_t readPoint(int num)
 {
 	  uint8_t offset=3;//add+regadd+len
 	  uint8_t  *buf = RT_NULL;
-		buf = rt_malloc(LENTH);
+		buf = rt_malloc(MODBUS_LENTH);
 	  uint16_t len = modbusReadReg(sheet.cirCula[num].slaveAddr,0x000B,READ_03,1,buf);
 	  uint16_t ret =0;
 	//	recFlag = RT_TRUE;
@@ -166,11 +164,9 @@ static uint16_t readPoint(int num)
 				rt_kprintf("%x ",buf[j]);
 		}
 		rt_kprintf("\n");
-		memset(buf,0,LENTH);
+		memset(buf,0,MODBUS_LENTH);
     len=0;
-		while(rt_mq_recv(&uartmque[sheet.cirCula[num].useUartNum], buf+len, 1, 500) == RT_EOK){//115200 波特率1ms 10个数据
-				len++;
-		}
+		len=  rs485UartRec(sheet.cirCula[num].useUartNum,buf,500);
 		rt_kprintf("%srec:",sign);
 		for(int j=0;j<len;j++){
 				rt_kprintf("%x ",buf[j]);

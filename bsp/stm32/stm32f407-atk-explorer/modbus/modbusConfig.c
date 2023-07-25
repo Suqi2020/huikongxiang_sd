@@ -1,8 +1,8 @@
 #include "board.h"
 const static char sign[]="[modbusConfig]";
 
-const static char     UartName[UART_NUM][6] ={"port1", "port2",  "port3"};//重映射一个名称
-const  uartEnum UartNum[UART_NUM]     ={USE_UART3,USE_UART6,USE_UART4};//重映射一个名称
+const static char     UartName[UART_NUM][6] ={"port1", "port2",  "port3","port4","port5","port6","port7","port8","port9"};//重映射一个名称
+//const  uartEnum UartNum[UART_NUM]     ={USE_UART3,USE_UART6,USE_UART4};//重映射一个名称
 
 		
 //打印所有增加的modbus设备列表
@@ -208,7 +208,7 @@ static int circulaConf(int uartnum,char *argv[])
 							sheet.cirCula[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.cirCula[i].slaveAddr=slaveAddr;	
-					sheet.cirCula[i].useUartNum=UartNum[uartnum];
+					sheet.cirCula[i].useUartNum=uartnum;
 					rt_strcpy(sheet.cirCula[i].model,argv[3]);
 					rt_kprintf("%s circula reconfig %d\n",sign,i);
 					rt_kprintf("%s circula OK\n",sign);
@@ -225,7 +225,7 @@ static int circulaConf(int uartnum,char *argv[])
 					if(sheet.cirCula[j].workFlag!=RT_TRUE){
 							sheet.cirCula[j].workFlag=RT_TRUE;//打开
 							sheet.cirCula[j].slaveAddr=slaveAddr;	
-							sheet.cirCula[j].useUartNum=UartNum[uartnum];
+							sheet.cirCula[j].useUartNum=uartnum;
 							rt_strcpy(sheet.cirCula[j].model,argv[3]);
 							rt_strcpy(sheet.cirCula[j].ID,argv[2]);
 							rt_kprintf("%s circula config %d\n",sign,j);
@@ -258,7 +258,7 @@ static int partDischagConf(int uartnum,char *argv[])
 							sheet.partDischag[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.partDischag[i].slaveAddr=slaveAddr;	
-					sheet.partDischag[i].useUartNum=UartNum[uartnum];
+					sheet.partDischag[i].useUartNum=uartnum;
 					rt_strcpy(sheet.partDischag[i].model,argv[3]);
 					rt_kprintf("%s partDischag reconfig %d\n",sign,i);
 					rt_kprintf("%s partDischag OK\n",sign);
@@ -275,7 +275,7 @@ static int partDischagConf(int uartnum,char *argv[])
 					if(sheet.partDischag[j].workFlag!=RT_TRUE){
 							sheet.partDischag[j].workFlag=RT_TRUE;//打开
 							sheet.partDischag[j].slaveAddr=slaveAddr;	
-							sheet.partDischag[j].useUartNum=UartNum[uartnum];
+							sheet.partDischag[j].useUartNum=uartnum;
 							rt_strcpy(sheet.partDischag[j].model,argv[3]);
 							rt_strcpy(sheet.partDischag[j].ID,argv[2]);
 							rt_kprintf("%s partDischag config %d\n",sign,j);
@@ -308,7 +308,7 @@ static int pressSettlConf(int uartnum,char *argv[])
 							sheet.pressSetl[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.pressSetl[i].slaveAddr=slaveAddr;	
-					sheet.pressSetl[i].useUartNum=UartNum[uartnum];
+					sheet.pressSetl[i].useUartNum=uartnum;
 					rt_strcpy(sheet.pressSetl[i].model,argv[3]);
 					rt_kprintf("%s pressSettl reconfig %d\n",sign,i);
 					rt_kprintf("%s pressSettl OK\n",sign);
@@ -325,7 +325,7 @@ static int pressSettlConf(int uartnum,char *argv[])
 					if(sheet.pressSetl[j].workFlag!=RT_TRUE){
 							sheet.pressSetl[j].workFlag=RT_TRUE;//打开
 							sheet.pressSetl[j].slaveAddr=slaveAddr;	
-							sheet.pressSetl[j].useUartNum=UartNum[uartnum];
+							sheet.pressSetl[j].useUartNum=uartnum;
 							rt_strcpy(sheet.pressSetl[j].model,argv[3]);
 							rt_strcpy(sheet.pressSetl[j].ID,argv[2]);
 							rt_kprintf("%s pressSettl config %d\n",sign,j);
@@ -358,7 +358,7 @@ static int crackMeterConf(int uartnum,char *argv[])
 							sheet.crackMeter[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.crackMeter[i].slaveAddr=slaveAddr;	
-					sheet.crackMeter[i].useUartNum=UartNum[uartnum];
+					sheet.crackMeter[i].useUartNum=uartnum;
 					rt_strcpy(sheet.crackMeter[i].model,argv[3]);
 					rt_kprintf("%s cover reconfig %d\n",sign,i);
 					rt_kprintf("%s cover OK\n",sign);
@@ -375,7 +375,7 @@ static int crackMeterConf(int uartnum,char *argv[])
 					if(sheet.crackMeter[j].workFlag!=RT_TRUE){
 							sheet.crackMeter[j].workFlag=RT_TRUE;//打开
 							sheet.crackMeter[j].slaveAddr=slaveAddr;	
-							sheet.crackMeter[j].useUartNum=UartNum[uartnum];
+							sheet.crackMeter[j].useUartNum=uartnum;
 							rt_strcpy(sheet.crackMeter[j].model,argv[3]);
 							rt_strcpy(sheet.crackMeter[j].ID,argv[2]);
 							rt_kprintf("%s crackMeter config %d\n",sign,j);
@@ -410,7 +410,7 @@ static int coverConf(int uartnum,char *argv[])
 							sheet.cover[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.cover[i].slaveAddr=slaveAddr;	
-					sheet.cover[i].useUartNum=UartNum[uartnum];
+					sheet.cover[i].useUartNum=uartnum;
 					rt_strcpy(sheet.cover[i].model,argv[3]);
 					rt_kprintf("%s crackMeter reconfig %d\n",sign,i);
 					rt_kprintf("%s crackMeter OK\n",sign);
@@ -427,7 +427,7 @@ static int coverConf(int uartnum,char *argv[])
 					if(sheet.cover[j].workFlag!=RT_TRUE){
 							sheet.cover[j].workFlag=RT_TRUE;//打开
 							sheet.cover[j].slaveAddr=slaveAddr;	
-							sheet.cover[j].useUartNum=UartNum[uartnum];
+							sheet.cover[j].useUartNum=uartnum;
 							rt_strcpy(sheet.cover[j].model,argv[3]);
 							rt_strcpy(sheet.cover[j].ID,argv[2]);
 							rt_kprintf("%s cover config %d\n",sign,j);
@@ -460,7 +460,7 @@ static int threeAxisConf(int uartnum,char *argv[])
 							sheet.threeAxiss[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.threeAxiss[i].slaveAddr=slaveAddr;	
-					sheet.threeAxiss[i].useUartNum=UartNum[uartnum];
+					sheet.threeAxiss[i].useUartNum=uartnum;
 					rt_strcpy(sheet.threeAxiss[i].model,argv[3]);
 					rt_kprintf("%s threeaxis reconfig %d\n",sign,i);
 					rt_kprintf("%s threeaxis OK\n",sign);
@@ -477,7 +477,7 @@ static int threeAxisConf(int uartnum,char *argv[])
 					if(sheet.threeAxiss[j].workFlag!=RT_TRUE){
 							sheet.threeAxiss[j].workFlag=RT_TRUE;//打开
 							sheet.threeAxiss[j].slaveAddr=slaveAddr;	
-							sheet.threeAxiss[j].useUartNum=UartNum[uartnum];
+							sheet.threeAxiss[j].useUartNum=uartnum;
 							rt_strcpy(sheet.threeAxiss[j].model,argv[3]);
 							rt_strcpy(sheet.threeAxiss[j].ID,argv[2]);
 							rt_kprintf("%s threeaxis config %d\n",sign,j);
@@ -511,7 +511,7 @@ static int ch4Conf(int uartnum,char *argv[])
 							sheet.ch4[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.ch4[i].slaveAddr=slaveAddr;	
-					sheet.ch4[i].useUartNum=UartNum[uartnum];
+					sheet.ch4[i].useUartNum=uartnum;
 					rt_strcpy(sheet.ch4[i].model,argv[3]);
 					rt_kprintf("%s ch4 reconfig %d\n",sign,i);
 					rt_kprintf("%s ch4 OK\n",sign);
@@ -528,7 +528,7 @@ static int ch4Conf(int uartnum,char *argv[])
 					if(sheet.ch4[j].workFlag!=RT_TRUE){
 							sheet.ch4[j].workFlag=RT_TRUE;//打开
 							sheet.ch4[j].slaveAddr=slaveAddr;	
-							sheet.ch4[j].useUartNum=UartNum[uartnum];
+							sheet.ch4[j].useUartNum=uartnum;
 							rt_strcpy(sheet.ch4[j].model,argv[3]);
 							rt_strcpy(sheet.ch4[j].ID,argv[2]);
 							rt_kprintf("%s ch4 config %d\n",sign,j);
@@ -561,7 +561,7 @@ static int coConf(int uartnum,char *argv[])
 							sheet.co[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.co[i].slaveAddr=slaveAddr;	
-					sheet.co[i].useUartNum=UartNum[uartnum];
+					sheet.co[i].useUartNum=uartnum;
 					rt_strcpy(sheet.co[i].model,argv[3]);
 					rt_kprintf("%s co reconfig %d\n",sign,i);
 					rt_kprintf("%s co OK\n",sign);
@@ -578,7 +578,7 @@ static int coConf(int uartnum,char *argv[])
 					if(sheet.co[j].workFlag!=RT_TRUE){
 							sheet.co[j].workFlag=RT_TRUE;//打开
 							sheet.co[j].slaveAddr=slaveAddr;	
-							sheet.co[j].useUartNum=UartNum[uartnum];
+							sheet.co[j].useUartNum=uartnum;
 							rt_strcpy(sheet.co[j].model,argv[3]);
 							rt_strcpy(sheet.co[j].ID,argv[2]);
 							rt_kprintf("%s co config %d\n",sign,j);
@@ -611,7 +611,7 @@ static int h2sConf(int uartnum,char *argv[])
 							sheet.h2s[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.h2s[i].slaveAddr=slaveAddr;	
-					sheet.h2s[i].useUartNum=UartNum[uartnum];
+					sheet.h2s[i].useUartNum=uartnum;
 					rt_strcpy(sheet.h2s[i].model,argv[3]);
 					rt_kprintf("%s h2s reconfig %d\n",sign,i);
 					rt_kprintf("%s h2s OK\n",sign);
@@ -628,7 +628,7 @@ static int h2sConf(int uartnum,char *argv[])
 					if(sheet.h2s[j].workFlag!=RT_TRUE){
 							sheet.h2s[j].workFlag=RT_TRUE;//打开
 							sheet.h2s[j].slaveAddr=slaveAddr;	
-							sheet.h2s[j].useUartNum=UartNum[uartnum];
+							sheet.h2s[j].useUartNum=uartnum;
 							rt_strcpy(sheet.h2s[j].model,argv[3]);
 							rt_strcpy(sheet.h2s[j].ID,argv[2]);
 							rt_kprintf("%s h2s config %d\n",sign,j);
@@ -662,7 +662,7 @@ static int o2Conf(int uartnum,char *argv[])
 							sheet.o2[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.o2[i].slaveAddr=slaveAddr;	
-					sheet.o2[i].useUartNum=UartNum[uartnum];
+					sheet.o2[i].useUartNum=uartnum;
 					rt_strcpy(sheet.o2[i].model,argv[3]);
 					rt_kprintf("%s o2 reconfig %d\n",sign,i);
 					rt_kprintf("%s o2 OK\n",sign);
@@ -679,7 +679,7 @@ static int o2Conf(int uartnum,char *argv[])
 					if(sheet.o2[j].workFlag!=RT_TRUE){
 							sheet.o2[j].workFlag=RT_TRUE;//打开
 							sheet.o2[j].slaveAddr=slaveAddr;	
-							sheet.o2[j].useUartNum=UartNum[uartnum];
+							sheet.o2[j].useUartNum=uartnum;
 							rt_strcpy(sheet.o2[j].model,argv[3]);
 							rt_strcpy(sheet.o2[j].ID,argv[2]);
 							rt_kprintf("%s o2 config %d\n",sign,j);
@@ -713,7 +713,7 @@ static int waterDepthConf(int uartnum,char *argv[])
 							sheet.waterDepth[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.waterDepth[i].slaveAddr=slaveAddr;	
-					sheet.waterDepth[i].useUartNum=UartNum[uartnum];
+					sheet.waterDepth[i].useUartNum=uartnum;
 					rt_strcpy(sheet.waterDepth[i].model,argv[3]);
 					rt_kprintf("%s waterDepth reconfig %d\n",sign,i);
 					rt_kprintf("%s waterDepth OK\n",sign);
@@ -730,7 +730,7 @@ static int waterDepthConf(int uartnum,char *argv[])
 					if(sheet.waterDepth[j].workFlag!=RT_TRUE){
 							sheet.waterDepth[j].workFlag=RT_TRUE;//打开
 							sheet.waterDepth[j].slaveAddr=slaveAddr;	
-							sheet.waterDepth[j].useUartNum=UartNum[uartnum];
+							sheet.waterDepth[j].useUartNum=uartnum;
 							rt_strcpy(sheet.waterDepth[j].model,argv[3]);
 							rt_strcpy(sheet.waterDepth[j].ID,argv[2]);
 							rt_kprintf("%s waterDepth config %d\n",sign,j);
@@ -763,7 +763,7 @@ static int tempHumConf(int uartnum,char *argv[])
 							sheet.tempHum[i].workFlag=RT_TRUE;//打开
 					}
 					sheet.tempHum[i].slaveAddr=slaveAddr;	
-					sheet.tempHum[i].useUartNum=UartNum[uartnum];
+					sheet.tempHum[i].useUartNum=uartnum;
 					rt_strcpy(sheet.tempHum[i].model,argv[3]);
 					rt_kprintf("%s tempHum reconfig %d\n",sign,i);
 					rt_kprintf("%s tempHum OK\n",sign);
@@ -780,7 +780,7 @@ static int tempHumConf(int uartnum,char *argv[])
 					if(sheet.tempHum[j].workFlag!=RT_TRUE){
 							sheet.tempHum[j].workFlag=RT_TRUE;//打开
 							sheet.tempHum[j].slaveAddr=slaveAddr;	
-							sheet.tempHum[j].useUartNum=UartNum[uartnum];
+							sheet.tempHum[j].useUartNum=uartnum;
 							rt_strcpy(sheet.tempHum[j].model,argv[3]);
 							rt_strcpy(sheet.tempHum[j].ID,argv[2]);
 							rt_kprintf("%s tempHum config %d\n",sign,j);

@@ -66,7 +66,7 @@ MSH_CMD_EXPORT(flash,flash save);//FINSH_FUNCTION_EXPORT_CMD
 
 //}
 //MSH_CMD_EXPORT(uart,uart config);//FINSH_FUNCTION_EXPORT_CMD
-static const uint8_t portStr[UART_NUM][6]={"port1","port2","port3"};
+static const uint8_t portStr[UART_NUM][6]={"port1","port2","port3","port4","port5","port6","port7","port8","port9"};
 ////////////////////¥Æø⁄≈‰÷√/////////////////////////////
 static void uart(int argc, char *argv[])
 {

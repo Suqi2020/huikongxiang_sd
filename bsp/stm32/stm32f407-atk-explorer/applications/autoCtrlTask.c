@@ -74,6 +74,7 @@ void digOutputOFFFun(char num)
 }
 //V3.3 output 置高  
 //输入 通道号
+#if 0
 void v33OutputONFun(char num)
 {
 	switch(num)
@@ -113,7 +114,7 @@ void v5OutputOFFFun(char num)
 	}
 }
 
-
+#endif
 //V12 output 置高  
 //输入 通道号
 void switchOutputONFun(char num)
@@ -156,7 +157,7 @@ bool digOutputReadFun(char num)
 	}
 	return false;
 }
-
+#if 0
 bool v33OutputReadFun(char num)
 {
 	switch(num)
@@ -176,6 +177,7 @@ bool v5OutputReadFun(char num)
 	}
 	return false;
 }
+#endif
 bool switchOutputReadFun(char num)
 {
 	switch(num)

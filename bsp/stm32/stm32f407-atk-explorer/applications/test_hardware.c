@@ -381,24 +381,24 @@ static void ioOutTest()//注意调用函数中的延时加上此处的延时
 
 
 
-#ifdef  TEST_SPAKER
-static void  spakerTest()
-{
-			SPAKER1_ON;
-	    SPAKER2_ON;
-	    SPAKER3_ON;
-	    SPAKER4_ON;
+//#ifdef  TEST_SPAKER
+//static void  spakerTest()
+//{
+//			SPAKER1_ON;
+//	    SPAKER2_ON;
+//	    SPAKER3_ON;
+//	    SPAKER4_ON;
 
-			rt_thread_mdelay(5000);
-			SPAKER1_OFF;
-	    SPAKER2_OFF;
-	    SPAKER3_OFF;
-	    SPAKER4_OFF;
+//			rt_thread_mdelay(5000);
+//			SPAKER1_OFF;
+//	    SPAKER2_OFF;
+//	    SPAKER3_OFF;
+//	    SPAKER4_OFF;
 
-			rt_thread_mdelay(5000);
-}
+//			rt_thread_mdelay(5000);
+//}
 
-#endif
+//#endif
 #ifdef  TEST_RELAY
 static void  relayTest()
 {
@@ -446,9 +446,9 @@ void  hardWareDriverTest(void)
 		relayTest();
 #endif
 	
-#ifdef  TEST_SPAKER
-   spakerTest();
-#endif
+//#ifdef  TEST_SPAKER
+//   spakerTest();
+//#endif
 #ifdef  TEST_W5500
 		w5500Test();
 #endif

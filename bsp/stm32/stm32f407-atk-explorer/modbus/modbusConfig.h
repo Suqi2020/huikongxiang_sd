@@ -30,18 +30,12 @@ typedef  enum{
 	  CRACK_TESTER,//(9,"¡—∑Ï“«");
 	  MANHOLE_COVER//(10,"æÆ∏«");
 }regTypeEnum;
-typedef enum{
-//		USE_UART2=0,
-	  USE_UART3=0,
-	  USE_UART6,
-	  USE_UART4,
-	  USE_DIS_UART=0XFF
-}uartEnum;////
+
 
 
 typedef struct{
 		bool 	workFlag;
- 		uartEnum  	useUartNum;
+ 		uint16_t  	useUartNum;
 		uint16_t  	slaveAddr; //0-255
 		char  ID[MODBID_LEN];
 		char  model[MODL_LEN];
@@ -471,7 +465,7 @@ typedef struct{
 	    digputFlagStru     switchOutput[SWITCH_NUM];
 }inoutDevStru;
 //DI≈‰÷√∏ﬂ”––ß
-extern rt_err_t uartDataRec( uartEnum uartNum,uint8_t dat);
+extern rt_err_t uartDataRec( uint8_t uartNum,uint8_t dat);
 extern deviceFlashStru sheet;
 extern inoutDevStru inpoutpFlag;
 

@@ -49,7 +49,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include  "board.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <rtthread.h>
@@ -118,17 +118,16 @@ extern "C" {
 #define REALAY_CTRL4_GPIO_Port GPIOE
 #define LED_Pin GPIO_PIN_15
 #define LED_GPIO_Port GPIOE
-#define W5500_IRQ_Pin GPIO_PIN_11
-#define W5500_IRQ_GPIO_Port GPIOB
-#define W5500_IRQ_EXTI_IRQn EXTI15_10_IRQn
-#define SPAKER1_Pin GPIO_PIN_12
-#define SPAKER1_GPIO_Port GPIOB
-#define SPAKER3_Pin GPIO_PIN_13
-#define SPAKER3_GPIO_Port GPIOB
-#define SPAKER4_Pin GPIO_PIN_14
-#define SPAKER4_GPIO_Port GPIOB
-#define SPAKER2_Pin GPIO_PIN_15
-#define SPAKER2_GPIO_Port GPIOB
+#define IRQ1234_Pin GPIO_PIN_10
+#define IRQ1234_GPIO_Port GPIOB
+#define IRQ1234_EXTI_IRQn EXTI15_10_IRQn
+#define RESET5678_Pin GPIO_PIN_12
+#define RESET5678_GPIO_Port GPIOB
+#define IRQ5678_Pin GPIO_PIN_13
+#define IRQ5678_GPIO_Port GPIOB
+#define IRQ5678_EXTI_IRQn EXTI15_10_IRQn
+#define RESET1234_Pin GPIO_PIN_11
+#define RESET1234_GPIO_Port GPIOA
 #define IO_OUT8_Pin GPIO_PIN_12
 #define IO_OUT8_GPIO_Port GPIOA
 #define IO_OUT7_Pin GPIO_PIN_15
@@ -204,20 +203,20 @@ extern "C" {
 #define RELAY3_READ			 HAL_GPIO_ReadPin(REALAY_CTRL3_GPIO_Port, REALAY_CTRL3_Pin)
 #define RELAY4_READ			 HAL_GPIO_ReadPin(REALAY_CTRL4_GPIO_Port, REALAY_CTRL4_Pin)
 
-#define SPAKER1_ON			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER1_Pin, GPIO_PIN_SET)
-#define SPAKER2_ON			 HAL_GPIO_WritePin(SPAKER2_GPIO_Port, SPAKER2_Pin, GPIO_PIN_SET)
-#define SPAKER3_ON			 HAL_GPIO_WritePin(SPAKER3_GPIO_Port, SPAKER3_Pin, GPIO_PIN_SET)
-#define SPAKER4_ON			 HAL_GPIO_WritePin(SPAKER4_GPIO_Port, SPAKER4_Pin, GPIO_PIN_SET)
+//#define SPAKER1_ON			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER1_Pin, GPIO_PIN_SET)
+//#define SPAKER2_ON			 HAL_GPIO_WritePin(SPAKER2_GPIO_Port, SPAKER2_Pin, GPIO_PIN_SET)
+//#define SPAKER3_ON			 HAL_GPIO_WritePin(SPAKER3_GPIO_Port, SPAKER3_Pin, GPIO_PIN_SET)
+//#define SPAKER4_ON			 HAL_GPIO_WritePin(SPAKER4_GPIO_Port, SPAKER4_Pin, GPIO_PIN_SET)
 
-#define SPAKER1_OFF			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER1_Pin, GPIO_PIN_RESET)
-#define SPAKER2_OFF			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER2_Pin, GPIO_PIN_RESET)
-#define SPAKER3_OFF			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER3_Pin, GPIO_PIN_RESET)
-#define SPAKER4_OFF			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER4_Pin, GPIO_PIN_RESET)
+//#define SPAKER1_OFF			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER1_Pin, GPIO_PIN_RESET)
+//#define SPAKER2_OFF			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER2_Pin, GPIO_PIN_RESET)
+//#define SPAKER3_OFF			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER3_Pin, GPIO_PIN_RESET)
+//#define SPAKER4_OFF			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER4_Pin, GPIO_PIN_RESET)
 
-#define SPAKER1_READ			 HAL_GPIO_ReadPin(SPAKER1_GPIO_Port, SPAKER1_Pin)
-#define SPAKER2_READ			 HAL_GPIO_ReadPin(SPAKER1_GPIO_Port, SPAKER2_Pin)
-#define SPAKER3_READ			 HAL_GPIO_ReadPin(SPAKER1_GPIO_Port, SPAKER3_Pin)
-#define SPAKER4_READ			 HAL_GPIO_ReadPin(SPAKER1_GPIO_Port, SPAKER4_Pin)
+//#define SPAKER1_READ			 HAL_GPIO_ReadPin(SPAKER1_GPIO_Port, SPAKER1_Pin)
+//#define SPAKER2_READ			 HAL_GPIO_ReadPin(SPAKER1_GPIO_Port, SPAKER2_Pin)
+//#define SPAKER3_READ			 HAL_GPIO_ReadPin(SPAKER1_GPIO_Port, SPAKER3_Pin)
+//#define SPAKER4_READ			 HAL_GPIO_ReadPin(SPAKER1_GPIO_Port, SPAKER4_Pin)
 
 
 

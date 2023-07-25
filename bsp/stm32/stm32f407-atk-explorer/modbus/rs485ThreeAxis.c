@@ -95,7 +95,7 @@ void readThreeTempAcc(int num)
 {
 	  uint8_t offset=3;//add+regadd+len
 	  uint8_t  *buf = RT_NULL;
-		buf = rt_malloc(LENTH);
+		buf = rt_malloc(MODBUS_LENTH);
 	  uint16_t len = tongHeModbusRead(sheet.threeAxiss[num].slaveAddr,0X0001,4,buf);
 //		rt_mutex_take(uartDev[sheet.threeAxiss[num].useUartNum].uartMutex,RT_WAITING_FOREVER);
 	  //485发送buf  len  等待modbus回应
@@ -106,10 +106,9 @@ void readThreeTempAcc(int num)
 		}
 		rt_kprintf("\n");
     len=0;
-		memset(buf,0,LENTH);
-		while(rt_mq_recv(&uartmque[sheet.threeAxiss[num].useUartNum], buf+len, 1, 500) == RT_EOK){//115200 波特率1ms 10个数据
-				len++;
-		}
+		memset(buf,0,MODBUS_LENTH);
+		len=  rs485UartRec(sheet.threeAxiss[num].useUartNum,buf,500);
+
 		if(len!=0){
 				rt_kprintf("%srec:",sign);
 				for(int j=0;j<len;j++){

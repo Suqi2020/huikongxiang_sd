@@ -20,6 +20,14 @@ typedef struct
 		uint8_t Ring_Buff[PRINTF_BUF_LEN];
 }RingBuff2_t;
 
+
+typedef struct
+{
+		uint16_t Head;
+		uint16_t Tail;
+		uint16_t Lenght;
+		uint8_t Ring_Buff[MODBUS_LENTH];
+}RingBuff3_t;
 //extern RingBuff_t ringBuff;
 
 

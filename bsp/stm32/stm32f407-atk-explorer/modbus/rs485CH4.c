@@ -49,7 +49,7 @@ void readCH4(int num)
 {
 	  uint8_t offset=3;//add+regadd+len
 	  uint8_t  *buf = RT_NULL;
-		buf = rt_malloc(LENTH);
+		buf = rt_malloc(MODBUS_LENTH);
 	  uint16_t len = modbusReadReg(sheet.ch4[num].slaveAddr,0X0002,READ_03,2,buf);
 	 //rt_kprintf("%sCH4 take %d\n",modbusFlash[CH4].useUartNum);
 //		rt_mutex_take(uartDev[sheet.ch4[num].useUartNum].uartMutex,RT_WAITING_FOREVER);
@@ -61,11 +61,9 @@ void readCH4(int num)
 		}
 		rt_kprintf("\n");
     len=0;
-		memset(buf,0,LENTH);
-		
-		while(rt_mq_recv(&uartmque[sheet.ch4[num].useUartNum], buf+len, 1, 500) == RT_EOK){//115200 波特率1ms 10个数据
-				len++;
-		}
+		memset(buf,0,MODBUS_LENTH);
+		len=  rs485UartRec(sheet.ch4[num].useUartNum,buf,500);
+
 		if(len!=0){
 				rt_kprintf("%srec:",sign);
 				for(int j=0;j<len;j++){

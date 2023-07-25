@@ -617,13 +617,13 @@ void USART3_IRQHandler(void)
 	#ifdef TEST_UART
 		uart3SendRecTest();
 	#else
-		uint8_t Res=0;
-		if((__HAL_UART_GET_FLAG(&huart3,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
-		{
-	
-				HAL_UART_Receive(&huart3,&Res,1,1000); 
-			  uartDataRec(USE_UART3,Res);
-		}
+//		uint8_t Res=0;
+//		if((__HAL_UART_GET_FLAG(&huart3,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+//		{
+//	
+//				HAL_UART_Receive(&huart3,&Res,1,1000); 
+//			  //uartDataRec(USE_UART3,Res);
+//		}
 		HAL_UART_IRQHandler(&huart3);	
 	#endif
 
@@ -666,12 +666,12 @@ void UART4_IRQHandler(void)
 	  uart4SendRecTest();
 
 	#else
-		uint8_t Res=0;
-		if((__HAL_UART_GET_FLAG(&huart4,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
-		{
-				HAL_UART_Receive(&huart4,&Res,1,1000); 
-			  uartDataRec(USE_UART4,Res);
-		}
+//		uint8_t Res=0;
+//		if((__HAL_UART_GET_FLAG(&huart4,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+//		{
+//				HAL_UART_Receive(&huart4,&Res,1,1000); 
+//			  uartDataRec(USE_UART4,Res);
+//		}
 		HAL_UART_IRQHandler(&huart4);	
 	#endif
 
@@ -770,7 +770,9 @@ void USART6_IRQHandler(void)
 		{
 //			  rt_kprintf("read\n");
 				HAL_UART_Receive(&huart6,&Res,1,1000); 
-			  uartDataRec(USE_UART6,Res);
+			 // uartDataRec(USE_UART6,Res);
+			  extern uint8_t Write_RingBuff3(uint8_t data);
+			  Write_RingBuff3(Res);
 			
 		}
 		HAL_UART_IRQHandler(&huart6);	

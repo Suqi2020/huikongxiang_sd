@@ -16,7 +16,7 @@
 
 #define   DATA_LEN        300
 #define 	ANALOG_NUM   	        8
-#define   UART_NUM        3//一共4路串口  剩余了三个
+#define   UART_NUM        9//一共4路串口  剩余了三个
 #define   ACUID_LEN       18
 #define 	DEVID_LEN       20
 #define   MODEL_LEN       8
@@ -36,6 +36,9 @@
 //#define   LOG_SAVE_SD    
 #define   USE_RINGBUF    1
 
+
+
+#define  MODBUS_LENTH   300
 //#incude  <iconv.h>
 #include <rtthread.h>
 #include "stdbool.h"
@@ -66,6 +69,7 @@
 #include "ctrlConfig.h"
 #include "ringbuf.h"	
 #include "modbusData.h"	
+#include "wk2xxx.h"	
 //#include "rs485ThreeAxis.h"
 //#include "rs485Circula.h"
 //#include "rs485PartDischag.h"

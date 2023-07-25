@@ -9,8 +9,8 @@
 //								 3/数字,模拟传感器阈值存储
 
 
-#define  LENTH   300
-#define  MSGPOOL_LEN   LENTH //485数据最大量  大于1k需要修改此处
+
+#define  MSGPOOL_LEN   MODBUS_LENTH //485数据最大量  大于1k需要修改此处
 
 //typedef struct{
 ////		uint32_t bps;
@@ -103,8 +103,8 @@ extern packIpUartStru packFlash;
 
 //extern uartConfStru  uartDev[];
 extern void rs485UartSend(uint8_t chanl,uint8_t *buf,int len);
-extern void uartMutexQueueCfg(void);
-extern struct  rt_messagequeue uartmque[UART_NUM];
+int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout);
+
 
 rt_bool_t errConfigCheck(void);
 
