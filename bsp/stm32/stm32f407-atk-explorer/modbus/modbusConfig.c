@@ -1,7 +1,7 @@
 #include "board.h"
 const static char sign[]="[modbusConfig]";
 
-const static char     UartName[UART_NUM][6] ={"port1", "port2",  "port3","port4","port5","port6","port7","port8","port9"};//重映射一个名称
+const  char     UartName[UART_NUM][6] ={"port1", "port2",  "port3","port4","port5","port6","port7","port8","port9"};//重映射一个名称
 //const  uartEnum UartNum[UART_NUM]     ={USE_UART3,USE_UART6,USE_UART4};//重映射一个名称
 
 		

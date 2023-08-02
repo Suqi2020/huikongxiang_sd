@@ -736,9 +736,23 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 				packFlash.uartBps[2]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
 				break;     		 			
 			case PORT4_ADDR:
-			//	packFlash.uartBps[3]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
+				packFlash.uartBps[3]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
 				break;     		 			
-
+			case PORT5_ADDR:
+				packFlash.uartBps[4]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
+				break;     		 			
+			case PORT6_ADDR:
+				packFlash.uartBps[5]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
+				break;     		 			
+			case PORT7_ADDR:
+				packFlash.uartBps[6]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
+				break;     		 			
+			case PORT8_ADDR:
+				packFlash.uartBps[7]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
+				break;  
+			case PORT9_ADDR:
+				packFlash.uartBps[8]=(uint32_t)(recBuf[7]<<24)+(uint32_t)(recBuf[8]<<16)+(uint32_t)(recBuf[9]<<8)+recBuf[10];
+				break;  
 			//MCUID
 			case MCUID_ADDR:
 				for(int i=0;i<ACUID_LEN+1;i++){

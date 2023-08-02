@@ -166,11 +166,41 @@ void LCDDispUart()
 		buf[3]=(uint8_t)(packFlash.uartBps[2]>>0);
 		LCDWtite(PORT3_ADDR,buf,2*2);
 		//显示端口4波特率
-//		buf[0]=(uint8_t)(packFlash.uartBps[3]>>24);
-//		buf[1]=(uint8_t)(packFlash.uartBps[3]>>16);
-//		buf[2]=(uint8_t)(packFlash.uartBps[3]>>8);
-//		buf[3]=(uint8_t)(packFlash.uartBps[3]>>0);
-//		LCDWtite(PORT4_ADDR,buf,2*2);
+		buf[0]=(uint8_t)(packFlash.uartBps[3]>>24);
+		buf[1]=(uint8_t)(packFlash.uartBps[3]>>16);
+		buf[2]=(uint8_t)(packFlash.uartBps[3]>>8);
+		buf[3]=(uint8_t)(packFlash.uartBps[3]>>0);
+		LCDWtite(PORT4_ADDR,buf,2*2);
+		//显示端口5波特率
+		buf[0]=(uint8_t)(packFlash.uartBps[4]>>24);
+		buf[1]=(uint8_t)(packFlash.uartBps[4]>>16);
+		buf[2]=(uint8_t)(packFlash.uartBps[4]>>8);
+		buf[3]=(uint8_t)(packFlash.uartBps[4]>>0);
+		LCDWtite(PORT5_ADDR,buf,2*2);
+		//显示端口6波特率
+		buf[0]=(uint8_t)(packFlash.uartBps[5]>>24);
+		buf[1]=(uint8_t)(packFlash.uartBps[5]>>16);
+		buf[2]=(uint8_t)(packFlash.uartBps[5]>>8);
+		buf[3]=(uint8_t)(packFlash.uartBps[5]>>0);
+		LCDWtite(PORT6_ADDR,buf,2*2);		
+		//显示端口7波特率
+		buf[0]=(uint8_t)(packFlash.uartBps[6]>>24);
+		buf[1]=(uint8_t)(packFlash.uartBps[6]>>16);
+		buf[2]=(uint8_t)(packFlash.uartBps[6]>>8);
+		buf[3]=(uint8_t)(packFlash.uartBps[6]>>0);
+		LCDWtite(PORT7_ADDR,buf,2*2);		
+		//显示端口8波特率
+		buf[0]=(uint8_t)(packFlash.uartBps[7]>>24);
+		buf[1]=(uint8_t)(packFlash.uartBps[7]>>16);
+		buf[2]=(uint8_t)(packFlash.uartBps[7]>>8);
+		buf[3]=(uint8_t)(packFlash.uartBps[7]>>0);
+		LCDWtite(PORT8_ADDR,buf,2*2);		
+		//显示端口9波特率
+		buf[0]=(uint8_t)(packFlash.uartBps[8]>>24);
+		buf[1]=(uint8_t)(packFlash.uartBps[8]>>16);
+		buf[2]=(uint8_t)(packFlash.uartBps[8]>>8);
+		buf[3]=(uint8_t)(packFlash.uartBps[8]>>0);
+		LCDWtite(PORT9_ADDR,buf,2*2);
 }
 
 

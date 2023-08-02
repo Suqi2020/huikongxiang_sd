@@ -41,6 +41,15 @@
 #define   PORT4_ADDR     		 			0X1106
 #define   KEY_PORT_SURE_ADDR		  0X1108
 #define   KEY_PORT_READ_ADDR		  0X110A
+
+
+
+#define   PORT5_ADDR     		 			0X1110
+#define   PORT6_ADDR     		 			0X1112
+#define   PORT7_ADDR     		 			0X1114
+#define   PORT8_ADDR     		 			0X1116
+#define   PORT9_ADDR     		 			0X1118
+
 //MCUID
 #define   MCUID_ADDR         			0X1210
 #define		KEY_MCUID_SURE_ADDR		  0X1202

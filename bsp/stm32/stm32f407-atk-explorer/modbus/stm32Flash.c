@@ -66,7 +66,7 @@ MSH_CMD_EXPORT(flash,flash save);//FINSH_FUNCTION_EXPORT_CMD
 
 //}
 //MSH_CMD_EXPORT(uart,uart config);//FINSH_FUNCTION_EXPORT_CMD
-static const uint8_t portStr[UART_NUM][6]={"port1","port2","port3","port4","port5","port6","port7","port8","port9"};
+extern  const uint8_t UartName[UART_NUM][6];
 ////////////////////¥Æø⁄≈‰÷√/////////////////////////////
 static void uart(int argc, char *argv[])
 {
@@ -76,7 +76,7 @@ static void uart(int argc, char *argv[])
 		}
 
 		for(int i=0;i<UART_NUM;i++){
-				if(0==rt_strcmp((char *)portStr[i], argv[1])){
+				if(0==rt_strcmp((char *)UartName[i], argv[1])){
 						packFlash.uartBps[i]    =atoi32(argv[2],10);
 						uartSingConf(i,packFlash.uartBps[i]);
 						rt_kprintf("%sport%d config OK\n",sign,i+1);

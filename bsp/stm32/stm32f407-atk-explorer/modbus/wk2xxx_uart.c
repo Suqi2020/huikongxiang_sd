@@ -18,13 +18,13 @@ void Wk2xxxRstInit(void)
 
 HAL_StatusTypeDef Uart4Transmit( uint8_t *pData, uint16_t size)
 {
-			HAL_UART_Transmit(&huart4,pData,size,100);
+	HAL_UART_Transmit(&huart4,pData,size,100);
 }
 
 
 HAL_StatusTypeDef Uart4Receive(uint8_t *pData, uint16_t size)
 {
-			HAL_UART_Receive(&huart4,pData,size,100); 	
+	HAL_UART_Receive(&huart4,pData,size,100); 	
 }
 
 
@@ -235,8 +235,8 @@ uint8_t Wk5678UartSetBaud(uint8_t port,uint32_t baudrate)
 		uint32_t temp,freq;
 		uint8_t scr;
 		uint8_t baud1,baud0,pres;
-//	freq=11059200;/*芯片外部时钟频率*/
-		freq=32000000;/*芯片外部时钟频率*/
+   	freq=11059200;/*芯片外部时钟频率*/
+		//freq=32000000;/*芯片外部时钟频率*/
 	  if(freq>=(baudrate*16))
 		{
 			temp=(freq)/(baudrate*16);
@@ -288,35 +288,35 @@ uint8_t Wk5678UartFormatSet(uint8_t port,uint8_t stopformat,uint8_t paritytype)
 		sier=Wk5678ReadSlaveRegister(port,WK2XXX_SIER_REG); 
 		Wk5678WriteSlaveRegister(port,WK2XXX_SIER_REG,0);
 
-	  if(stopformat==WK2XXX_UART_STOPBITS_1){
-					lcr=lcr|0;
-				}
-				else if(stopformat==WK2XXX_UART_STOPBITS_2){
-					lcr=lcr|LCR_STPL_BIT;
-				}
-			  else {
-					return 1;
-				}
+		if(stopformat==WK2XXX_UART_STOPBITS_1){
+			lcr=lcr|0;
+		}
+		else if(stopformat==WK2XXX_UART_STOPBITS_2){
+			lcr=lcr|LCR_STPL_BIT;
+		}
+		else {
+			return 1;
+		}
 
-				/**/
-				if(paritytype==WK2XXX_UART_PARITY_NONE){
-					lcr=lcr|0;
-				}
-				else if(paritytype==WK2XXX_UART_PARITY_ODD){
-					lcr=lcr|(LCR_PAM0_BIT | LCR_PAEN_BIT);
-				}
-				else if(paritytype==WK2XXX_UART_PARITY_EVEN){
-					lcr=lcr|(LCR_PAM1_BIT | LCR_PAEN_BIT);
-				}
-				else if(paritytype==WK2XXX_UART_PARITY_MARK){
-					lcr=lcr|(LCR_PAM0_BIT | LCR_PAM1_BIT|LCR_PAEN_BIT);
-				}
-				else if(paritytype==WK2XXX_UART_PARITY_SPACE){
-					lcr=lcr|LCR_PAEN_BIT;
-				}
-				else {
-					return 1;
-				}
+		/**/
+		if(paritytype==WK2XXX_UART_PARITY_NONE){
+			lcr=lcr|0;
+		}
+		else if(paritytype==WK2XXX_UART_PARITY_ODD){
+			lcr=lcr|(LCR_PAM0_BIT | LCR_PAEN_BIT);
+		}
+		else if(paritytype==WK2XXX_UART_PARITY_EVEN){
+			lcr=lcr|(LCR_PAM1_BIT | LCR_PAEN_BIT);
+		}
+		else if(paritytype==WK2XXX_UART_PARITY_MARK){
+			lcr=lcr|(LCR_PAM0_BIT | LCR_PAM1_BIT|LCR_PAEN_BIT);
+		}
+		else if(paritytype==WK2XXX_UART_PARITY_SPACE){
+			lcr=lcr|LCR_PAEN_BIT;
+		}
+		else {
+			return 1;
+		}
 
     Wk5678WriteSlaveRegister(port,WK2XXX_LCR_REG,lcr);
 		//使能子串口收发使能
@@ -418,8 +418,8 @@ uint16_t Wk5678UartRxChars(uint8_t port,uint8_t *recbuf)
 /**************************WK_RS485*******************************************************/
 void Wk5678UartRS485(uint8_t port)
 {   
-	  Wk5678WriteSlaveRegister(port,WK2XXX_RS485_REG,0x02);//默认高电平
-	  //WkWriteSlaveRegister(port,WK2XXX_RS485_REG,0x03);//默认低电平
+	  //Wk5678WriteSlaveRegister(port,WK2XXX_RS485_REG,0x02);//默认高电平
+	  Wk5678WriteSlaveRegister(port,WK2XXX_RS485_REG,0x03);//默认低电平
 		Wk5678WriteSlaveRegister(port,WK2XXX_SPAGE_REG,1);//切换到page1
 		Wk5678WriteSlaveRegister(port,WK2XXX_RTSDLY_REG,0X10);
 		Wk5678WriteSlaveRegister(port,WK2XXX_SPAGE_REG,0);//切换到page0 
