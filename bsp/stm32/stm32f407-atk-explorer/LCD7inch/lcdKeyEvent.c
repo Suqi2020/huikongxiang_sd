@@ -652,7 +652,7 @@ void lcdCopyAnaPort(uint8_t *rec);
 void lcdCopyAnaTime(uint8_t *rec);
 bool checkPassWord(char *rec);
 void LCDHidePssd(void);
-extern rt_bool_t getUTCFlag;
+//extern rt_bool_t getUTCFlag;
 //lcd 发来的配置解析
 void LCDDispConfig(uint8_t *recBuf,int len)
 {
@@ -772,7 +772,11 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 							break;
 					}
 				}
-				if(devIDOKCheck(LCDInput.ID)!=true){//核对ID
+				if(strcmp(LCDInput.ID,"")==0){//核对ID
+						rt_kprintf("%sERR:ID empty\n",sign);
+
+				}
+				else if(devIDOKCheck(LCDInput.ID)!=true){//核对ID
 						LCDDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
 						rt_kprintf("%sERR:same ID\n",sign);
 				}
@@ -836,7 +840,7 @@ void LCDDispConfig(uint8_t *recBuf,int len)
 			case LCD_RTC_ADDR:
 				readRtc= copyBufToRtc((char *)recBuf);
 			
-				getUTCFlag=RT_TRUE;
+//				getUTCFlag=RT_TRUE;
 				
 			  break;
 #ifndef     ANA_MASK

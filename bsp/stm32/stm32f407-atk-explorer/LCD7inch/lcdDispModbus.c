@@ -991,7 +991,11 @@ void  	modbErrDevReadIndexLow()
 int modbusConfIDCheck(char *inputID);
 void keyModbusCfgSure()
 {
-		if(devIDOKCheck(LCDInput.ID)!=true){//ºË¶ÔID
+		if(strcmp(LCDInput.ID,"")==0){//ºË¶ÔID
+				rt_kprintf("%sERR:ID empty\n",sign);
+
+		}
+		else if(devIDOKCheck(LCDInput.ID)!=true){//ºË¶ÔID
 				LCDDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
 				rt_kprintf("%sERR:same ID[%s]\n",sign,LCDInput.ID);
 

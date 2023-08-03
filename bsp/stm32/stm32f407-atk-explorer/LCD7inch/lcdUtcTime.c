@@ -5,7 +5,7 @@ time_t t_unix;//时间撮
 
 //RT_LIBC_DEFAULT_TIMEZONE  已经偏移8个小时时区
 
-
+#define  UTC2099TIME  1893427200
 
 /**************************************
 
@@ -51,6 +51,7 @@ uint32_t beijingTime_to_utc(RTC_TimeTypeDef t_location)
 		tmCurrentTime.tm_sec=t_location.second;
 		t_unix = mktime(&tmCurrentTime);
 		return (uint32_t)(t_unix);//1686550004  0x6486B5F4
+	                            //955296001217
 }
 
 ///**************************************
@@ -144,12 +145,22 @@ void  correctLcdTime(uint32_t time)
 uint32_t lcdUtcTime_beijing()
 {
 
-	  memset(&readRtc,0,sizeof(readRtc));
-		readLcdRTC();
-	  rt_thread_mdelay(200);  //延时等待回应
-	
-	 	rt_kprintf("[read]%d年%d月%d日%d时%d分%d秒\r\n",readRtc.year,readRtc.month,readRtc.day,\
-  	readRtc.hour,readRtc.minute,readRtc.second );
+	  int count=25;//5秒钟内还获取不到正确的回应  丢掉
+	  do
+		{
+				memset(&readRtc,0,sizeof(readRtc));
+				readLcdRTC();
+				rt_thread_mdelay(200);  //延时等待回应
+			
+				rt_kprintf("[read]%d年%d月%d日%d时%d分%d秒\r\n",readRtc.year,readRtc.month,readRtc.day,\
+				readRtc.hour,readRtc.minute,readRtc.second );
+			  count--;
+			  if(count==0){
+						rt_kprintf("ERR:get beijing time err\n");
+						break;
+				}
+
+		}while(readRtc.year==0);
 	  return beijingTime_to_utc(readRtc);
 }
 

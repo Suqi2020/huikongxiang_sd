@@ -40,7 +40,12 @@ void lcdCopyInputID(uint8_t *rec)
 				break;
 		}
 	}
-	if(devIDOKCheck(digInputLCD.devID)!=true){//核对ID
+
+	if(strcmp(digInputLCD.devID,"")==0){//核对ID
+			rt_kprintf("%sERR:ID empty\n",sign);
+
+	}
+	else 	if(devIDOKCheck(digInputLCD.devID)!=true){//核对ID
 			LCDDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
 		  rt_kprintf("%sERR:same ID\n",sign);
 	}
@@ -71,7 +76,11 @@ void lcdCopyInputPort(uint8_t *rec)
 void  lcdInputConfig()
 {
 		int port=digInputLCD.port;
-		if(devIDOKCheck(digInputLCD.devID)!=true){//核对ID
+		if(strcmp(digInputLCD.devID,"")==0){//核对ID
+			rt_kprintf("%sERR:ID empty\n",sign);
+			return;
+	 }
+  	else 		if(devIDOKCheck(digInputLCD.devID)!=true){//核对ID
 				LCDDispSameID(DISP_INPUT_SAME_ID_MSG_ADDR);
 			  rt_kprintf("%sERR:same ID\n",sign);
 				return;

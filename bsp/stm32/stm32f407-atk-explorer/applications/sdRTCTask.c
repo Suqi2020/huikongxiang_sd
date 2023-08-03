@@ -16,7 +16,7 @@ extern void creatFolder(void);
 
 extern void FatReadDirDelEarlyLogTxt(void);
 //static int count=0;
-rt_bool_t getUTCFlag=RT_FALSE;
+//rt_bool_t getUTCFlag=RT_FALSE;
 void getUTCFromLCD()
 {
 		uint32_t lcdUtcTime_beijing();
@@ -73,10 +73,10 @@ void  rtcCheck()
 {
 		static int count =0;
 
-		if(getUTCFlag==RT_FALSE){//没有同步RTC时钟 每隔1分钟同步一次
+//		if(getUTCFlag==RT_FALSE){//没有同步RTC时钟 每隔1分钟同步一次
 				getUTCFromLCD();
 			  rt_kprintf("%scheck UTC\n",task);
-		}
+		//}
 }
 
 
@@ -92,7 +92,7 @@ extern void h2sDelEarlyTxt(void);
 extern void lieFengYiDelEarlyTxt(void);
 extern void jingGaiDelEarlyTxt(void);
 extern void ch4DelEarlyTxt(void);
-void  modbusDataCheck()
+void  modbusDataTxtCheck()
 {
 			static int count =30;
 	    count++;
@@ -134,6 +134,7 @@ void  sdAndRtcInit()
 void   sdRTCTask(void *parameter)
 {
 		sdAndRtcInit();
+	  rtcCheck();
 	  int count=0;
 		while(1){
 #if 1
@@ -141,8 +142,7 @@ void   sdRTCTask(void *parameter)
 			  if(count>3000){//大约1分钟进去一次
 					count=0;
 					sdCheck();
-					rtcCheck();
-					modbusDataCheck();
+					modbusDataTxtCheck();
 				}
 				logSave();
 #endif
