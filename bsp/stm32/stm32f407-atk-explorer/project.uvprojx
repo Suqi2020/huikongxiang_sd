@@ -339,7 +339,7 @@
               <MiscControls>--no-multibyte-chars  </MiscControls>
               <Define>RT_USING_LIBC, USE_HAL_DRIVER, STM32F407xx, __CLK_TCK=RT_TICK_PER_SECOND, __STDC_LIMIT_MACROS, __RTTHREAD__, RT_USING_ARM_LIBC</Define>
               <Undefine></Undefine>
-              <IncludePath>..\libraries\HAL_Drivers;..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\components\drivers\include;applications;..\..\..\components\libc\compilers\common\include;..\libraries\HAL_Drivers\config;LCD7inch;..\..\..\components\libc\compilers\common\extension;..\..\..\components\libc\posix\io\poll;..\..\..\libcpu\arm\cortex-m4;..\..\..\components\drivers\include;..\..\..\components\libc\posix\io\stdio;analog;..\libraries\HAL_Drivers\CMSIS\Include;..\..\..\components\drivers\spi;..\..\..\components\libc\posix\ipc;..\..\..\libcpu\arm\common;..\..\..\components\drivers\include;..\..\..\components\libc\compilers\common\extension\fcntl\octal;board\CubeMX_Config\Inc;..\..\..\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;.;board;json;..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;..\..\..\components\finsh;..\libraries\HAL_Drivers\drv_flash;board\ports;modbus;w5500;ctrlConfig;FatFs;sdio</IncludePath>
+              <IncludePath>..\libraries\HAL_Drivers;..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\components\drivers\include;applications;..\..\..\components\libc\compilers\common\include;..\libraries\HAL_Drivers\config;LCD7inch;..\..\..\components\libc\compilers\common\extension;..\..\..\components\libc\posix\io\poll;..\..\..\libcpu\arm\cortex-m4;..\..\..\components\drivers\include;..\..\..\components\libc\posix\io\stdio;analog;..\libraries\HAL_Drivers\CMSIS\Include;..\..\..\components\drivers\spi;..\..\..\components\libc\posix\ipc;..\..\..\libcpu\arm\common;..\..\..\components\drivers\include;..\..\..\components\libc\compilers\common\extension\fcntl\octal;board\CubeMX_Config\Inc;..\..\..\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;.;board;json;..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;..\..\..\components\finsh;..\libraries\HAL_Drivers\drv_flash;board\ports;modbus;w5500;ctrlConfig;FatFs;sdio;mqtt</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -485,11 +485,6 @@
               <FilePath>applications\NetJsonDataUpTask.c</FilePath>
             </File>
             <File>
-              <FileName>autoCtrlTask.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\autoCtrlTask.c</FilePath>
-            </File>
-            <File>
               <FileName>wdtTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\wdtTask.c</FilePath>
@@ -500,9 +495,19 @@
               <FilePath>.\applications\sdRTCTask.c</FilePath>
             </File>
             <File>
+              <FileName>autoCtrlTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\autoCtrlTask.c</FilePath>
+            </File>
+            <File>
               <FileName>readme.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\readme.c</FilePath>
+            </File>
+            <File>
+              <FileName>mqttTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\mqttTask.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1484,6 +1489,96 @@
               <FileName>cc936.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\FatFs\cc936.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MQTT</GroupName>
+          <Files>
+            <File>
+              <FileName>MQTTConnectClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTConnectClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTConnectServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTConnectServer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTDeserializePublish.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTDeserializePublish.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTFormat.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTFormat.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTPacket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTPacket.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTPublish.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MQTT\MQTTPublish.h</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSerializePublish.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTSerializePublish.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSubscribe.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MQTT\MQTTSubscribe.h</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSubscribeClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTSubscribeClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSubscribeServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTSubscribeServer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTUnsubscribe.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MQTT\MQTTUnsubscribe.h</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTUnsubscribeClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTUnsubscribeClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTUnsubscribeServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\MQTTUnsubscribeServer.c</FilePath>
+            </File>
+            <File>
+              <FileName>StackTrace.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MQTT\StackTrace.h</FilePath>
+            </File>
+            <File>
+              <FileName>transport.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MQTT\transport.c</FilePath>
+            </File>
+            <File>
+              <FileName>transport.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MQTT\transport.h</FilePath>
+            </File>
+            <File>
+              <FileName>mqttDataPhase.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\mqttDataPhase.c</FilePath>
             </File>
           </Files>
         </Group>

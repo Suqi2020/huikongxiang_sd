@@ -39,6 +39,7 @@
 
 
 #define  MODBUS_LENTH   300
+//#define  USE_MQTT
 //#incude  <iconv.h>
 #include <rtthread.h>
 #include "stdbool.h"
@@ -49,7 +50,7 @@
 #include "drv_flash.h"
 #include "test_hardware.h"
 #include "main.h"
-
+#include "cJSON.h"
 #include "W5500Task.h"
 #include "w5500_conf.h"
 #include "w5500.h"
@@ -77,9 +78,20 @@
 //#include "rs485Gas.h"
 //#include "rs485waterDepth.h"
 //#include "rs485TempHum.h"
-#include "cJSON.h"
+
 #include "analogConfig.h"
 #include "modbusConfig.h"
+
+#include "MQTTFormat.h"
+#include "mqttConnect.h"
+#include "MQTTPacket.h"
+#include "MQTTPublish.h"
+#include "MQTTSubscribe.h"
+#include "MQTTUnsubscribe.h"
+#include "transport.h"
+#include "StackTrace.h"
+
+#include "mqttTask.h"
 //#include "utf_8.h"
 
 //#define  USE_WDT
@@ -91,6 +103,14 @@
 
 #define  CCMRAM __attribute__((section("ccmram"))) 
 #define  PACK_HEAD_LEN  4
+
+
+
+#define EVENT_CONNACK   (1 << 1)
+#define EVENT_SUBACK   (1 << 2)
+#define EVENT_PINGRESP (1 << 3)
+
+
 
  
 #ifdef  USE_WDT

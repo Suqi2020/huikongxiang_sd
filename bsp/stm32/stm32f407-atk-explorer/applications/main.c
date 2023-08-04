@@ -27,7 +27,6 @@ void LCDDispSoftVer()
 {
 		char buf[10]="V_";
 		sprintf((char *)buf+2,"%02d.%02d",(uint8_t)(APP_VER>>8),(uint8_t)APP_VER);
-	
 	  LCDWtite(SOFT_VER_ADDR ,(uint8_t *)buf,strlen(buf));
 }
 //static    rt_thread_t tid 	= RT_NULL;
@@ -37,7 +36,7 @@ static    rt_thread_t tidNetSend 	= RT_NULL;
 static    rt_thread_t tidUpkeep 	= RT_NULL;
 static    rt_thread_t tidLCD      = RT_NULL;
 static    rt_thread_t tidAutoCtrl = RT_NULL;
-
+static    rt_thread_t tidMqtt     = RT_NULL;
 static    rt_thread_t tidSdRTC =RT_NULL;
 
 
@@ -49,6 +48,7 @@ rt_mutex_t   sdWrite_mutex=RT_NULL;
 rt_mutex_t   printf_mutex=RT_NULL;
 rt_sem_t   uart1234_sem=RT_NULL;
 rt_sem_t   uart5678_sem=RT_NULL;
+
 //邮箱的定义
 extern struct  rt_mailbox mbNetSendData;;
 static char 	 mbSendPool[20];//发送缓存20条
@@ -96,6 +96,7 @@ extern  void   autoCtrlTask(void *para);
 extern  void   logSaveSDTask(void *para);
 extern  void   WDTTask(void *parameter);
 extern  void   sdRTCTask(void *parameter);
+extern  void   mqttTask(void *parameter);
 const  static char sign[]="[main]";
 extern rt_bool_t gbNetState;
 
@@ -297,7 +298,22 @@ int main(void)
 				rt_thread_startup(tidW5500);													 
 				printf("%sRTcreat w5500Task task\r\n",sign);
 		}
+#ifdef USE_MQTT
+		tidMqtt = rt_thread_create("mqtt",mqttTask,RT_NULL,256*2,4, 10 );
+		if(tidMqtt!=NULL){
+				rt_thread_startup(tidMqtt);													 
+				rt_kprintf("RTcreat mqtt task\r\n");
+		}
+		else{
+				rt_kprintf("RTcreat mqtt ERR\r\n");
+		}		
+///////////////////////////////////事件标志组////////////////////////////
+    if (rt_event_init(&mqttAckEvent, "mqttAckEvent", RT_IPC_FLAG_FIFO) != RT_EOK)
+    {
+        rt_kprintf("%sinit mqttAckEvent failed.\n",sign);
 
+    }
+#endif
 		tidSdRTC =  rt_thread_create("sdRTC",sdRTCTask,RT_NULL,512*4,8, 10 );
 		if(tidSdRTC!=NULL){
 				rt_thread_startup(tidSdRTC);													 

@@ -84,38 +84,7 @@ uint16_t logCrtlReadResp(cJSON *Json)
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		//打包
-		int len=0;
-		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=LENTH_LEN;//json长度最后再填写
-		// 释放内存  
-		out = cJSON_Print(root);
-		rt_strcpy((char *)NetTxBuffer+len,out);
-		len+=rt_strlen(out);
-		if(out!=NULL){
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
-				rt_free(out);
-				out=NULL;
-		}
-		if(root!=NULL){
-			cJSON_Delete(root);
-			root=NULL;
-		}
-		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-	  //crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
-		//tail
-		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-		NetTxBuffer[len]=0;//len++;//结尾 补0
-		rt_free(sprinBuf);
-		sprinBuf=RT_NULL;
+		int len=jsonPackMqttTcp(&out,&root,&sprinBuf,true);
 	  return len;
 }
 
@@ -220,39 +189,9 @@ uint16_t logCrtlAddResp(cJSON *Json)
 		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
+		int len=jsonPackMqttTcp(&out,&root,&sprinBuf,true);
 		//打包
-		int len=0;
-		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=LENTH_LEN;//json长度最后再填写
-		// 释放内存  
-		out = cJSON_Print(root);
-		rt_strcpy((char *)NetTxBuffer+len,out);
-		len+=rt_strlen(out);
-		if(out!=NULL){
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
-				rt_free(out);
-				out=NULL;
-		}
-		if(root!=NULL){
-			cJSON_Delete(root);
-			root=NULL;
-		}
-		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-	  //crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
-		//tail
-		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-		NetTxBuffer[len]=0;//len++;//结尾 补0
-		rt_free(sprinBuf);
-		sprinBuf=RT_NULL;
+
 	  return len;
 }
 
@@ -303,38 +242,7 @@ uint16_t logCtrlDel(cJSON *Json)
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		//打包
-		int len=0;
-		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=LENTH_LEN;//json长度最后再填写
-		// 释放内存  
-		out = cJSON_Print(root);
-		rt_strcpy((char *)NetTxBuffer+len,out);
-		len+=rt_strlen(out);
-		if(out!=NULL){
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
-				rt_free(out);
-				out=NULL;
-		}
-		if(root!=NULL){
-			cJSON_Delete(root);
-			root=NULL;
-		}
-		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-	  //crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
-		//tail
-		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-		NetTxBuffer[len]=0;//len++;//结尾 补0
-		rt_free(sprinBuf);
-		sprinBuf=RT_NULL;
+		int len=jsonPackMqttTcp(&out,&root,&sprinBuf,true);
 	  return len;
 }
 bool v33OutputReadFun(char num);
@@ -433,38 +341,7 @@ uint16_t logCrtlDelResp(cJSON *Json,char *identify)
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		//打包
-		int len=0;
-		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=LENTH_LEN;//json长度最后再填写
-		// 释放内存  
-		out = cJSON_Print(root);
-		rt_strcpy((char *)NetTxBuffer+len,out);
-		len+=rt_strlen(out);
-		if(out!=NULL){
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
-				rt_free(out);
-				out=NULL;
-		}
-		if(root!=NULL){
-			cJSON_Delete(root);
-			root=NULL;
-		}
-		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-	  //crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
-		//tail
-		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-		NetTxBuffer[len]=0;//len++;//结尾 补0
-		rt_free(sprinBuf);
-		sprinBuf=RT_NULL;
+		int len=jsonPackMqttTcp(&out,&root,&sprinBuf,true);
 	  return len;
 }
 

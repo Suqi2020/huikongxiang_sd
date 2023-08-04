@@ -381,46 +381,7 @@ bool modPartDischagWarn2Send()
 		sprintf(sprinBuf,"%llu",utcTime_ms());
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		//打包
-		int len=0;
-		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=LENTH_LEN;//json长度最后再填写
-		// 释放内存  
-		out = cJSON_Print(root);
-		rt_strcpy((char *)NetTxBuffer+len,out);
-		len+=rt_strlen(out);
-		if(out!=NULL){
-	
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
-			  
-				rt_free(out);
-
-				out=NULL;
-		}
-		if(root!=NULL){
-		
-			cJSON_Delete(root);
-		
-			root=NULL;
-		}
-		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-	  //crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
-		//tail
-		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-		NetTxBuffer[len]=0;//len++;//结尾 补0
-		mcu.repDataMessID =mcu.upMessID;
-		//mcu.devRegMessID =mcu.upMessID;
-		upMessIdAdd();
-		rt_free(sprinBuf);
-		sprinBuf=RT_NULL;
+		int len=jsonPackMqttTcp(&out,&root,&sprinBuf,false);
 		return true;
 }
 
@@ -521,197 +482,12 @@ uint16_t partDischagJsonPack(bool respFlag)
 
 		// 打印JSON数据包  
 		
-		
-		
-		int len=0;
-		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=HEAD_LEN;//json长度最后再填写
-		// 释放内存  
-		out = cJSON_Print(root);
-		
-		rt_strcpy((char *)NetTxBuffer+len,out);
-		len+=rt_strlen(out);
-		if(out!=NULL){
-			
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
-			  
-		rt_free(out);
-		out=NULL;
-		}
-		if(root!=NULL){
-			cJSON_Delete(root);
-			root=NULL;
-		}
-
-
-		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-	  //crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
-		//tail
-		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-		NetTxBuffer[len]=0;//len++;//结尾 补0
-	
-		if(respFlag==false){
-				mcu.repDataMessID =mcu.upMessID;
-				upMessIdAdd();
-		}
-
-		rt_free(sprinBuf);
-		sprinBuf=RT_NULL;
+		int len=jsonPackMqttTcp(&out,&root,&sprinBuf,respFlag);
 
 		return 1;
 }
 
 #endif
-//uint16_t partDischagJsonPack(bool respFlag)
-//{
-//		char *data=NULL;
-//		data =rt_malloc(300); // suqi 根据实际长度来调整 否则导致内存溢出
-//		char* out = NULL;
-//		//创建数组
-//		cJSON* Array = NULL;
-//		// 创建JSON Object  
-//		cJSON* root = NULL;
-//		cJSON* nodeobj = NULL;
-//		cJSON* nodeobj_p = NULL;
-//		root = cJSON_CreateObject();
-//		if (root == NULL) return 0;
-//		// 加入节点（键值对）
-//	
-//		if(respFlag==true){
-//				cJSON_AddNumberToObject(root, "mid",respMid);
-//				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_GET_RESP");
-//				cJSON_AddNumberToObject(root, "code",0);
-//		}
-//		else
-//		{
-//				cJSON_AddNumberToObject(root, "mid",mcu.upMessID);
-//				cJSON_AddStringToObject(root, "packetType","PROPERTIES_485DATA_REP");
-//		}
-//		cJSON_AddStringToObject(root, "identifier","partial_discharge_monitor");
-//		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
-//		char *sprinBuf=RT_NULL;
-//		sprinBuf=rt_malloc(20);//20个字符串长度 够用了
-//		#if 1
-//		{
-//		Array = cJSON_CreateArray();
-//		if (Array == NULL) return 0;
-//		cJSON_AddItemToObject(root, "params", Array);
-//		for (int i = 0; i < PARTDISCHAG_485_NUM; i++)//		for (int i = 0; i < PARTDISCHAG_485_NUM; i++)
-//		{		
-//			
-//			if(sheet.partDischag[i].workFlag==RT_TRUE){
-//				nodeobj = cJSON_CreateObject();
-//				cJSON_AddItemToArray(Array, nodeobj);
-//			  cJSON_AddItemToObject(nodeobj,"deviceId",cJSON_CreateString(sheet.partDischag[i].ID));
-//				cJSON_AddNumberToObject(nodeobj,"responseStatus",partDiscStru_p[i].respStat);
-//				nodeobj_p= cJSON_CreateObject();
-//				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
-//				
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeA);
-//				cJSON_AddItemToObject(nodeobj_p,"pdA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqA);
-//				cJSON_AddItemToObject(nodeobj_p,"freqA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeA);
-//				cJSON_AddItemToObject(nodeobj_p,"dischargeDataA",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"  ");
-
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeB);
-//				cJSON_AddItemToObject(nodeobj_p,"pdB",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqB);
-//				cJSON_AddItemToObject(nodeobj_p,"freqB",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeB);
-//				cJSON_AddItemToObject(nodeobj_p,"dischargeDataB",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
-////				cJSON_AddItemToObject(nodeobj_p,"prpdDataB",cJSON_CreateString(""));
-////				cJSON_AddItemToObject(nodeobj_p,"prpsDataB",cJSON_CreateString(""));
-//				
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].amplitudeC);
-//				cJSON_AddItemToObject(nodeobj_p,"pdC",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].freqC);
-//				cJSON_AddItemToObject(nodeobj_p,"freqC",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
-//				sprintf(sprinBuf,"%d",partDiscStru_p[i].dischargeC);
-//				cJSON_AddItemToObject(nodeobj_p,"dischargeDataC",cJSON_CreateString(sprinBuf));strcat(data,sprinBuf);strcat(data,"  ");
-//				sprintf(sprinBuf,"%llu",utcTime_ms());
-//				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(data,sprinBuf);strcat(data,"\r\n");
-
-//				extern void juFangTxtSaveSD(char *id,char *data);
-//				juFangTxtSaveSD(sheet.partDischag[i].ID,data);
-////					rt_thread_delay(10);
-//				rt_kprintf("%sSD data：%s",sign,data);//自带换行
-
-//			}
-//		}
-//		}
-//		#endif
-//		sprintf(sprinBuf,"%llu",utcTime_ms());
-//		cJSON_AddStringToObject(root,"timestamp",sprinBuf);  
-//		cJSON_AddStringToObject(root,"test",test);
-//		// 打印JSON数据包  
-//		
-//		
-//		
-//		int len=0;
-//		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-//		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-//		len+=HEAD_LEN;//json长度最后再填写
-//		// 释放内存  
-//		out = cJSON_Print(root);
-//		
-//		rt_strcpy((char *)NetTxBuffer+len,out);
-//		len+=rt_strlen(out);
-//		if(out!=NULL){
-//			
-//				for(int i=0;i<rt_strlen(out);i++)
-//						rt_kprintf("%c",out[i]);
-//				rt_kprintf("\n");
-//			  
-
-//		}
-////		if(root!=NULL){
-////			rt_kprintf("free root s\n");
-////			cJSON_Delete(root);
-////			rt_kprintf("free root e\n");
-////			root=NULL;
-////		}
-//		rt_kprintf("free out s  len=%d\n",rt_strlen(out));
-//		
-//								rt_free(out);
-//			  rt_kprintf("free out e\n");
-//				out=NULL;
-//		cJSON_Delete(root);
-//		rt_kprintf("free out d\n");
-//		root=NULL;
-
-//		//lenth
-//	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-//	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-//	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-//	  //crc
-//	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-//	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
-//		//tail
-//		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-//		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-//		NetTxBuffer[len]=0;//len++;//结尾 补0
-//	
-//		if(respFlag==false){
-//				mcu.repDataMessID =mcu.upMessID;
-//				upMessIdAdd();
-//		}
-
-//		rt_free(sprinBuf);
-//		sprinBuf=RT_NULL;
-//		rt_free(data);
-//		data=NULL;
-//		return 1;
-//}
 
 ///局放的读取和发送  供其他函数来调用
 void partDischagRead2Send(rt_bool_t netStat,bool respFlag)
@@ -899,45 +675,8 @@ static  int atlasJsonNodataPack(phaseEnum X,int num)
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		
+   int len=jsonPackMqttTcp(&out,&root,&sprinBuf,true);
 		
-		
-		int len=0;
-		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=HEAD_LEN;//json长度最后再填写
-		// 释放内存  
-		out = cJSON_Print(root);
-		
-		rt_strcpy((char *)NetTxBuffer+len,out);
-		len+=rt_strlen(out);
-		if(out!=NULL){
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
-				rt_free(out);
-				out=NULL;
-		}
-		if(root!=NULL){
-			cJSON_Delete(root);
-			root=NULL;
-		}
-		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-	  //crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
-		//tail
-		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-		NetTxBuffer[len]=0;//len++;//结尾 补0
-	
-
-
-		rt_free(sprinBuf);
-		sprinBuf=RT_NULL;
-
 		return 1;
 }
 
@@ -1063,46 +802,8 @@ static  int atlasJsonReadPack(phaseEnum X,int num,int totalLen,int offset,int re
 		cJSON_AddStringToObject(root,"timestamp",sprinBuf);
 		// 打印JSON数据包  
 		
-		
-		
-		int len=0;
-		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
-		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
-		len+=HEAD_LEN;//json长度最后再填写
-		// 释放内存  
-		out = cJSON_Print(root);
-		
-		rt_strcpy((char *)NetTxBuffer+len,out);
-		len+=rt_strlen(out);
-		if(out!=NULL){
-//				for(int i=0;i<rt_strlen(out);i++)
-//						rt_kprintf("%c",out[i]);
-//				rt_kprintf("\n");
-				rt_free(out);
-				out=NULL;
-		}
-		if(root!=NULL){
-			cJSON_Delete(root);
-			root=NULL;
-		}
-		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
-	  //crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
-	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
-		//tail
-		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
-		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
-		NetTxBuffer[len]=0;//len++;//结尾 补0
 	
-//				for(int i=0;i<len;i++)
-//						rt_kprintf("%02x ",NetTxBuffer[i]);
-//				rt_kprintf("\n");
-
-		rt_free(sprinBuf);
-		sprinBuf=RT_NULL;
+		int len=jsonPackMqttTcp(&out,&root,&sprinBuf,true);
 //		static int times=0;
 //    rt_kprintf("atlasJson len =%d\n",len);
 //		

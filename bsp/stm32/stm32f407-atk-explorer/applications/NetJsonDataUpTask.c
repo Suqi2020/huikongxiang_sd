@@ -78,7 +78,7 @@ static int timeOut()
 						if(tim[i].count!=0xFFFF){
 								if(tim[i].count>=tim[i].threshoVal){
 									timeRestart((upDataTimEnum)i);
-									rt_kprintf("tim out %d %d\n",i,10);
+									rt_kprintf("tim[%d] out\n",i);
 									rt_kprintf("[%d %d]\n",tim[i].threshoVal,tim[i].count);
 									return i;
 								}
@@ -120,6 +120,7 @@ static void  timeOutRunFun()
 
 		rt_mutex_take(read485_mutex,RT_WAITING_FOREVER);
 		switch(timeOut()){
+#ifndef USE_MQTT
 			case HEART_TIME://心跳
 				heartUpJsonPack();
 				//jsonBufPackTest();
@@ -127,6 +128,7 @@ static void  timeOutRunFun()
 						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 			  rt_kprintf("%sheart timer out\r\n",task);
 				break;
+#endif
 			case REG_TIME://注册 注册成功后定时器就关闭 输入输出状态跟谁注册信息上发
 			  if(gbRegFlag==RT_FALSE){
 //					partDischgAtlasResp("12345");//test 

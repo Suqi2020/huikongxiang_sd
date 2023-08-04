@@ -115,6 +115,79 @@ int  modbusRespCheck(uint16_t slavAddr,uint8_t *buf,uint16_t len,rt_bool_t readF
 
 
 
+int jsonPackMqttTcp(char **outp,cJSON** rootp,char **sprinBufp,bool respflagp)
+{
+	
+   char *out=*outp;
+	 cJSON *root=*rootp;
+	 char *sprinBuf=*sprinBufp;
+	 bool respFlag=respflagp;
+	 int len=0;
+#ifdef  USE_MQTT
+		
+	  out = cJSON_Print(root);
+		NetTxBuffer[0]=0xff;
+		NetTxBuffer[1]=0xff;
+		NetTxBuffer[2]=0xff;
+		NetTxBuffer[3]=0xff;
+		rt_strcpy((char *)NetTxBuffer+PACK_HEAD_LEN,out);
+	  len=rt_strlen(out)+PACK_HEAD_LEN;
+		if(out!=NULL){
+				for(int i=0;i<rt_strlen(out);i++)
+						rt_kprintf("%c",out[i]);
+				rt_kprintf("\n");
+				rt_free(out);
+				out=NULL;
+		}
+		if(root!=NULL){
+			cJSON_Delete(root);
+			out=NULL;
+		}
+
+#else
+		//打包
+
+		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
+		NetTxBuffer[len]= (uint8_t)(HEAD);    len++;
+		len+=LENTH_LEN;//json长度最后再填写
+		// 释放内存  
+		out = cJSON_Print(root);
+		rt_strcpy((char *)NetTxBuffer+len,out);
+		len+=rt_strlen(out);
+		if(out!=NULL){
+				for(int i=0;i<rt_strlen(out);i++)
+						rt_kprintf("%c",out[i]);
+				rt_kprintf("\n");
+				rt_free(out);
+				out=NULL;
+		}
+		if(root!=NULL){
+			cJSON_Delete(root);
+			root=NULL;
+		}
+		//lenth
+	  NetTxBuffer[2]=(uint8_t)((len-LENTH_LEN-HEAD_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-LENTH_LEN-HEAD_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
+	  //crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
+	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;
+		//tail
+		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
+		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
+		NetTxBuffer[len]=0;//len++;//结尾 补0
+
+#endif
+		if(respFlag==false){
+				mcu.repDataMessID =mcu.upMessID;
+				upMessIdAdd();
+		}
+		rt_free(sprinBuf);
+		sprinBuf=RT_NULL;
+    return len;
+}
+
+
 
 
 

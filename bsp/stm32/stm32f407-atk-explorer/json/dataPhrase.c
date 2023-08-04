@@ -23,7 +23,8 @@ const static char sign[]="[dataPhrs]";
 uint32_t  respMid=0;
 //数据校验 头尾 校验和 是否正确
 //rt_TRUE 正确 rt_FALSE 错误
-rt_bool_t dataCheck(char *data,int lenth)
+#ifndef USE_MQTT
+rt_bool_t tcpDataCheck(char *data,int lenth)
 {
 //	1、解析头尾校验 不对丢弃
 //	2、提取packettype,分别校验
@@ -49,6 +50,7 @@ rt_bool_t dataCheck(char *data,int lenth)
 		}
 		return RT_TRUE;
 }
+#endif
 //分别找出下行数据的类型并分类    
 packTypeEnum  downLinkPackTpyeGet(cJSON  *TYPE)
 {
@@ -65,7 +67,7 @@ packTypeEnum  downLinkPackTpyeGet(cJSON  *TYPE)
 
 
 //需要判断devid 和消息ID一致才认为心跳发送成功
-rt_bool_t heartRespFun(cJSON  *Json)
+rt_bool_t timeSetFun(cJSON  *Json)
 {
 
 		cJSON  *time =cJSON_GetObjectItem(Json,"timestamp");
@@ -121,7 +123,8 @@ rt_bool_t comRespFun(cJSON  *Json,uint32_t mesgID)
 		}
 	#endif   //suqi  只用心跳回应来校时
 		cJSON  *msg =cJSON_GetObjectItem(Json,"msg");
-		rt_kprintf("%sreg msg %s\r\n",sign,msg->valuestring);
+		rt_kprintf("%sdown msg %s\r\n",sign,msg->valuestring);
+		timeSetFun(Json);
 		cJSON  *mid =cJSON_GetObjectItem(Json,"mid");
     if(mesgID!= mid->valueint){
 				rt_kprintf("%sreg resp messID err %d %d\r\n",sign,mid->valueint,mesgID);
@@ -140,7 +143,14 @@ rt_bool_t gbNetResp=RT_FALSE;
 void AllDownPhrase(char *data,int lenth)
 {
 		rt_kprintf("%sphrase len:%d\r\n",sign,lenth);
-	  if(dataCheck(data,lenth)==RT_FALSE){
+		
+		
+		
+#ifdef USE_MQTT
+		char *Buffer=data;		
+#else
+		
+	  if(tcpDataCheck(data,lenth)==RT_FALSE){
 			
 				return;
 		}
@@ -150,7 +160,7 @@ void AllDownPhrase(char *data,int lenth)
 		char *Buffer=(char *)rt_malloc(len+1);
 		rt_strncpy(Buffer,buf,len);
     Buffer[len]=0;
-		
+#endif		
 		
 //		for(int i=0;i<len;i++)
 //		rt_kprintf("%c",Buffer[i]);
@@ -174,12 +184,13 @@ void AllDownPhrase(char *data,int lenth)
 			  respMid = mid->valueint;
 		 
 			  switch(downLinkPackTpyeGet(pkType)){
-
+#ifndef USE_MQTT
 					case	PROPERTIES_HEART_RESP:
-						if(RT_TRUE==heartRespFun(Json)){//收到心跳回应 怎么通知发送层
+						if(RT_TRUE==timeSetFun(Json)){//收到心跳回应 怎么通知发送层
 								rt_kprintf("%srec heart resp\r\n",sign);
 						}
 						break;
+#endif
 					case	PROPERTIES_REG_RESP:
 						if(RT_TRUE==comRespFun(Json,mcu.devRegMessID)){//收到注册回应 怎么通知发送层
 								rt_kprintf("%sreg dev succ\r\n",sign);
@@ -306,3 +317,62 @@ void AllDownPhrase(char *data,int lenth)
 	  Buffer =RT_NULL;
 		
 }
+
+
+#ifdef  USE_MQTT
+
+//接收到的网络数据解析头部 判断类别
+void netRecSendEvent(uint8_t *recBuf,int len)
+{
+//	   extern uint8_t  NetRxBuffer[TX_RX_MAX_BUF_SIZE];
+	   uint8_t *bufp=recBuf;
+	   int rxLen=len;
+	   extern struct rt_event mqttAckEvent;
+	   char headBuf[10]={0};	//根据手册得知剩余长度从第二个直接开始最大字段 4个字节  5个字节buf足够
+	   memcpy(headBuf,bufp,sizeof(headBuf));
+	//根据手册得知剩余长度从第二个直接开始最大字段 4个字节
+   
+	   int ret =MQTTPacket_read((uint8_t *)headBuf, sizeof(headBuf), transport_getdata);//作用确定头部以及剩余最大数量
+	   switch(ret)
+		 {
+			 case CONNACK:
+				 rt_event_send(&mqttAckEvent, EVENT_CONNACK);
+			   rt_kprintf("%seVent CONNACK\r\n",sign);
+					break;
+			 case SUBACK:{
+					unsigned short submsgid;
+					int subcount;
+					int granted_qos;
+				//	rt_kprintf("%smqttSub ack\r\n",sign);
+					MQTTDeserialize_suback(&submsgid, 1, &subcount, &granted_qos,(uint8_t *)bufp, rxLen);
+					if (granted_qos != 0)
+					{
+							rt_kprintf("%sERROR:granted qos != 0, 0x%02x\r\n", sign,granted_qos);
+					}
+				 rt_event_send(&mqttAckEvent, EVENT_SUBACK);
+					rt_kprintf("%seVent SUBACK\r\n",sign);
+				}
+				 break;
+			 case PINGRESP:
+				 rt_event_send(&mqttAckEvent, EVENT_PINGRESP);
+			   rt_kprintf("%sEVENT PINGRESP\r\n",sign);
+				 break;
+			 case PUBLISH:{
+				 extern bool mqttpubRead(uint8_t *rxbuf,int len);
+				 rt_kprintf("%smqttPub ack begin\r\n",sign);
+				 mqttpubRead(recBuf,len);
+				 extern void getMqttRespTime();
+			   getMqttRespTime();
+				 rt_kprintf("%smqttPub ack end\r\n",sign);
+			  }
+				 break;
+			 default:
+				 rt_kprintf("%sphrase mqtthead err %d\n",sign,ret);
+				 break;
+			 
+		 }
+		 
+}
+
+
+#endif

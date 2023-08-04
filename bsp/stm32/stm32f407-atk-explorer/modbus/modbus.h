@@ -26,5 +26,6 @@ uint8_t modbusWriteMultReg(uint16_t slavAddr,uint16_t regAddr,uint16_t len,uint8
 
 int  modbusRespCheck(uint16_t slavAddr,uint8_t *buf,uint16_t len,rt_bool_t readFlag);
 bool  devIDOKCheck(char *inputID);
+extern int jsonPackMqttTcp(char **outp,cJSON** rootp,char **sprinBufp,bool respflagp);
 
 #endif
