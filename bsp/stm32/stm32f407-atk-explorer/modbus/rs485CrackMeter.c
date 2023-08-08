@@ -2,7 +2,7 @@
 //<<TH-DCM数字式裂缝计串口通讯协议说明-20210622>>
 //  24+红色，24-黑色，A+蓝色，B-绿色
 const static char sign[]="[裂缝仪]";
-static  bool alarmFLag=false;
+
 //#define   SLAVE_ADDR     0X02 
 //#define   LENTH          50  //工作环流用到的最大接收buf长度
 
@@ -40,6 +40,7 @@ static void  crackMeterUartSend(int num,uint8_t *buf,int len)
 //沉降仪比较阈值并设置相应的flag标记
 static void pressStlCheckSetFlag(int num)
 {
+	  static  bool alarmFLag=false;
 		alarmFLag=false;
 	  if(sheet.modbusCrackMeter[num].tempUpLimit!=0){
 			if(crackMeter[num].temp.flotVal>=sheet.modbusCrackMeter[num].tempUpLimit){

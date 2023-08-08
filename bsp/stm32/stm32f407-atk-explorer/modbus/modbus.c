@@ -110,10 +110,54 @@ int  modbusRespCheck(uint16_t slavAddr,uint8_t *buf,uint16_t len,rt_bool_t readF
 		}
 		return 0;
 }
+#ifdef USE_MQTT
 
+void   packMqtt()
+{
+//		rt_mutex_take(txBuf_mutex,RT_WAITING_FOREVER);
+	 
+		extern bool  mqttState(void);
+	  extern rt_bool_t  gbNetState;
+	  rt_kprintf("%smqttstat[%d],netsate[%d]\n",sign,mqttState(),gbNetState);
+	  if( mqttState()!=RT_TRUE)
+			return;
+		if(gbNetState!=RT_TRUE)
+			return;
 
+	  static MQTTString topic= MQTTString_initializer;
+	  int sendBufLen=0;
+		topic.cstring = rt_malloc(100);
+		rt_sprintf(topic.cstring,"/acu/%s/up",packFlash.acuId);
+		
+		
 
+	  extern int MQTTSerialize_publish_suqi(int buflen,unsigned char dup, int qos, unsigned char retained, unsigned short packetid,
+		MQTTString topicName, unsigned char* payload, int payloadlen);
+		if((sendBufLen=MQTTSerialize_publish_suqi(sizeof(NetTxBuffer),0, 0, 0,0,topic, (unsigned char *)NetTxBuffer+PACK_HEAD_LEN,strlen((char*)NetTxBuffer)-PACK_HEAD_LEN+1))>0){ //qos=1????packetid
+				rt_kprintf("%sok publish pack\n",sign);
+			}
+		else
+			rt_kprintf("%serr publish pack\n",sign);
+	 // sendBufLen++;
 
+		//NetTxBuffer[sendBufLen]=0;
+		rt_free(topic.cstring);
+		topic.cstring=RT_NULL;
+		NetTxBuffer[0]=(uint8_t)(sendBufLen>>24);
+		NetTxBuffer[1]=(uint8_t)(sendBufLen>>16);
+		NetTxBuffer[2]=(uint8_t)(sendBufLen>>8);
+		NetTxBuffer[3]=(uint8_t)sendBufLen;
+//			rt_kprintf("len2=%d\n",sendBufLen);
+//		rt_kprintf("start>>>>>>>>>>>>>\n");
+//		for(int i=0;i<sendBufLen;i++)
+//				rt_kprintf("%c",NetTxBuffer[i]);
+//		rt_kprintf("\n");
+//		rt_kprintf("end>>>>>>>>>>>>>\n");
+//		rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+//	  rt_mutex_release(txBuf_mutex);
+}
+
+#endif
 
 int jsonPackMqttTcp(char **outp,cJSON** rootp,char **sprinBufp,bool respflagp)
 {
@@ -132,10 +176,11 @@ int jsonPackMqttTcp(char **outp,cJSON** rootp,char **sprinBufp,bool respflagp)
 		NetTxBuffer[3]=0xff;
 		rt_strcpy((char *)NetTxBuffer+PACK_HEAD_LEN,out);
 	  len=rt_strlen(out)+PACK_HEAD_LEN;
+	  NetTxBuffer[len]=0;
 		if(out!=NULL){
-				for(int i=0;i<rt_strlen(out);i++)
-						rt_kprintf("%c",out[i]);
-				rt_kprintf("\n");
+//				for(int i=0;i<rt_strlen(out);i++)
+//						rt_kprintf("%c",out[i]);
+//				rt_kprintf("\n");
 				rt_free(out);
 				out=NULL;
 		}
@@ -143,7 +188,10 @@ int jsonPackMqttTcp(char **outp,cJSON** rootp,char **sprinBufp,bool respflagp)
 			cJSON_Delete(root);
 			out=NULL;
 		}
-
+		for(int i=PACK_HEAD_LEN;i<len;i++)
+				rt_kprintf("%c",NetTxBuffer[i]);
+		rt_kprintf("\n");
+		 packMqtt();
 #else
 		//´ò°ü
 

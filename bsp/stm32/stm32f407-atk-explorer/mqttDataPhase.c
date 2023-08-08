@@ -129,8 +129,8 @@ extern struct rt_event mqttAckEvent;
 int  dataPhrase(char *json)
 {
 	rt_mutex_take(read485_mutex,RT_WAITING_FOREVER);
-	extern void AllDownPhrase(char *data);
-	AllDownPhrase(json);
+	extern void AllDownPhrase(char *data,int lenth);
+	AllDownPhrase(json,0);//长度没有用到
 	rt_mutex_release(read485_mutex);
 	return 1;
 }
@@ -187,22 +187,22 @@ bool  mqttpubRead(uint8_t *rxbuf,int len)
 					int qos;
 					unsigned char retained;
 					unsigned short msgid;
-					int payloadlen_in;
+					int payload_in_len;
 					unsigned char* payload_in;
           uint8_t *rxbufP=rxbuf;
 	        int rxLen=len;
 					MQTTString receivedTopic;
 					int rc = MQTTDeserialize_publish(&dup, &qos, &retained, &msgid, &receivedTopic,
-							&payload_in, &payloadlen_in, (uint8_t *)rxbufP,  rxLen);
+							&payload_in, &payload_in_len, (uint8_t *)rxbufP,  rxLen);
 					rt_kprintf("%srec topic: %.*s [%d]\r\n",task,receivedTopic.lenstring.len,receivedTopic.lenstring.data,receivedTopic.lenstring.len);
 					int topicNum = mqttFindTopic(receivedTopic.lenstring.data);
 				  if(topicNum>=0){
-						  rt_kprintf("%stopicNum =%d  payloadlen=%d\r\n",task,topicNum,payloadlen_in);
-							MQTTDataPackt[topicNum].msglen  = payloadlen_in;
-							MQTTDataPackt[topicNum].msg			= rt_malloc(payloadlen_in+1);//必须加1   是字符串
+						  rt_kprintf("%stopicNum =%d  payloadlen=%d\r\n",task,topicNum,payload_in_len);
+							MQTTDataPackt[topicNum].msglen  = payload_in_len;
+							MQTTDataPackt[topicNum].msg			= rt_malloc(payload_in_len+1);//必须加1   是字符串
 							//strcpy(MQTTDataPackt[topicNum].msg,(char *)payload_in);//此句可能导致(MEM_POOL(&small_mem->heap_ptr[mem->next]) == small_mem) assertion failed at function:rt_smem_free, line number:542 
-							strncpy(MQTTDataPackt[topicNum].msg,(char *)payload_in,payloadlen_in);
-							MQTTDataPackt[topicNum].msg[payloadlen_in]=0;//此句可能导致
+							strncpy(MQTTDataPackt[topicNum].msg,(char *)payload_in,payload_in_len);
+							MQTTDataPackt[topicNum].msg[payload_in_len]=0;//此句可能导致
 						  rt_kprintf("%stopicNum %d\r\n",task,topicNum);	
 						  if(MQTTDataPackt[topicNum].fun!=NULL){
 									MQTTDataPackt[topicNum].fun(MQTTDataPackt[topicNum].msg);//执行回调函数
@@ -211,15 +211,22 @@ bool  mqttpubRead(uint8_t *rxbuf,int len)
 									rt_kprintf("%stopic fun is NULL\r\n",task);
 							}
 							rt_kprintf("%srec message: %.*s \r\n",task, MQTTDataPackt[topicNum].msglen, MQTTDataPackt[topicNum].msg);//
-						
-						  rt_free(MQTTDataPackt[topicNum].msg);
-
+							if(MQTTDataPackt[topicNum].msg==NULL)
+							{
+								rt_kprintf("msg is enpty\n");
+							}
+							else{
+								rt_kprintf("msg is not enpty\n");
+							}
+					  	rt_kprintf("test1\r\n");
+						  rt_free(MQTTDataPackt[topicNum].msg);//free 出错  suqi
+rt_kprintf("test2\r\n");
 						  MQTTDataPackt[topicNum].msg=NULL;
 						  MQTTDataPackt[topicNum].msglen=0;
-
+rt_kprintf("test3\r\n");
 					}
 					else
-							rt_kprintf("%snot find topic message arrived %.*s   topic:%s  %.*s [%d]\r\n",task, payloadlen_in, payload_in,receivedTopic.cstring,receivedTopic.lenstring.len,receivedTopic.lenstring.data,receivedTopic.lenstring.len);
+							rt_kprintf("%snot find topic message arrived %.*s   topic:%s  %.*s [%d]\r\n",task, payload_in_len, payload_in,receivedTopic.cstring,receivedTopic.lenstring.len,receivedTopic.lenstring.data,receivedTopic.lenstring.len);
 
 			return false;
 }
@@ -227,7 +234,7 @@ bool  mqttpubRead(uint8_t *rxbuf,int len)
 
 static MQTTEnum MQTTstep=conMQTT_enum; 
 
-static uint32_t respTime ;
+static uint32_t respTime=0 ;
 void getMqttRespTime()
 {
 	respTime = rt_tick_get();
@@ -246,7 +253,7 @@ int  mqttLoopData(void)
 	  static int conTimes=0;
 	  static uint8_t pingTimes=0;
 	  int  tep=0;
-
+		static bool reg2Flag=false;
 		switch(MQTTstep){
 			case  conMQTT_enum:
 				    //设备  humi_protect1
@@ -265,9 +272,9 @@ int  mqttLoopData(void)
 			      memcpy(connectData.clientID.lenstring.data,packFlash.acuId,strlen(packFlash.acuId));
 						connectData.clientID.lenstring.data	=	"fa19d97c0364436bb166e92979ce5408suqi";//后期采用格式化物理地址来填充  防止出现多个clientid相同情况 error
 						connectData.clientID.lenstring.len	=	strlen(connectData.clientID.lenstring.data);
-						connectData.username.lenstring.data	=	"";
+						connectData.username.lenstring.data	=	"admin";
 						connectData.username.lenstring.len	=	strlen(connectData.username.lenstring.data);
-						connectData.password.lenstring.data	=	"";
+						connectData.password.lenstring.data	=	"suqi201301";
 						connectData.password.lenstring.len	=	strlen(connectData.password.lenstring.data);
 #endif
 						connectData.keepAliveInterval = MQTTKEEPALIVE_TIME_S;
@@ -305,6 +312,8 @@ int  mqttLoopData(void)
 				break;
 			case pubGetUtcMqtt_enum:
 						MQTTstep=pubMQTT_enum;
+			      
+
 			case  pubMQTT_enum:
 						MQTTstep	=	dealwithMQTT_enum;
 			case  pingMQTT_enum:
@@ -332,8 +341,12 @@ int  mqttLoopData(void)
 								rt_kprintf("%sOOPS %d\r\n",task,ret);
 								gu32PingFailTimes++;
 							  if(pingTimes++>=2){//先判断后++
-									  MQTTstep	=	resetMQTT_enum;
-										mqttStateSet(false);
+//									  MQTTstep	=	resetMQTT_enum;
+//										mqttStateSet(false);
+									
+										extern void rstMqttStep();
+										rstMqttStep();
+			
 										if(gbNetState==RT_TRUE){
 												gbNetState = RT_FALSE;
 			
@@ -341,11 +354,21 @@ int  mqttLoopData(void)
 								}
 						}
 						rt_kprintf("ping[%d],pingrsp[%d],pingUnrsp[%d]\n",ping2Times,pingRspTimes,pingUnrspTimes);
+						
 				break;
 			case  dealwithMQTT_enum://
 						if((rt_tick_get()-respTime)>(MQTTKEEPALIVE_TIME_S)*1000){
 								MQTTstep=pingMQTT_enum;
+							  break;
 						}
+						rt_thread_delay(1000);
+						if(reg2Flag==false){
+								reg2Flag=true;//联网后只注册一次  后期由定时器实现反复注册
+								extern uint16_t devRegJsonPack();
+								devRegJsonPack();//devRegJsonPack();
+							  rt_kprintf("%s devRegJsonPack\n",task);
+								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+				  	}
 				break;
 			case  resetMQTT_enum:
 				    mqttCleanTopic();
@@ -365,7 +388,7 @@ int  mqttLoopData(void)
 						MQTTstep=conMQTT_enum;
 //						rt_event_send(&WDTEvent,EVENT_WDT_MQTTTASK);
 						mqttStateSet(false);;
-						rt_thread_delay(1000);
+					//	rt_thread_delay(100);
 				break;
 		}
 		return tep;
@@ -377,7 +400,8 @@ void rstMqttStep()
 
 			mqttStateSet(false);
 		}
-	  MQTTstep=resetMQTT_enum;
+		if(MQTTstep!=conMQTT_enum)//不处于连接状态 可能malloc了  需要调用reset去free掉
+			MQTTstep=resetMQTT_enum;
 }
 
 

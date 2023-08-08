@@ -641,7 +641,7 @@ bool   modbusThresholdConfig(int num,char *ID,int sensorSubName,float upLimit,fl
 										return  false;
 						}
 				}
-			  break;
+
 				rt_kprintf("%s ERR:modbusThresholdConfig %d\n",sign,num);
 				break;
 		}

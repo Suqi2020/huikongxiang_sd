@@ -142,14 +142,14 @@ rt_bool_t comRespFun(cJSON  *Json,uint32_t mesgID)
 rt_bool_t gbNetResp=RT_FALSE;
 void AllDownPhrase(char *data,int lenth)
 {
-		rt_kprintf("%sphrase len:%d\r\n",sign,lenth);
+//		rt_kprintf("%sphrase len:%d\r\n",sign);
 		
 		
 		
 #ifdef USE_MQTT
 		char *Buffer=data;		
 #else
-		
+
 	  if(tcpDataCheck(data,lenth)==RT_FALSE){
 			
 				return;
@@ -184,13 +184,14 @@ void AllDownPhrase(char *data,int lenth)
 			  respMid = mid->valueint;
 		 
 			  switch(downLinkPackTpyeGet(pkType)){
-#ifndef USE_MQTT
+
 					case	PROPERTIES_HEART_RESP:
+#ifndef USE_MQTT
 						if(RT_TRUE==timeSetFun(Json)){//收到心跳回应 怎么通知发送层
 								rt_kprintf("%srec heart resp\r\n",sign);
 						}
-						break;
 #endif
+						break;
 					case	PROPERTIES_REG_RESP:
 						if(RT_TRUE==comRespFun(Json,mcu.devRegMessID)){//收到注册回应 怎么通知发送层
 								rt_kprintf("%sreg dev succ\r\n",sign);
@@ -312,10 +313,14 @@ void AllDownPhrase(char *data,int lenth)
 		else{
 			rt_kprintf("%serr:json cannot phrase\r\n",sign);	
 		}
+		//rt_kprintf("%serr:test1\r\n",sign);	
 		cJSON_Delete(Json);
+	//	rt_kprintf("%serr:test2\r\n",sign);	
+	#ifndef USE_MQTT
 		rt_free(Buffer);
+		//rt_kprintf("%serr:test3\r\n",sign);	
 	  Buffer =RT_NULL;
-		
+	#endif
 }
 
 
@@ -333,6 +338,7 @@ void netRecSendEvent(uint8_t *recBuf,int len)
 	//根据手册得知剩余长度从第二个直接开始最大字段 4个字节
    
 	   int ret =MQTTPacket_read((uint8_t *)headBuf, sizeof(headBuf), transport_getdata);//作用确定头部以及剩余最大数量
+	
 	   switch(ret)
 		 {
 			 case CONNACK:
@@ -368,6 +374,7 @@ void netRecSendEvent(uint8_t *recBuf,int len)
 				 break;
 			 default:
 				 rt_kprintf("%sphrase mqtthead err %d\n",sign,ret);
+			   
 				 break;
 			 
 		 }

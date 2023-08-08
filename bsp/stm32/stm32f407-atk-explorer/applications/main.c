@@ -299,7 +299,7 @@ int main(void)
 				printf("%sRTcreat w5500Task task\r\n",sign);
 		}
 #ifdef USE_MQTT
-		tidMqtt = rt_thread_create("mqtt",mqttTask,RT_NULL,256*2,4, 10 );
+		tidMqtt = rt_thread_create("mqtt",mqttTask,RT_NULL,512*2,4, 10 );
 		if(tidMqtt!=NULL){
 				rt_thread_startup(tidMqtt);													 
 				rt_kprintf("RTcreat mqtt task\r\n");
@@ -383,3 +383,13 @@ void  tasklog(int argc, char *argv[])
 }
 MSH_CMD_EXPORT(tasklog,tasklog del);//FINSH_FUNCTION_EXPORT_CMD
 
+
+//网络连接成功标志 
+bool netOKState()
+{
+#ifdef  USE_MQTT
+	return mqttState();
+#else
+	return gbNetState;
+#endif
+}

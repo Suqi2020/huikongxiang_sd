@@ -18,10 +18,13 @@ void  mqttTask(void *parameter)
 			while(1){
 				  if(gbNetState==RT_TRUE)
 						  mqttLoopData();
+					else{
+						 rt_thread_delay(1000);
+					}
 #ifdef  USE_WDT
 					rt_event_send(&WDTEvent,EVENT_WDT_MQTTTASK);
 #endif
-					rt_thread_delay(1000);
+					
 			}
 }
 

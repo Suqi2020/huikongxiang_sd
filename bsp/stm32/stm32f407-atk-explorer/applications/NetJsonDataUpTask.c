@@ -5,7 +5,7 @@
 rt_bool_t gbRegFlag = RT_FALSE;
 extern struct rt_mailbox mbNetSendData;
 
-extern rt_bool_t gbNetState;
+//extern rt_bool_t gbNetState;
 const static char task[]="[dataUp]";
 
 
@@ -124,7 +124,7 @@ static void  timeOutRunFun()
 			case HEART_TIME://心跳
 				heartUpJsonPack();
 				//jsonBufPackTest();
-			  if(gbNetState==RT_TRUE)
+			  if(netOKState()==RT_TRUE)
 						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 			  rt_kprintf("%sheart timer out\r\n",task);
 				break;
@@ -134,27 +134,31 @@ static void  timeOutRunFun()
 //					partDischgAtlasResp("12345");//test 
 ////					 jsonBufPackTest();
 //					rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-					break;//suqi
+				//	break;//suqi
 					  devRegJsonPack();//devRegJsonPack();
-					  if(gbNetState==RT_TRUE)
+					  if(netOKState()==RT_TRUE)
 								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 					//  timeStop(REG_TIME);//正式使用时候需要去掉
-						if(gbNetState==RT_TRUE){
+					
 							  int ret=digitalInputReport();//数字输入上报
 								if(ret!=0) {
+									 if(netOKState()==RT_TRUE)
 										rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 										rt_thread_delay(500);
 							  }
 								ret=digitalOutputReport("12v_output");
 								
-								if(ret!=0){ rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+								if(ret!=0){ 
+									if(netOKState()==RT_TRUE)
+									  rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 										rt_thread_delay(500);
 								}
 								ret=digitalOutputReport("digital_output");
 								if(ret!=0){
+									if(netOKState()==RT_TRUE)
 								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
 								rt_thread_delay(500);
-								}
+
 						}
 				}
 				else
@@ -162,47 +166,47 @@ static void  timeOutRunFun()
 				rt_kprintf("%sreg timer out\r\n",task);
 				break;
 			case CIRCULA_TIME://读取环流
-				circulaRead2Send(gbNetState,false);
+				circulaRead2Send(netOKState(),false);
 				rt_kprintf("%sCIRCULA_TIME out\r\n",task);
 				break;
 			case PARTDISCHAG_TIME://读取局放
-				partDischagRead2Send(gbNetState,false);
+				partDischagRead2Send(netOKState(),false);
 				rt_kprintf("%sPARTDISCHAG_TIME out\r\n",task);
 				break;
 			case PRESSSETTL_TIME:
-        pressSettRead2Send(gbNetState,false);
+        pressSettRead2Send(netOKState(),false);
 				rt_kprintf("%sPRESSSETTL_TIME out\r\n",task);
 				break;
 			case THREEAXIS_TIME:
-				threeAxisRead2Send(gbNetState,false);
+				threeAxisRead2Send(netOKState(),false);
 				rt_kprintf("%sTHREEAXIS_TIMEout\r\n",task);
 				break;
 
 			case  CH4_TIME:
-				ch4Read2Send(gbNetState,false);
+				ch4Read2Send(netOKState(),false);
 				break;
 			case  O2_TIME:
-				o2Read2Send(gbNetState,false);
+				o2Read2Send(netOKState(),false);
 				break;
 			case  H2S_TIME:
-				h2sRead2Send(gbNetState,false);
+				h2sRead2Send(netOKState(),false);
 				break;
 			case  CO_TIME://4种气体在一起读取 所以前三个不使用 只在此处读取并打包发送  关闭时候只需要关闭CO就可以把所有气体全部关闭
 
-			  coRead2Send(gbNetState,false);
+			  coRead2Send(netOKState(),false);
 				break;
 			case  TEMPHUM_TIME:
-				tempHumRead2Send(gbNetState,false);
+				tempHumRead2Send(netOKState(),false);
 				break;
 			case  WATERDEPTH_TIME:
-				waterDepthRead2Send(gbNetState,false);
+				waterDepthRead2Send(netOKState(),false);
 				break;
 			case CRACKMETER_TIME:
-				crackMeterRead2Send(gbNetState,false);
+				crackMeterRead2Send(netOKState(),false);
 				rt_kprintf("%sTHREEAXIS_TIMEout\r\n",task);
 				break;
 			case COVER_TIME:
-				coverRead2Send(gbNetState,false);
+				coverRead2Send(netOKState(),false);
 				rt_kprintf("%sCOVER_TIME out\r\n",task);
 				break;
 #ifndef     ANA_MASK

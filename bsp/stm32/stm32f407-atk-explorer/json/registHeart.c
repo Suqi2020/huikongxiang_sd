@@ -709,13 +709,31 @@ uint16_t devRegJsonPack()
 	
 	// 打印JSON数据包  
 #endif
+	len=rt_strlen((char *)NetTxBuffer);
+				for(int i=4;i<len;i++)
+					rt_kprintf("%c",NetTxBuffer[i]);
+			rt_kprintf("\n");
+#ifdef USE_MQTT
 
 
+		NetTxBuffer[0]=0xff;
+		NetTxBuffer[1]=0xff;
+		NetTxBuffer[2]=0xff;
+		NetTxBuffer[3]=0xff;
+
+	  NetTxBuffer[len]=0;
+
+		rt_kprintf("\n");
+		extern int packMqtt();
+		packMqtt();
+
+
+#else
 	
 	// 释放内存  
 	
 
-		len=rt_strlen((char *)NetTxBuffer);
+	
 
 			for(int i=4;i<len;i++)
 					rt_kprintf("%c",NetTxBuffer[i]);
@@ -738,10 +756,11 @@ uint16_t devRegJsonPack()
 		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
 		NetTxBuffer[len]=0;//len++;//结尾 补0
 		
+
+#endif
 		mcu.devRegMessID =mcu.upMessID;
 		upMessIdAdd();
 		rt_kprintf("%sreg len:%d\r\n",sign,len);
-		
 //		for(int i=0;i<len;i++)
 //				rt_kprintf("%02x",NetTxBuffer[i]);
 		rt_kprintf("\r\n%slen：%d str0:%x str1:%x str[2]:%d  str[3]:%d\r\n",sign,len,NetTxBuffer[0],NetTxBuffer[1],NetTxBuffer[2],NetTxBuffer[3]);

@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-
+#ifdef  USE_MQTT
 
 
 #define  MQTTKEEPALIVE_TIME_S      60
@@ -34,7 +34,7 @@ extern void mqttStateSet(bool state);
 
 
 
-
+#endif
 #endif
 
 

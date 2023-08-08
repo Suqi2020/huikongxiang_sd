@@ -103,7 +103,7 @@ int MQTTSerialize_publish_suqi(int buflen,unsigned char dup, int qos, unsigned c
   unsigned char *payLoad_p=rt_malloc(payloadlen);
 	memcpy(payLoad_p,payload,payloadlen);
 	
-	
+
 	FUNC_ENTRY;
 	if (MQTTPacket_len(rem_len = MQTTSerialize_publishLength(qos, topicName, payloadlen)) > buflen)
 	{
@@ -117,24 +117,23 @@ int MQTTSerialize_publish_suqi(int buflen,unsigned char dup, int qos, unsigned c
 	header.bits.qos = qos;
 	header.bits.retain = retained;
 	writeChar(&ptr, header.byte); /* write header */
-
-	ptr += MQTTPacket_encode(ptr, rem_len); /* write remaining length */;
-
+	uint8_t headLen=1; //根据协议 headlen 一个字节  suqi
+	uint8_t varibLen=MQTTPacket_encode(ptr, rem_len); //可变长度 suqi
+	ptr += varibLen; /* write remaining length */;
 	writeMQTTString(&ptr, topicName);
-
 	if (qos > 0)
 		writeInt(&ptr, packetid);
-
 	memcpy(ptr, payLoad_p, payloadlen);
 	ptr += payloadlen;
-
 	rc = ptr - payload;
+
 
 exit:
 	FUNC_EXIT_RC(rc);
 	 rt_free(payLoad_p);
 	 payLoad_p=NULL;
 	rt_kprintf("mqtt publish\n");
+	//return (rc+headLen+varibLen); //suqi
 	return rc;
 }
 

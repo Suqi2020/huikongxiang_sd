@@ -39,7 +39,7 @@
 
 
 #define  MODBUS_LENTH   300
-//#define  USE_MQTT
+#define  USE_MQTT
 //#incude  <iconv.h>
 #include <rtthread.h>
 #include "stdbool.h"
@@ -139,6 +139,7 @@ extern  void MX_USART3_UART_Init(int bps);
 extern  void MX_USART6_UART_Init(int bps);
 extern struct rt_mailbox mbNetSendData;
 extern rt_mutex_t w5500Spi_mutex;
+bool netOKState(void);
 //extern rt_mutex_t cirCurrMutex ;
 //队列的定义
 //extern struct  rt_messagequeue cirCurrmque;

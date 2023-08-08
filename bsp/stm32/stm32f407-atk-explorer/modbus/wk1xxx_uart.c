@@ -18,14 +18,14 @@ void Wk1xxxRstInit(void)
 
 HAL_StatusTypeDef Uart3Transmit( uint8_t *pData, uint16_t size)
 {
-			HAL_UART_Transmit(&huart3,pData,size,100);
+		return	HAL_UART_Transmit(&huart3,pData,size,100);
 	    //rt_kprintf("uart3 send\n");
 }
 
 
 HAL_StatusTypeDef Uart3Receive(uint8_t *pData, uint16_t size)
 {
-			HAL_UART_Receive(&huart3,pData,size,100); 	
+		return	HAL_UART_Receive(&huart3,pData,size,100); 	
 	    //rt_kprintf("uart3 rec\n");
 }
 

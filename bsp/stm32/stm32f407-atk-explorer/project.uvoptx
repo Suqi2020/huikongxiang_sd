@@ -593,8 +593,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\applications\readme.c</PathWithFileName>
-      <FilenameWithoutPath>readme.c</FilenameWithoutPath>
+      <PathWithFileName>.\applications\mqttTask.c</PathWithFileName>
+      <FilenameWithoutPath>mqttTask.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -605,8 +605,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\applications\mqttTask.c</PathWithFileName>
-      <FilenameWithoutPath>mqttTask.c</FilenameWithoutPath>
+      <PathWithFileName>.\applications\readme.c</PathWithFileName>
+      <FilenameWithoutPath>readme.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1146,7 +1146,7 @@
 
   <Group>
     <GroupName>Json</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2522,7 +2522,7 @@
 
   <Group>
     <GroupName>SDIO</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2790,7 +2790,7 @@
 
   <Group>
     <GroupName>MQTT</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

@@ -521,17 +521,17 @@ uint32_t 	onLTimes;
 int offline()
 {
 
-		extern rt_bool_t gbNetState;
+	//	extern rt_bool_t gbNetState;
 		extern rt_bool_t gbNetResp;
 
 
 
-    if(gbNetState==RT_FALSE)
+    if(netOKState()==RT_FALSE)
 			gbNetResp=RT_FALSE;
 
 
 		
-		rt_kprintf("[offLine]net online state %d ,net resp state %d \r\n",gbNetState,gbNetResp);
+		rt_kprintf("[offLine]net online state %d ,net resp state %d \r\n",netOKState(),gbNetResp);
 		return 0;
 }
 //FINSH_FUNCTION_EXPORT(offline, offline finsh);//FINSH_FUNCTION_EXPORT_CMD

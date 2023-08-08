@@ -878,7 +878,7 @@ void  partDischgAtlasResp(char *ID)
 		}
 		else{
 				len=partDischagChanlRead(C,readNum)/2;//除以2 --读取的实际记录号个数
-				len=5400;//test suqi
+//				len=5400;//test suqi
 			  if(len<=sizeof(pdBuf)/4){//一包就能发完
 					 atlasJsonReadPack(C,readNum,len,0,len);
 			     rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
