@@ -713,8 +713,7 @@ uint16_t devRegJsonPack()
 				for(int i=4;i<len;i++)
 					rt_kprintf("%c",NetTxBuffer[i]);
 			rt_kprintf("\n");
-#ifdef USE_MQTT
-
+  if(USE_MQTT){
 
 		NetTxBuffer[0]=0xff;
 		NetTxBuffer[1]=0xff;
@@ -726,15 +725,10 @@ uint16_t devRegJsonPack()
 		rt_kprintf("\n");
 		extern int packMqtt();
 		packMqtt();
-
-
-#else
+	}
+	else{
 	
 	//  Õ∑≈ƒ⁄¥Ê  
-	
-
-	
-
 			for(int i=4;i<len;i++)
 					rt_kprintf("%c",NetTxBuffer[i]);
 			rt_kprintf("\n");
@@ -755,9 +749,7 @@ uint16_t devRegJsonPack()
 		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
 		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
 		NetTxBuffer[len]=0;//len++;//Ω·Œ≤ ≤π0
-		
-
-#endif
+	}
 		mcu.devRegMessID =mcu.upMessID;
 		upMessIdAdd();
 		rt_kprintf("%sreg len:%d\r\n",sign,len);

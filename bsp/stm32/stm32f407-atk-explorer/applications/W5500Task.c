@@ -151,10 +151,10 @@ void netSend(uint8_t *data,int len)
 	  rt_mutex_release(w5500Spi_mutex);
 		if(ret==0){//启动个定时器来实现重发  2s内收不到回复
 				gbNetState=RT_FALSE;//发送身边 重新联网
-#ifdef USE_MQTT
-				extern void rstMqttStep();
-				rstMqttStep();
-#endif
+				if(USE_MQTT){
+								extern void rstMqttStep();
+								rstMqttStep();
+				}
 
 				extern void  LCDDispNetOffline();
 				LCDDispNetOffline();

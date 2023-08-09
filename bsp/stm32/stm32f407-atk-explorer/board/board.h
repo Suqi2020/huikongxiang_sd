@@ -39,7 +39,7 @@
 
 
 #define  MODBUS_LENTH   300
-#define  USE_MQTT
+//#define  USE_MQTT
 //#incude  <iconv.h>
 #include <rtthread.h>
 #include "stdbool.h"
@@ -123,6 +123,8 @@
 #define EVENT_WDT_SENDTASK   (1 << 7)
 extern struct rt_event WDTEvent;
 #endif
+
+extern bool USE_MQTT;
 //阿里云ip 47.103.184.125 port 1883
 			      //设备 temp_test001
 //花生壳 内网穿透  115.236.153.174  15260

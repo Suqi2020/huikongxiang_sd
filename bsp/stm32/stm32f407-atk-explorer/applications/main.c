@@ -15,12 +15,12 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+1)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+4)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230802";
+const char date[]="20230809";
 
-
+bool USE_MQTT=true;
 
 //显示软件版本
 void LCDDispSoftVer()
@@ -132,6 +132,7 @@ void  netLedLight()
 				HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 		}
 }
+//extern uint32_t gbLcdRecTime;//接收到屏幕数据清0  无操作2分钟内返回主界面
 //static int cnt = 0;
 /* 定时器1超时函数 每100ms进去一次*/
 //10秒提醒一次 uart offline状态
@@ -140,13 +141,16 @@ static void timeout1(void *parameter)
 		static int count=0;
 	  extern void timeInc();
 	  count++;  
+
 	  if(gbSDExit==false){
 				if(count%(100)==0)//10秒提醒一下
 						printf("%s请插入TF卡并重启设备\n",sign);
 		}
-	  if(count%10==0){
+	  if(count%10==0){//1秒进去一次
 				timeInc();
+
 		}
+		
 		netStateSet();
 		netLedLight();
 }
@@ -165,7 +169,8 @@ int main(void)
 	  rt_err_t result;
 		stm32_flash_read(FLASH_IP_SAVE_ADDR,    (uint8_t*)&packFlash,sizeof(packFlash));
 		stm32_flash_read(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,    sizeof(sheet));
-	  printf(" save1=%d save2=%d\n",sizeof(packFlash),sizeof(sheet));
+	  USE_MQTT=(bool)packFlash.protol;
+	  printf(" save1=%d save2=%d MQTT=%d\n",sizeof(packFlash),sizeof(sheet),USE_MQTT);
 	  if(packFlash_LEN<sizeof(packFlash)){
 				printf("err:packFlash_LEN too small\n");
 		}
@@ -298,7 +303,7 @@ int main(void)
 				rt_thread_startup(tidW5500);													 
 				printf("%sRTcreat w5500Task task\r\n",sign);
 		}
-#ifdef USE_MQTT
+
 		tidMqtt = rt_thread_create("mqtt",mqttTask,RT_NULL,512*2,4, 10 );
 		if(tidMqtt!=NULL){
 				rt_thread_startup(tidMqtt);													 
@@ -313,7 +318,7 @@ int main(void)
         rt_kprintf("%sinit mqttAckEvent failed.\n",sign);
 
     }
-#endif
+
 		tidSdRTC =  rt_thread_create("sdRTC",sdRTCTask,RT_NULL,512*4,8, 10 );
 		if(tidSdRTC!=NULL){
 				rt_thread_startup(tidSdRTC);													 
@@ -387,9 +392,10 @@ MSH_CMD_EXPORT(tasklog,tasklog del);//FINSH_FUNCTION_EXPORT_CMD
 //网络连接成功标志 
 bool netOKState()
 {
-#ifdef  USE_MQTT
+if(USE_MQTT){
 	return mqttState();
-#else
+}
+else{
 	return gbNetState;
-#endif
+}
 }

@@ -2,7 +2,7 @@
 #include "board.h"
 #include "mqttTask.h"
 #include "transport.h"
-#ifdef USE_MQTT
+
 /*
 {"clientId":"a1S9kgxkc8w.humi_protect1|securemode=2,signmethod=hmacsha256,timestamp=1656814731352|",
  "username":"humi_protect1&a1S9kgxkc8w",
@@ -16,7 +16,7 @@ void  mqttTask(void *parameter)
 {
 
 			while(1){
-				  if(gbNetState==RT_TRUE)
+				  if((gbNetState==RT_TRUE)&&(USE_MQTT))
 						  mqttLoopData();
 					else{
 						 rt_thread_delay(1000);
@@ -32,8 +32,4 @@ void  mqttTask(void *parameter)
 
 
 
-
-
-
-#endif
 

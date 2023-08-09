@@ -110,7 +110,6 @@ int  modbusRespCheck(uint16_t slavAddr,uint8_t *buf,uint16_t len,rt_bool_t readF
 		}
 		return 0;
 }
-#ifdef USE_MQTT
 
 void   packMqtt()
 {
@@ -157,7 +156,6 @@ void   packMqtt()
 //	  rt_mutex_release(txBuf_mutex);
 }
 
-#endif
 
 int jsonPackMqttTcp(char **outp,cJSON** rootp,char **sprinBufp,bool respflagp)
 {
@@ -167,7 +165,7 @@ int jsonPackMqttTcp(char **outp,cJSON** rootp,char **sprinBufp,bool respflagp)
 	 char *sprinBuf=*sprinBufp;
 	 bool respFlag=respflagp;
 	 int len=0;
-#ifdef  USE_MQTT
+  if(USE_MQTT){
 		
 	  out = cJSON_Print(root);
 		NetTxBuffer[0]=0xff;
@@ -192,7 +190,8 @@ int jsonPackMqttTcp(char **outp,cJSON** rootp,char **sprinBufp,bool respflagp)
 				rt_kprintf("%c",NetTxBuffer[i]);
 		rt_kprintf("\n");
 		 packMqtt();
-#else
+	}
+	else{
 		//¥Ú∞¸
 
 		NetTxBuffer[len]= (uint8_t)(HEAD>>8); len++;
@@ -224,8 +223,7 @@ int jsonPackMqttTcp(char **outp,cJSON** rootp,char **sprinBufp,bool respflagp)
 		NetTxBuffer[len]=(uint8_t)(TAIL>>8); len++;
 		NetTxBuffer[len]=(uint8_t)(TAIL);    len++;
 		NetTxBuffer[len]=0;//len++;//Ω·Œ≤ ≤π0
-
-#endif
+	}
 		if(respFlag==false){
 				mcu.repDataMessID =mcu.upMessID;
 				upMessIdAdd();

@@ -141,16 +141,16 @@ void  dispJinggaiData(void);
 void  LCDDispSDState(uint8_t state);
 void  LCDDispSoftVer(void);
 void LCDDispSDSize(void);
-void ledOnOff(uint8_t value)
-{
-		uint8_t buf[2];
-	  buf[0]=0;
-	  buf[1]=value;
-	
-	
-		LCDWtite(0x0ff0,buf,1*2);
+//void ledOnOff(uint8_t value)
+//{
+//		uint8_t buf[2];
+//	  buf[0]=0;
+//	  buf[1]=value;
+//	
+//	
+//		LCDWtite(0x0ff0,buf,1*2);
 
-}
+//}
 
 void rstLCD()
 {
@@ -540,11 +540,22 @@ void  keyReturn(uint16_t keyAddr)
 			case KEY_PASSWD_SURE_ADDR:
 				surePassWord();
 				break;
-			case  KEY_LED_ON_ADDR:
-				ledOnOff(0);
+			case  KEY_TCP_ADDR:
+
+		    changeBmp(4);
+			  USE_MQTT=false;
+			  packFlash.protol=false;
 				break;
-			case  KEY_LED_OFF_ADDR:
-				ledOnOff(1);
+			case  KEY_MQTT_ADDR:
+				changeBmp(5);
+			  USE_MQTT=true;
+			  packFlash.protol=true;
+				break;
+			case  KEY_PROTOL_SWITCH_ADDR:
+				if(USE_MQTT)
+					changeBmp(5);
+				else
+					changeBmp(4);
 				break;
 			case  KEY_OUTPUT_READ_INTERFACE_ADDR://进去接口
 				dispoutputReadInterf();

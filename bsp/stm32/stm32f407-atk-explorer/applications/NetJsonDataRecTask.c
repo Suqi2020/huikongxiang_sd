@@ -57,30 +57,31 @@ void   netDataRecTask(void *para)
 		while(1){
 			 if (rt_mb_recv(&mbNetRecData, (rt_ubase_t *)&str, 1000) == RT_EOK)
 			 {
-#ifdef  USE_MQTT
-					 uint32_t  lenth= (str[0]<<24)+(str[1]<<16)+(str[2]<<8)+str[3];
-					 if(lenth>0){
-							 void netRecSendEvent(uint8_t *recBuf,int len)	;
-							 netRecSendEvent((uint8_t *)(str+PACK_HEAD_LEN),lenth);		
-					 }
+				if(USE_MQTT){
+							 uint32_t  lenth= (str[0]<<24)+(str[1]<<16)+(str[2]<<8)+str[3];
+							 if(lenth>0){
+									 void netRecSendEvent(uint8_t *recBuf,int len)	;
+									 netRecSendEvent((uint8_t *)(str+PACK_HEAD_LEN),lenth);		
+							 }
 
-#else
-		#if 1
-				   rt_kprintf("strlen=%d\n",strlen((char *)str));
-					 uint16_t  lenth= netDataCheck(str);
-				   if(lenth>sizeof(NetRxBuffer)){
-							rt_kprintf("err:lenth err > sizeof(NetRxBuffer) %d\n",sizeof(NetRxBuffer));//数据太长 解析时候会导致内存溢出 此处丢掉
-					 }
-					 else{
-						 if(lenth>0){
-									AllDownPhrase((char *)str,lenth);
 						 }
-					 }
-		#else
-					 netDataCheckp(str);
-		#endif	
+				else{
+						#if 1
+									 rt_kprintf("strlen=%d\n",strlen((char *)str));
+									 uint16_t  lenth= netDataCheck(str);
+									 if(lenth>sizeof(NetRxBuffer)){
+											rt_kprintf("err:lenth err > sizeof(NetRxBuffer) %d\n",sizeof(NetRxBuffer));//数据太长 解析时候会导致内存溢出 此处丢掉
+									 }
+									 else{
+										 if(lenth>0){
+													AllDownPhrase((char *)str,lenth);
+										 }
+									 }
+						#else
+									 netDataCheckp(str);
+						#endif	
 
-#endif
+				 }
 			 }
 #ifdef  USE_WDT
 			rt_event_send(&WDTEvent,EVENT_WDT_RECTASK);

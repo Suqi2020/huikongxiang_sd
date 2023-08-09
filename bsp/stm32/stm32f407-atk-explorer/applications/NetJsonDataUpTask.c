@@ -120,15 +120,17 @@ static void  timeOutRunFun()
 
 		rt_mutex_take(read485_mutex,RT_WAITING_FOREVER);
 		switch(timeOut()){
-#ifndef USE_MQTT
+	
 			case HEART_TIME://心跳
-				heartUpJsonPack();
-				//jsonBufPackTest();
-			  if(netOKState()==RT_TRUE)
-						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
-			  rt_kprintf("%sheart timer out\r\n",task);
-				break;
-#endif
+				if(!USE_MQTT){
+					heartUpJsonPack();
+					//jsonBufPackTest();
+					if(netOKState()==RT_TRUE)
+							rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					rt_kprintf("%sheart timer out\r\n",task);
+				}
+			break;
+			
 			case REG_TIME://注册 注册成功后定时器就关闭 输入输出状态跟谁注册信息上发
 			  if(gbRegFlag==RT_FALSE){
 //					partDischgAtlasResp("12345");//test 
@@ -248,7 +250,9 @@ void startTimeList()
 		timeInit(WATERDEPTH_TIME, 15,45);
 		timeInit(CRACKMETER_TIME, 16,50);
 		#else 
-		timeInit(HEART_TIME,      120,2);//心跳定时  定时30秒 第一次28秒就来
+		if(!USE_MQTT){
+			timeInit(HEART_TIME,      120,2);//心跳定时  定时30秒 第一次28秒就来
+		}
 		timeInit(REG_TIME,        60,0);//注册 注册成功后定时器就关闭
 
 

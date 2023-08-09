@@ -16,8 +16,19 @@ extern void LCDDispConfig(uint8_t *recBuf,int len);
 extern void firstNameDispInit(void);
 extern void LCDDispNetOffline(void);
 
-
-
+bool lcdHome=false;
+uint32_t lcdRecTime=0;//接收到屏幕数据清0  无操作2分钟内返回主界面
+void changeHome()
+{
+		if(lcdHome){
+			lcdRecTime++;
+			if(lcdRecTime>2){
+					lcdHome=false;
+					extern void changeBmp(int num);
+					changeBmp(0);
+			}
+		}
+}
 uint8_t lcdRecBuf[LCD_BUF_LEN];
 uint8_t  lcdRecLen;
 void  LCDTask(void *parameter)
@@ -47,6 +58,8 @@ void  LCDTask(void *parameter)
 #if   USE_RINGBUF
 			  rt_thread_mdelay(50);
 			  while(true== Read_RingBuff(lcdRecBuf+lcdRecLen)){
+					  lcdRecTime=0;
+					  lcdHome=true;
 						rt_thread_mdelay(2);
 					  lcdRecLen++;
 					
@@ -88,7 +101,8 @@ void  LCDTask(void *parameter)
 					
 				}
 				if(++dispCount>=1200){
-
+					  changeHome();
+						
 						dispCount=0;
 						LCDDispNetOffline();
 						//LCDDispNetErrState();

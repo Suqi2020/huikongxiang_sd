@@ -69,7 +69,7 @@ typedef struct{
 //	  analogDevStru  analog[ANALOG_NUM];//存储模拟数据
 	  uint32_t       uartBps[UART_NUM];    //存储串口配置
 	  char     acuId[ACUID_LEN+1];      //存储acuID
-	  char rev;
+	  bool protol;
 		digitStru diginput[DI_NUM];   //数字输入
 	  digitStru digoutput[DO_NUM];   //数字输出
 //		digitStru v33output[V33O_NUM]; //3V3电源输出

@@ -440,11 +440,13 @@
 #define   KEY_COVER_LAST_ADDR         0X192A
 #define   KEY_COVER_NEXT_ADDR         0X192C
 
+#define   KEY_PROTOL_SWITCH_ADDR      0X192E
+
 #define   SOFT_VER_ADDR        			  0X1930  
 #define   SD_STATE_ADDR         			0X193A
 
-#define   KEY_LED_ON_ADDR									0X193C
-#define   KEY_LED_OFF_ADDR								0X193E
+#define   KEY_TCP_ADDR									0X193C
+#define   KEY_MQTT_ADDR								  0X193E
 #define   SD_TOTOAL_SIZE_ADDR             0X1940
 #define   SD_REMAIN_SIZE_ADDR             0X1950
 //[09:27:21.942]สีก๛ก๔[LCD] fa:5a a5 15 82 19 0 47 59 4e 4a 4c 58 53 44 30 30 30 30 30 30 36 38 34 ff 

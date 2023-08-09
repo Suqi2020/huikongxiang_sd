@@ -23,7 +23,7 @@ const static char sign[]="[dataPhrs]";
 uint32_t  respMid=0;
 //数据校验 头尾 校验和 是否正确
 //rt_TRUE 正确 rt_FALSE 错误
-#ifndef USE_MQTT
+
 rt_bool_t tcpDataCheck(char *data,int lenth)
 {
 //	1、解析头尾校验 不对丢弃
@@ -50,7 +50,7 @@ rt_bool_t tcpDataCheck(char *data,int lenth)
 		}
 		return RT_TRUE;
 }
-#endif
+
 //分别找出下行数据的类型并分类    
 packTypeEnum  downLinkPackTpyeGet(cJSON  *TYPE)
 {
@@ -145,22 +145,23 @@ void AllDownPhrase(char *data,int lenth)
 //		rt_kprintf("%sphrase len:%d\r\n",sign);
 		
 		
-		
-#ifdef USE_MQTT
-		char *Buffer=data;		
-#else
-
-	  if(tcpDataCheck(data,lenth)==RT_FALSE){
-			
-				return;
+		char *Buffer=NULL;
+		if(USE_MQTT){
+			Buffer=data;		
 		}
-		gbNetResp=RT_TRUE;
-		char *buf=data+HEAD_LEN+LENTH_LEN;//偏移后是真实的json数据
-		int  len=lenth-HEAD_LEN-LENTH_LEN-TAIL_LEN-CRC_LEN;//获取真实的json数据长度
-		char *Buffer=(char *)rt_malloc(len+1);
-		rt_strncpy(Buffer,buf,len);
-    Buffer[len]=0;
-#endif		
+		else{
+
+			if(tcpDataCheck(data,lenth)==RT_FALSE){
+				
+					return;
+			}
+			gbNetResp=RT_TRUE;
+			char *buf=data+HEAD_LEN+LENTH_LEN;//偏移后是真实的json数据
+			int  len=lenth-HEAD_LEN-LENTH_LEN-TAIL_LEN-CRC_LEN;//获取真实的json数据长度
+			Buffer=(char *)rt_malloc(len+1);
+			rt_strncpy(Buffer,buf,len);
+			Buffer[len]=0;
+		}	
 		
 //		for(int i=0;i<len;i++)
 //		rt_kprintf("%c",Buffer[i]);
@@ -186,11 +187,11 @@ void AllDownPhrase(char *data,int lenth)
 			  switch(downLinkPackTpyeGet(pkType)){
 
 					case	PROPERTIES_HEART_RESP:
-#ifndef USE_MQTT
-						if(RT_TRUE==timeSetFun(Json)){//收到心跳回应 怎么通知发送层
-								rt_kprintf("%srec heart resp\r\n",sign);
+						if(!USE_MQTT){
+							if(RT_TRUE==timeSetFun(Json)){//收到心跳回应 怎么通知发送层
+									rt_kprintf("%srec heart resp\r\n",sign);
+							}
 						}
-#endif
 						break;
 					case	PROPERTIES_REG_RESP:
 						if(RT_TRUE==comRespFun(Json,mcu.devRegMessID)){//收到注册回应 怎么通知发送层
@@ -316,15 +317,15 @@ void AllDownPhrase(char *data,int lenth)
 		//rt_kprintf("%serr:test1\r\n",sign);	
 		cJSON_Delete(Json);
 	//	rt_kprintf("%serr:test2\r\n",sign);	
-	#ifndef USE_MQTT
-		rt_free(Buffer);
-		//rt_kprintf("%serr:test3\r\n",sign);	
-	  Buffer =RT_NULL;
-	#endif
+	  if(!USE_MQTT){
+			rt_free(Buffer);
+			//rt_kprintf("%serr:test3\r\n",sign);	
+			Buffer =RT_NULL;
+		}
 }
 
 
-#ifdef  USE_MQTT
+
 
 //接收到的网络数据解析头部 判断类别
 void netRecSendEvent(uint8_t *recBuf,int len)
@@ -382,4 +383,4 @@ void netRecSendEvent(uint8_t *recBuf,int len)
 }
 
 
-#endif
+

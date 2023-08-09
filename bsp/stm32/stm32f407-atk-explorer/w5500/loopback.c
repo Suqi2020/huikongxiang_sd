@@ -199,10 +199,11 @@ void loopback_tcp(uint16 port)
 		  gbNetState=RT_FALSE;
 
 		  rt_kprintf("%sSOCK_CLOSED\n",sign);
-#ifdef USE_MQTT
-			extern void rstMqttStep();
-			rstMqttStep();
-#endif
+
+		  if(USE_MQTT){
+					extern void rstMqttStep();
+					rstMqttStep();
+			}
 		  break;
 		case SOCK_INIT:													        	         /*socket处于初始化状态*/
 			connect(SOCK_TCPC,packFlash.netIpFlash.remoteIp,packFlash.netIpFlash.remotePort);               /*socket连接服务器*/ 
@@ -217,20 +218,18 @@ void loopback_tcp(uint16 port)
 			if(netRxBufLen>0)
 			{
 				rt_kprintf("reclen :%d",netRxBufLen);
-		#ifndef USE_MQTT
-				recv(SOCK_TCPC,NetRxBuffer,netRxBufLen); 							   		         /*接收来自Server的数据*/
-				NetRxBuffer[netRxBufLen]=0;  //防止多打印
-
-			#else
-				
-				recv(SOCK_TCPC,NetRxBuffer+PACK_HEAD_LEN,netRxBufLen); 							   		         /*接收来自Server的数据*/
-				NetRxBuffer[netRxBufLen+PACK_HEAD_LEN]=0;
-				NetRxBuffer[0]=(uint8_t)(netRxBufLen>>24);
-				NetRxBuffer[0]=(uint8_t)(netRxBufLen>>16);
-				NetRxBuffer[0]=(uint8_t)(netRxBufLen>>8);
-				NetRxBuffer[0]=(uint8_t)(netRxBufLen>>0);//填充头部
-				//rt_kprintf("reclen: %d",netRxBufLen);
-			#endif
+				if(!USE_MQTT){
+						recv(SOCK_TCPC,NetRxBuffer,netRxBufLen); 							   		         /*接收来自Server的数据*/
+						NetRxBuffer[netRxBufLen]=0;  //防止多打印
+				}
+				else{
+						recv(SOCK_TCPC,NetRxBuffer+PACK_HEAD_LEN,netRxBufLen); 							   		         /*接收来自Server的数据*/
+						NetRxBuffer[netRxBufLen+PACK_HEAD_LEN]=0;
+						NetRxBuffer[0]=(uint8_t)(netRxBufLen>>24);
+						NetRxBuffer[0]=(uint8_t)(netRxBufLen>>16);
+						NetRxBuffer[0]=(uint8_t)(netRxBufLen>>8);
+						NetRxBuffer[0]=(uint8_t)(netRxBufLen>>0);//填充头部
+				}
 				
 				extern struct rt_mailbox mbNetRecData;
 				rt_mb_send_wait(&mbNetRecData, (rt_ubase_t)&NetRxBuffer,RT_WAITING_FOREVER);  
@@ -249,18 +248,16 @@ void loopback_tcp(uint16 port)
 					gbNetState =RT_TRUE;	
 				  gbNetResp=RT_FALSE;
 					rt_kprintf("%sSOCK_ESTABLISHED\n",sign);
-		#ifndef		USE_MQTT
-				  static bool regFlag=false;	
-				  if(regFlag==false){
-								regFlag=true;//联网后只注册一次  后期由定时器实现反复注册
-								extern uint16_t devRegJsonPack();
-								devRegJsonPack();//devRegJsonPack();
-								rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+					if(!USE_MQTT){
+							static bool regFlag=false;	
+							if(regFlag==false){
+										regFlag=true;//联网后只注册一次  后期由定时器实现反复注册
+										extern uint16_t devRegJsonPack();
+										devRegJsonPack();//devRegJsonPack();
+										rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER); 
+							}
 					}
-		#else
-
-		#endif
-			}
+				}
 		  break;
 		case SOCK_CLOSE_WAIT: 											    	         /*socket处于等待关闭状态*/
 			close(SOCK_TCPC);
