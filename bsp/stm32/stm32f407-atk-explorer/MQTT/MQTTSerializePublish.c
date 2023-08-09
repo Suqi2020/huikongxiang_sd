@@ -117,7 +117,7 @@ int MQTTSerialize_publish_suqi(int buflen,unsigned char dup, int qos, unsigned c
 	header.bits.qos = qos;
 	header.bits.retain = retained;
 	writeChar(&ptr, header.byte); /* write header */
-	uint8_t headLen=1; //根据协议 headlen 一个字节  suqi
+//	uint8_t headLen=1; //根据协议 headlen 一个字节  suqi
 	uint8_t varibLen=MQTTPacket_encode(ptr, rem_len); //可变长度 suqi
 	ptr += varibLen; /* write remaining length */;
 	writeMQTTString(&ptr, topicName);

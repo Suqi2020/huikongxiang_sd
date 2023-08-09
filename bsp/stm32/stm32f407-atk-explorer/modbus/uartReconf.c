@@ -227,7 +227,7 @@ void uartSingConf(int chanl,int bps)
 }
 
 
-extern void RingBuff3_Init();
+extern void RingBuff3_Init(void);
 //485根据串口发送
 void rs485UartSend(uint8_t chanl,uint8_t *buf,int len)
 {

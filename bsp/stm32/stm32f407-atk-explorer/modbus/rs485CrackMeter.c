@@ -44,22 +44,26 @@ static void pressStlCheckSetFlag(int num)
 		alarmFLag=false;
 	  if(sheet.modbusCrackMeter[num].tempUpLimit!=0){
 			if(crackMeter[num].temp.flotVal>=sheet.modbusCrackMeter[num].tempUpLimit){
-					inpoutpFlag.modbusCrackMeter[num].tempUpFlag=true;alarmFLag=true;
+					inpoutpFlag.modbusCrackMeter[num].tempUpFlag=true;
+				  alarmFLag=true;
 			}
 		}
 		if(sheet.modbusCrackMeter[num].tempLowLimit!=0){
 			if(crackMeter[num].temp.flotVal<=sheet.modbusCrackMeter[num].tempLowLimit){
-					inpoutpFlag.modbusCrackMeter[num].tempLowFlag=true;alarmFLag=true;
+					inpoutpFlag.modbusCrackMeter[num].tempLowFlag=true;
+				  alarmFLag=true;
 			}
 		}
 		if(sheet.modbusCrackMeter[num].distancUpLimit!=0){
 			if(crackMeter[num].distanc.flotVal>=sheet.modbusCrackMeter[num].distancUpLimit){
-					inpoutpFlag.modbusCrackMeter[num].distancUpFlag=true;alarmFLag=true;
+					inpoutpFlag.modbusCrackMeter[num].distancUpFlag=true;
+				  alarmFLag=true;
 			}
 		}
 		if(sheet.modbusCrackMeter[num].distancLowLimit!=0){
 			if(crackMeter[num].distanc.flotVal<=sheet.modbusCrackMeter[num].distancLowLimit){
-					inpoutpFlag.modbusCrackMeter[num].distancLowFlag=true;alarmFLag=true;
+					inpoutpFlag.modbusCrackMeter[num].distancLowFlag=true;
+				  alarmFLag=true;
 			}
 		}
 

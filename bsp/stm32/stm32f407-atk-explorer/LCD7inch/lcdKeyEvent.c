@@ -140,7 +140,7 @@ void  lastJinggaiIndex(void);
 void  dispJinggaiData(void);
 void  LCDDispSDState(uint8_t state);
 void  LCDDispSoftVer(void);
-void LCDDispSDSize();
+void LCDDispSDSize(void);
 void ledOnOff(uint8_t value)
 {
 		uint8_t buf[2];

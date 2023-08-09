@@ -99,25 +99,25 @@ static void  mqttCleanTopic()
 
 //解析设置的参数并显示  /sys/a1X8eraA4gE/%s/thing/service/property/set
 //{"method":"thing.service.property.set","id":"1475268842","params":{"CurrentHumidity":80.8,"CurrentTemperature":81.8},"version":"1.0.0"}
-static int getSetJsoin(char *buf)
-{
-		rt_kprintf("%sgetsetJson\n\r",task);				
-		cJSON  *Json=NULL;
-		Json = cJSON_Parse(buf);
-		cJSON  *params   =cJSON_GetObjectItem(Json,"params");
-		char *out =cJSON_Print(params);
-		  if(out!=NULL){
-				rt_free(out);
-		}
-		rt_kprintf("%sJson %s\n\r",task,out);
-		double  humi     = cJSON_GetObjectItem(params,"CurrentHumidity")->valuedouble;
-		double  temp     = cJSON_GetObjectItem(params,"CurrentTemperature")->valuedouble;
-	  if(Json!=RT_NULL){
-				cJSON_Delete(Json);
-		}
-		rt_kprintf("%ssethumi[%lf] settemp[%lf]\n\r",task,humi,temp);	
-		return 1;
-}
+//static int getSetJsoin(char *buf)
+//{
+//		rt_kprintf("%sgetsetJson\n\r",task);				
+//		cJSON  *Json=NULL;
+//		Json = cJSON_Parse(buf);
+//		cJSON  *params   =cJSON_GetObjectItem(Json,"params");
+//		char *out =cJSON_Print(params);
+//		  if(out!=NULL){
+//				rt_free(out);
+//		}
+//		rt_kprintf("%sJson %s\n\r",task,out);
+//		double  humi     = cJSON_GetObjectItem(params,"CurrentHumidity")->valuedouble;
+//		double  temp     = cJSON_GetObjectItem(params,"CurrentTemperature")->valuedouble;
+//	  if(Json!=RT_NULL){
+//				cJSON_Delete(Json);
+//		}
+//		rt_kprintf("%ssethumi[%lf] settemp[%lf]\n\r",task,humi,temp);	
+//		return 1;
+//}
 
 
 
@@ -211,19 +211,19 @@ bool  mqttpubRead(uint8_t *rxbuf,int len)
 									rt_kprintf("%stopic fun is NULL\r\n",task);
 							}
 							rt_kprintf("%srec message: %.*s \r\n",task, MQTTDataPackt[topicNum].msglen, MQTTDataPackt[topicNum].msg);//
-							if(MQTTDataPackt[topicNum].msg==NULL)
-							{
-								rt_kprintf("msg is enpty\n");
-							}
-							else{
-								rt_kprintf("msg is not enpty\n");
-							}
-					  	rt_kprintf("test1\r\n");
+//							if(MQTTDataPackt[topicNum].msg==NULL)
+//							{
+//								rt_kprintf("msg is enpty\n");
+//							}
+//							else{
+//								rt_kprintf("msg is not enpty\n");
+//							}
+//					  	rt_kprintf("test1\r\n");
 						  rt_free(MQTTDataPackt[topicNum].msg);//free 出错  suqi
-rt_kprintf("test2\r\n");
+//rt_kprintf("test2\r\n");
 						  MQTTDataPackt[topicNum].msg=NULL;
 						  MQTTDataPackt[topicNum].msglen=0;
-rt_kprintf("test3\r\n");
+//rt_kprintf("test3\r\n");
 					}
 					else
 							rt_kprintf("%snot find topic message arrived %.*s   topic:%s  %.*s [%d]\r\n",task, payload_in_len, payload_in,receivedTopic.cstring,receivedTopic.lenstring.len,receivedTopic.lenstring.data,receivedTopic.lenstring.len);
