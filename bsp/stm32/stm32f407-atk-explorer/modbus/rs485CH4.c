@@ -160,8 +160,10 @@ static uint16_t ch4Pack(bool respFlag)
 					if(strlen(sdData)>=(sizeof(sdData)-2)){
 						rt_kprintf("err:sdData is not enough\n");
 				}
-				extern void ch4SaveSD(char *id,char *data);
-				ch4SaveSD(sheet.ch4[i].ID,sdData);
+//				extern void ch4SaveSD(char *id,char *data);
+//				ch4SaveSD(sheet.ch4[i].ID,sdData);
+				modbusTxtSaveSD(sheet.ch4[i].ID,sdData,WATERDEPTH);
+
 			}
 			}
 		

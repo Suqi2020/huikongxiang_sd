@@ -1300,9 +1300,12 @@ void rt_kputs(const char *str)
 static char rt_log_buf[RT_CONSOLEBUF_SIZE];
 extern uint8_t Write_RingBuff2(uint8_t data);
 extern rt_mutex_t   printf_mutex;
+rt_bool_t shieldLog=RT_FALSE;//屏蔽log 
 //char sendBuf
 RT_WEAK int rt_kprintf(const char *fmt, ...)
 {
+	  if(shieldLog==RT_TRUE)//打开了屏蔽log 跳出
+			 return 0;
     va_list args;
     rt_size_t length;
 //   if(log_save_sdFlag==1)
@@ -1361,6 +1364,41 @@ RT_WEAK int rt_kprintf(const char *fmt, ...)
     return length;
 }
 RTM_EXPORT(rt_kprintf);
+
+
+
+
+
+int mod_printf(const char *fmt, ...)
+{
+    va_list args;
+    rt_size_t length;
+//   if(log_save_sdFlag==1)
+//		rt_mutex_take(printf_mutex,RT_WAITING_FOREVER);
+    va_start(args, fmt);
+    /* the return value of vsnprintf is the number of bytes that would be
+     * written to buffer had if the size of the buffer been sufficiently
+     * large excluding the terminating null byte. If the output string
+     * would be larger than the rt_log_buf, we have to adjust the output
+     * length. */
+    length = vsnprintf(rt_log_buf, sizeof(rt_log_buf) - 1, fmt, args);
+    if (length > RT_CONSOLEBUF_SIZE - 1)
+        length = RT_CONSOLEBUF_SIZE - 1;
+
+
+
+		if (_console_device == RT_NULL)
+		{
+				rt_hw_console_output(rt_log_buf);
+		}
+		else
+		{
+				rt_device_write(_console_device, 0, rt_log_buf, length);
+		}
+
+    va_end(args);
+    return length;
+}
 #endif /* RT_USING_CONSOLE */
 
 #if defined(RT_USING_HEAP) && !defined(RT_USING_USERHEAP)

@@ -352,7 +352,22 @@ typedef enum{
 #ifdef  USE_4GAS
 const static char  modbusName[MODBUS_NUM][NAME_LEN] ={"HuanLiu","JuFang","FangChenJiang","FangWaiPo","JiaWan","YangQi","LiuHuaQing","YiYangHuaTan","WenShiDu","ShuiWei","LieFengYi","JingGai"};
 //const static char  modbusNameFold[MODBUS_NUM][NAME_LEN+6]={"0://HuanLiu","0://JuFang","0://FangChenJiang","0://FangWaiPo","0://JiaWan","0://YangQi","0://LiuHuaQing","0://YiYangHuaTan","0://WenShiDu","0://ShuiWei","0://LieFengYi","0://JingGai"};
+const static char  modbusLog[MODBUS_NUM][100]={
+	"earthCurA runCurA loadRatioA earthCurB runCurB loadRatioB earthCurC runCurC loadRatioC time(ms)\r\n",\
+	"pdA freqA dischargeDateA pdB freqB dischargeDateB  pdC freqC dischargeDateC time(ms)\r\n",\
+	"temp height time(ms)\r\n",\
+	"temp accelerationX accelerationY accelerationZ time(ms)\r\n",\
+	"methane time(ms)\r\n",\
+	"oxygen time(ms)\r\n",\
+	"hydrogenSulfide time(ms)\r\n",\
+	"monoxide time(ms)\r\n",\
+	"temperature humidity time(ms)\r\n",\
+	"depth time(ms)\r\n",\
+	"temp distance time(ms)\r\n",\
+  "incline switch2(2¸Ç) vibration switch1(1¸Ç) time(ms)\r\n"\
+};
 
+	
 const static int   modbusBps[MODBUS_NUM]      ={115200,   115200  ,9600,   9600,   9600,   9600,   9600,   9600,   9600,   9600,9600,9600};
 #else
 const static char  modbusName[MODBUS_NUM][NAME_LEN] ={"HuanLiu","JuFang","FangChenJiang","FangWaiPo","WenShiDu","ShuiWei","LieFengYi","JingGai"};

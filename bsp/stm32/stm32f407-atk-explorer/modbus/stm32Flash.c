@@ -20,7 +20,7 @@ packIpUartStru packFlash  CCMRAM __attribute__ ((aligned (4)));
 deviceFlashStru sheet     CCMRAM __attribute__ ((aligned (4)))={0};
 
 extern void uartSingConf(int num,int bps);
-
+extern int mod_printf(const char *fmt, ...);
 static void flash(int argc, char *argv[])
 {
 		if(argc==1){
@@ -29,6 +29,7 @@ static void flash(int argc, char *argv[])
 		if(argc==2){
 			if(0==rt_strcmp((char *)"save", argv[1])){
 				rt_kprintf("%sflash save OK\n",sign);
+				mod_printf("flash save OK\n");
 				stm32_flash_erase(FLASH_IP_SAVE_ADDR, sizeof(packFlash));//每次擦除128k字节数据 存储时候需要一起存储
 				stm32_flash_write(FLASH_IP_SAVE_ADDR,(uint8_t*)&packFlash,sizeof(packFlash));
 				stm32_flash_write(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,sizeof(sheet));

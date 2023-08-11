@@ -3,7 +3,7 @@ static const char sign[]="[SDh2s]";
 //在 creatFolder/ID号创建的文件夹下边创建带有时间的txt文件
 //创建txt文件 以utc时间戳为基准/3600*24 得到每天的时间戳作为txt文件的名称
 
-static const char h2sText[]="temp distance time(ms)\r\n";
+static const char h2sText[]="hydrogenSulfide time(ms)\r\n";
 
 
 static uint32_t writetime=0;

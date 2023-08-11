@@ -152,8 +152,10 @@ static uint16_t h2sPack(bool respFlag)
 					if(strlen(sdData)>=(sizeof(sdData)-2)){
 						rt_kprintf("err:sdData is not enough\n");
 				}
-				extern void h2sSaveSD(char *id,char *data);
-				h2sSaveSD(sheet.h2s[i].ID,sdData);
+//				extern void h2sSaveSD(char *id,char *data);
+//				h2sSaveSD(sheet.h2s[i].ID,sdData);
+				modbusTxtSaveSD(sheet.h2s[i].ID,sdData,WATERDEPTH);
+
 			}
 			}
 		

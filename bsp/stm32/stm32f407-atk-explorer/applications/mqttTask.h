@@ -2,7 +2,7 @@
 #define __mqttthread_h__
 
 #include "main.h"
-
+#include "stdbool.h"
 
 
 #define  MQTTKEEPALIVE_TIME_S      60

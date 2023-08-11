@@ -573,7 +573,7 @@ void USART2_IRQHandler(void)
 			#if   USE_RINGBUF
 					Write_RingBuff(Res);
 			#else
-			   rt_mq_send(&LCDmque,&Res,1);
+			   rt_mq_send(&LCDmque,&Res,1000);
 			#endif
 		//	 rt_kprintf("[%x]",Res);
 		}

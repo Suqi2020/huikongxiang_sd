@@ -153,8 +153,10 @@ static uint16_t coPack(bool respFlag)
 				if(strlen(sdData)>=(sizeof(sdData)-2)){
 						rt_kprintf("err:sdData is not enough\n");
 				}
-				extern void coSaveSD(char *id,char *data);
-				coSaveSD(sheet.co[i].ID,sdData);
+//				extern void coSaveSD(char *id,char *data);
+//				coSaveSD(sheet.co[i].ID,sdData);
+				modbusTxtSaveSD(sheet.co[i].ID,sdData,CO);
+
 			}
 			}
 		//}

@@ -189,8 +189,10 @@ uint16_t pressSettlJsonPack(bool respFlag)
 					if(strlen(sdData)>=(sizeof(sdData)-2)){
 							rt_kprintf("err:sdData is not enough\n");
 					}
-					extern void fCJiangTxtSaveSD(char *id,char *data);
-					fCJiangTxtSaveSD(sheet.pressSetl[i].ID,sdData);
+//					extern void fCJiangTxtSaveSD(char *id,char *data);
+//					fCJiangTxtSaveSD(sheet.pressSetl[i].ID,sdData);
+				  modbusTxtSaveSD(sheet.pressSetl[i].ID,sdData,PRESSSETTL);
+
 				}
 			}
 		}

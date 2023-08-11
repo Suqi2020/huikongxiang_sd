@@ -1,70 +1,70 @@
 #include "board.h"
-const static char sign[]="[modbusConfig]";
+
 
 const  char     UartName[UART_NUM][6] ={"port1", "port2",  "port3","port4","port5","port6","port7","port8","port9"};//重映射一个名称
 //const  uartEnum UartNum[UART_NUM]     ={USE_UART3,USE_UART6,USE_UART4};//重映射一个名称
-
+extern int mod_printf(const char *fmt, ...);
 		
 //打印所有增加的modbus设备列表
 void printModbusDevList()
 {
-	  rt_kprintf("%s printf modbus device list\n",sign);
+	  mod_printf("printf modbus device list\n");
 		for(int i=0;i<MODBUS_NUM;i++){
 			switch(i)
 			{
 				case CIRCULA:
 					for(int j=0;j<CIRCULA_485_NUM;j++){//核对有没有配置过
 							if(sheet.cirCula[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s ",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
-									rt_kprintf("%s ",sheet.cirCula[j].ID);
-									rt_kprintf("%s ",sheet.cirCula[j].model);
-									rt_kprintf("%s ",UartName[sheet.cirCula[j].useUartNum]);
-									rt_kprintf("%d ",sheet.cirCula[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.cirCulaColTime);
+									mod_printf("modbus ");
+									mod_printf("%10s ",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
+									mod_printf("%s ",sheet.cirCula[j].ID);
+									mod_printf("%s ",sheet.cirCula[j].model);
+									mod_printf("%s ",UartName[sheet.cirCula[j].useUartNum]);
+									mod_printf("%d ",sheet.cirCula[j].slaveAddr);
+									mod_printf("%d \n",sheet.cirCulaColTime);
 							}
 					}
 				break;
 				case PARTDISCHAG:
 					for(int j=0;j<PARTDISCHAG_485_NUM;j++){//核对有没有配置过
 							if(sheet.partDischag[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s ",modbusName[i]);
-									rt_kprintf("(%d)",modbusBps[i]);
-									rt_kprintf("%s ",sheet.partDischag[j].ID);
-									rt_kprintf("%s ",sheet.partDischag[j].model);
-									rt_kprintf("%s ",UartName[sheet.partDischag[j].useUartNum]);
-									rt_kprintf("%d ",sheet.partDischag[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.partDischagColTime);
+									mod_printf("modbus ");
+									mod_printf("%10s ",modbusName[i]);
+									mod_printf("(%d)",modbusBps[i]);
+									mod_printf("%s ",sheet.partDischag[j].ID);
+									mod_printf("%s ",sheet.partDischag[j].model);
+									mod_printf("%s ",UartName[sheet.partDischag[j].useUartNum]);
+									mod_printf("%d ",sheet.partDischag[j].slaveAddr);
+									mod_printf("%d \n",sheet.partDischagColTime);
 							}
 					}
 				break;
 				case PRESSSETTL:
 					for(int j=0;j<PRESSSETTL_485_NUM;j++){//核对有没有配置过
 							if(sheet.pressSetl[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s ",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
-									rt_kprintf("%s ",sheet.pressSetl[j].ID);
-									rt_kprintf("%s ",sheet.pressSetl[j].model);
-									rt_kprintf("%s ",UartName[sheet.pressSetl[j].useUartNum]);
-									rt_kprintf("%d ",sheet.pressSetl[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.pressSetlColTime);
+									mod_printf("modbus ");
+									mod_printf("%10s ",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
+									mod_printf("%s ",sheet.pressSetl[j].ID);
+									mod_printf("%s ",sheet.pressSetl[j].model);
+									mod_printf("%s ",UartName[sheet.pressSetl[j].useUartNum]);
+									mod_printf("%d ",sheet.pressSetl[j].slaveAddr);
+									mod_printf("%d \n",sheet.pressSetlColTime);
 							}
 					}
 				break;
 				case THREEAXIS:
 					for(int j=0;j<THREEAXIS_485_NUM;j++){//核对有没有配置过
 							if(sheet.threeAxiss[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s ",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
-									rt_kprintf("%s ",sheet.threeAxiss[j].ID);
-									rt_kprintf("%s ",sheet.threeAxiss[j].model);
-									rt_kprintf("%s ",UartName[sheet.threeAxiss[j].useUartNum]);
-									rt_kprintf("%d ",sheet.threeAxiss[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.threeAxissColTime);
+									mod_printf("modbus ");
+									mod_printf("%10s ",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
+									mod_printf("%s ",sheet.threeAxiss[j].ID);
+									mod_printf("%s ",sheet.threeAxiss[j].model);
+									mod_printf("%s ",UartName[sheet.threeAxiss[j].useUartNum]);
+									mod_printf("%d ",sheet.threeAxiss[j].slaveAddr);
+									mod_printf("%d \n",sheet.threeAxissColTime);
 							}
 					}
 				break;
@@ -72,56 +72,56 @@ void printModbusDevList()
 				case CH4:
 					for(int j=0;j<CH4_485_NUM;j++){//核对有没有配置过
 							if(sheet.ch4[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s ",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
-									rt_kprintf("%s ",sheet.ch4[j].ID);
-									rt_kprintf("%s ",sheet.ch4[j].model);
-									rt_kprintf("%s ",UartName[sheet.ch4[j].useUartNum]);
-									rt_kprintf("%d ",sheet.ch4[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.ch4ColTime);//sheet.ch4ColTime);
+									mod_printf("modbus ");
+									mod_printf("%10s ",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
+									mod_printf("%s ",sheet.ch4[j].ID);
+									mod_printf("%s ",sheet.ch4[j].model);
+									mod_printf("%s ",UartName[sheet.ch4[j].useUartNum]);
+									mod_printf("%d ",sheet.ch4[j].slaveAddr);
+									mod_printf("%d \n",sheet.ch4ColTime);//sheet.ch4ColTime);
 							}
 					}
 				break;
 				case O2:
 					for(int j=0;j<O2_485_NUM;j++){//核对有没有配置过
 							if(sheet.o2[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s ",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
-									rt_kprintf("%s ",sheet.o2[j].ID);
-									rt_kprintf("%s ",sheet.o2[j].model);
-									rt_kprintf("%s ",UartName[sheet.o2[j].useUartNum]);
-									rt_kprintf("%d ",sheet.o2[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.o2ColTime);//sheet.o2ColTime);
+									mod_printf("modbus ");
+									mod_printf("%10s ",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
+									mod_printf("%s ",sheet.o2[j].ID);
+									mod_printf("%s ",sheet.o2[j].model);
+									mod_printf("%s ",UartName[sheet.o2[j].useUartNum]);
+									mod_printf("%d ",sheet.o2[j].slaveAddr);
+									mod_printf("%d \n",sheet.o2ColTime);//sheet.o2ColTime);
 							}
 					}
 				break;
 				case H2S:
 					for(int j=0;j<H2S_485_NUM;j++){//核对有没有配置过
 							if(sheet.h2s[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s ",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
-									rt_kprintf("%s ",sheet.h2s[j].ID);
-									rt_kprintf("%s ",sheet.h2s[j].model);
-									rt_kprintf("%s ",UartName[sheet.h2s[j].useUartNum]);
-									rt_kprintf("%d ",sheet.h2s[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.h2sColTime);//sheet.h2sColTime);
+									mod_printf("modbus ");
+									mod_printf("%10s ",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
+									mod_printf("%s ",sheet.h2s[j].ID);
+									mod_printf("%s ",sheet.h2s[j].model);
+									mod_printf("%s ",UartName[sheet.h2s[j].useUartNum]);
+									mod_printf("%d ",sheet.h2s[j].slaveAddr);
+									mod_printf("%d \n",sheet.h2sColTime);//sheet.h2sColTime);
 							}
 					}
 				break;
 				case CO:
 					for(int j=0;j<CO_485_NUM;j++){//核对有没有配置过
 							if(sheet.co[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s ",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
-									rt_kprintf("%s ",sheet.co[j].ID);
-									rt_kprintf("%s ",sheet.co[j].model);
-									rt_kprintf("%s ",UartName[sheet.co[j].useUartNum]);
-									rt_kprintf("%d ",sheet.co[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.coColTime);
+									mod_printf("modbus ");
+									mod_printf("%10s ",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
+									mod_printf("%s ",sheet.co[j].ID);
+									mod_printf("%s ",sheet.co[j].model);
+									mod_printf("%s ",UartName[sheet.co[j].useUartNum]);
+									mod_printf("%d ",sheet.co[j].slaveAddr);
+									mod_printf("%d \n",sheet.coColTime);
 							}
 					}
 				break;
@@ -129,59 +129,59 @@ void printModbusDevList()
 				case TEMPHUM:
 					for(int j=0;j<TEMPHUM_485_NUM;j++){//核对有没有配置过
 							if(sheet.tempHum[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s ",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
-									rt_kprintf("%s ",sheet.tempHum[j].ID);
-									rt_kprintf("%s ",sheet.tempHum[j].model);
-									rt_kprintf("%s ",UartName[sheet.tempHum[j].useUartNum]);
-									rt_kprintf("%d ",sheet.tempHum[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.tempHumColTime);
+									mod_printf("modbus ");
+									mod_printf("%10s ",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
+									mod_printf("%s ",sheet.tempHum[j].ID);
+									mod_printf("%s ",sheet.tempHum[j].model);
+									mod_printf("%s ",UartName[sheet.tempHum[j].useUartNum]);
+									mod_printf("%d ",sheet.tempHum[j].slaveAddr);
+									mod_printf("%d \n",sheet.tempHumColTime);
 							}
 					}
 				break;
 				case WATERDEPTH:
 					for(int j=0;j<WATERDEPTH_485_NUM;j++){//核对有没有配置过
 							if(sheet.waterDepth[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
+									mod_printf("modbus ");
+									mod_printf("%10s",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
 			
-									rt_kprintf("%s ",sheet.waterDepth[j].ID);
-									rt_kprintf("%s ",sheet.waterDepth[j].model);
-									rt_kprintf("%s ",UartName[sheet.waterDepth[j].useUartNum]);
-									rt_kprintf("%d ",sheet.waterDepth[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.waterDepthColTime);
+									mod_printf("%s ",sheet.waterDepth[j].ID);
+									mod_printf("%s ",sheet.waterDepth[j].model);
+									mod_printf("%s ",UartName[sheet.waterDepth[j].useUartNum]);
+									mod_printf("%d ",sheet.waterDepth[j].slaveAddr);
+									mod_printf("%d \n",sheet.waterDepthColTime);
 							}
 					}
 				break;
 				case CRACKMETER:
 					for(int j=0;j<CRACKMETER_485_NUM;j++){//核对有没有配置过
 							if(sheet.crackMeter[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
+									mod_printf("modbus ");
+									mod_printf("%10s",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
 			
-									rt_kprintf("%s ",sheet.crackMeter[j].ID);
-									rt_kprintf("%s ",sheet.crackMeter[j].model);
-									rt_kprintf("%s ",UartName[sheet.crackMeter[j].useUartNum]);
-									rt_kprintf("%d ",sheet.crackMeter[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.crackMeterColTime);
+									mod_printf("%s ",sheet.crackMeter[j].ID);
+									mod_printf("%s ",sheet.crackMeter[j].model);
+									mod_printf("%s ",UartName[sheet.crackMeter[j].useUartNum]);
+									mod_printf("%d ",sheet.crackMeter[j].slaveAddr);
+									mod_printf("%d \n",sheet.crackMeterColTime);
 							}
 					}
 				break;
 				case COVER://增加井盖
 					for(int j=0;j<COVER_485_NUM;j++){//核对有没有配置过
 							if(sheet.cover[j].workFlag==RT_TRUE){
-									rt_kprintf("%s modbus ",sign);
-									rt_kprintf("%10s",modbusName[i]);
-								  rt_kprintf("(%d)",modbusBps[i]);
+									mod_printf("modbus ");
+									mod_printf("%10s",modbusName[i]);
+								  mod_printf("(%d)",modbusBps[i]);
 			
-									rt_kprintf("%s ",sheet.cover[j].ID);
-									rt_kprintf("%s ",sheet.cover[j].model);
-									rt_kprintf("%s ",UartName[sheet.cover[j].useUartNum]);
-									rt_kprintf("%d ",sheet.cover[j].slaveAddr);
-									rt_kprintf("%d \n",sheet.coverColTime);
+									mod_printf("%s ",sheet.cover[j].ID);
+									mod_printf("%s ",sheet.cover[j].model);
+									mod_printf("%s ",UartName[sheet.cover[j].useUartNum]);
+									mod_printf("%d ",sheet.cover[j].slaveAddr);
+									mod_printf("%d \n",sheet.coverColTime);
 							}
 					}
 				break;
@@ -201,7 +201,7 @@ static int circulaConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.cirCula[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.cirCula[i].workFlag=RT_FALSE;//关闭
-						  rt_kprintf("%s del circula ok\n",sign);
+						  mod_printf("del circula ok\n");
 						  return 1;
 					}
 					else{
@@ -210,8 +210,8 @@ static int circulaConf(int uartnum,char *argv[])
 					sheet.cirCula[i].slaveAddr=slaveAddr;	
 					sheet.cirCula[i].useUartNum=uartnum;
 					rt_strcpy(sheet.cirCula[i].model,argv[3]);
-					rt_kprintf("%s circula reconfig %d\n",sign,i);
-					rt_kprintf("%s circula OK\n",sign);
+					mod_printf("circula reconfig %d\n",i);
+					mod_printf("circula OK\n");
 					ret =1;
 					break;
 			}
@@ -228,14 +228,14 @@ static int circulaConf(int uartnum,char *argv[])
 							sheet.cirCula[j].useUartNum=uartnum;
 							rt_strcpy(sheet.cirCula[j].model,argv[3]);
 							rt_strcpy(sheet.cirCula[j].ID,argv[2]);
-							rt_kprintf("%s circula config %d\n",sign,j);
-						  rt_kprintf("%s circula OK\n",sign);
+							mod_printf("circula config %d\n",j);
+						  mod_printf("circula OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==CIRCULA_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,CIRCULA_485_NUM);
+					mod_printf("ERR totalNum=%d\n",CIRCULA_485_NUM);
 			}
 	}
 	return ret;
@@ -251,7 +251,7 @@ static int partDischagConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.partDischag[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.partDischag[i].workFlag=RT_FALSE;//关闭
-						  rt_kprintf("%s del partDischarge\n",sign);
+						  mod_printf("del partDischarge\n");
 							return 1;
 					}
 					else{
@@ -260,8 +260,8 @@ static int partDischagConf(int uartnum,char *argv[])
 					sheet.partDischag[i].slaveAddr=slaveAddr;	
 					sheet.partDischag[i].useUartNum=uartnum;
 					rt_strcpy(sheet.partDischag[i].model,argv[3]);
-					rt_kprintf("%s partDischag reconfig %d\n",sign,i);
-					rt_kprintf("%s partDischag OK\n",sign);
+					mod_printf("partDischag reconfig %d\n",i);
+					mod_printf("partDischag OK\n");
 					ret =1;
 					break;
 			}
@@ -278,14 +278,14 @@ static int partDischagConf(int uartnum,char *argv[])
 							sheet.partDischag[j].useUartNum=uartnum;
 							rt_strcpy(sheet.partDischag[j].model,argv[3]);
 							rt_strcpy(sheet.partDischag[j].ID,argv[2]);
-							rt_kprintf("%s partDischag config %d\n",sign,j);
-						  rt_kprintf("%s partDischag OK\n",sign);
+							mod_printf("partDischag config %d\n",j);
+						  mod_printf("partDischag OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==PARTDISCHAG_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,PARTDISCHAG_485_NUM);
+					mod_printf("ERR totalNum=%d\n",PARTDISCHAG_485_NUM);
 			}
 	}
 	return ret;
@@ -301,7 +301,7 @@ static int pressSettlConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.pressSetl[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.pressSetl[i].workFlag=RT_FALSE;//关闭
-						  rt_kprintf("%s del pressSettle\n",sign);
+						  mod_printf("del pressSettle\n");
 						  return 1;
 					}
 					else{
@@ -310,8 +310,8 @@ static int pressSettlConf(int uartnum,char *argv[])
 					sheet.pressSetl[i].slaveAddr=slaveAddr;	
 					sheet.pressSetl[i].useUartNum=uartnum;
 					rt_strcpy(sheet.pressSetl[i].model,argv[3]);
-					rt_kprintf("%s pressSettl reconfig %d\n",sign,i);
-					rt_kprintf("%s pressSettl OK\n",sign);
+					mod_printf("pressSettl reconfig %d\n",i);
+					mod_printf("pressSettl OK\n");
 					ret =1;
 					break;
 			}
@@ -328,14 +328,14 @@ static int pressSettlConf(int uartnum,char *argv[])
 							sheet.pressSetl[j].useUartNum=uartnum;
 							rt_strcpy(sheet.pressSetl[j].model,argv[3]);
 							rt_strcpy(sheet.pressSetl[j].ID,argv[2]);
-							rt_kprintf("%s pressSettl config %d\n",sign,j);
-						  rt_kprintf("%s pressSettl OK\n",sign);
+							mod_printf("pressSettl config %d\n",j);
+						  mod_printf("pressSettl OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==PRESSSETTL_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,PRESSSETTL_485_NUM);
+					mod_printf("ERR totalNum=%d\n",PRESSSETTL_485_NUM);
 			}
 	}
 	return ret;
@@ -351,7 +351,7 @@ static int crackMeterConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.crackMeter[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.crackMeter[i].workFlag=RT_FALSE;//关闭
-						  rt_kprintf("%s del cover\n",sign);
+						  mod_printf("del cover\n");
 						  return 1;
 					}
 					else{
@@ -360,8 +360,8 @@ static int crackMeterConf(int uartnum,char *argv[])
 					sheet.crackMeter[i].slaveAddr=slaveAddr;	
 					sheet.crackMeter[i].useUartNum=uartnum;
 					rt_strcpy(sheet.crackMeter[i].model,argv[3]);
-					rt_kprintf("%s cover reconfig %d\n",sign,i);
-					rt_kprintf("%s cover OK\n",sign);
+					mod_printf("cover reconfig %d\n",i);
+					mod_printf("cover OK\n");
 					ret =1;
 					break;
 			}
@@ -378,14 +378,14 @@ static int crackMeterConf(int uartnum,char *argv[])
 							sheet.crackMeter[j].useUartNum=uartnum;
 							rt_strcpy(sheet.crackMeter[j].model,argv[3]);
 							rt_strcpy(sheet.crackMeter[j].ID,argv[2]);
-							rt_kprintf("%s crackMeter config %d\n",sign,j);
-						  rt_kprintf("%s crackMeter OK\n",sign);
+							mod_printf("crackMeter config %d\n",j);
+						  mod_printf("crackMeter OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==CRACKMETER_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,CRACKMETER_485_NUM);
+					mod_printf("ERR totalNum=%d\n",CRACKMETER_485_NUM);
 			}
 	}
 	return ret;
@@ -403,7 +403,7 @@ static int coverConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.cover[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.cover[i].workFlag=RT_FALSE;//关闭
-						  rt_kprintf("%s del crackMeter\n",sign);
+						  mod_printf("del crackMeter\n");
 						  return 1;
 					}
 					else{
@@ -412,8 +412,8 @@ static int coverConf(int uartnum,char *argv[])
 					sheet.cover[i].slaveAddr=slaveAddr;	
 					sheet.cover[i].useUartNum=uartnum;
 					rt_strcpy(sheet.cover[i].model,argv[3]);
-					rt_kprintf("%s crackMeter reconfig %d\n",sign,i);
-					rt_kprintf("%s crackMeter OK\n",sign);
+					mod_printf("crackMeter reconfig %d\n",i);
+					mod_printf("crackMeter OK\n");
 					ret =1;
 					break;
 			}
@@ -430,14 +430,14 @@ static int coverConf(int uartnum,char *argv[])
 							sheet.cover[j].useUartNum=uartnum;
 							rt_strcpy(sheet.cover[j].model,argv[3]);
 							rt_strcpy(sheet.cover[j].ID,argv[2]);
-							rt_kprintf("%s cover config %d\n",sign,j);
-						  rt_kprintf("%s cover OK\n",sign);
+							mod_printf("cover config %d\n",j);
+						  mod_printf("cover OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==COVER_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,COVER_485_NUM);
+					mod_printf("ERR totalNum=%d\n",COVER_485_NUM);
 			}
 	}
 	return ret;
@@ -453,7 +453,7 @@ static int threeAxisConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.threeAxiss[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.threeAxiss[i].workFlag=RT_FALSE;//关闭
-						  rt_kprintf("%s del threeAxis\n",sign);
+						  mod_printf("del threeAxis\n");
 						  return 1;
 					}
 					else{
@@ -462,8 +462,8 @@ static int threeAxisConf(int uartnum,char *argv[])
 					sheet.threeAxiss[i].slaveAddr=slaveAddr;	
 					sheet.threeAxiss[i].useUartNum=uartnum;
 					rt_strcpy(sheet.threeAxiss[i].model,argv[3]);
-					rt_kprintf("%s threeaxis reconfig %d\n",sign,i);
-					rt_kprintf("%s threeaxis OK\n",sign);
+					mod_printf("threeaxis reconfig %d\n",i);
+					mod_printf("threeaxis OK\n");
 					ret =1;
 					break;
 			}
@@ -480,14 +480,14 @@ static int threeAxisConf(int uartnum,char *argv[])
 							sheet.threeAxiss[j].useUartNum=uartnum;
 							rt_strcpy(sheet.threeAxiss[j].model,argv[3]);
 							rt_strcpy(sheet.threeAxiss[j].ID,argv[2]);
-							rt_kprintf("%s threeaxis config %d\n",sign,j);
-						  rt_kprintf("%s threeaxis OK\n",sign);
+							mod_printf("threeaxis config %d\n",j);
+						  mod_printf("threeaxis OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==THREEAXIS_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,THREEAXIS_485_NUM);
+					mod_printf("ERR totalNum=%d\n",THREEAXIS_485_NUM);
 			}
 	}
 	return ret;
@@ -504,7 +504,7 @@ static int ch4Conf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.ch4[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.ch4[i].workFlag=RT_FALSE;//关闭
-							rt_kprintf("%s del ch4\n",sign);
+							mod_printf("del ch4\n");
 						  return 1;
 					}
 					else{
@@ -513,8 +513,8 @@ static int ch4Conf(int uartnum,char *argv[])
 					sheet.ch4[i].slaveAddr=slaveAddr;	
 					sheet.ch4[i].useUartNum=uartnum;
 					rt_strcpy(sheet.ch4[i].model,argv[3]);
-					rt_kprintf("%s ch4 reconfig %d\n",sign,i);
-					rt_kprintf("%s ch4 OK\n",sign);
+					mod_printf("ch4 reconfig %d\n",i);
+					mod_printf("ch4 OK\n");
 					ret =1;
 					break;
 			}
@@ -531,14 +531,14 @@ static int ch4Conf(int uartnum,char *argv[])
 							sheet.ch4[j].useUartNum=uartnum;
 							rt_strcpy(sheet.ch4[j].model,argv[3]);
 							rt_strcpy(sheet.ch4[j].ID,argv[2]);
-							rt_kprintf("%s ch4 config %d\n",sign,j);
-						  rt_kprintf("%s ch4 OK\n",sign);
+							mod_printf("ch4 config %d\n",j);
+						  mod_printf("ch4 OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==CH4_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,CH4_485_NUM);
+					mod_printf("ERR totalNum=%d\n",CH4_485_NUM);
 			}
 	}
 	return ret;
@@ -554,7 +554,7 @@ static int coConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.co[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.co[i].workFlag=RT_FALSE;//关闭
-						  rt_kprintf("%s del co\n",sign);
+						  mod_printf("del co\n");
 						  return 1;
 					}
 					else{
@@ -563,8 +563,8 @@ static int coConf(int uartnum,char *argv[])
 					sheet.co[i].slaveAddr=slaveAddr;	
 					sheet.co[i].useUartNum=uartnum;
 					rt_strcpy(sheet.co[i].model,argv[3]);
-					rt_kprintf("%s co reconfig %d\n",sign,i);
-					rt_kprintf("%s co OK\n",sign);
+					mod_printf("co reconfig %d\n",i);
+					mod_printf("co OK\n");
 					ret =1;
 					break;
 			}
@@ -581,14 +581,14 @@ static int coConf(int uartnum,char *argv[])
 							sheet.co[j].useUartNum=uartnum;
 							rt_strcpy(sheet.co[j].model,argv[3]);
 							rt_strcpy(sheet.co[j].ID,argv[2]);
-							rt_kprintf("%s co config %d\n",sign,j);
-						  rt_kprintf("%s co OK\n",sign);
+							mod_printf("co config %d\n",j);
+						  mod_printf("co OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==CO_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,CO_485_NUM);
+					mod_printf("ERR totalNum=%d\n",CO_485_NUM);
 			}
 	}
 	return ret;
@@ -604,7 +604,7 @@ static int h2sConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.h2s[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.h2s[i].workFlag=RT_FALSE;//关闭
-						  rt_kprintf("%s del h2s\n",sign);
+						  mod_printf("del h2s\n");
 						  return 1;
 					}
 					else{
@@ -613,8 +613,8 @@ static int h2sConf(int uartnum,char *argv[])
 					sheet.h2s[i].slaveAddr=slaveAddr;	
 					sheet.h2s[i].useUartNum=uartnum;
 					rt_strcpy(sheet.h2s[i].model,argv[3]);
-					rt_kprintf("%s h2s reconfig %d\n",sign,i);
-					rt_kprintf("%s h2s OK\n",sign);
+					mod_printf("h2s reconfig %d\n",i);
+					mod_printf("h2s OK\n");
 					ret =1;
 					break;
 			}
@@ -631,14 +631,14 @@ static int h2sConf(int uartnum,char *argv[])
 							sheet.h2s[j].useUartNum=uartnum;
 							rt_strcpy(sheet.h2s[j].model,argv[3]);
 							rt_strcpy(sheet.h2s[j].ID,argv[2]);
-							rt_kprintf("%s h2s config %d\n",sign,j);
-						  rt_kprintf("%s h2s OK\n",sign);
+							mod_printf("h2s config %d\n",j);
+						  mod_printf("h2s OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==H2S_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,H2S_485_NUM);
+					mod_printf("ERR totalNum=%d\n",H2S_485_NUM);
 			}
 	}
 	return ret;
@@ -655,7 +655,7 @@ static int o2Conf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.o2[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.o2[i].workFlag=RT_FALSE;//关闭
-						  rt_kprintf("%s del o2\n",sign);
+						  mod_printf("del o2\n");
 						  return 1;
 					}
 					else{
@@ -664,8 +664,8 @@ static int o2Conf(int uartnum,char *argv[])
 					sheet.o2[i].slaveAddr=slaveAddr;	
 					sheet.o2[i].useUartNum=uartnum;
 					rt_strcpy(sheet.o2[i].model,argv[3]);
-					rt_kprintf("%s o2 reconfig %d\n",sign,i);
-					rt_kprintf("%s o2 OK\n",sign);
+					mod_printf("o2 reconfig %d\n",i);
+					mod_printf("o2 OK\n");
 					ret =1;
 					break;
 			}
@@ -682,14 +682,14 @@ static int o2Conf(int uartnum,char *argv[])
 							sheet.o2[j].useUartNum=uartnum;
 							rt_strcpy(sheet.o2[j].model,argv[3]);
 							rt_strcpy(sheet.o2[j].ID,argv[2]);
-							rt_kprintf("%s o2 config %d\n",sign,j);
-						  rt_kprintf("%s o2 OK\n",sign);
+							mod_printf("o2 config %d\n",j);
+						  mod_printf("o2 OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==O2_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,O2_485_NUM);
+					mod_printf("ERR totalNum=%d\n",O2_485_NUM);
 			}
 	}
 	return ret;
@@ -706,7 +706,7 @@ static int waterDepthConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.waterDepth[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.waterDepth[i].workFlag=RT_FALSE;//关闭
-							rt_kprintf("%s del waterdepth\n",sign);
+							mod_printf("del waterdepth\n");
 						  return 1;
 					}
 					else{
@@ -715,8 +715,8 @@ static int waterDepthConf(int uartnum,char *argv[])
 					sheet.waterDepth[i].slaveAddr=slaveAddr;	
 					sheet.waterDepth[i].useUartNum=uartnum;
 					rt_strcpy(sheet.waterDepth[i].model,argv[3]);
-					rt_kprintf("%s waterDepth reconfig %d\n",sign,i);
-					rt_kprintf("%s waterDepth OK\n",sign);
+					mod_printf("waterDepth reconfig %d\n",i);
+					mod_printf("waterDepth OK\n");
 					ret =1;
 					break;
 			}
@@ -733,14 +733,14 @@ static int waterDepthConf(int uartnum,char *argv[])
 							sheet.waterDepth[j].useUartNum=uartnum;
 							rt_strcpy(sheet.waterDepth[j].model,argv[3]);
 							rt_strcpy(sheet.waterDepth[j].ID,argv[2]);
-							rt_kprintf("%s waterDepth config %d\n",sign,j);
-						  rt_kprintf("%s waterDepth OK\n",sign);
+							mod_printf("waterDepth config %d\n",j);
+						  mod_printf("waterDepth OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==WATERDEPTH_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,WATERDEPTH_485_NUM);
+					mod_printf("ERR totalNum=%d\n",WATERDEPTH_485_NUM);
 			}
 	}
 	return ret;
@@ -756,7 +756,7 @@ static int tempHumConf(int uartnum,char *argv[])
 			if(rt_strcmp(sheet.tempHum[i].ID,argv[2])==0){//配置过
 					if((slaveAddr==0)||(slaveAddr==255)){//关闭
 							sheet.tempHum[i].workFlag=RT_FALSE;//关闭
-							rt_kprintf("%s del temp humi\n",sign);
+							mod_printf("del temp humi\n");
 						  return 1;
 					}
 					else{
@@ -765,8 +765,8 @@ static int tempHumConf(int uartnum,char *argv[])
 					sheet.tempHum[i].slaveAddr=slaveAddr;	
 					sheet.tempHum[i].useUartNum=uartnum;
 					rt_strcpy(sheet.tempHum[i].model,argv[3]);
-					rt_kprintf("%s tempHum reconfig %d\n",sign,i);
-					rt_kprintf("%s tempHum OK\n",sign);
+					mod_printf("tempHum reconfig %d\n",i);
+					mod_printf("tempHum OK\n");
 					ret =1;
 					break;
 			}
@@ -783,14 +783,14 @@ static int tempHumConf(int uartnum,char *argv[])
 							sheet.tempHum[j].useUartNum=uartnum;
 							rt_strcpy(sheet.tempHum[j].model,argv[3]);
 							rt_strcpy(sheet.tempHum[j].ID,argv[2]);
-							rt_kprintf("%s tempHum config %d\n",sign,j);
-						  rt_kprintf("%s tempHum OK\n",sign);
+							mod_printf("tempHum config %d\n",j);
+						  mod_printf("tempHum OK\n");
 							ret =1;
 							break;
 					}
 			}
 			if(j==TEMPHUM_485_NUM){
-					rt_kprintf("%sERR totalNum=%d\n",sign,TEMPHUM_485_NUM);
+					mod_printf("ERR totalNum=%d\n",TEMPHUM_485_NUM);
 			}
 	}
 	return ret;
@@ -800,7 +800,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 {
 	  int ret=0;
 	  //int slaveAddr=atoi32(argv[5],10);//提取设备地址 前面已经核对过
-//		rt_kprintf("conf:%d %d\n",modbusnum,uartnum);
+//		mod_printf("conf:%d %d\n",modbusnum,uartnum);
 		switch(modbusnum)
 		{
 			case CIRCULA:
@@ -855,7 +855,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 //					for(int j=0;j<CIRCULA_485_NUM;j++){//核对有没有配置过
 //							if(sheet.cirCula[j].workFlag==RT_TRUE){
 //									if(rt_strcmp(sheet.cirCula[j].ID,inputID)==0){
-//											rt_kprintf("del cirCula same ID\n");
+//											mod_printf("del cirCula same ID\n");
 //											sheet.cirCula[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
@@ -866,7 +866,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 //					for(int j=0;j<PARTDISCHAG_485_NUM;j++){//核对有没有配置过
 //							if(sheet.partDischag[j].workFlag==RT_TRUE){
 //									if(rt_strcmp(sheet.partDischag[j].ID,inputID)==0){
-//											rt_kprintf("del partDischag same ID\n");
+//											mod_printf("del partDischag same ID\n");
 //											sheet.partDischag[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
@@ -877,7 +877,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 //					for(int j=0;j<PRESSSETTL_485_NUM;j++){//核对有没有配置过
 //							if(sheet.pressSetl[j].workFlag==RT_TRUE){
 //									if(rt_strcmp(sheet.pressSetl[j].ID,inputID)==0){
-//											rt_kprintf("del pressSetl same ID\n");
+//											mod_printf("del pressSetl same ID\n");
 //											sheet.pressSetl[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
@@ -888,7 +888,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 //					for(int j=0;j<THREEAXIS_485_NUM;j++){//核对有没有配置过
 //							if(sheet.threeAxiss[j].workFlag==RT_TRUE){
 //									if(rt_strcmp(sheet.threeAxiss[j].ID,inputID)==0){
-//											rt_kprintf("del threeAxiss same ID\n");
+//											mod_printf("del threeAxiss same ID\n");
 //											sheet.threeAxiss[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
@@ -900,7 +900,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 ////					for(int j=0;j<CH4_485_NUM;j++){//核对有没有配置过
 ////							if(sheet.ch4[j].workFlag==RT_TRUE){
 ////									if(rt_strcmp(sheet.ch4[j].ID,inputID)==0){
-////											rt_kprintf("del ch4 same ID\n");
+////											mod_printf("del ch4 same ID\n");
 ////											sheet.ch4[j].workFlag=RT_FALSE;
 ////										  return 1;
 ////									}
@@ -911,7 +911,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 ////					for(int j=0;j<O2_485_NUM;j++){//核对有没有配置过
 ////							if(sheet.o2[j].workFlag==RT_TRUE){
 ////									if(rt_strcmp(sheet.o2[j].ID,inputID)==0){
-////											rt_kprintf("del o2 same ID\n");
+////											mod_printf("del o2 same ID\n");
 ////											sheet.o2[j].workFlag=RT_FALSE;
 ////										  return 1;
 ////									}
@@ -922,7 +922,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 ////					for(int j=0;j<H2S_485_NUM;j++){//核对有没有配置过
 ////							if(sheet.h2s[j].workFlag==RT_TRUE){
 ////									if(rt_strcmp(sheet.h2s[j].ID,inputID)==0){
-////											rt_kprintf("del h2s same ID\n");
+////											mod_printf("del h2s same ID\n");
 ////											sheet.h2s[j].workFlag=RT_FALSE;
 ////										  return 1;
 ////									}
@@ -933,7 +933,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 ////					for(int j=0;j<CO_485_NUM;j++){//核对有没有配置过
 ////							if(sheet.co[j].workFlag==RT_TRUE){
 ////									if(rt_strcmp(sheet.co[j].ID,inputID)==0){
-////											rt_kprintf("del co same ID\n");
+////											mod_printf("del co same ID\n");
 ////											sheet.co[j].workFlag=RT_FALSE;
 ////										  return 1;
 ////									}
@@ -945,7 +945,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 //					for(int j=0;j<TEMPHUM_485_NUM;j++){//核对有没有配置过
 //							if(sheet.tempHum[j].workFlag==RT_TRUE){
 //									if(rt_strcmp(sheet.tempHum[j].ID,inputID)==0){
-//											rt_kprintf("del TEMPHUM same ID\n");
+//											mod_printf("del TEMPHUM same ID\n");
 //											sheet.tempHum[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
@@ -956,7 +956,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 //					for(int j=0;j<WATERDEPTH_485_NUM;j++){//核对有没有配置过
 //							if(sheet.waterDepth[j].workFlag==RT_TRUE){
 //									if(rt_strcmp(sheet.waterDepth[j].ID,inputID)==0){
-//											rt_kprintf("del waterDepth same ID\n");
+//											mod_printf("del waterDepth same ID\n");
 //											sheet.waterDepth[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
@@ -967,7 +967,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 //					for(int j=0;j<CRACKMETER_485_NUM;j++){//核对有没有配置过
 //							if(sheet.crackMeter[j].workFlag==RT_TRUE){
 //									if(rt_strcmp(sheet.crackMeter[j].ID,inputID)==0){
-//											rt_kprintf("del crackMeter same ID\n");
+//											mod_printf("del crackMeter same ID\n");
 //											sheet.crackMeter[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
@@ -978,7 +978,7 @@ static int modbusConf(int modbusnum,int uartnum,char *argv[])
 //					for(int j=0;j<COVER_485_NUM;j++){//核对有没有配置过
 //							if(sheet.cover[j].workFlag==RT_TRUE){
 //									if(rt_strcmp(sheet.cover[j].ID,inputID)==0){
-//											rt_kprintf("del cover same ID\n");
+//											mod_printf("del cover same ID\n");
 //											sheet.cover[j].workFlag=RT_FALSE;
 //										  return 1;
 //									}
@@ -1007,12 +1007,12 @@ static void modbus(int argc, char *argv[])
 	  int i,j;
 		if ((argc != 7)&&(argc != 2))
 		{
-				rt_kprintf("%sERR input argc\n",sign);
+				mod_printf("ERR input argc\n");
 				goto ERR;
 		}
 		if(devIDOKCheck(argv[2])!=true){
 			if((strcmp(argv[5],"0")!=0)&&(strcmp(argv[5],"255")!=0)){
-				rt_kprintf("%sERR input the same ID\n",sign);
+				mod_printf("ERR input the same ID\n");
 			  return;
 			}
 		}
@@ -1026,11 +1026,11 @@ static void modbus(int argc, char *argv[])
 				uint8_t slaveaddr=atoi16(argv[5],10);
 				int setTime =atoi16(argv[6],10);
 				if(setTime<60){
-						rt_kprintf("%serr:argv[6] 采集时间>60 now is%d\n",sign,setTime);
+						mod_printf("err:argv[6] 采集时间>60 now is%d\n",setTime);
 						goto ERR;
 				}
 				if(slaveaddr>255){
-						rt_kprintf("%serr:argv[5] between 0 and 255 %d\n",sign,argv[5]);
+						mod_printf("err:argv[5] between 0 and 255 %d\n",argv[5]);
 						goto ERR;
 				}
 				for(i=0;i<MODBUS_NUM;i++){
@@ -1044,32 +1044,32 @@ static void modbus(int argc, char *argv[])
 						}
 				}
 				if(i>=MODBUS_NUM){
-						rt_kprintf("%serr:argv[1]\n",sign);
+						mod_printf("err:argv[1]\n");
 						for(int j=0;j<MODBUS_NUM;j++)
-								rt_kprintf("%s ",modbusName[j]);
-						rt_kprintf("\n ");
+								mod_printf("%s ",modbusName[j]);
+						mod_printf("\n ");
 						goto ERR;
 				}
 				if(j>=UART_NUM){
-						rt_kprintf("%serr:argv[2]\n",sign);
+						mod_printf("err:argv[2]\n");
 						for(int j=0;j<UART_NUM;j++)
-								rt_kprintf("%s ",UartName[j]);
-						rt_kprintf("\n ");
+								mod_printf("%s ",UartName[j]);
+						mod_printf("\n ");
 						goto ERR;
 				}
 				if(1==modbusConf(i,j,argv)){//配置modbus参数到表中
 						return;//正确跳出
 				}
 				else{
-						rt_kprintf("%smodbus exit delete first\n",sign);
+						mod_printf("modbus exit delete first\n");
 				}
 	
 		}
 		
 		ERR:
-		rt_kprintf("%sfor example:modbus+设备名称(波特率)+ID+model+端口(port1-port%d)+设备地址(0/255-关闭设备)+采集间隔(秒)\n",sign,UART_NUM);
-		rt_kprintf("%sNOTE:括号内对参数进行解释,不需要输入\n",sign);
-		rt_kprintf("%smodbus list\n",sign);
+		mod_printf("for example:modbus+设备名称(波特率)+ID+model+端口(port1-port%d)+设备地址(0/255-关闭设备)+采集间隔(秒)\n",UART_NUM);
+		mod_printf("NOTE:括号内对参数进行解释,不需要输入\n");
+		mod_printf("modbus list\n");
 }
 //FINSH_FUNCTION_EXPORT(modbus, offline finsh);//FINSH_FUNCTION_EXPORT_CMD
 MSH_CMD_EXPORT(modbus,port slaveaddr config);//FINSH_FUNCTION_EXPORT_CMD

@@ -153,8 +153,10 @@ uint16_t waterDepthJsonPack(bool respFlag)
 				if(strlen(sdData)>=(sizeof(sdData)-2)){
 						rt_kprintf("err:sdData is not enough\n");
 				}
-				extern void shuiWeiSaveSD(char *id,char *data);
-				shuiWeiSaveSD(sheet.waterDepth[i].ID,sdData);
+//				extern void shuiWeiSaveSD(char *id,char *data);
+//				shuiWeiSaveSD(sheet.waterDepth[i].ID,sdData);
+				modbusTxtSaveSD(sheet.waterDepth[i].ID,sdData,WATERDEPTH);
+
 			}
 		}
 		}

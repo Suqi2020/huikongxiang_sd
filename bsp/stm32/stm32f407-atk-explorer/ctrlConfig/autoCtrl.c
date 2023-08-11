@@ -30,10 +30,10 @@ autoctrl V5O 水泵  GYNJLXSD000000429 1
 autoctrl SWITCH 水泵  GYNJLXSD000000439 1
 //////////////////////////////////////////////////
 */
-
+extern int mod_printf(const char *fmt, ...);
 inoutDevStru inpoutpFlag __attribute__((at(0x2000D000)))={0};//输入输出超值的标记位  指定内存地址  防止更改代码后内存地址移位
-//sheet.autoctrl[pindex].output[outputIndex].flag中指针指向了inpoutpFlag
-const static char sign[]="[autoCtrl]";
+////sheet.autoctrl[pindex].output[outputIndex].flag中指针指向了inpoutpFlag
+//const static char sign[]="[autoCtrl]";
 char inName[INNAME_NUM][INOUTNAME_LEN]={"AI","DI","MB",};
 //char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","V3O","V5O","SWITCH"};
 //char outSwitchNum[OUTNAME_NUM]={DO_NUM,V33O_NUM,V5O_NUM,SWITCH_NUM};
@@ -67,7 +67,7 @@ static bool ctrlCirculaConf(char **argv)
 		uint8_t limit   = atoi16(argv[5],10);
 		int i;
 		if(!((limit==0)||(limit==1))){
-				rt_kprintf("%sERR:autoCirculaConf argv[5] limit %s should be 0 1\n",sign);
+				mod_printf("ERR:autoCirculaConf argv[5] limit %s should be 0 1\n");
 				return false;
 		}
 
@@ -124,7 +124,7 @@ static bool crtlPartDischagConf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:partDischagConf argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:partDischagConf argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<PARTDISCHAG_485_NUM;i++){
@@ -229,7 +229,7 @@ static bool ctrlPressSettlConf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrlPressSettlConf argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrlPressSettlConf argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<PRESSSETTL_485_NUM;i++){
@@ -269,7 +269,7 @@ static bool ctrlThreeAxisConf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrlThreeAxisConf argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrlThreeAxisConf argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<THREEAXIS_485_NUM;i++){
@@ -337,7 +337,7 @@ static bool ctrlCh4Conf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrlCh4Conf argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrlCh4Conf argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<CH4_485_NUM;i++){
@@ -365,7 +365,7 @@ static bool ctrlO2Conf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrlO2Conf argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrlO2Conf argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<O2_485_NUM;i++){
@@ -394,7 +394,7 @@ static bool ctrlH2sConf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrlH2sConf argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrlH2sConf argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<H2S_485_NUM;i++){
@@ -422,7 +422,7 @@ static bool ctrlCoConf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrlCoConf argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrlCoConf argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<CO_485_NUM;i++){
@@ -453,7 +453,7 @@ static bool ctrlTemphumConf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrlTempHumConf argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrlTempHumConf argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<TEMPHUM_485_NUM;i++){
@@ -492,7 +492,7 @@ static bool  ctrlWaterConf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrlWaterConf argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrlWaterConf argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<WATERDEPTH_485_NUM;i++){
@@ -519,7 +519,7 @@ static bool  ctrlCrackMeterConf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrl crackMeter argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrl crackMeter argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<CRACKMETER_485_NUM;i++){
@@ -559,7 +559,7 @@ static bool  ctrlCoverConf(char **argv)
 			uint8_t limit   = atoi16(argv[5],10);
 	    int i;
 			if(!((limit==0)||(limit==1))){
-					rt_kprintf("%sERR:ctrl cover argv[5] limit %s should be 0 1\n",sign);
+					mod_printf("ERR:ctrl cover argv[5] limit %s should be 0 1\n");
 				  return false;
 			}
 			for(i=0;i<COVER_485_NUM;i++){
@@ -625,7 +625,7 @@ void autoctrlInputcfg(char*argv[])
 		for(i=0;i<sizeof(inName)/sizeof(inName[0]);i++){
 				if(rt_strcmp(inName[i],argv[1])==0){//find input
 						if(inputIndex>=CRTL_IN_NUM){
-								rt_kprintf("%serr:autoctrl input num is %d\n",sign,CRTL_IN_NUM);
+								mod_printf("err:autoctrl input num is %d\n",CRTL_IN_NUM);
 							  return;
 						}
 						switch(i){
@@ -645,10 +645,10 @@ void autoctrlInputcfg(char*argv[])
 														rt_strcpy(sheet.autoctrl[pindex].input[inputIndex].subName,argv[4]);
 														sheet.autoctrl[pindex].input[inputIndex].limit=limit;
 //													  if(!((subname==0)||(subname==1)||(subname==2))){
-//																rt_kprintf("%sERR:argv[4] subname %s should be 0 1 2\n",sign,inName[i]);
+//																mod_printf("%sERR:argv[4] subname %s should be 0 1 2\n",sign,inName[i]);
 //														}
 														if(!((limit==0)||(limit==1))){
-																rt_kprintf("%sERR:argv[5] limit %s should be 0 1\n",sign,inName[i]);
+																mod_printf("%sERR:argv[5] limit %s should be 0 1\n",sign,inName[i]);
 														}
 														if(sheet.analog[j].subName==1){//find subname 这里用数字替代
 															  if(rt_strcmp(argv[4],"temperature")==0){//温度
@@ -670,7 +670,7 @@ void autoctrlInputcfg(char*argv[])
 																		inputIndex++;
 																}
 																configFlag=true;
-																rt_kprintf("%saotuctrl AI OK\n",sign);
+																mod_printf("%saotuctrl AI OK\n",sign);
 																break;
 														}
 												}
@@ -686,7 +686,7 @@ void autoctrlInputcfg(char*argv[])
 								rt_strcpy(sheet.autoctrl[pindex].input[inputIndex].subName,"useless");
 								sheet.autoctrl[pindex].input[inputIndex].limit=limit;
 								if(!((limit==0)||(limit==1))){
-										rt_kprintf("%sERR:di conf argv[5] limit %s should be 0 1\n",sign);
+										mod_printf("ERR:di conf argv[5] limit %s should be 0 1\n");
 										return ;
 								}
 								for(i=0;i<DI_NUM;i++){
@@ -698,7 +698,7 @@ void autoctrlInputcfg(char*argv[])
 														sheet.autoctrl[pindex].input[inputIndex].flag=&inpoutpFlag.digInput[i].upFlag;
 												inputIndex++;
 												configFlag=true;
-												rt_kprintf("%saotuctrl DI OK\n",sign);
+												mod_printf("aotuctrl DI OK\n");
 										}
 								}
 								break;
@@ -754,14 +754,14 @@ void autoctrlInputcfg(char*argv[])
 														ret=ctrlCoverConf(argv);
 													break;
 													default:
-														rt_kprintf("%sERR:argv[2]>%d\n",sign,WATERDEPTH);
+														mod_printf("ERR:argv[2]>%d\n",WATERDEPTH);
 													break;
 												}
 												
 												if(ret==true){
 														configFlag=true;
 													  inputIndex++;
-														rt_kprintf("%saotuctrl MB OK\n",sign);
+														mod_printf("aotuctrl MB OK\n");
 												}
 												break;
 										}
@@ -782,7 +782,7 @@ void autoctrlOutputcfg(char*argv[])
 	
 		int  limit   = atoi16(argv[5],10);
 		if(!((limit==0)||(limit==1))){
-				rt_kprintf("%sERR:autoctrlOutputcfg argv[5] limit %s should be 0 1\n",sign);
+				mod_printf("ERR:autoctrlOutputcfg argv[5] limit %s should be 0 1\n");
 				return ;
 		}
 		
@@ -790,7 +790,7 @@ void autoctrlOutputcfg(char*argv[])
 				if(rt_strcmp(outName[i],argv[1])==0){//find output
 
 						if(outputIndex>=CRTL_OUT_NUM){
-								rt_kprintf("%serr:autoctrl output num is %d\n",sign,CRTL_OUT_NUM);
+								mod_printf("err:autoctrl output num is %d\n",CRTL_OUT_NUM);
 							  return;
 						}
 						rt_strcpy(sheet.autoctrl[pindex].output[outputIndex].typeName,argv[1]);
@@ -809,7 +809,7 @@ void autoctrlOutputcfg(char*argv[])
 														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.digOutput[i].lowFlag;
 												else
 														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.digOutput[i].upFlag;
-												rt_kprintf("%saotuctrl DO OK addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
+												mod_printf("aotuctrl DO OK addr=0x%x\n",sheet.autoctrl[pindex].output[outputIndex].flag);
 												outputIndex++;
 												configFlag=true;
 												
@@ -824,7 +824,7 @@ void autoctrlOutputcfg(char*argv[])
 //														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v33Output[i].lowFlag;
 //												else
 //														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v33Output[i].upFlag;
-//												rt_kprintf("%saotuctrl V33O OK addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
+//												mod_printf("%saotuctrl V33O OK addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
 //												outputIndex++;
 //												configFlag=true;
 //												
@@ -839,7 +839,7 @@ void autoctrlOutputcfg(char*argv[])
 //														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v5Output[i].lowFlag;
 //												else
 //														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.v5Output[i].upFlag;
-//												rt_kprintf("%saotuctrl V5O OK  addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
+//												mod_printf("%saotuctrl V5O OK  addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
 //												outputIndex++;
 //												configFlag=true;
 //												
@@ -854,7 +854,7 @@ void autoctrlOutputcfg(char*argv[])
 														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.switchOutput[i].lowFlag;
 												else
 														sheet.autoctrl[pindex].output[outputIndex].flag=&inpoutpFlag.switchOutput[i].upFlag;
-												rt_kprintf("%saotuctrl SWITCH OK  addr=0x%x\n",sign,sheet.autoctrl[pindex].output[outputIndex].flag);
+												mod_printf("aotuctrl SWITCH OK  addr=0x%x\n",sheet.autoctrl[pindex].output[outputIndex].flag);
 												outputIndex++;
 												configFlag=true;
 												
@@ -873,33 +873,33 @@ void autoctrlOutputcfg(char*argv[])
 //打印自动控制的配置列表
 void printfCtrl()
 {
-		rt_kprintf("%sauto ctrl list\n",sign);
+		mod_printf("auto ctrl list\n");
 		for(int i=0;i<CRTL_TOTAL_NUM;i++){
-				//rt_kprintf("%s,autoctrl list",sign);
+				//mod_printf("%s,autoctrl list",sign);
 			  if(sheet.autoctrl[i].workFlag==true){
-					  rt_kprintf("%sautoctrl the [%d] inctrl\n",sign,i+1);
+					  mod_printf("autoctrl the [%d] inctrl\n",i+1);
 						for(int k=0;k<CRTL_IN_NUM;k++){
 								if((sheet.autoctrl[i].input[k].flag!=NULL)&&((uint32_t)(uint32_t*)(sheet.autoctrl[i].input[k].flag)!=0xFFFFFFFF)){
-										rt_kprintf("In:autoctrl ");
-										rt_kprintf("%s ",sheet.autoctrl[i].input[k].typeName);
-										rt_kprintf("%s ",sheet.autoctrl[i].input[k].senseName);
-										rt_kprintf("%s ",sheet.autoctrl[i].input[k].ID);
-										rt_kprintf("%s ",sheet.autoctrl[i].input[k].subName);
-										rt_kprintf("%d \n",sheet.autoctrl[i].input[k].limit);
+										mod_printf("In:autoctrl ");
+										mod_printf("%s ",sheet.autoctrl[i].input[k].typeName);
+										mod_printf("%s ",sheet.autoctrl[i].input[k].senseName);
+										mod_printf("%s ",sheet.autoctrl[i].input[k].ID);
+										mod_printf("%s ",sheet.autoctrl[i].input[k].subName);
+										mod_printf("%d \n",sheet.autoctrl[i].input[k].limit);
 								}
 						}
 						for(int j=0;j<CRTL_OUT_NUM;j++){
 							 							//	if((sheet.autoctrl[i].input[k].flag!=NULL)&&((uint32_t)(uint32_t*)(sheet.autoctrl[i].input[k].flag)!=0xFFFFFFFF)){
 								if((sheet.autoctrl[i].output[j].flag!=NULL)&&((uint32_t)(uint32_t*)sheet.autoctrl[i].output[j].flag!=0xFFFFFFFF)){
-										rt_kprintf("Out:autoctrl ");
-										rt_kprintf("%s ",sheet.autoctrl[i].output[j].typeName);
-										rt_kprintf("%s ",sheet.autoctrl[i].output[j].senseName);
-										rt_kprintf("%s ",sheet.autoctrl[i].output[j].ID);
-										rt_kprintf("%s ",sheet.autoctrl[i].output[j].subName);
-										rt_kprintf("%d \n",sheet.autoctrl[i].output[j].limit);
+										mod_printf("Out:autoctrl ");
+										mod_printf("%s ",sheet.autoctrl[i].output[j].typeName);
+										mod_printf("%s ",sheet.autoctrl[i].output[j].senseName);
+										mod_printf("%s ",sheet.autoctrl[i].output[j].ID);
+										mod_printf("%s ",sheet.autoctrl[i].output[j].subName);
+										mod_printf("%d \n",sheet.autoctrl[i].output[j].limit);
 								}
 						}	
-						rt_kprintf("\n");
+						mod_printf("\n");
 				}
 		}
 }
@@ -919,7 +919,7 @@ void  autoCfgSure()
 		configFlag=false;
 		inputIndex=0; 
 		outputIndex=0;
-		rt_kprintf("%saotuctrl sure OK\n",sign);
+		mod_printf("aotuctrl sure OK\n");
 }
 void delAutoCfg(int num)
 {
@@ -930,7 +930,7 @@ void delAutoCfg(int num)
 			 sheet.autoctrl[num-1].output[j].flag=NULL;
 		if(configFlag==false)
 				pindex =findCtrlIndex();//删除后刷新坐标
-		rt_kprintf("%saotuctrl delete OK\n",sign);
+		mod_printf("aotuctrl delete OK\n");
 }
 //自动控制输入函数  串口输出命令首先调用此函数解析
 //以上逻辑配置时候如需要删除单个输入或者输出设备，选项为0即可，
@@ -947,15 +947,15 @@ static void autoctrl(char argc,char*argv[])
 			  
 			  int num=atoi16(argv[2],10);
 			  if( num==0){
-						rt_kprintf("%sargv[2] should not 0\n",sign);
+						mod_printf("argv[2] should not 0\n");
 				}
-			  rt_kprintf("%s %d %d\n",sign,num,pindex);
+			  mod_printf("%d %d\n",num,pindex);
 			  delAutoCfg(num);
 				return;
 		}//打印删除按钮
 
 	  if(pindex==255){
-				rt_kprintf("%sERR:aotuctrl is full,the total number is %d\n",sign,CRTL_TOTAL_NUM);
+				mod_printf("ERR:aotuctrl is full,the total number is %d\n",CRTL_TOTAL_NUM);
 			  return;
 		}
 		if(rt_strcmp("sure",argv[1])==0){//确定本次配置按钮  确定完了只能删除 不能取消
@@ -974,12 +974,12 @@ static void autoctrl(char argc,char*argv[])
 			  configFlag=false;
 				inputIndex=0; 
 				outputIndex=0;
-				rt_kprintf("%saotuctrl cancel OK\n",sign);
+				mod_printf("aotuctrl cancel OK\n");
 				return;
 		}
 
 		if(pindex>=CRTL_TOTAL_NUM){
-				rt_kprintf("%serr:autoctrl totoal num is %d\n",sign,CRTL_TOTAL_NUM);
+				mod_printf("err:autoctrl totoal num is %d\n",CRTL_TOTAL_NUM);
 		}
 		autoctrlInputcfg(argv); //检查是不是输入配置
 		autoctrlOutputcfg(argv);//检查是不是输出配置

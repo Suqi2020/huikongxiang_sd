@@ -468,8 +468,10 @@ uint16_t partDischagJsonPack(bool respFlag)
 				if(strlen(sdData)>=(sizeof(sdData)-2)){
 					rt_kprintf("err:sdData is not enough\n");
 				}
-				extern void juFangTxtSaveSD(char *id,char *data);
-				juFangTxtSaveSD(sheet.partDischag[i].ID,sdData);
+//				extern void juFangTxtSaveSD(char *id,char *data);
+//				juFangTxtSaveSD(sheet.partDischag[i].ID,sdData);
+				modbusTxtSaveSD(sheet.partDischag[i].ID,sdData,PARTDISCHAG);
+
 //					rt_thread_delay(10);
 				rt_kprintf("%sSD sdData£º%s",sign,sdData);//×Ô´ø»»ÐÐ
 

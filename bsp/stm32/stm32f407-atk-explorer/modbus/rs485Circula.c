@@ -272,9 +272,14 @@ uint16_t circulaJsonPack(bool respFlag)
 					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(sdData,"0");strcat(sdData,"  ");
 					sprintf(sprinBuf,"%llu",utcTime_ms());
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
-
-					huanLiuTxtSaveSD(sheet.cirCula[i].ID,sdData);//suqi
-					
+//				extern void huanLiuTxtSaveSD(char *id,char *data);
+//				huanLiuTxtSaveSD(sheet.cirCula[i].ID,sdData);//suqi
+				  modbusTxtSaveSD(sheet.cirCula[i].ID,sdData,CIRCULA);
+//				typedef enum{
+//    CIRCULA=0, 	PARTDISCHAG,			PRESSSETTL, 			THREEAXIS,		\
+//   	CH4,		O2		,H2S,			CO,			\
+//	  TEMPHUM,			WATERDEPTH,CRACKMETER,COVER
+//}modbNumEnum;
 					if(strlen(sdData)>=(sizeof(sdData)-2)){
 						rt_kprintf("err:sdData is not enough\n");
 					}

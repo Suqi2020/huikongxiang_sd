@@ -250,9 +250,10 @@ static uint16_t threeAxisJsonPack(bool respFlag)
 				if(strlen(sdData)>=(sizeof(sdData)-2)){
 					rt_kprintf("err:sdData is not enough\n");
 				}
-				extern void fWaiPoSaveSD(char *id,char *data);
-				fWaiPoSaveSD(sheet.threeAxiss[i].ID,sdData);
-//					rt_thread_delay(10);
+//				extern void fWaiPoSaveSD(char *id,char *data);
+//				fWaiPoSaveSD(sheet.threeAxiss[i].ID,sdData);
+				modbusTxtSaveSD(sheet.threeAxiss[i].ID,sdData,THREEAXIS);
+
 				rt_kprintf("%sSD sdData£º%s",sign,sdData);//×Ô´ø»»ÐÐ
 			}
 		}

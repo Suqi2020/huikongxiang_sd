@@ -2,6 +2,7 @@
 //#include    "modbus.h"
 
 const static char sign[]="[modbus]";
+
 /*
 1、什么时候读取数据 
 1.1 定时读取  队列发送 485 延时500ms 等待队列接收 接受完打包发送  加入1个 互斥保护
@@ -133,7 +134,7 @@ void   packMqtt()
 	  extern int MQTTSerialize_publish_suqi(int buflen,unsigned char dup, int qos, unsigned char retained, unsigned short packetid,
 		MQTTString topicName, unsigned char* payload, int payloadlen);
 		if((sendBufLen=MQTTSerialize_publish_suqi(sizeof(NetTxBuffer),0, 0, 0,0,topic, (unsigned char *)NetTxBuffer+PACK_HEAD_LEN,strlen((char*)NetTxBuffer)-PACK_HEAD_LEN+1))>0){ //qos=1????packetid
-				rt_kprintf("%sok publish pack\n",sign);
+				mod_printf("%sok publish pack\n",sign);
 			}
 		else
 			rt_kprintf("%serr publish pack\n",sign);

@@ -100,7 +100,11 @@ void  LCDTask(void *parameter)
 						lcdRecLen=0;
 					
 				}
+#if   USE_RINGBUF
 				if(++dispCount>=1200){
+#else
+				if(++dispCount>=60){	
+#endif
 					  changeHome();
 						
 						dispCount=0;

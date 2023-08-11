@@ -136,6 +136,9 @@ int  dataPhrase(char *json)
 }
 //int mqttRet=-1;
 //mqtt来实现订阅功能
+
+
+
 static void mqttSubFun()
 {
 	/* subscribe */

@@ -164,8 +164,10 @@ static uint16_t o2Pack(bool respFlag)
 				if(strlen(sdData)>=(sizeof(sdData)-2)){
 						rt_kprintf("err:sdData is not enough\n");
 				}
-				extern void o2SaveSD(char *id,char *data);
-				o2SaveSD(sheet.o2[i].ID,sdData);
+//				extern void o2SaveSD(char *id,char *data);
+//				o2SaveSD(sheet.o2[i].ID,sdData);
+				modbusTxtSaveSD(sheet.o2[i].ID,sdData,PRESSSETTL);
+
 			}
 			}
 		

@@ -4,8 +4,6 @@ static const char sign[]="[SDco]";
 //创建txt文件 以utc时间戳为基准/3600*24 得到每天的时间戳作为txt文件的名称
 
 static const char coText[]="monoxide time(ms)\r\n";
-
-
 static uint32_t writetime=0;
 void coSaveSD(char *id,char *data)
 {

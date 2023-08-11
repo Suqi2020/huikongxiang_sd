@@ -186,9 +186,10 @@ static uint16_t tempHumJsonPack(bool respFlag)
 				cJSON_AddItemToObject(nodeobj_p,"humidity",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
-				extern void wenShiDuSaveSD(char *id,char *data);
-				wenShiDuSaveSD(sheet.tempHum[i].ID,sdData);//suqi
-					
+//				extern void wenShiDuSaveSD(char *id,char *data);
+//				wenShiDuSaveSD(sheet.tempHum[i].ID,sdData);//suqi
+				modbusTxtSaveSD(sheet.tempHum[i].ID,sdData,TEMPHUM);
+
 				if(strlen(sdData)>=(sizeof(sdData)-2)){
 					rt_kprintf("err:sdData is not enough\n");
 				}

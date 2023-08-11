@@ -15,10 +15,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+4)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+5)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230809";
+const char date[]="20230811";
 
 bool USE_MQTT=true;
 
@@ -37,17 +37,17 @@ static    rt_thread_t tidUpkeep 	= RT_NULL;
 static    rt_thread_t tidLCD      = RT_NULL;
 static    rt_thread_t tidAutoCtrl = RT_NULL;
 static    rt_thread_t tidMqtt     = RT_NULL;
-static    rt_thread_t tidSdRTC =RT_NULL;
+static    rt_thread_t tidSdRTC 		=	RT_NULL;
 
 
 //互斥信号量定义
-rt_mutex_t   read485_mutex=RT_NULL;//防止多个线程同事读取modbus数据
-rt_mutex_t   lcdSend_mutex=RT_NULL;//防止多个线程同事往lcd发数据
-rt_mutex_t   w5500Spi_mutex=RT_NULL;//防止多个线程同时操作spi
-rt_mutex_t   sdWrite_mutex=RT_NULL;
-rt_mutex_t   printf_mutex=RT_NULL;
-rt_sem_t   uart1234_sem=RT_NULL;
-rt_sem_t   uart5678_sem=RT_NULL;
+rt_mutex_t   read485_mutex	=	RT_NULL;//防止多个线程同事读取modbus数据
+rt_mutex_t   lcdSend_mutex	=	RT_NULL;//防止多个线程同事往lcd发数据
+rt_mutex_t   w5500Spi_mutex	=	RT_NULL;//防止多个线程同时操作spi
+rt_mutex_t   sdWrite_mutex	=	RT_NULL;
+rt_mutex_t   printf_mutex		=	RT_NULL;
+rt_sem_t   		uart1234_sem	=	RT_NULL;
+rt_sem_t   		uart5678_sem	=	RT_NULL;
 
 //邮箱的定义
 extern struct  rt_mailbox mbNetSendData;;
@@ -362,6 +362,8 @@ int main(void)
 				}
     }
 }
+extern rt_bool_t shieldLog;//屏蔽log 
+extern int mod_printf(const char *fmt, ...);
 //tasklog delete  线程挂起时候才能删除   
 void  tasklog(int argc, char *argv[])
 {
@@ -369,22 +371,23 @@ void  tasklog(int argc, char *argv[])
 				goto ERR;
 		}
 		if(rt_strcmp("delete",argv[1])==0){
-			  if((tidW5500->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
-						rt_thread_delete(tidW5500);
-				if((tidNetRec->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
-						rt_thread_delete(tidNetRec);
-				if((tidNetSend->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
-						rt_thread_delete(tidNetSend);
-				if((tidUpkeep->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
-						rt_thread_delete(tidUpkeep);
-				if((tidAutoCtrl->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
-						rt_thread_delete(tidAutoCtrl);
-			  rt_kprintf("%s[tasklog delete OK]\n",sign);
+//			  if((tidW5500->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+//						rt_thread_delete(tidW5500);
+//				if((tidNetRec->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+//						rt_thread_delete(tidNetRec);
+//				if((tidNetSend->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+//						rt_thread_delete(tidNetSend);
+//				if((tidUpkeep->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+//						rt_thread_delete(tidUpkeep);
+//				if((tidAutoCtrl->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+//						rt_thread_delete(tidAutoCtrl);
+				shieldLog=RT_TRUE;
+			  mod_printf("[tasklog delete OK]\n");
 			  return;
 		}
 		ERR:
-		rt_kprintf("%serr for example:\n",sign);
-		rt_kprintf("%s[tasklog delete]\n",sign);
+		mod_printf("err for example:\n");
+		mod_printf("[tasklog delete]\n");
 }
 MSH_CMD_EXPORT(tasklog,tasklog del);//FINSH_FUNCTION_EXPORT_CMD
 

@@ -3,10 +3,10 @@
 
 
 
-const static char sign[]="[threshold]";
+//const static char sign[]="[threshold]";
 
 
-
+extern int mod_printf(const char *fmt, ...);
 //必须启用情况下才能得到阈值  即workFlag为true
 void printfThresholdList()
 {
@@ -15,20 +15,20 @@ void printfThresholdList()
 		for(int j=0;j<ANALOG_NUM;j++){//查一遍 找到 温湿度的模拟阈值
 			  if(sheet.analog[j].workFlag==RT_TRUE){
 						//if(rt_strcmp(sheet.analog[j].name,analogName[i])==0){
-								rt_kprintf("%s threshold ",sign);
-								rt_kprintf("%s ",sheet.analog[j].name);
-								rt_kprintf("%s ",sheet.analog[j].ID);
-								rt_kprintf("2 ");
-								rt_kprintf("%s ",sheet.analog[j].subName);
+								mod_printf("threshold ");
+								mod_printf("%s ",sheet.analog[j].name);
+								mod_printf("%s ",sheet.analog[j].ID);
+								mod_printf("2 ");
+								mod_printf("%s ",sheet.analog[j].subName);
 							  if(sheet.analog[j].subName==1){//温度
 										
-										rt_kprintf("%0.2f ",sheet.analogTempHum.tempLowLimit);
-									  rt_kprintf("%0.2f \n",sheet.analogTempHum.tempUpLimit);
+										mod_printf("%0.2f ",sheet.analogTempHum.tempLowLimit);
+									  mod_printf("%0.2f \n",sheet.analogTempHum.tempUpLimit);
 								}
 								else if(sheet.analog[j].subName==2){//湿度
 										
-										rt_kprintf("%0.2f ",sheet.analogTempHum.humLowLimit);
-									  rt_kprintf("%0.2f \n",sheet.analogTempHum.humUpLimit);
+										mod_printf("%0.2f ",sheet.analogTempHum.humLowLimit);
+									  mod_printf("%0.2f \n",sheet.analogTempHum.humUpLimit);
 
 								}
 						}
@@ -38,169 +38,169 @@ void printfThresholdList()
 		
 		for(i=0;i<CIRCULA_485_NUM;i++){
 				if(sheet.cirCula[i].workFlag==RT_TRUE){//找到工作的设备  环流需要连续打印三次
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[CIRCULA]);
-						rt_kprintf("%s ",sheet.cirCula[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusCircul[i].cirCurALowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusCircul[i].cirCurAUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[CIRCULA]);
+						mod_printf("%s ",sheet.cirCula[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusCircul[i].cirCurALowLimit);
+						mod_printf("%0.2f \n",sheet.modbusCircul[i].cirCurAUpLimit);
 	
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[CIRCULA]);
-						rt_kprintf("%s ",sheet.cirCula[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("2 ");
-						rt_kprintf("%0.2f ",sheet.modbusCircul[i].cirCurBLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusCircul[i].cirCurBUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[CIRCULA]);
+						mod_printf("%s ",sheet.cirCula[i].ID);
+						mod_printf("1 ");
+						mod_printf("2 ");
+						mod_printf("%0.2f ",sheet.modbusCircul[i].cirCurBLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusCircul[i].cirCurBUpLimit);
 					
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[CIRCULA]);
-						rt_kprintf("%s ",sheet.cirCula[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("3 ");
-						rt_kprintf("%0.2f ",sheet.modbusCircul[i].cirCurCLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusCircul[i].cirCurCUpLimit);
-						rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[CIRCULA]);
+						mod_printf("%s ",sheet.cirCula[i].ID);
+						mod_printf("1 ");
+						mod_printf("3 ");
+						mod_printf("%0.2f ",sheet.modbusCircul[i].cirCurCLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusCircul[i].cirCurCUpLimit);
+						mod_printf("\n");
 				}
 				
 		}
 
 		for(i=0;i<PARTDISCHAG_485_NUM;i++){
 				if(sheet.partDischag[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PARTDISCHAG]);
-						rt_kprintf("%s ",sheet.partDischag[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%u ",sheet.modbusPartDisChg[i].amplitudeALowLimit);
-						rt_kprintf("%u \n",sheet.modbusPartDisChg[i].amplitudeAUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PARTDISCHAG]);
+						mod_printf("%s ",sheet.partDischag[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%u ",sheet.modbusPartDisChg[i].amplitudeALowLimit);
+						mod_printf("%u \n",sheet.modbusPartDisChg[i].amplitudeAUpLimit);
 					
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PARTDISCHAG]);
-						rt_kprintf("%s ",sheet.partDischag[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("2 ");
-						rt_kprintf("%u ",sheet.modbusPartDisChg[i].freqALowLimit);
-						rt_kprintf("%u \n",sheet.modbusPartDisChg[i].freqAUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PARTDISCHAG]);
+						mod_printf("%s ",sheet.partDischag[i].ID);
+						mod_printf("1 ");
+						mod_printf("2 ");
+						mod_printf("%u ",sheet.modbusPartDisChg[i].freqALowLimit);
+						mod_printf("%u \n",sheet.modbusPartDisChg[i].freqAUpLimit);
 					
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PARTDISCHAG]);
-						rt_kprintf("%s ",sheet.partDischag[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("3 ");
-						rt_kprintf("%u ",sheet.modbusPartDisChg[i].dischargeALowLimit);
-						rt_kprintf("%u \n",sheet.modbusPartDisChg[i].dischargeAUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PARTDISCHAG]);
+						mod_printf("%s ",sheet.partDischag[i].ID);
+						mod_printf("1 ");
+						mod_printf("3 ");
+						mod_printf("%u ",sheet.modbusPartDisChg[i].dischargeALowLimit);
+						mod_printf("%u \n",sheet.modbusPartDisChg[i].dischargeAUpLimit);
 
 
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PARTDISCHAG]);
-						rt_kprintf("%s ",sheet.partDischag[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("4 ");
-						rt_kprintf("%u ",sheet.modbusPartDisChg[i].amplitudeBLowLimit);
-						rt_kprintf("%u \n",sheet.modbusPartDisChg[i].amplitudeBUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PARTDISCHAG]);
+						mod_printf("%s ",sheet.partDischag[i].ID);
+						mod_printf("1 ");
+						mod_printf("4 ");
+						mod_printf("%u ",sheet.modbusPartDisChg[i].amplitudeBLowLimit);
+						mod_printf("%u \n",sheet.modbusPartDisChg[i].amplitudeBUpLimit);
 						
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PARTDISCHAG]);
-						rt_kprintf("%s ",sheet.partDischag[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("5 ");
-						rt_kprintf("%u ",sheet.modbusPartDisChg[i].freqBLowLimit);
-						rt_kprintf("%u \n",sheet.modbusPartDisChg[i].freqBUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PARTDISCHAG]);
+						mod_printf("%s ",sheet.partDischag[i].ID);
+						mod_printf("1 ");
+						mod_printf("5 ");
+						mod_printf("%u ",sheet.modbusPartDisChg[i].freqBLowLimit);
+						mod_printf("%u \n",sheet.modbusPartDisChg[i].freqBUpLimit);
 						
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PARTDISCHAG]);
-						rt_kprintf("%s ",sheet.partDischag[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("6 ");
-						rt_kprintf("%u ",sheet.modbusPartDisChg[i].dischargeBLowLimit);
-						rt_kprintf("%u \n",sheet.modbusPartDisChg[i].dischargeBUpLimit);	
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PARTDISCHAG]);
+						mod_printf("%s ",sheet.partDischag[i].ID);
+						mod_printf("1 ");
+						mod_printf("6 ");
+						mod_printf("%u ",sheet.modbusPartDisChg[i].dischargeBLowLimit);
+						mod_printf("%u \n",sheet.modbusPartDisChg[i].dischargeBUpLimit);	
 
 
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PARTDISCHAG]);
-						rt_kprintf("%s ",sheet.partDischag[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("7 ");
-						rt_kprintf("%u ",sheet.modbusPartDisChg[i].amplitudeCLowLimit);
-						rt_kprintf("%u \n",sheet.modbusPartDisChg[i].amplitudeCUpLimit);	
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PARTDISCHAG]);
+						mod_printf("%s ",sheet.partDischag[i].ID);
+						mod_printf("1 ");
+						mod_printf("7 ");
+						mod_printf("%u ",sheet.modbusPartDisChg[i].amplitudeCLowLimit);
+						mod_printf("%u \n",sheet.modbusPartDisChg[i].amplitudeCUpLimit);	
 						
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PARTDISCHAG]);
-						rt_kprintf("%s ",sheet.partDischag[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("8 ");
-						rt_kprintf("%u ",sheet.modbusPartDisChg[i].freqCLowLimit);
-						rt_kprintf("%u \n",sheet.modbusPartDisChg[i].freqCUpLimit);	
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PARTDISCHAG]);
+						mod_printf("%s ",sheet.partDischag[i].ID);
+						mod_printf("1 ");
+						mod_printf("8 ");
+						mod_printf("%u ",sheet.modbusPartDisChg[i].freqCLowLimit);
+						mod_printf("%u \n",sheet.modbusPartDisChg[i].freqCUpLimit);	
 						
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PARTDISCHAG]);
-						rt_kprintf("%s ",sheet.partDischag[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("9 ");
-						rt_kprintf("%u ",sheet.modbusPartDisChg[i].dischargeCLowLimit);
-						rt_kprintf("%u \n",sheet.modbusPartDisChg[i].dischargeCUpLimit);
-						rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PARTDISCHAG]);
+						mod_printf("%s ",sheet.partDischag[i].ID);
+						mod_printf("1 ");
+						mod_printf("9 ");
+						mod_printf("%u ",sheet.modbusPartDisChg[i].dischargeCLowLimit);
+						mod_printf("%u \n",sheet.modbusPartDisChg[i].dischargeCUpLimit);
+						mod_printf("\n");
 				}
 		}
 		for(i=0;i<PRESSSETTL_485_NUM;i++){
 				if(sheet.pressSetl[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PRESSSETTL]);
-						rt_kprintf("%s ",sheet.pressSetl[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusPreSettl[i].tempLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusPreSettl[i].tempUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PRESSSETTL]);
+						mod_printf("%s ",sheet.pressSetl[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusPreSettl[i].tempLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusPreSettl[i].tempUpLimit);
 					
 					
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[PRESSSETTL]);
-						rt_kprintf("%s ",sheet.pressSetl[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("2 ");
-						rt_kprintf("%0.2f ",sheet.modbusPreSettl[i].heightLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusPreSettl[i].heightUpLimit);
-						rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[PRESSSETTL]);
+						mod_printf("%s ",sheet.pressSetl[i].ID);
+						mod_printf("1 ");
+						mod_printf("2 ");
+						mod_printf("%0.2f ",sheet.modbusPreSettl[i].heightLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusPreSettl[i].heightUpLimit);
+						mod_printf("\n");
 
 				}
 		}
 
 		for(i=0;i<THREEAXIS_485_NUM;i++){
 				if(sheet.threeAxiss[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[THREEAXIS]);
-						rt_kprintf("%s ",sheet.threeAxiss[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusThreAxis[i].tempLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusThreAxis[i].tempUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[THREEAXIS]);
+						mod_printf("%s ",sheet.threeAxiss[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusThreAxis[i].tempLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusThreAxis[i].tempUpLimit);
 		
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[THREEAXIS]);
-						rt_kprintf("%s ",sheet.threeAxiss[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("2 ");
-						rt_kprintf("%0.2f ",sheet.modbusThreAxis[i].accXLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusThreAxis[i].accXUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[THREEAXIS]);
+						mod_printf("%s ",sheet.threeAxiss[i].ID);
+						mod_printf("1 ");
+						mod_printf("2 ");
+						mod_printf("%0.2f ",sheet.modbusThreAxis[i].accXLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusThreAxis[i].accXUpLimit);
 	
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[THREEAXIS]);
-						rt_kprintf("%s ",sheet.threeAxiss[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("3 ");
-						rt_kprintf("%0.2f ",sheet.modbusThreAxis[i].accYLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusThreAxis[i].accYUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[THREEAXIS]);
+						mod_printf("%s ",sheet.threeAxiss[i].ID);
+						mod_printf("1 ");
+						mod_printf("3 ");
+						mod_printf("%0.2f ",sheet.modbusThreAxis[i].accYLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusThreAxis[i].accYUpLimit);
 
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[THREEAXIS]);
-						rt_kprintf("%s ",sheet.threeAxiss[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("4 ");
-						rt_kprintf("%0.2f ",sheet.modbusThreAxis[i].accZLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusThreAxis[i].accZUpLimit);
-						rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[THREEAXIS]);
+						mod_printf("%s ",sheet.threeAxiss[i].ID);
+						mod_printf("1 ");
+						mod_printf("4 ");
+						mod_printf("%0.2f ",sheet.modbusThreAxis[i].accZLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusThreAxis[i].accZUpLimit);
+						mod_printf("\n");
 				}
 
 		}
@@ -209,143 +209,143 @@ void printfThresholdList()
 
 		for(i=0;i<CH4_485_NUM;i++){
 				if(sheet.ch4[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[CH4]);
-						rt_kprintf("%s ",sheet.ch4[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusCh4[i].ch4LowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusCh4[i].ch4UpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[CH4]);
+						mod_printf("%s ",sheet.ch4[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusCh4[i].ch4LowLimit);
+						mod_printf("%0.2f \n",sheet.modbusCh4[i].ch4UpLimit);
+					  mod_printf("\n");
 				}
 		}
 		for(i=0;i<O2_485_NUM;i++){
 				if(sheet.ch4[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[O2]);
-						rt_kprintf("%s ",sheet.o2[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusO2[i].o2LowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusO2[i].o2UpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[O2]);
+						mod_printf("%s ",sheet.o2[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusO2[i].o2LowLimit);
+						mod_printf("%0.2f \n",sheet.modbusO2[i].o2UpLimit);
 				
-						rt_kprintf("\n");
+						mod_printf("\n");
 				}
 		}
 		for(i=0;i<H2S_485_NUM;i++){
 				if(sheet.ch4[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[H2S]);
-						rt_kprintf("%s ",sheet.h2s[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusH2s[i].h2sLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusH2s[i].h2sUpLimit);
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[H2S]);
+						mod_printf("%s ",sheet.h2s[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusH2s[i].h2sLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusH2s[i].h2sUpLimit);
 				
-				    rt_kprintf("\n");
+				    mod_printf("\n");
 				}
 		}
 		for(i=0;i<CO_485_NUM;i++){
 				if(sheet.co[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[CO]);
-						rt_kprintf("%s ",sheet.co[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusCo[i].coLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusCo[i].coUpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[CO]);
+						mod_printf("%s ",sheet.co[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusCo[i].coLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusCo[i].coUpLimit);
+					  mod_printf("\n");
 				}
 				
 		}
 #endif
 		for(i=0;i<TEMPHUM_485_NUM;i++){
 				if(sheet.tempHum[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[TEMPHUM]);
-						rt_kprintf("%s ",sheet.tempHum[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusTempHum[i].tempLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusTempHum[i].tempUpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[TEMPHUM]);
+						mod_printf("%s ",sheet.tempHum[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusTempHum[i].tempLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusTempHum[i].tempUpLimit);
+					  mod_printf("\n");
 				}
-				//rt_kprintf("\n");
+				//mod_printf("\n");
 		}
 		for(i=0;i<WATERDEPTH_485_NUM;i++){
 				if(sheet.waterDepth[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[WATERDEPTH]);
-						rt_kprintf("%s ",sheet.waterDepth[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusWaterDepth[i].depthLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusWaterDepth[i].depthUpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[WATERDEPTH]);
+						mod_printf("%s ",sheet.waterDepth[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusWaterDepth[i].depthLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusWaterDepth[i].depthUpLimit);
+					  mod_printf("\n");
 				}
-				//rt_kprintf("\n");
+				//mod_printf("\n");
 		}
 		for(i=0;i<CRACKMETER_485_NUM;i++){
 				if(sheet.crackMeter[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[CRACKMETER]);
-						rt_kprintf("%s ",sheet.crackMeter[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%0.2f ",sheet.modbusCrackMeter[i].tempLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusCrackMeter[i].tempUpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[CRACKMETER]);
+						mod_printf("%s ",sheet.crackMeter[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%0.2f ",sheet.modbusCrackMeter[i].tempLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusCrackMeter[i].tempUpLimit);
+					  mod_printf("\n");
 					
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[CRACKMETER]);
-						rt_kprintf("%s ",sheet.crackMeter[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("2 ");
-						rt_kprintf("%0.2f ",sheet.modbusCrackMeter[i].distancLowLimit);
-						rt_kprintf("%0.2f \n",sheet.modbusCrackMeter[i].distancUpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[CRACKMETER]);
+						mod_printf("%s ",sheet.crackMeter[i].ID);
+						mod_printf("1 ");
+						mod_printf("2 ");
+						mod_printf("%0.2f ",sheet.modbusCrackMeter[i].distancLowLimit);
+						mod_printf("%0.2f \n",sheet.modbusCrackMeter[i].distancUpLimit);
+					  mod_printf("\n");
 				}
-				//rt_kprintf("\n");
+				//mod_printf("\n");
 		}
 		for(i=0;i<COVER_485_NUM;i++){
 				if(sheet.cover[i].workFlag==RT_TRUE){//找到相同ID的
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[COVER]);
-						rt_kprintf("%s ",sheet.cover[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("1 ");
-						rt_kprintf("%d ",sheet.modbusCover[i].inclineLowLimit);
-						rt_kprintf("%d \n",sheet.modbusCover[i].inclineUpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[COVER]);
+						mod_printf("%s ",sheet.cover[i].ID);
+						mod_printf("1 ");
+						mod_printf("1 ");
+						mod_printf("%d ",sheet.modbusCover[i].inclineLowLimit);
+						mod_printf("%d \n",sheet.modbusCover[i].inclineUpLimit);
+					  mod_printf("\n");
 					
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[COVER]);
-						rt_kprintf("%s ",sheet.cover[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("2 ");
-						rt_kprintf("%d ",sheet.modbusCover[i].switch2LowLimit);
-						rt_kprintf("%d \n",sheet.modbusCover[i].switch2UpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[COVER]);
+						mod_printf("%s ",sheet.cover[i].ID);
+						mod_printf("1 ");
+						mod_printf("2 ");
+						mod_printf("%d ",sheet.modbusCover[i].switch2LowLimit);
+						mod_printf("%d \n",sheet.modbusCover[i].switch2UpLimit);
+					  mod_printf("\n");
 					
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[COVER]);
-						rt_kprintf("%s ",sheet.cover[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("3 ");
-						rt_kprintf("%d ",sheet.modbusCover[i].vibrationLowLimit);
-						rt_kprintf("%d \n",sheet.modbusCover[i].vibrationUpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[COVER]);
+						mod_printf("%s ",sheet.cover[i].ID);
+						mod_printf("1 ");
+						mod_printf("3 ");
+						mod_printf("%d ",sheet.modbusCover[i].vibrationLowLimit);
+						mod_printf("%d \n",sheet.modbusCover[i].vibrationUpLimit);
+					  mod_printf("\n");
 						
-						rt_kprintf("%s threshold ",sign);
-						rt_kprintf("%s ",modbusName[COVER]);
-						rt_kprintf("%s ",sheet.cover[i].ID);
-						rt_kprintf("1 ");
-						rt_kprintf("4 ");
-						rt_kprintf("%d ",sheet.modbusCover[i].switch1LowLimit);
-						rt_kprintf("%d \n",sheet.modbusCover[i].switch1UpLimit);
-					  rt_kprintf("\n");
+						mod_printf("threshold ");
+						mod_printf("%s ",modbusName[COVER]);
+						mod_printf("%s ",sheet.cover[i].ID);
+						mod_printf("1 ");
+						mod_printf("4 ");
+						mod_printf("%d ",sheet.modbusCover[i].switch1LowLimit);
+						mod_printf("%d \n",sheet.modbusCover[i].switch1UpLimit);
+					  mod_printf("\n");
 				}
-				//rt_kprintf("\n");
+				//mod_printf("\n");
 		}
 		//打印modbus设置的阈值
 }
@@ -642,7 +642,7 @@ bool   modbusThresholdConfig(int num,char *ID,int sensorSubName,float upLimit,fl
 						}
 				}
 
-				rt_kprintf("%s ERR:modbusThresholdConfig %d\n",sign,num);
+				mod_printf("ERR:modbusThresholdConfig %d\n",num);
 				break;
 		}
 		return false;
@@ -684,11 +684,11 @@ static void threshold(int argc,char *argv[])
 		sensorType= atoi32(argv[3],10);
 		sensorSubName=atoi32(argv[4],10);
 		if((sensorType!=1)&&(sensorType!=2)){
-				rt_kprintf("%ssensorType argv[3] should be 1 or 2\n",sign);
+				mod_printf("sensorType argv[3] should be 1 or 2\n");
 			  goto ERR;
 		}
 		if(sensorSubName>100){
-				rt_kprintf("%ssensorSubName argv[4] should be <100\n",sign);
+				mod_printf("sensorSubName argv[4] should be <100\n");
 			  goto ERR;
 		}
 		uplimit  = atof(argv[6]);
@@ -698,7 +698,7 @@ static void threshold(int argc,char *argv[])
 			  for(i=0;i<MODBUS_NUM;i++){
 						if(rt_strcmp(argv[1],modbusName[i])==0){
 								if(true==modbusThresholdConfig(i,argv[2],sensorSubName,uplimit,lowlimit)){
-									  rt_kprintf("%sthreshold mb cfg OK\n",sign);
+									  mod_printf("threshold mb cfg OK\n");
 										return;
 								}
 								else{
@@ -713,7 +713,7 @@ static void threshold(int argc,char *argv[])
 			  for(i=0;i<ANALOGNAME_NUM;i++){
 						if(rt_strcmp(argv[1],analogName[i])==0){
 								if(true==analogThresholdConfig(i,argv[2],sensorSubName,uplimit,lowlimit)){
-										rt_kprintf("%sthreshold ana cfg OK\n",sign);
+										mod_printf("%sthreshold ana cfg OK\n",sign);
 										return;
 								}
 								else{
@@ -725,9 +725,9 @@ static void threshold(int argc,char *argv[])
 #endif
 		return;
 		ERR:
-		rt_kprintf("%sfor example\n",sign);
-		rt_kprintf("%s[threshold 温湿度 GYNJLXSD000000164 1 1 10 80]\n",sign);
-		rt_kprintf("%s[阈值上下限为0时候 不启用阈值]\n",sign);
+		mod_printf("for example\n");
+		mod_printf("[threshold 温湿度 GYNJLXSD000000164 1 1 10 80]\n");
+		mod_printf("[阈值上下限为0时候 不启用阈值]\n");
 
 }
 MSH_CMD_EXPORT(threshold,threshold config);

@@ -1,9 +1,9 @@
 #include <board.h>
 
 
-const static char sign[]="[digInput]";
+//const static char sign[]="[digInput]";
 
-
+extern int mod_printf(const char *fmt, ...);
 //digital input 读取电平值 高电平返回1   其他返回0
 bool  diReadFun(char num)
 {
@@ -45,13 +45,13 @@ void printfDIList()
 {
 		for(int j=0;j<DI_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 				if(packFlash.diginput[j].workFlag==RT_TRUE){//打开
-						rt_kprintf("%s digInput ",sign);
+						mod_printf("digInput ");
 
-						rt_kprintf("%s ",packFlash.diginput[j].name);
-						rt_kprintf("%s ",packFlash.diginput[j].devID);
+						mod_printf("%s ",packFlash.diginput[j].name);
+						mod_printf("%s ",packFlash.diginput[j].devID);
 						
-						rt_kprintf("%s ",packFlash.diginput[j].model);
-						rt_kprintf("%d \n",packFlash.diginput[j].port);
+						mod_printf("%s ",packFlash.diginput[j].model);
+						mod_printf("%d \n",packFlash.diginput[j].port);
 
 
 
@@ -73,7 +73,7 @@ static void digInput(int argc, char *argv[])
 		}
 		if(devIDOKCheck(argv[2])!=true){
 			if((strcmp(argv[5],"0")!=0)&&(strcmp(argv[5],"255")!=0)){
-				rt_kprintf("%sERR input the same ID\n",sign);
+				mod_printf("ERR input the same ID\n");
 			  return;
 			}
 		}
@@ -85,22 +85,22 @@ static void digInput(int argc, char *argv[])
 				rt_strcpy(packFlash.diginput[port-1].devID,argv[2]);
 				rt_strcpy(packFlash.diginput[port-1].model,argv[3]);
 				packFlash.diginput[port-1].port=port;
-				rt_kprintf("%s add diginput chanl %d\n",sign,port);
-        rt_kprintf("%s digInput OK\n",sign);
+				mod_printf("add diginput chanl %d\n",port);
+        mod_printf("digInput OK\n");
 		}
 		else{//删除
 			 for(int j=0;j<DI_NUM;j++){//查一遍 找到 GYNJLXSD000000499  如果
 					if(rt_strcmp(packFlash.diginput[j].devID,argv[2])==0){
 							packFlash.diginput[j].workFlag=RT_FALSE;
-							rt_kprintf("%s delete diginput channel %d\n",sign,j+1);
+							mod_printf("delete diginput channel %d\n",j+1);
 					}
 			 }
 		}
 		return;
 		ERR:
-		rt_kprintf("%sfor example\n",sign);
-		rt_kprintf("%s[digInput 水泵 GYNJLXSD000000162 GY281 1]\n",sign);
-		rt_kprintf("%s[port1-8 之外清除对应ID的所有参数]\n",sign);
+		mod_printf("for example\n");
+		mod_printf("[digInput 水泵 GYNJLXSD000000162 GY281 1]\n");
+		mod_printf("[port1-8 之外清除对应ID的所有参数]\n");
 
 }
 MSH_CMD_EXPORT(digInput,digInput config);//FINSH_FUNCTION_EXPORT_CMD

@@ -116,7 +116,7 @@ void  modbusDataTxtCheck()
 
 void  sdAndRtcInit()
 {
-		rt_thread_mdelay(350);//延时2秒 不能去掉 需要等待lcd启动稳定并且同步时钟完毕再写入sd卡
+		rt_thread_mdelay(500);//延时2秒 不能去掉 需要等待lcd启动稳定并且同步时钟完毕再写入sd卡
 	  extern void changeBmp(int num);
 	  changeBmp(0);
 	  rt_kprintf("%schangeBmp-0\n",task);

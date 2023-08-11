@@ -215,9 +215,14 @@ static uint16_t coverJsonPack(bool respFlag)
 				cJSON_AddNumberToObject(nodeobj_p,"switch1"   ,cover[i].switch1p);   sprintf(sprinBuf,"%d",cover[i].switch1p);  strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%llu",utcTime_ms());
 				cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
-					
-				extern void jingGaiSaveSD(char *id,char *data);
-				jingGaiSaveSD(sheet.cover[i].ID,sdData);;
+//				extern void jingGaiSaveSD(char *id,char *data);
+//			 jingGaiSaveSD(sheet.cover[i].ID,sdData);
+				modbusTxtSaveSD(sheet.cover[i].ID,sdData,COVER);
+//				typedef enum{
+//    CIRCULA=0, 	PARTDISCHAG,			PRESSSETTL, 			THREEAXIS,		\
+//   	CH4,		O2		,H2S,			CO,			\
+//	  TEMPHUM,			WATERDEPTH,CRACKMETER,COVER
+//}modbNumEnum;
 				if(strlen(sdData)>=(sizeof(sdData)-2)){
 						rt_kprintf("err:sdData is not enough\n");
 				}

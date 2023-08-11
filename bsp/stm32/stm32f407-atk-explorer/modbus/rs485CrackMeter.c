@@ -201,9 +201,10 @@ uint16_t crackMeterJsonPack(bool respFlag)
 					cJSON_AddItemToObject(nodeobj_p,"distance",cJSON_CreateString(sprinBuf));  			strcat(sdData,sprinBuf);strcat(sdData,"  ");
 					sprintf(sprinBuf,"%llu",utcTime_ms());
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
-					
-					extern void lieFengYiSaveSD(char *id,char *data);
-					lieFengYiSaveSD(sheet.crackMeter[i].ID,sdData);;
+//					extern void lieFengYiSaveSD(char *id,char *data);
+//					lieFengYiSaveSD(sheet.crackMeter[i].ID,sdData);
+			  	modbusTxtSaveSD(sheet.crackMeter[i].ID,sdData,CRACKMETER);
+
 					if(strlen(sdData)>=(sizeof(sdData)-2)){
 							rt_kprintf("err:sdData is not enough\n");
 					}
