@@ -8,6 +8,18 @@
  * 2018-11-06     SummerGift   first version
  * 2018-11-19     flybreak     add stm32f407-atk-explorer bsp
  */
+ 
+ 
+ 
+ 
+//dmodbus    HuanLiu  GYNJLXSD000000563 GY289 port5 1 60 
+//modbus    HuanLiu  GYNJLXSD000000562 GY289 port5 2 60 
+//modbus     JuFang  GYNJLXSD000000665 GY298 port5 3 60 
+//modbus FangChenJiang GYNJLXSD000000781 GY299 port8 1 100 
+//modbus  FangWaiPo GYNJLXSD000000782 GY299 port8 2 100 
+//modbus     JiaWan  GYNJLXSD00000068 GY299 port7 1 100 
+//modbus LiuHuaQing GYNJLXSD000000683 GY299 port7 3 100 
+//modbus  LieFengYi GYNJLXSD000000783 GY299 port8 9 100 
 
 #include <rtthread.h>
 #include <rtdevice.h>
@@ -15,10 +27,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+5)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+6)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230811";
+const char date[]="20230813";
 
 bool USE_MQTT=true;
 

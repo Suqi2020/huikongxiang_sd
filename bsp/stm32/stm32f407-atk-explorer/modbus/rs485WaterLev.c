@@ -59,7 +59,7 @@ static void readWaterDepth(int num)
 		memset(buf,0,MODBUS_LENTH);
 		
 
-		len=  rs485UartRec(sheet.waterDepth[num].useUartNum,buf,500);
+		len=  rs485UartRec(sheet.waterDepth[num].useUartNum,buf,1000);
 		if(len!=0){
 				rt_kprintf("%srec:",sign);
 				for(int j=0;j<len;j++){

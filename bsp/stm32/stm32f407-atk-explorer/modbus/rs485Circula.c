@@ -99,7 +99,7 @@ void readCirCurrAndWaring(int num)
 //	  rt_mutex_take(uartDev[sheet.cirCula[num].useUartNum].uartMutex,RT_WAITING_FOREVER);
 		memset(buf,0,MODBUS_LENTH);
     len=0;
-		len=  rs485UartRec(sheet.cirCula[num].useUartNum,buf,500);
+		len=  rs485UartRec(sheet.cirCula[num].useUartNum,buf,1000);
 		if(len!=0){
 				rt_kprintf("%srec:",sign);
 				for(int j=0;j<len;j++){
@@ -166,7 +166,7 @@ static uint16_t readPoint(int num)
 		rt_kprintf("\n");
 		memset(buf,0,MODBUS_LENTH);
     len=0;
-		len=  rs485UartRec(sheet.cirCula[num].useUartNum,buf,500);
+		len=  rs485UartRec(sheet.cirCula[num].useUartNum,buf,1000);
 		rt_kprintf("%srec:",sign);
 		for(int j=0;j<len;j++){
 				rt_kprintf("%x ",buf[j]);

@@ -133,7 +133,7 @@ void readPdFreqDischarge(int num)
 		rt_kprintf("\n");
 		memset(buf,0,MODBUS_LENTH);
     len=0;
-		len=  rs485UartRec(sheet.partDischag[num].useUartNum,buf,500);
+		len=  rs485UartRec(sheet.partDischag[num].useUartNum,buf,2000);
 		if(len!=0){
 				rt_kprintf("%srec:",sign);
 				for(int j=0;j<len;j++){
@@ -204,7 +204,7 @@ rt_bool_t readPartDischgWarning(int num)
 		rt_kprintf("\n");
 		memset(buf,0,MODBUS_LENTH);
     len=0;
-		len=  rs485UartRec(sheet.partDischag[num].useUartNum,buf,500);
+		len=  rs485UartRec(sheet.partDischag[num].useUartNum,buf,2000);
 		rt_kprintf("%srec:",sign);
 		for(int j=0;j<len;j++){
 				rt_kprintf("%x ",buf[j]);
@@ -555,7 +555,7 @@ static int partDischagChanlRead(phaseEnum X,int num)
 					rt_kprintf("\n");
 					memset(buf,0,MODBUS_LENTH);
 					len=0;
-		      len=  rs485UartRec(sheet.partDischag[num].useUartNum,buf,500);
+		      len=  rs485UartRec(sheet.partDischag[num].useUartNum,buf,2000);
 
 					if(len==0){
 							rt_kprintf("%s partDis read atlas not resp ,break \n",sign);

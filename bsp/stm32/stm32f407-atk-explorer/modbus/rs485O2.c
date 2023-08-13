@@ -65,7 +65,7 @@ void readO2(int num)
 		rt_kprintf("\n");
     len=0;
 		memset(buf,0,MODBUS_LENTH);
-		len=  rs485UartRec(sheet.o2[num].useUartNum,buf,500);
+		len=  rs485UartRec(sheet.o2[num].useUartNum,buf,1000);
 
 		if(len!=0){
 				rt_kprintf("%srec:",sign);

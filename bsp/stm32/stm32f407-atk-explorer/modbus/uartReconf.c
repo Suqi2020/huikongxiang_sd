@@ -35,6 +35,8 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 			case 3:
 			if(rt_sem_take(uart1234_sem,timeout)==RT_EOK)
 			{
+				
+				rt_kprintf("485 1read\n");
 				gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
 					do{
 							//判断子串口1是否有中断
@@ -68,6 +70,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 			case 7:
 			if(rt_sem_take(uart5678_sem,timeout)==RT_EOK)
 			{
+				rt_kprintf(":485 2read\n");
 				gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);
 					do{
 							//判断子串口1是否有中断
@@ -135,9 +138,9 @@ void uartReconfig()
 		Wk1234UartInit(3);
 		Wk1234UartInit(4);
 //		//设置子串口波特率
-		Wk1234UartSetBaud(1,packFlash.uartBps[0]);
-		Wk1234UartSetBaud(2,packFlash.uartBps[1]);
-		Wk1234UartSetBaud(3,packFlash.uartBps[2]);
+		Wk1234UartSetBaud(3,packFlash.uartBps[0]);
+		Wk1234UartSetBaud(1,packFlash.uartBps[1]);
+		Wk1234UartSetBaud(2,packFlash.uartBps[2]);
 		Wk1234UartSetBaud(4,packFlash.uartBps[3]);
 		Wk1234UartRS485(1);
 		Wk1234UartRS485(2);
@@ -156,9 +159,9 @@ void uartReconfig()
 		Wk5678UartInit(3);
 		Wk5678UartInit(4);
 //		//设置子串口波特率
-		Wk5678UartSetBaud(1,packFlash.uartBps[4]);
-		Wk5678UartSetBaud(2,packFlash.uartBps[5]);
-		Wk5678UartSetBaud(3,packFlash.uartBps[6]);
+		Wk5678UartSetBaud(3,packFlash.uartBps[4]);
+		Wk5678UartSetBaud(1,packFlash.uartBps[5]);
+		Wk5678UartSetBaud(2,packFlash.uartBps[6]);
 		Wk5678UartSetBaud(4,packFlash.uartBps[7]);
 		Wk5678UartRS485(1);
 		Wk5678UartRS485(2);
@@ -182,20 +185,20 @@ void uartSingConf(int chanl,int bps)
 			break;
 
 		case 0:
-			Wk1234UartInit(1);
+			Wk1234UartInit(3);
 			//设置子串口波特率
-			Wk1234UartSetBaud(1,bps);
-	   	Wk1234UartRS485(1);
+			Wk1234UartSetBaud(3,bps);
+	   	Wk1234UartRS485(3);
 			break;
 		case 1:
-			Wk1234UartInit(2);
-			Wk1234UartSetBaud(2,bps);
-		  Wk1234UartRS485(2);
+			Wk1234UartInit(1);
+			Wk1234UartSetBaud(1,bps);
+		  Wk1234UartRS485(1);
 			break;
 		case 2:
-			Wk1234UartInit(3);
-			Wk1234UartSetBaud(3,bps);
-			Wk1234UartRS485(3);
+			Wk1234UartInit(2);
+			Wk1234UartSetBaud(2,bps);
+			Wk1234UartRS485(2);
 			break;
 		case 3:
 			Wk1234UartInit(4);
@@ -203,20 +206,20 @@ void uartSingConf(int chanl,int bps)
 		  Wk1234UartRS485(4);
 			break;
 		case 4:
-			Wk5678UartInit(1);
+			Wk5678UartInit(3);
 			//设置子串口波特率
+			Wk5678UartSetBaud(3,bps);
+		  Wk5678UartRS485(3);
+			break;
+		case 5:
+			Wk5678UartInit(1);
 			Wk5678UartSetBaud(1,bps);
 		  Wk5678UartRS485(1);
 			break;
-		case 5:
+		case 6:
 			Wk5678UartInit(2);
 			Wk5678UartSetBaud(2,bps);
 		  Wk5678UartRS485(2);
-			break;
-		case 6:
-			Wk5678UartInit(3);
-			Wk5678UartSetBaud(3,bps);
-		  Wk5678UartRS485(3);
 			break;
 		case 7:
 			Wk5678UartInit(4);
@@ -240,26 +243,33 @@ void rs485UartSend(uint8_t chanl,uint8_t *buf,int len)
 				RingBuff3_Init();
 				HAL_UART_Transmit(&huart6,(uint8_t *)buf,len,1000);
 				break;
-			case 0:
-				Wk1234UartTxChars(1,len,buf);
-				break;
-			case 1:
-				Wk1234UartTxChars(2,len,buf);
-				break;
-			case 2:
+			case 0://OK
 				Wk1234UartTxChars(3,len,buf);
 				break;
+			case 1:
+				Wk1234UartTxChars(1,len,buf);
+				break;
+			case 2:
+				Wk1234UartTxChars(2,len,buf);
+				break;
 			case 3:
-				Wk1234UartTxChars(4,len,buf);
+				Wk1234UartTxChars(4,len,buf);//port 0
+//			Wk1234UartTxChars(3,len,buf);
+//			Wk1234UartTxChars(2,len,buf);
+//			Wk1234UartTxChars(1,len,buf);
+//			Wk5678UartTxChars(1,len,buf);
+//			Wk5678UartTxChars(2,len,buf);
+//			Wk5678UartTxChars(3,len,buf);
+//			Wk5678UartTxChars(4,len,buf);
 				break;
 			case 4:
-				Wk5678UartTxChars(1,len,buf);
+				Wk5678UartTxChars(3,len,buf);
 				break;
 			case 5:
-				Wk5678UartTxChars(2,len,buf);
+				Wk5678UartTxChars(1,len,buf);
 				break;
 			case 6:
-				Wk5678UartTxChars(3,len,buf);
+				Wk5678UartTxChars(2,len,buf);
 				break;
 			case 7:
 				Wk5678UartTxChars(4,len,buf);
