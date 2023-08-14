@@ -38,10 +38,9 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
- 
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "drv_common.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -243,7 +242,7 @@ void HAL_SD_MspInit(SD_HandleTypeDef* hsd)
     hdma_sdio.Init.PeriphBurst = DMA_PBURST_INC4;
     if (HAL_DMA_Init(&hdma_sdio) != HAL_OK)
     {
-      //Error_Handler();
+//      Error_Handler();
     }
 
     /* Several peripheral DMA handle pointers point to the same DMA handle.
@@ -396,7 +395,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     */
     GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF8_UART4;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -623,5 +622,3 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

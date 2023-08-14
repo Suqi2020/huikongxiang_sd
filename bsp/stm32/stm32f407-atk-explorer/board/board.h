@@ -124,6 +124,16 @@
 extern struct rt_event WDTEvent;
 #endif
 
+
+enum swichStep{
+		IO_inout_step=0,
+	  //IO_out_step,
+	  ADC_in_step,
+	  Uart_step,
+	  SWITCH_step,
+	  INTERNET_step
+	
+};
 extern bool USE_MQTT;
 //∞¢¿Ô‘∆ip 47.103.184.125 port 1883
 			      //…Ë±∏ temp_test001

@@ -28,10 +28,10 @@ UART_HandleTypeDef huart6;
 /* USER CODE BEGIN PV */
 void uartIrqEnaAfterQueue()
 {
-	 __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+	 
 //	 __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 //	 __HAL_UART_ENABLE_IT(&huart4, UART_IT_RXNE);
-	 __HAL_UART_ENABLE_IT(&huart5, UART_IT_RXNE);//串口屏 其它modbu
+	 __HAL_UART_ENABLE_IT(&huart5, UART_IT_RXNE);// 其它modbu
 	 __HAL_UART_ENABLE_IT(&huart6, UART_IT_RXNE);
 }
 /* USER CODE END PV */
@@ -584,6 +584,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(IRQ5678_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : TEST_SWITCH_Pin */
+  GPIO_InitStruct.Pin = TEST_SWITCH_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(TEST_SWITCH_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : TESTCODE_Pin */
+  GPIO_InitStruct.Pin = TESTCODE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(TESTCODE_GPIO_Port, &GPIO_InitStruct);
+	
   /*Configure GPIO pins : RESET1234_Pin IO_OUT8_Pin IO_OUT7_Pin */
   GPIO_InitStruct.Pin = RESET1234_Pin|IO_OUT8_Pin|IO_OUT7_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;

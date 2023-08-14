@@ -33,6 +33,7 @@ uint8_t lcdRecBuf[LCD_BUF_LEN];
 uint8_t  lcdRecLen;
 void  LCDTask(void *parameter)
 {
+	  __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);//´®¿ÚÆÁ
 	  extern void LCDDispErrMosbusState();
 	  extern void LCDDispErrModbusGet();
 		extern void LDCDispErrMosbusInfo();

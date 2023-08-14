@@ -126,6 +126,10 @@ extern "C" {
 #define IRQ5678_Pin GPIO_PIN_13
 #define IRQ5678_GPIO_Port GPIOB
 #define IRQ5678_EXTI_IRQn EXTI15_10_IRQn
+#define TEST_SWITCH_Pin GPIO_PIN_11
+#define TEST_SWITCH_GPIO_Port GPIOD
+#define TESTCODE_Pin GPIO_PIN_8
+#define TESTCODE_GPIO_Port GPIOA
 #define RESET1234_Pin GPIO_PIN_11
 #define RESET1234_GPIO_Port GPIOA
 #define IO_OUT8_Pin GPIO_PIN_12
@@ -150,6 +154,7 @@ extern "C" {
 #define IO_IN7_GPIO_Port GPIOE
 #define IO_IN6_Pin GPIO_PIN_1
 #define IO_IN6_GPIO_Port GPIOE
+
 /* USER CODE BEGIN Private defines */
 //UART1´®¿ÚdebugÓÃ
 //#define RS485_CTRL1_PIN    GET_PIN(C, 9)
@@ -203,6 +208,10 @@ extern "C" {
 #define RELAY3_READ			 HAL_GPIO_ReadPin(REALAY_CTRL3_GPIO_Port, REALAY_CTRL3_Pin)
 #define RELAY4_READ			 HAL_GPIO_ReadPin(REALAY_CTRL4_GPIO_Port, REALAY_CTRL4_Pin)
 
+
+
+#define TESTSWITCH_READ		 HAL_GPIO_ReadPin(TEST_SWITCH_GPIO_Port, TEST_SWITCH_Pin)
+#define TESTCODE_READ			 HAL_GPIO_ReadPin(TESTCODE_GPIO_Port, TESTCODE_Pin)
 //#define SPAKER1_ON			 HAL_GPIO_WritePin(SPAKER1_GPIO_Port, SPAKER1_Pin, GPIO_PIN_SET)
 //#define SPAKER2_ON			 HAL_GPIO_WritePin(SPAKER2_GPIO_Port, SPAKER2_Pin, GPIO_PIN_SET)
 //#define SPAKER3_ON			 HAL_GPIO_WritePin(SPAKER3_GPIO_Port, SPAKER3_Pin, GPIO_PIN_SET)
@@ -267,5 +276,3 @@ extern "C" {
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

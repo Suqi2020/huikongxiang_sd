@@ -274,77 +274,206 @@ extern ADC_HandleTypeDef hadc1;
 //} 
 void adcGetTest()
 {
-
-				int rt=Get_Adc_Average(ADC_CHANNEL_8,10);
-				rt_kprintf("ADC_CHANNEL_8 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
-				 rt=Get_Adc_Average(ADC_CHANNEL_9,10);
-				rt_kprintf("ADC_CHANNEL_9 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_10,10);
-				rt_kprintf("ADC_CHANNEL_10 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_11,10);
-				rt_kprintf("ADC_CHANNEL_11 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_12,10);
-				rt_kprintf("ADC_CHANNEL_12 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_13,10);
-				rt_kprintf("ADC_CHANNEL_13 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_14,10);
-				rt_kprintf("ADC_CHANNEL_14 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
-					 rt=Get_Adc_Average(ADC_CHANNEL_15,10);
-				rt_kprintf("ADC_CHANNEL_15 ,adc tick:%d,voltgge 扩大100倍:%dV\n\r\n\r\n",rt,rt*330/4096);
+	   rt_kprintf("adc采集测试\n");
+			int rt=Get_Adc_Average(ADC_CHANNEL_8,10);
+			rt_kprintf("ADC_CHANNEL_8 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
+			 rt=Get_Adc_Average(ADC_CHANNEL_9,10);
+			rt_kprintf("ADC_CHANNEL_9 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
+				 rt=Get_Adc_Average(ADC_CHANNEL_10,10);
+			rt_kprintf("ADC_CHANNEL_10 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
+				 rt=Get_Adc_Average(ADC_CHANNEL_11,10);
+			rt_kprintf("ADC_CHANNEL_11 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
+				 rt=Get_Adc_Average(ADC_CHANNEL_12,10);
+			rt_kprintf("ADC_CHANNEL_12 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
+				 rt=Get_Adc_Average(ADC_CHANNEL_13,10);
+			rt_kprintf("ADC_CHANNEL_13 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
+				 rt=Get_Adc_Average(ADC_CHANNEL_14,10);
+			rt_kprintf("ADC_CHANNEL_14 ,adc tick:%d,voltgge 扩大100倍:%dV\n",rt,rt*330/4096);
+				 rt=Get_Adc_Average(ADC_CHANNEL_15,10);
+			rt_kprintf("ADC_CHANNEL_15 ,adc tick:%d,voltgge 扩大100倍:%dV\n\r\n\r\n",rt,rt*330/4096);
 }
 
 #endif
 
 #ifdef TEST_IOIN
-static void ioInTest()
+ void ioInOutTest()
 {
+	   rt_kprintf("IO口输入输出测试\n");
 	   if(HAL_GPIO_ReadPin(IO_IN1_GPIO_Port, IO_IN1_Pin)==GPIO_PIN_SET){
 				rt_kprintf("1路高\r\n");
+				IOOUT1_ON;
+				IOOUT2_ON;
+				IOOUT3_ON;
+				IOOUT4_ON;
+				IOOUT5_OFF;
+				IOOUT6_OFF;
+				IOOUT7_OFF;
+				IOOUT8_OFF;
 		 }
 		 else{
 				rt_kprintf("1路低\r\n");
+				IOOUT1_OFF;
+				IOOUT2_OFF;
+				IOOUT3_OFF;
+				IOOUT4_OFF;
+				IOOUT5_ON;
+				IOOUT6_ON;
+				IOOUT7_ON;
+				IOOUT8_ON;
 		 }
 		 if(HAL_GPIO_ReadPin(IO_IN2_GPIO_Port, IO_IN2_Pin)==GPIO_PIN_SET){
 				rt_kprintf("2路高\r\n");
+				IOOUT1_ON;
+				IOOUT2_ON;
+				IOOUT3_ON;
+				IOOUT4_ON;
+				IOOUT5_OFF;
+				IOOUT6_OFF;
+				IOOUT7_OFF;
+				IOOUT8_OFF;
 		 }
 		 else{
 				rt_kprintf("2路低\r\n");
+				IOOUT1_OFF;
+				IOOUT2_OFF;
+				IOOUT3_OFF;
+				IOOUT4_OFF;
+				IOOUT5_ON;
+				IOOUT6_ON;
+				IOOUT7_ON;
+				IOOUT8_ON;
 		 }
 		 if(HAL_GPIO_ReadPin(IO_IN3_GPIO_Port, IO_IN3_Pin)==GPIO_PIN_SET){
 				rt_kprintf("3路高\r\n");
+				IOOUT1_ON;
+				IOOUT2_ON;
+				IOOUT3_ON;
+				IOOUT4_ON;
+				IOOUT5_OFF;
+				IOOUT6_OFF;
+				IOOUT7_OFF;
+				IOOUT8_OFF;
 		 }
 		 else{
 				rt_kprintf("3路低\r\n");
+				IOOUT1_OFF;
+				IOOUT2_OFF;
+				IOOUT3_OFF;
+				IOOUT4_OFF;
+				IOOUT5_ON;
+				IOOUT6_ON;
+				IOOUT7_ON;
+				IOOUT8_ON;
 		 }
 		 if(HAL_GPIO_ReadPin(IO_IN4_GPIO_Port, IO_IN4_Pin)==GPIO_PIN_SET){
 				rt_kprintf("4路高\r\n");
+		 		IOOUT1_ON;
+				IOOUT2_ON;
+				IOOUT3_ON;
+				IOOUT4_ON;
+				IOOUT5_OFF;
+				IOOUT6_OFF;
+				IOOUT7_OFF;
+				IOOUT8_OFF;
 		 }
 		 else{
 				rt_kprintf("4路低\r\n");
+				IOOUT1_OFF;
+				IOOUT2_OFF;
+				IOOUT3_OFF;
+				IOOUT4_OFF;
+				IOOUT5_ON;
+				IOOUT6_ON;
+				IOOUT7_ON;
+				IOOUT8_ON;
 		 }
 		 if(HAL_GPIO_ReadPin(IO_IN5_GPIO_Port, IO_IN5_Pin)==GPIO_PIN_SET){
 				rt_kprintf("5路高\r\n");
+				IOOUT1_ON;
+				IOOUT2_ON;
+				IOOUT3_ON;
+				IOOUT4_ON;
+				IOOUT5_OFF;
+				IOOUT6_OFF;
+				IOOUT7_OFF;
+				IOOUT8_OFF;
 		 }
 		 else{
 				rt_kprintf("5路低\r\n");
+				IOOUT1_OFF;
+				IOOUT2_OFF;
+				IOOUT3_OFF;
+				IOOUT4_OFF;
+				IOOUT5_ON;
+				IOOUT6_ON;
+				IOOUT7_ON;
+				IOOUT8_ON;
 		 }
 		 if(HAL_GPIO_ReadPin(IO_IN6_GPIO_Port, IO_IN6_Pin)==GPIO_PIN_SET){
 				rt_kprintf("6路高\r\n");
+				IOOUT1_ON;
+				IOOUT2_ON;
+				IOOUT3_ON;
+				IOOUT4_ON;
+				IOOUT5_OFF;
+				IOOUT6_OFF;
+				IOOUT7_OFF;
+				IOOUT8_OFF;
 		 }
 		 else{
 				rt_kprintf("6路低\r\n");
+				IOOUT1_OFF;
+				IOOUT2_OFF;
+				IOOUT3_OFF;
+				IOOUT4_OFF;
+				IOOUT5_ON;
+				IOOUT6_ON;
+				IOOUT7_ON;
+				IOOUT8_ON;
 		 }
 		 if(HAL_GPIO_ReadPin(IO_IN7_GPIO_Port, IO_IN7_Pin)==GPIO_PIN_SET){
 				rt_kprintf("7路高\r\n");
+				IOOUT1_ON;
+				IOOUT2_ON;
+				IOOUT3_ON;
+				IOOUT4_ON;
+				IOOUT5_OFF;
+				IOOUT6_OFF;
+				IOOUT7_OFF;
+				IOOUT8_OFF;
 		 }
 		 else{
 				rt_kprintf("7路低\r\n");
+				IOOUT1_OFF;
+				IOOUT2_OFF;
+				IOOUT3_OFF;
+				IOOUT4_OFF;
+				IOOUT5_ON;
+				IOOUT6_ON;
+				IOOUT7_ON;
+				IOOUT8_ON;
 		 }
 		 if(HAL_GPIO_ReadPin(IO_IN8_GPIO_Port, IO_IN8_Pin)==GPIO_PIN_SET){
 				rt_kprintf("8路高\r\n");
+				IOOUT1_ON;
+				IOOUT2_ON;
+				IOOUT3_ON;
+				IOOUT4_ON;
+				IOOUT5_OFF;
+				IOOUT6_OFF;
+				IOOUT7_OFF;
+				IOOUT8_OFF;
 		 }
 		 else{
 				rt_kprintf("8路低\r\n");
+				IOOUT1_OFF;
+				IOOUT2_OFF;
+				IOOUT3_OFF;
+				IOOUT4_OFF;
+				IOOUT5_ON;
+				IOOUT6_ON;
+				IOOUT7_ON;
+				IOOUT8_ON;
 		 }
 		 
 			 
@@ -352,7 +481,7 @@ static void ioInTest()
 #endif
 
 #ifdef TEST_IOOUT
-static void ioOutTest()//注意调用函数中的延时加上此处的延时
+ void ioOutTest()//注意调用函数中的延时加上此处的延时
 {
 			IOOUT1_ON;
 	    IOOUT2_ON;
@@ -400,20 +529,22 @@ static void ioOutTest()//注意调用函数中的延时加上此处的延时
 
 //#endif
 #ifdef  TEST_RELAY
-static void  relayTest()
+void  relayTest()
 {
+	   //static bool relay=false;
+			rt_kprintf("继电器输出测试\n");
 			RELAY1_ON;
 	    RELAY2_ON;
 	    RELAY3_ON;
 	    RELAY4_ON;
 
-			rt_thread_mdelay(5000);
+			rt_thread_mdelay(1000);
 			RELAY1_OFF;
 	    RELAY2_OFF;
 	    RELAY3_OFF;
 	    RELAY4_OFF;
 
-			rt_thread_mdelay(5000);
+			rt_thread_mdelay(1000);
 }
 
 #endif
@@ -439,7 +570,7 @@ void  hardWareDriverTest(void)
 #endif
 	
 #ifdef TEST_IOIN
-    ioInTest();
+    ioInOutTest();
 #endif
 	
 #ifdef  TEST_RELAY

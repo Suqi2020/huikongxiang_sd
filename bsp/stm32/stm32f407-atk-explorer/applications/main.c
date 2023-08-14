@@ -27,10 +27,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+6)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+7)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230813";
+const char date[]="20230814";
 
 bool USE_MQTT=true;
 
@@ -73,7 +73,7 @@ extern struct rt_mailbox mbsdWriteData;
 
 /* 事件控制块 */
 struct rt_event mqttAckEvent;
-rt_bool_t gbSDExit=true;
+rt_bool_t gbSDExit=false;
 
 #ifdef USE_WDT
 struct rt_event WDTEvent;
@@ -200,6 +200,7 @@ int main(void)
                              RT_TIMER_FLAG_PERIODIC);
 		if (timer1 != RT_NULL)
         rt_timer_start(timer1);
+
 		//创建485设备用到的互斥 队列
 		read485_mutex= rt_mutex_create("read485_mutex", RT_IPC_FLAG_FIFO);
 		if (read485_mutex == RT_NULL)
@@ -295,6 +296,77 @@ int main(void)
 				rt_thread_startup(tidLCD);													 
 				printf("%sRTcreat LCDStateTask \r\n",sign);
 		}
+
+		
+
+		int read=TESTCODE_READ;//读取工装测试电平
+		enum swichStep step=IO_inout_step;
+		static bool change=true;
+    while (read==GPIO_PIN_RESET)//task用于测试 以及闪灯操作
+    {
+			  if(TESTSWITCH_READ==GPIO_PIN_RESET){
+					rt_thread_mdelay(20);
+					if(TESTSWITCH_READ==GPIO_PIN_RESET){
+						while(TESTSWITCH_READ==GPIO_PIN_RESET);
+						//等待按键放开
+							rt_kprintf("GPIO_PIN_SET\n");
+							 
+							 if(step>=INTERNET_step){
+									step=IO_inout_step;
+								  change=true;
+									if((tidW5500->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+											rt_thread_delete(tidW5500);
+									if((tidNetRec->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+											rt_thread_delete(tidNetRec);
+									if((tidNetSend->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+											rt_thread_delete(tidNetSend);
+							 }
+							 rt_kprintf("切换step\n");
+							 step++;
+					}
+				}
+				
+			  switch(step){
+
+					case IO_inout_step:
+						ioInOutTest();
+					  rt_thread_mdelay(1000);
+						break;
+					case ADC_in_step:
+						adcGetTest();
+					  rt_thread_mdelay(1000);
+						break;
+					case Uart_step:
+						break;
+					case SWITCH_step:
+						relayTest();
+						break;
+					case INTERNET_step:
+						if(change){
+							changeBmp(0);
+							change=false;
+							tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
+							if(tidNetRec!=NULL){
+									rt_thread_startup(tidNetRec);													 
+									printf("%sRTcreat netDataRecTask \r\n",sign);
+							}
+							tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
+							if(tidNetSend!=NULL){
+									rt_thread_startup(tidNetSend);													 
+									printf("%sRTcreat netDataSendTask \r\n",sign);
+							}
+							tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
+							if(tidW5500!=NULL){
+									rt_thread_startup(tidW5500);													 
+									printf("%sRTcreat w5500Task task\r\n",sign);
+							}
+						}
+					  rt_thread_mdelay(1000);
+						break;
+				}
+				//hardWareDriverTest();
+    }
+		
 		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
 		if(tidNetRec!=NULL){
 				rt_thread_startup(tidNetRec);													 
@@ -305,16 +377,18 @@ int main(void)
 				rt_thread_startup(tidNetSend);													 
 				printf("%sRTcreat netDataSendTask \r\n",sign);
 		}
-		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
-		if(tidUpkeep!=NULL){
-				rt_thread_startup(tidUpkeep);													 
-				printf("%sRTcreat upKeepStateTask \r\n",sign);
-		}
     tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
 		if(tidW5500!=NULL){
 				rt_thread_startup(tidW5500);													 
 				printf("%sRTcreat w5500Task task\r\n",sign);
 		}
+
+		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
+		if(tidUpkeep!=NULL){
+				rt_thread_startup(tidUpkeep);													 
+				printf("%sRTcreat upKeepStateTask \r\n",sign);
+		}
+
 
 		tidMqtt = rt_thread_create("mqtt",mqttTask,RT_NULL,512*2,4, 10 );
 		if(tidMqtt!=NULL){
@@ -330,7 +404,6 @@ int main(void)
         rt_kprintf("%sinit mqttAckEvent failed.\n",sign);
 
     }
-
 		tidSdRTC =  rt_thread_create("sdRTC",sdRTCTask,RT_NULL,512*4,8, 10 );
 		if(tidSdRTC!=NULL){
 				rt_thread_startup(tidSdRTC);													 
@@ -341,6 +414,7 @@ int main(void)
 				rt_thread_startup(tidAutoCtrl);													 
 				printf("%sRTcreat autoCtrlTask\r\n",sign);
 		}
+
 #ifdef  USE_WDT
 		extern IWDG_HandleTypeDef hiwdg;
 		static    rt_thread_t tidWDT      = RT_NULL;
@@ -357,22 +431,7 @@ int main(void)
 //			sprintf(test,"long:%u", a);//"monitoringTime":"1655172531937"
 //			rt_kprintf("%s %s \r\n",sign,test);
 //////////////////////////////结束//////////////////////////////////////
-    while (0)//task用于测试 以及闪灯操作
-    {
-				hardWareDriverTest();
-				HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
-				rt_thread_mdelay(250);
-			  extern rt_bool_t gbNetState;
-			  if(gbNetState==RT_TRUE){
-					  rt_thread_mdelay(250);
-						
-				}
-				HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
-				rt_thread_mdelay(250);
-				if(gbNetState==RT_TRUE){
-					  rt_thread_mdelay(250);	
-				}
-    }
+
 }
 extern rt_bool_t shieldLog;//屏蔽log 
 extern int mod_printf(const char *fmt, ...);
