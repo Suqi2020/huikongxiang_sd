@@ -118,7 +118,7 @@ void uartReconfig()
 {
 		for(int i=0;i<UART_NUM;i++){
 				if(packFlash.uartBps[i]==0){//没用到的串口 给个默认波特率 
-					  packFlash.uartBps[i]=4800;
+					  packFlash.uartBps[i]=9600;
 				}
 		}
 		for(int i=0;i<UART_NUM;i++){

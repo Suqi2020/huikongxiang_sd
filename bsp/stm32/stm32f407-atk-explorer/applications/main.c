@@ -170,7 +170,7 @@ static void timeout1(void *parameter)
 extern void creatFolder(void);
 void  outIOInit(void);
 char  printVer[50];
-
+extern void hartWareTest();
 
 int main(void)
 {
@@ -297,75 +297,7 @@ int main(void)
 				printf("%sRTcreat LCDStateTask \r\n",sign);
 		}
 
-		
-
-		int read=TESTCODE_READ;//读取工装测试电平
-		enum swichStep step=IO_inout_step;
-		static bool change=true;
-    while (read==GPIO_PIN_RESET)//task用于测试 以及闪灯操作
-    {
-			  if(TESTSWITCH_READ==GPIO_PIN_RESET){
-					rt_thread_mdelay(20);
-					if(TESTSWITCH_READ==GPIO_PIN_RESET){
-						while(TESTSWITCH_READ==GPIO_PIN_RESET);
-						//等待按键放开
-							rt_kprintf("GPIO_PIN_SET\n");
-							 
-							 if(step>=INTERNET_step){
-									step=IO_inout_step;
-								  change=true;
-									if((tidW5500->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
-											rt_thread_delete(tidW5500);
-									if((tidNetRec->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
-											rt_thread_delete(tidNetRec);
-									if((tidNetSend->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
-											rt_thread_delete(tidNetSend);
-							 }
-							 rt_kprintf("切换step\n");
-							 step++;
-					}
-				}
-				
-			  switch(step){
-
-					case IO_inout_step:
-						ioInOutTest();
-					  rt_thread_mdelay(1000);
-						break;
-					case ADC_in_step:
-						adcGetTest();
-					  rt_thread_mdelay(1000);
-						break;
-					case Uart_step:
-						break;
-					case SWITCH_step:
-						relayTest();
-						break;
-					case INTERNET_step:
-						if(change){
-							changeBmp(0);
-							change=false;
-							tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
-							if(tidNetRec!=NULL){
-									rt_thread_startup(tidNetRec);													 
-									printf("%sRTcreat netDataRecTask \r\n",sign);
-							}
-							tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
-							if(tidNetSend!=NULL){
-									rt_thread_startup(tidNetSend);													 
-									printf("%sRTcreat netDataSendTask \r\n",sign);
-							}
-							tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
-							if(tidW5500!=NULL){
-									rt_thread_startup(tidW5500);													 
-									printf("%sRTcreat w5500Task task\r\n",sign);
-							}
-						}
-					  rt_thread_mdelay(1000);
-						break;
-				}
-				//hardWareDriverTest();
-    }
+		void hartWareTest();
 		
 		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
 		if(tidNetRec!=NULL){
@@ -433,6 +365,7 @@ int main(void)
 //////////////////////////////结束//////////////////////////////////////
 
 }
+
 extern rt_bool_t shieldLog;//屏蔽log 
 extern int mod_printf(const char *fmt, ...);
 //tasklog delete  线程挂起时候才能删除   
@@ -472,4 +405,79 @@ if(USE_MQTT){
 else{
 	return gbNetState;
 }
+}
+
+
+void hartWareTest()
+{
+		int read=TESTCODE_READ;//读取工装测试电平
+		enum swichStep step=IO_inout_step;
+		static bool change=true;
+    while (read==GPIO_PIN_RESET)//task用于测试 以及闪灯操作
+    {
+			  if(TESTSWITCH_READ==GPIO_PIN_RESET){
+					rt_thread_mdelay(20);
+					if(TESTSWITCH_READ==GPIO_PIN_RESET){
+						while(TESTSWITCH_READ==GPIO_PIN_RESET);
+						//等待按键放开
+							rt_kprintf("GPIO_PIN_SET\n");
+							 step++;
+							 if(step>INTERNET_step){
+									step=IO_inout_step;
+								  change=true;
+									if((tidW5500->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+											rt_thread_delete(tidW5500);
+									if((tidNetRec->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+											rt_thread_delete(tidNetRec);
+									if((tidNetSend->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
+											rt_thread_delete(tidNetSend);
+							 }
+							 rt_kprintf("切换step\n");
+							 
+					}
+				}
+				
+			  switch(step){
+
+					case IO_inout_step:
+						ioInOutTest();
+					  rt_thread_mdelay(1000);
+						break;
+					case ADC_in_step:
+						adcGetTest();
+					  rt_thread_mdelay(1000);
+						break;
+					case Uart_step:
+						uartTest();
+				  	rt_thread_mdelay(1000);
+						break;
+					case SWITCH_step:
+						relayTest();
+						break;
+					case INTERNET_step:
+						if(change){
+							changeBmp(0);
+							change=false;
+							tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
+							if(tidNetRec!=NULL){
+									rt_thread_startup(tidNetRec);													 
+									printf("%sRTcreat netDataRecTask \r\n",sign);
+							}
+							tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
+							if(tidNetSend!=NULL){
+									rt_thread_startup(tidNetSend);													 
+									printf("%sRTcreat netDataSendTask \r\n",sign);
+							}
+							tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
+							if(tidW5500!=NULL){
+									rt_thread_startup(tidW5500);													 
+									printf("%sRTcreat w5500Task task\r\n",sign);
+							}
+						}
+					  //rt_thread_mdelay(1000);
+						break;
+				}
+				//hardWareDriverTest();
+    }
+		
 }
