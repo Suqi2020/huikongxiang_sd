@@ -134,39 +134,6 @@ void testSD()
 extern ADC_HandleTypeDef hadc1;
 
 
-//获得ADC值
-//ch: 通道值 0~16，取值范围为：ADC_CHANNEL_0~ADC_CHANNEL_16
-//返回值:转换结果
-//uint16_t Get_Adc(uint32_t ch)   
-//{
-//    ADC_ChannelConfTypeDef ADC1_ChanConf;
-//    
-//    ADC1_ChanConf.Channel=ch;                                   //通道
-//    ADC1_ChanConf.Rank=1;                                       //第1个序列，序列1
-//    ADC1_ChanConf.SamplingTime=ADC_SAMPLETIME_480CYCLES;        //采样时间
-//    ADC1_ChanConf.Offset=0;                 
-//    HAL_ADC_ConfigChannel(&hadc1,&ADC1_ChanConf);        //通道配置
-//	
-//    HAL_ADC_Start(&hadc1);                               //开启ADC
-//	
-//    HAL_ADC_PollForConversion(&hadc1,10);                //轮询转换
-// 
-//	return (uint16_t)HAL_ADC_GetValue(&hadc1);	        //返回最近一次ADC1规则组的转换结果
-//}
-//获取指定通道的转换值，取times次,然后平均 
-//times:获取次数
-//返回值:通道ch的times次转换结果平均值
-//uint16_t Get_Adc_Average(uint16_t ch,uint16_t times)
-//{
-//		uint16_t temp_val=0;
-//		uint16_t t;
-//		for(t=0;t<times;t++)
-//		{
-//				temp_val+=Get_Adc(ch);
-//				rt_thread_mdelay(5);
-//		}
-//		return temp_val/times;
-//} 
 void adcGetTest()
 {
 	   rt_kprintf("adc采集测试\n");
@@ -287,10 +254,20 @@ void adcGetTest()
 
 static char testSBuf[]="1234567890";
 static char testRBuf[11]="";
+
 void uartTest()
 {
-	  extern void uartReconfig();
-	  uartReconfig();
+	  static int confFlag=false;
+	  if(confFlag==false){
+				for(int i=0;i<UART_NUM;i++){
+
+						packFlash.uartBps[i]=9600;
+
+				}
+				extern void uartReconfig();
+				uartReconfig();
+				confFlag=true;
+		}
 	  for(int j=0;j<8;j++){
 			  memset(testRBuf,0,strlen(testSBuf));
 				rs485UartSend(j,(uint8_t *)testSBuf,strlen(testSBuf));
@@ -318,13 +295,13 @@ void  relayTest()
 	    RELAY3_ON;
 	   // RELAY4_ON;
 
-			rt_thread_mdelay(1000);
+			rt_thread_mdelay(500);
 			RELAY1_OFF;
 	    RELAY2_OFF;
 	    RELAY3_OFF;
 //	    RELAY4_OFF;
 
-			rt_thread_mdelay(1000);
+			rt_thread_mdelay(500);
 }
 
 
@@ -352,15 +329,6 @@ MSH_CMD_EXPORT(tick,tick stamp);//FINSH_FUNCTION_EXPORT_CMD
 
 
 
-//extern uint64_t subTimeStamp;
-// void  subTimeStampSet(uint64_t time)
-//{
-//	  if(time>=rt_tick_get())
-//				subTimeStamp=time-rt_tick_get();//服务器rtc值-当前tick值
-//		else
-//				subTimeStamp = 0;
-
-//}
 int tickSet(int argc, char *argv[])
 {
 
@@ -381,7 +349,6 @@ int tickSet(int argc, char *argv[])
 
 	  return 0;
 }
-//FINSH_FUNCTION_EXPORT(tick, tick finsh);//FINSH_FUNCTION_EXPORT_CMD
 MSH_CMD_EXPORT(tickSet,tick set stamp);//FINSH_FUNCTION_EXPORT_CMD
 
 
@@ -408,7 +375,6 @@ int offline()
 		rt_kprintf("[offLine]net online state %d ,net resp state %d \r\n",netOKState(),gbNetResp);
 		return 0;
 }
-//FINSH_FUNCTION_EXPORT(offline, offline finsh);//FINSH_FUNCTION_EXPORT_CMD
 MSH_CMD_EXPORT(offline,offline stamp);//FINSH_FUNCTION_EXPORT_CMD
 
 
@@ -437,19 +403,7 @@ int SDSize()
 	if(gbSDExit==false){
 				goto ERROR;
 	}
-//	DWORD fre_clust;
-//	FATFS *pfs;
 	int tot_sect,fre_sect;
-//  int res_flash = f_getfree("0:", &fre_clust, &pfs); 
-//	
-//  if(FR_OK==0){
-//  /* 计算得到总的扇区个数和空扇区个数 */
-//		 tot_sect = (pfs->n_fatent - 2) * pfs->csize;
-//		 fre_sect = fre_clust * pfs->csize;
-//	}
-//	else{
-//		rt_kprintf("err:sdSize read %d\n",FR_OK);
-//	}
   sdSize_p(&tot_sect,&fre_sect);
   /* 打印信息(4096 字节/扇区) */
 	ERROR:

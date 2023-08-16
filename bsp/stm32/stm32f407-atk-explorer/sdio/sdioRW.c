@@ -103,6 +103,7 @@ void creatIDFolder(int i)
 {
 	  
 		char *txtName;
+	
 //	  uint32_t fnum;
 //	  int ret;
 		txtName =rt_malloc(50);
@@ -130,7 +131,7 @@ void creatIDFolder(int i)
 							strcat(txtName,sheet.partDischag[j].ID);
 							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
-						}
+						} 
 				}
 			break;
 			case PRESSSETTL:
@@ -238,7 +239,7 @@ void creatIDFolder(int i)
 				for(int j=0;j<COVER_485_NUM;j++){//核对有没有配置过
 						if(sheet.cover[j].workFlag==RT_TRUE){
 							strcpy(txtName,modbusName[i]);
-							strcat(txtName,"/");
+							strcat(txtName,"/"); 
 							strcat(txtName,sheet.cover[j].ID);
 							f_mkdir(txtName);//创建目录
 							memset(txtName,0,sizeof((char *)txtName));
@@ -263,14 +264,15 @@ void creatFolder()
    //在外部SD卡挂载文件系统，文件系统挂载时会对SD卡初始化
    res_sd = f_mount(&fs,"0:",1);  
    if(res_sd==FR_OK){
+		 gbSDExit=true;
 //		  fountFlag=true;
 		  for(int j=0;j<MODBUS_NUM;j++){
 					ret=f_mkdir(modbusName[j]);//创建目录
 				  if((ret==FR_OK)||(ret==FR_EXIST)){
 						  creatIDFolder(j);
-						  rt_kprintf("%screat ID folder\n",sign);
+						 // rt_kprintf("%screat ID folder\n",sign);
 					}
-					else
+					else 
 							rt_kprintf("%sERR:mkdir ret=%d\n",sign,ret);
 			}
 			f_close(&fnew);

@@ -13,11 +13,11 @@ typedef struct{
 extern uint32_t offLTimes;
 extern uint32_t onLTimes;
 extern offLineStru offLine;
-void adcGetTest();
-void ioInOutTest();
-void ioOutTest();
-void uartTest();
-void  relayTest();
+void adcGetTest(void);
+void ioInOutTest(void);
+void ioOutTest(void);
+void uartTest(void);
+void relayTest(void);
 
 
 

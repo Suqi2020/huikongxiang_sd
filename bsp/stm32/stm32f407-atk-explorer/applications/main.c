@@ -118,7 +118,7 @@ rt_bool_t gbNetState_p=RT_TRUE;
 static  int netTick=0;
 static void netStateSet()
 {
-		if(gbNetState==RT_TRUE){
+		if(netOKState()==RT_TRUE){
 			if(gbNetState_p==RT_FALSE){
 						netTick++;
 						if(netTick>=30){
@@ -297,7 +297,7 @@ int main(void)
 				printf("%sRTcreat LCDStateTask \r\n",sign);
 		}
 
-		void hartWareTest();
+		hartWareTest();
 		
 		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
 		if(tidNetRec!=NULL){
@@ -407,12 +407,14 @@ else{
 }
 }
 
-
 void hartWareTest()
 {
 		int read=TESTCODE_READ;//读取工装测试电平
 		enum swichStep step=IO_inout_step;
 		static bool change=true;
+
+		sdAndRtcInit();
+
     while (read==GPIO_PIN_RESET)//task用于测试 以及闪灯操作
     {
 			  if(TESTSWITCH_READ==GPIO_PIN_RESET){
@@ -454,9 +456,10 @@ void hartWareTest()
 					case SWITCH_step:
 						relayTest();
 						break;
+
 					case INTERNET_step:
 						if(change){
-							changeBmp(0);
+							
 							change=false;
 							tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
 							if(tidNetRec!=NULL){
