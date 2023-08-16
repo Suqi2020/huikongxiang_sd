@@ -195,12 +195,13 @@ int main(void)
 				rt_strcpy(packFlash.acuId,"000000000000001");//必须加上 执行cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		}    
 		  /* 创建定时器 周期定时器 */
-    timer1 = rt_timer_create("timer1", timeout1,
-                             RT_NULL, 100,
-                             RT_TIMER_FLAG_PERIODIC);
-		if (timer1 != RT_NULL)
-        rt_timer_start(timer1);
-
+		if(TESTCODE_READ==GPIO_PIN_SET){//工装测试不启动定时器
+				timer1 = rt_timer_create("timer1", timeout1,
+																 RT_NULL, 100,
+																 RT_TIMER_FLAG_PERIODIC);
+				if (timer1 != RT_NULL)
+						rt_timer_start(timer1);
+		}
 		//创建485设备用到的互斥 队列
 		read485_mutex= rt_mutex_create("read485_mutex", RT_IPC_FLAG_FIFO);
 		if (read485_mutex == RT_NULL)
@@ -412,15 +413,22 @@ void hartWareTest()
 		int read=TESTCODE_READ;//读取工装测试电平
 		enum swichStep step=IO_inout_step;
 		static bool change=true;
-
+    HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);//开启中断 清除串口冗余数据
 		sdAndRtcInit();
-
-    while (read==GPIO_PIN_RESET)//task用于测试 以及闪灯操作
+    if(read!=GPIO_PIN_RESET){
+				return;
+		}
+		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		rt_thread_mdelay(500);
+		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+    while (1)//task用于测试 以及闪灯操作
     {
 			  if(TESTSWITCH_READ==GPIO_PIN_RESET){
 					rt_thread_mdelay(20);
 					if(TESTSWITCH_READ==GPIO_PIN_RESET){
+						HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 						while(TESTSWITCH_READ==GPIO_PIN_RESET);
+						HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 						//等待按键放开
 							rt_kprintf("GPIO_PIN_SET\n");
 							 step++;

@@ -36,7 +36,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 			if(rt_sem_take(uart1234_sem,timeout)==RT_EOK)
 			{
 				
-				rt_kprintf("485 1read\n");
+//				rt_kprintf("485 1read\n");
 				gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
 					do{
 							//判断子串口1是否有中断
@@ -70,7 +70,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 			case 7:
 			if(rt_sem_take(uart5678_sem,timeout)==RT_EOK)
 			{
-				rt_kprintf(":485 2read\n");
+	//			rt_kprintf(":485 2read\n");
 				gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);
 					do{
 							//判断子串口1是否有中断

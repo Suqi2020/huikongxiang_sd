@@ -261,7 +261,7 @@ void uartTest()
 	  if(confFlag==false){
 				for(int i=0;i<UART_NUM;i++){
 
-						packFlash.uartBps[i]=9600;
+						packFlash.uartBps[i]=115200;
 
 				}
 				extern void uartReconfig();
@@ -278,7 +278,7 @@ void uartTest()
 				else{
 						rt_kprintf("uart[%d] ÊÕ·¢²âÊÔÊ§°Ü\n",j+1);
 					  testRBuf[10]=0;
-					  rt_kprintf("rec;[%s]\n",testRBuf);
+					 // rt_kprintf("rec;[%s]\n",testRBuf);
 				}
 		}
 }
