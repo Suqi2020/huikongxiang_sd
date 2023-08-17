@@ -751,7 +751,7 @@ void EXTI15_10_IRQHandler(void)
 		if(HAL_GPIO_ReadPin(IRQ1234_GPIO_Port,IRQ1234_Pin)==GPIO_PIN_RESET){
 			 HAL_GPIO_EXTI_IRQHandler(IRQ1234_Pin);
 			 rt_sem_release(uart1234_sem);
-			 //rt_kprintf("irq:485 1\n");
+			// rt_kprintf("irq:485 1\n");
 		}
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_10);
     

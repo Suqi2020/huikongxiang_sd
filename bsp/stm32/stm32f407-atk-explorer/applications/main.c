@@ -27,10 +27,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+7)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+8)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230814";
+const char date[]="20230817";
 
 bool USE_MQTT=true;
 
@@ -153,10 +153,12 @@ static void timeout1(void *parameter)
 		static int count=0;
 	  extern void timeInc();
 	  count++;  
-
-	  if(gbSDExit==false){
-				if(count%(100)==0)//10秒提醒一下
-						printf("%s请插入TF卡并重启设备\n",sign);
+		if(TESTCODE_READ==GPIO_PIN_SET){//工装测试不启动定时器
+				if(gbSDExit==false){
+						if(count%(100)==0)//10秒提醒一下
+								printf("%s请插入TF卡并重启设备\n",sign);
+				}
+				netLedLight();
 		}
 	  if(count%10==0){//1秒进去一次
 				timeInc();
@@ -164,7 +166,6 @@ static void timeout1(void *parameter)
 		}
 		
 		netStateSet();
-		netLedLight();
 }
 
 extern void creatFolder(void);
@@ -195,13 +196,13 @@ int main(void)
 				rt_strcpy(packFlash.acuId,"000000000000001");//必须加上 执行cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		}    
 		  /* 创建定时器 周期定时器 */
-		if(TESTCODE_READ==GPIO_PIN_SET){//工装测试不启动定时器
-				timer1 = rt_timer_create("timer1", timeout1,
-																 RT_NULL, 100,
-																 RT_TIMER_FLAG_PERIODIC);
-				if (timer1 != RT_NULL)
-						rt_timer_start(timer1);
-		}
+
+		timer1 = rt_timer_create("timer1", timeout1,
+														 RT_NULL, 100,
+														 RT_TIMER_FLAG_PERIODIC);
+		if (timer1 != RT_NULL)
+				rt_timer_start(timer1);
+
 		//创建485设备用到的互斥 队列
 		read485_mutex= rt_mutex_create("read485_mutex", RT_IPC_FLAG_FIFO);
 		if (read485_mutex == RT_NULL)
@@ -410,13 +411,13 @@ else{
 
 void hartWareTest()
 {
-		int read=TESTCODE_READ;//读取工装测试电平
-		enum swichStep step=IO_inout_step;
+	//	int read=TESTCODE_READ;//读取工装测试电平
+		enum swichStep step= IO_inout_step;
 		static bool change=true;
     HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);//开启中断 清除串口冗余数据
 		sdAndRtcInit();
-    if(read!=GPIO_PIN_RESET){
-				return;
+    if(TESTCODE_READ!=GPIO_PIN_RESET){
+				return;;//
 		}
 		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 		rt_thread_mdelay(500);
@@ -442,7 +443,7 @@ void hartWareTest()
 									if((tidNetSend->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
 											rt_thread_delete(tidNetSend);
 							 }
-							 rt_kprintf("切换step\n");
+							// rt_kprintf("切换step\n");
 							 
 					}
 				}
@@ -459,7 +460,8 @@ void hartWareTest()
 						break;
 					case Uart_step:
 						uartTest();
-				  	rt_thread_mdelay(1000);
+				  	//rt_thread_mdelay(1000);
+//					 rt_kprintf("12345step\n");
 						break;
 					case SWITCH_step:
 						relayTest();

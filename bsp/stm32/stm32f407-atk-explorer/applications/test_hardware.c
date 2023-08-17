@@ -252,9 +252,139 @@ void adcGetTest()
 }
 
 
-static char testSBuf[]="1234567890";
-static char testRBuf[11]="";
+static const char testSBuf[11]="1234567890";
+//static char testRBuf[UART_NUM-1][11]={0};
+static char testRBuf[11];
+//static char trecBuf[11]="";
 
+
+//				rt_thread_mdelay(timeout);
+//				while(true==Read_RingBuff3(recBuf+count)){
+//					count++;
+//					rt_thread_mdelay(2);
+//				}
+//				
+void rs485TestUseUart6()
+{
+	   int count=0;
+    uint8_t Read_RingBuff3(uint8_t *rData);
+	   memset(testRBuf,0,sizeof(testRBuf));
+				while(true==Read_RingBuff3((uint8_t *)testRBuf+count)){
+					
+					if(count>=sizeof(testRBuf)){
+						testRBuf[10]=0;
+						//break;
+					}
+					else{
+						count++;
+					}
+					rt_thread_mdelay(2);
+				}
+			  if(strncmp(testSBuf,(char *)testRBuf,strlen((char *)testSBuf))==0){
+						rt_kprintf("uart[8] 收发测试成功\n");
+				}
+				else{
+						rt_kprintf("uart[8] 收发测试失败\n");
+//					  testRBuf[j][10]=0;
+					 // rt_kprintf("rec;[%s]\n",testRBuf[j]);
+				}
+}
+				
+#if 0
+
+extern rt_sem_t   uart1234_sem;
+extern rt_sem_t   uart5678_sem;
+int  rs485UartRecp(int chanl,int timeout)
+{
+	  int count=0;
+	  uint8_t gifr=0;
+		switch(chanl)
+		{
+
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+			if(rt_sem_take(uart1234_sem,timeout)==RT_EOK)
+			{
+				
+			//	rt_kprintf("485 1234\n");
+				gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
+					do{
+							//判断子串口1是否有中断
+							if(gifr&GIFR_UT1INT_BIT){ /*数据处理*///pcb映射串口1+1
+									/*数据接收*/
+									 count=Wk1234UartRxChars(1,(uint8_t *)testRBuf[1]);//一次接收的数据不会超过256Byte
+								   rt_kprintf("485 1read\n");
+								  return count;
+							}	
+							//判断子串口2是否有中断
+							if(gifr&GIFR_UT2INT_BIT){//pcb映射串口2+1
+								/*数据接收*/
+									 count=Wk1234UartRxChars(2,(uint8_t *)testRBuf[2]);//一次接收的数据不会超过256Byte
+									 rt_kprintf("485 2read\n");
+								  return count;
+							}
+							//判断子串口3是否有中断
+							if(gifr&GIFR_UT3INT_BIT){//pcb映射串口0+1
+										/*数据接收*/
+									count=Wk1234UartRxChars(3,(uint8_t *)testRBuf[0]);//一次接收的数据不会超过256Byte
+								  rt_kprintf("485 0read\n");
+								  return count;
+							}
+							//判断子串口4是否有中断
+							if(gifr&GIFR_UT4INT_BIT){//pcb映射串口3+1
+										/*数据接收*/
+									 count=Wk1234UartRxChars(4,(uint8_t *)testRBuf[3]);//一次接收的数据不会超过256Byte
+								   rt_kprintf("485 3read\n");
+								  return count;
+							}
+							
+							gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
+					}while(gifr&0x0f);
+				}
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			if(rt_sem_take(uart5678_sem,timeout)==RT_EOK)
+			{
+				rt_kprintf(":485 5678\n");
+				gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);
+					do{
+							//判断子串口1是否有中断
+							if(gifr&GIFR_UT1INT_BIT){ /*数据处理*///pcb映射串口7
+									/*数据接收*/
+									 count=Wk5678UartRxChars(1,(uint8_t *)testRBuf[5]);//一次接收的数据不会超过256Byte
+								rt_kprintf("485 6read\n");
+							}	
+							//判断子串口2是否有中断
+							if(gifr&GIFR_UT2INT_BIT){//pcb映射串口5
+								/*数据接收*/
+									 count=Wk5678UartRxChars(2,(uint8_t *)testRBuf[6]);//一次接收的数据不会超过256Byte
+								rt_kprintf("485 4read\n");
+							}
+							//判断子串口3是否有中断
+							if(gifr&GIFR_UT3INT_BIT){//pcb映射串口6
+										/*数据接收*/
+									count=Wk5678UartRxChars(3,(uint8_t *)testRBuf[4]);//一次接收的数据不会超过256Byte
+								rt_kprintf("485 5read\n");
+							}
+							//判断子串口4是否有中断
+							if(gifr&GIFR_UT4INT_BIT){//pcb映射串口8
+										/*数据接收*/
+									 count=Wk5678UartRxChars(4,(uint8_t *)testRBuf[7]);//一次接收的数据不会超过256Byte
+								rt_kprintf("485 7read\n");
+							}
+							
+							gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);
+					}while(gifr&0x0f);
+				}
+				break;
+			}
+		return count;
+}
+#endif
 void uartTest()
 {
 	  static int confFlag=false;
@@ -268,19 +398,23 @@ void uartTest()
 				uartReconfig();
 				confFlag=true;
 		}
-	  for(int j=0;j<8;j++){
-			  memset(testRBuf,0,strlen(testSBuf));
+	  for(int j=0;j<UART_NUM-1;j++){
+			  memset(testRBuf,0,sizeof(testRBuf));
 				rs485UartSend(j,(uint8_t *)testSBuf,strlen(testSBuf));
-				rs485UartRec(j,(uint8_t *)testRBuf,1000);
-			  if(strncmp(testSBuf,testRBuf,strlen(testSBuf))==0){
-						rt_kprintf("uart[%d] 收发测试成功\n",j+1);
+			 // rs485TestUseUart6();
+
+				rs485UartRec(j,(uint8_t *)testRBuf,100);
+			  if(strncmp(testSBuf,(char *)testRBuf,strlen((char *)testSBuf))==0){
+						rt_kprintf("uart[%d] 收发测试成功\n",j);
 				}
 				else{
-						rt_kprintf("uart[%d] 收发测试失败\n",j+1);
-					  testRBuf[10]=0;
-					 // rt_kprintf("rec;[%s]\n",testRBuf);
+						rt_kprintf("uart[%d] 收发测试失败\n",j);
+//					  testRBuf[j][10]=0;
+					 // rt_kprintf("rec;[%s]\n",testRBuf[j]);
 				}
 		}
+		rt_thread_mdelay(100);
+		rs485TestUseUart6();
 }
 
 

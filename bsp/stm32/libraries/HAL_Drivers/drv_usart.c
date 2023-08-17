@@ -768,11 +768,11 @@ void USART6_IRQHandler(void)
 		uint8_t Res=0;
 		if((__HAL_UART_GET_FLAG(&huart6,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 		{
-//			  rt_kprintf("read\n");
-				HAL_UART_Receive(&huart6,&Res,1,1000); 
-			 // uartDataRec(USE_UART6,Res);
-			  extern uint8_t Write_RingBuff3(uint8_t data);
-			  Write_RingBuff3(Res);
+			  
+				HAL_UART_Receive(&huart6,&Res,1,10); 
+				extern uint8_t Write_RingBuff3(uint8_t data);
+				Write_RingBuff3(Res);
+
 			
 		}
 		HAL_UART_IRQHandler(&huart6);	
@@ -780,6 +780,7 @@ void USART6_IRQHandler(void)
 
     /* leave interrupt */
     rt_interrupt_leave();
+		//rt_kprintf("uart6\n");
 }
 #if defined(RT_SERIAL_USING_DMA) && defined(BSP_UART6_RX_USING_DMA)
 void UART6_DMA_RX_IRQHandler(void)

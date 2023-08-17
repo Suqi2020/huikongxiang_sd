@@ -19,6 +19,9 @@ extern void FatReadDirDelEarlyLogTxt(void);
 //rt_bool_t getUTCFlag=RT_FALSE;
 void getUTCFromLCD()
 {
+    if(TESTCODE_READ==GPIO_PIN_RESET){
+				return;//测试模式不获取
+		}
 		uint32_t lcdUtcTime_beijing();
 		void  subTimeStampSet(uint64_t time);
 	  uint64_t timeRead1,timeRead2;

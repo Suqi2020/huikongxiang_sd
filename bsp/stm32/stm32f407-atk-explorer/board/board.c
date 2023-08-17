@@ -32,7 +32,7 @@ void uartIrqEnaAfterQueue()
 //	 __HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 //	 __HAL_UART_ENABLE_IT(&huart4, UART_IT_RXNE);
 	 __HAL_UART_ENABLE_IT(&huart5, UART_IT_RXNE);// ÆäËümodbu
-	 __HAL_UART_ENABLE_IT(&huart6, UART_IT_RXNE);
+//	 __HAL_UART_ENABLE_IT(&huart6, UART_IT_RXNE);
 }
 /* USER CODE END PV */
 
