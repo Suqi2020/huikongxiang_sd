@@ -27,10 +27,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+8)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+9)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230817";
+const char date[]="20230818";
 
 bool USE_MQTT=true;
 
@@ -182,7 +182,10 @@ int main(void)
 	  rt_err_t result;
 		stm32_flash_read(FLASH_IP_SAVE_ADDR,    (uint8_t*)&packFlash,sizeof(packFlash));
 		stm32_flash_read(FLASH_MODBUS_SAVE_ADDR,(uint8_t*)&sheet,    sizeof(sheet));
-	  USE_MQTT=(bool)packFlash.protol;
+	  if(0xff==(int)packFlash.protol)
+			USE_MQTT=0;
+		else
+			USE_MQTT=(bool)packFlash.protol;
 	  printf(" save1=%d save2=%d MQTT=%d\n",sizeof(packFlash),sizeof(sheet),USE_MQTT);
 	  if(packFlash_LEN<sizeof(packFlash)){
 				printf("err:packFlash_LEN too small\n");

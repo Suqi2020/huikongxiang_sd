@@ -281,10 +281,10 @@ void rs485TestUseUart6()
 					rt_thread_mdelay(2);
 				}
 			  if(strncmp(testSBuf,(char *)testRBuf,strlen((char *)testSBuf))==0){
-						rt_kprintf("uart[8] 收发测试成功\n");
+						rt_kprintf("uart[9] 收发测试成功\n");
 				}
 				else{
-						rt_kprintf("uart[8] 收发测试失败\n");
+						rt_kprintf("uart[9] 收发测试失败\n");
 //					  testRBuf[j][10]=0;
 					 // rt_kprintf("rec;[%s]\n",testRBuf[j]);
 				}
@@ -405,15 +405,15 @@ void uartTest()
 
 				rs485UartRec(j,(uint8_t *)testRBuf,100);
 			  if(strncmp(testSBuf,(char *)testRBuf,strlen((char *)testSBuf))==0){
-						rt_kprintf("uart[%d] 收发测试成功\n",j);
+						rt_kprintf("uart[%d] 收发测试成功\n",j+1);
 				}
 				else{
-						rt_kprintf("uart[%d] 收发测试失败\n",j);
+						rt_kprintf("uart[%d] 收发测试失败\n",j+1);
 //					  testRBuf[j][10]=0;
 					 // rt_kprintf("rec;[%s]\n",testRBuf[j]);
 				}
 		}
-		rt_thread_mdelay(100);
+		rt_thread_mdelay(500);
 		rs485TestUseUart6();
 }
 
