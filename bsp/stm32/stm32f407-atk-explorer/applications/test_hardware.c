@@ -413,8 +413,9 @@ void uartTest()
 					 // rt_kprintf("rec;[%s]\n",testRBuf[j]);
 				}
 		}
-		rt_thread_mdelay(500);
+
 		rs485TestUseUart6();
+		rt_thread_mdelay(1000);
 }
 
 

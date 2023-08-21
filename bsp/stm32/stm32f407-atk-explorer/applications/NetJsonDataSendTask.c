@@ -29,18 +29,17 @@ void   netDataSendTask(void *para)
 			  if (rt_mb_recv(&mbNetSendData, (rt_ubase_t *)&str, 1000) == RT_EOK)
         { 
 						if(!USE_MQTT){
-										int lenth = netDataSendCheck(str);
-										if((lenth!=0)&&(gbNetState ==RT_TRUE)){
-											
-												netSend(str,lenth);
-				//								for(int i=0;i<lenth;i++)
-				//										rt_kprintf("%c",str[i]);
-				//								rt_kprintf("\n");
+								int lenth = netDataSendCheck(str);
+								if((lenth!=0)&&(gbNetState ==RT_TRUE)){
+										netSend(str,lenth);
+		//								for(int i=0;i<lenth;i++)
+		//										rt_kprintf("%c",str[i]);
+		//								rt_kprintf("\n");
 
-										}
-										else
-											rt_kprintf("%sERR:net offline drop data\r\n",task);
-									}
+								}
+								else
+									rt_kprintf("%sERR:net offline drop data\r\n",task);
+						}
 						else{
 							uint32_t lenth = (str[0]<<24)+(str[1]<<16)+(str[2]<<8)+str[3];
 							if((lenth!=0)&&(gbNetState ==RT_TRUE)){

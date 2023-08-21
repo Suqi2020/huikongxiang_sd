@@ -94,13 +94,13 @@
 #include "mqttTask.h"
 //#include "utf_8.h"
 
-//#define  USE_WDT
+
 #include "bsp_sdio_sd.h"
 
 #include "sdioRW.h"
 
 
-
+#define  USE_WDT
 #define  CCMRAM __attribute__((section("ccmram"))) 
 #define  PACK_HEAD_LEN  4
 
@@ -117,10 +117,11 @@
 #define EVENT_WDT_AUTOCTRL   (1 << 1)
 #define EVENT_WDT_W5500      (1 << 2)
 #define EVENT_WDT_UPTASK     (1 << 3)
-//#define EVENT_WDT_MQTTTASK   (1 << 4)
+#define EVENT_WDT_MQTTTASK   (1 << 4)
 #define EVENT_WDT_LCDTASK    (1 << 5)
 #define EVENT_WDT_RECTASK    (1 << 6)
 #define EVENT_WDT_SENDTASK   (1 << 7)
+#define EVENT_WDT_SDTASK     (1 << 8)
 extern struct rt_event WDTEvent;
 #endif
 

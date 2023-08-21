@@ -150,5 +150,9 @@ void   sdRTCTask(void *parameter)
 				logSave();
 #endif
 			  rt_thread_mdelay(20);
+			
+#ifdef  USE_WDT
+			  rt_event_send(&WDTEvent,EVENT_WDT_SDTASK);
+#endif
 		}
 }
