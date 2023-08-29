@@ -28,10 +28,20 @@ void  dispWaterData()
 				buf[0]=0;
 				buf[1]=dispWaterTotlNum;
 				LCDWtite(DISP_DATA_WATER_TOTALNUM_ADDR,buf,2);
+				int j=0,k=0;
+				for (int i = 0; i < WATERDEPTH_485_NUM; i++)//查找真正的下标
+				{		
+						if(sheet.waterDepth[i].workFlag==RT_TRUE){
+							  if(j==dispWaterIndex){
+									k=i;
+								}
+								j++;
+						}
+				}
 				//显示idr
 			  int len=0;
 			  for(len=0;len<MODBID_LEN;len++){
-						buf[len]=sheet.waterDepth[dispWaterIndex].ID[len];
+						buf[len]=sheet.waterDepth[k].ID[len];
 					  if(buf[len]==0){
 								break;
 						}
@@ -39,7 +49,7 @@ void  dispWaterData()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_WATER_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",waterDepth[dispWaterIndex]);
+				sprintf((char *)buf,"%0.2f",waterDepth[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;

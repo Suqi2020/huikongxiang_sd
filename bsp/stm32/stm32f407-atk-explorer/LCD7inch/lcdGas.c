@@ -29,10 +29,21 @@ void  dispCH4Data()
 				buf[0]=0;
 				buf[1]=dispCH4TotlNum;
 				LCDWtite(DISP_DATA_CH4_TOTALNUM_ADDR,buf,2);
+				int j=0,k=0;
+				for (int i = 0; i < CH4_485_NUM; i++)//查找真正的下标
+				{		
+						if(sheet.ch4[i].workFlag==RT_TRUE){
+							  if(j==dispCH4Index){
+									k=i;
+								}
+								j++;
+						}
+				}
+
 				//显示idr
 			  int len=0;
 			  for(len=0;len<MODBID_LEN;len++){
-						buf[len]=sheet.ch4[dispCH4Index].ID[len];
+						buf[len]=sheet.ch4[k].ID[len];
 					  if(buf[len]==0){
 								break;
 						}
@@ -40,7 +51,7 @@ void  dispCH4Data()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_CH4_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",ch4[dispCH4Index]);
+				sprintf((char *)buf,"%0.2f",ch4[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
@@ -99,10 +110,20 @@ void  dispO2Data()
 				buf[0]=0;
 				buf[1]=dispO2TotlNum;
 				LCDWtite(DISP_DATA_O2_TOTALNUM_ADDR,buf,2);
+				int j=0,k=0;
+				for (int i = 0; i < O2_485_NUM; i++)//查找真正的下标
+				{		
+						if(sheet.o2[i].workFlag==RT_TRUE){
+							  if(j==dispO2Index){
+									k=i;
+								}
+								j++;
+						}
+				}
 				//显示idr
 			  int len=0;
 			  for(len=0;len<MODBID_LEN;len++){
-						buf[len]=sheet.o2[dispO2Index].ID[len];
+						buf[len]=sheet.o2[j].ID[len];
 					  if(buf[len]==0){
 								break;
 						}
@@ -110,7 +131,7 @@ void  dispO2Data()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_O2_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",o2[dispO2Index]);
+				sprintf((char *)buf,"%0.2f",o2[j]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
@@ -168,10 +189,20 @@ void  dispH2SData()
 				buf[0]=0;
 				buf[1]=dispH2STotlNum;
 				LCDWtite(DISP_DATA_H2S_TOTALNUM_ADDR,buf,2);
+				int j=0,k=0;
+				for (int i = 0; i < H2S_485_NUM; i++)//查找真正的下标
+				{		
+						if(sheet.h2s[i].workFlag==RT_TRUE){
+							  if(j==dispH2SIndex){
+									k=i;
+								}
+								j++;
+						}
+				}
 				//显示idr
 			  int len=0;
 			  for(len=0;len<MODBID_LEN;len++){
-						buf[len]=sheet.h2s[dispH2SIndex].ID[len];
+						buf[len]=sheet.h2s[k].ID[len];
 					  if(buf[len]==0){
 								break;
 						}
@@ -179,7 +210,7 @@ void  dispH2SData()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_H2S_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",h2s[dispH2SIndex]);
+				sprintf((char *)buf,"%0.2f",h2s[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
@@ -237,10 +268,21 @@ void  dispCOData()
 				buf[0]=0;
 				buf[1]=dispCOTotlNum;
 				LCDWtite(DISP_DATA_CO_TOTALNUM_ADDR,buf,2);
+			
+				int j=0,k=0;
+				for (int i = 0; i < CO_485_NUM; i++)//查找真正的下标
+				{		
+						if(sheet.co[i].workFlag==RT_TRUE){
+							  if(j==dispCOIndex){
+									k=i;
+								}
+								j++;
+						}
+				}
 				//显示idr
 			  int len=0;
 			  for(len=0;len<MODBID_LEN;len++){
-						buf[len]=sheet.co[dispCOIndex].ID[len];
+						buf[len]=sheet.co[k].ID[len];
 					  if(buf[len]==0){
 								break;
 						}
@@ -248,7 +290,7 @@ void  dispCOData()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_CO_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",co[dispCOIndex]);
+				sprintf((char *)buf,"%0.2f",co[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;

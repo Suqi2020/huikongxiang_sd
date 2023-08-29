@@ -36,10 +36,20 @@ void  dispLiefengData()
 				buf[0]=0;
 				buf[1]=dispLiefengTotlNum;
 				LCDWtite(DISP_DATA_LIEFENG_TOTALNUM_ADDR,buf,2);
+				int j=0,k=0;
+				for (int i = 0; i < CRACKMETER_485_NUM; i++)//查找真正的下标
+				{		
+						if(sheet.crackMeter[i].workFlag==RT_TRUE){
+							  if(j==dispLiefengIndex){
+									k=i;
+								}
+								j++;
+						}
+				}
 				//显示idr
 			  int len=0;
 			  for(len=0;len<MODBID_LEN;len++){
-						buf[len]=sheet.crackMeter[dispLiefengIndex].ID[len];
+						buf[len]=sheet.crackMeter[k].ID[len];
 					  if(buf[len]==0){
 								break;
 						}
@@ -48,12 +58,12 @@ void  dispLiefengData()
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_LIEFENG_ID_ADDR,buf,len);
 				
-				sprintf((char *)buf,"%0.2f",crackMeter[dispLiefengIndex].temp.flotVal);
+				sprintf((char *)buf,"%0.2f",crackMeter[k].temp.flotVal);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_LIEFENG_TEMP_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",crackMeter[dispLiefengIndex].distanc.flotVal);
+				sprintf((char *)buf,"%0.2f",crackMeter[k].distanc.flotVal);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;

@@ -27,10 +27,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+10)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+11)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230821";
+const char date[]="20230829";
 
 bool USE_MQTT=true;
 
@@ -415,6 +415,7 @@ else{
 void hartWareTest()
 {
 	//	int read=TESTCODE_READ;//读取工装测试电平
+	  void sdAndRtcInit();
 		enum swichStep step= IO_inout_step;
 		static bool change=true;
     HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);//开启中断 清除串口冗余数据

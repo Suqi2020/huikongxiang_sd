@@ -164,6 +164,8 @@ extern int modbusChosIndex;
 void lcdAnaConfig(void);
 void  delOneAna(void);
 #endif
+
+extern void dispHuanliuData_tjw();
 //按键触发总接口
 void  keyReturn(uint16_t keyAddr)
 {
@@ -574,20 +576,43 @@ void  keyReturn(uint16_t keyAddr)
 
 			case  KEY_OUTPUT_READ_RETURN_P_ADDR:
 				break;
-			case KEY_RETURN_ADDR:
+			case  KEY_RETURN_ADDR:
 
 				LCDClearSaveOK();
 				LCDClearRstOK();
 				LCDClearClose();
 				LCDClearOpen();
 				break;
-			case KEY_SOFT_VER_ADDR:
+			case  KEY_SOFT_VER_ADDR:
 				LCDDispSoftVer();
 				break;
-			case KEY_SD_STATE_ADDR:
+			case  KEY_SD_STATE_ADDR:
 				LCDDispSDState((uint8_t)gbSDExit );
 			  LCDDispSDSize();
 				break;
+//天井洼定制  start
+			case  KEY_CHOOSE_HUAJING_TJW_ADDR:
+				dispWaterData();
+			  dispWenshiduData();
+			  dispCH4Data();
+				dispO2Data();
+			  dispH2SData();
+			  dispCOData();
+				break;
+			case  KEY_CHOOSE_FANGWAIPO_TJW_ADDR:
+				break;
+			case  KEY_CHOOSE_FANGCHENJIANG_TJW_ADDR:
+				break;
+			case  KEY_CHOOSE_HUANLIU_TJW_ADDR:
+				dispHuanliuData_tjw();
+				break;
+			case  KEY_CHOOSE_JINGGAI_TJW_ADDR:
+				dispJinggaiData();
+				break;
+			case  KEY_CHOOSE_LIEFENGYI_TJW_ADDR:
+				dispLiefengData();
+				break;
+//天井洼定制  end
 			///////////output_end///////////////
 //#define        KEY_ANA_SUBNAME_INTERFACE_ADDR     0x522C
 //#define        KEY_ANA_SURE_ADDR     0x522E
@@ -1073,6 +1098,7 @@ void LCDDispSDSize()
 		LCDWtite(SD_REMAIN_SIZE_ADDR,(uint8_t *)buf,4);
 	
 }
+//start
 //显示sd卡状态
 //void LCDDispSDState(uint8_t state )
 //{
