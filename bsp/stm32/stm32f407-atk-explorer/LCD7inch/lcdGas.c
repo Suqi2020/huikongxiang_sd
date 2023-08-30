@@ -94,6 +94,11 @@ int dispO2TotlNum=0;
 void  dispO2Data()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+	  for(int i=0;i<O2_485_NUM;i++){
+			if(sheet.o2[i].workFlag==RT_TRUE){
+						dispO2TotlNum++;
+				}
+		}
 		if(dispO2TotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;
@@ -123,7 +128,7 @@ void  dispO2Data()
 				//显示idr
 			  int len=0;
 			  for(len=0;len<MODBID_LEN;len++){
-						buf[len]=sheet.o2[j].ID[len];
+						buf[len]=sheet.o2[k].ID[len];
 					  if(buf[len]==0){
 								break;
 						}
@@ -131,7 +136,7 @@ void  dispO2Data()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_O2_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",o2[j]);
+				sprintf((char *)buf,"%0.2f",o2[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
@@ -173,6 +178,11 @@ int dispH2STotlNum=0;
 void  dispH2SData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+	  for(int i=0;i<H2S_485_NUM;i++){
+			if(sheet.h2s[i].workFlag==RT_TRUE){
+						dispH2STotlNum++;
+				}
+		}
 		if(dispH2STotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;
@@ -252,6 +262,11 @@ int dispCOTotlNum=0;
 void  dispCOData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+	  for(int i=0;i<CO_485_NUM;i++){
+			if(sheet.co[i].workFlag==RT_TRUE){
+						dispCOTotlNum++;
+				}
+		}
 		if(dispCOTotlNum==0){//没有工作的环流
 				//显示总页数
 				buf[0]=0;

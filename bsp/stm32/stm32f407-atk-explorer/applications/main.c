@@ -27,10 +27,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+11)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+12)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20230829";
+const char date[]="20230830";
 
 bool USE_MQTT=true;
 
@@ -404,12 +404,12 @@ MSH_CMD_EXPORT(tasklog,tasklog del);//FINSH_FUNCTION_EXPORT_CMD
 //网络连接成功标志 
 bool netOKState()
 {
-if(USE_MQTT){
-	return mqttState();
-}
-else{
-	return gbNetState;
-}
+		if(USE_MQTT){
+			return mqttState();
+		}
+		else{
+			return gbNetState;
+		}
 }
 
 void hartWareTest()

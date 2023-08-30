@@ -164,8 +164,9 @@ extern int modbusChosIndex;
 void lcdAnaConfig(void);
 void  delOneAna(void);
 #endif
-
+extern void dispChenjiangData_tjw();
 extern void dispHuanliuData_tjw();
+void  dispWaipoData_tjw();
 //按键触发总接口
 void  keyReturn(uint16_t keyAddr)
 {
@@ -600,8 +601,10 @@ void  keyReturn(uint16_t keyAddr)
 			  dispCOData();
 				break;
 			case  KEY_CHOOSE_FANGWAIPO_TJW_ADDR:
+				dispWaipoData_tjw();
 				break;
 			case  KEY_CHOOSE_FANGCHENJIANG_TJW_ADDR:
+				 dispChenjiangData_tjw();
 				break;
 			case  KEY_CHOOSE_HUANLIU_TJW_ADDR:
 				dispHuanliuData_tjw();

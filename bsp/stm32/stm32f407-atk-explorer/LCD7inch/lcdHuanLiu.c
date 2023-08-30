@@ -169,84 +169,89 @@ void  dispHuanliuData_tjw()
 				{		
 						if(sheet.cirCula[i].workFlag==RT_TRUE){
 								k1=i;
+								int len=0;
+								for(len=0;len<MODBID_LEN;len++){
+										buf[len]=sheet.cirCula[k1].ID[len];
+										if(buf[len]==0){
+												break;
+										}
+								}
+								buf[len++]	=0xff;  
+								buf[len++]  =0xff; 
+								LCDWtite(DISP_DATA_HUANLIU1_ID_TJW_ADDR,buf,len);
+								sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurA);
+								len=strlen((char *)buf);
+								buf[len++]=0xff;
+								buf[len++]=0xff;
+								LCDWtite(DISP_DATA_HUANLIU1_EARTH_A_TJW_ADDR,buf,len);
+
+								sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurB);
+								len=strlen((char *)buf);
+								buf[len++]=0xff;
+								buf[len++]=0xff;
+								LCDWtite(DISP_DATA_HUANLIU1_EARTH_B_TJW_ADDR,buf,len);
+
+								sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurC);
+								len=strlen((char *)buf);
+								buf[len++]=0xff;
+								buf[len++]=0xff;
+								LCDWtite(DISP_DATA_HUANLIU1_EARTH_C_TJW_ADDR,buf,len);
+
+								sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurD);
+								len=strlen((char *)buf);
+								buf[len++]=0xff;
+								buf[len++]=0xff;
+								LCDWtite(DISP_DATA_HUANLIU1_CURRENT_TJW_ADDR,buf,len);
 							  break;
 						}
 				}
-				for (int i = k1+1; i < CIRCULA_485_NUM; i++)//查找真正的下标
-				{		
-						if(sheet.cirCula[i].workFlag==RT_TRUE){
-								k2=i;
-							  break;
-						}
+				if(dispHuanliuTotlNum>=2){
+					for (int i = k1+1; i < CIRCULA_485_NUM; i++)//查找真正的下标
+					{		
+							if(sheet.cirCula[i].workFlag==RT_TRUE){
+									k2=i;
+								  int len=0;
+									for(len=0;len<MODBID_LEN;len++){
+											buf[len]=sheet.cirCula[k2].ID[len];
+											if(buf[len]==0){
+													break;
+											}
+									}
+									buf[len++]	=0xff;  
+									buf[len++]  =0xff; 
+									LCDWtite(DISP_DATA_HUANLIU2_ID_TJW_ADDR,buf,len);
+									sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurA);
+									len=strlen((char *)buf);
+									buf[len++]=0xff;
+									buf[len++]=0xff;
+									LCDWtite(DISP_DATA_HUANLIU2_EARTH_A_TJW_ADDR,buf,len);
+
+									sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurB);
+									len=strlen((char *)buf);
+									buf[len++]=0xff;
+									buf[len++]=0xff;
+									LCDWtite(DISP_DATA_HUANLIU2_EARTH_B_TJW_ADDR,buf,len);
+
+									sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurC);
+									len=strlen((char *)buf);
+									buf[len++]=0xff;
+									buf[len++]=0xff;
+									LCDWtite(DISP_DATA_HUANLIU2_EARTH_C_TJW_ADDR,buf,len);
+
+									sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurD);
+									len=strlen((char *)buf);
+									buf[len++]=0xff;
+									buf[len++]=0xff;
+									LCDWtite(DISP_DATA_HUANLIU2_CURRENT_TJW_ADDR,buf,len);
+									break;
+							}
+					}
 				}
 				//显示idr
-			  int len=0;
-			  for(len=0;len<MODBID_LEN;len++){
-						buf[len]=sheet.cirCula[k1].ID[len];
-					  if(buf[len]==0){
-								break;
-						}
-				}
-				buf[len++]	=0xff;  
-				buf[len++]  =0xff; 
-				LCDWtite(DISP_DATA_HUANLIU1_ID_TJW_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurA);
-				len=strlen((char *)buf);
-				buf[len++]=0xff;
-				buf[len++]=0xff;
-				LCDWtite(DISP_DATA_HUANLIU1_EARTH_A_TJW_ADDR,buf,len);
-				
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurB);
-				len=strlen((char *)buf);
-				buf[len++]=0xff;
-				buf[len++]=0xff;
-				LCDWtite(DISP_DATA_HUANLIU1_EARTH_B_TJW_ADDR,buf,len);
-				
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurC);
-				len=strlen((char *)buf);
-				buf[len++]=0xff;
-				buf[len++]=0xff;
-				LCDWtite(DISP_DATA_HUANLIU1_EARTH_C_TJW_ADDR,buf,len);
-				
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurD);
-				len=strlen((char *)buf);
-				buf[len++]=0xff;
-				buf[len++]=0xff;
-				LCDWtite(DISP_DATA_HUANLIU1_CURRENT_TJW_ADDR,buf,len);
+	
 				
 				
-			  for(len=0;len<MODBID_LEN;len++){
-						buf[len]=sheet.cirCula[k2].ID[len];
-					  if(buf[len]==0){
-								break;
-						}
-				}
-				buf[len++]	=0xff;  
-				buf[len++]  =0xff; 
-				LCDWtite(DISP_DATA_HUANLIU2_ID_TJW_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurA);
-				len=strlen((char *)buf);
-				buf[len++]=0xff;
-				buf[len++]=0xff;
-				LCDWtite(DISP_DATA_HUANLIU2_EARTH_A_TJW_ADDR,buf,len);
-				
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurB);
-				len=strlen((char *)buf);
-				buf[len++]=0xff;
-				buf[len++]=0xff;
-				LCDWtite(DISP_DATA_HUANLIU2_EARTH_B_TJW_ADDR,buf,len);
-				
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurC);
-				len=strlen((char *)buf);
-				buf[len++]=0xff;
-				buf[len++]=0xff;
-				LCDWtite(DISP_DATA_HUANLIU2_EARTH_C_TJW_ADDR,buf,len);
-				
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurD);
-				len=strlen((char *)buf);
-				buf[len++]=0xff;
-				buf[len++]=0xff;
-				LCDWtite(DISP_DATA_HUANLIU2_CURRENT_TJW_ADDR,buf,len);
+			  
 
 		}
 
