@@ -25,7 +25,7 @@ void	LCDDispUart(void);
 void	LCDDispMCUID(void);
 void  LCDDispNetOffline(void);
 void  offLineIndexAdd(void);
-void  dispCinaName(uint8_t *buf);
+void  dispChinaName(uint8_t *buf);
 void  dispChinaNameIndexLow(void);
 void  dispChinaNameIndexAdd(void);
 void  LDCDispMosbusInfo(void);
@@ -328,15 +328,15 @@ void  keyReturn(uint16_t keyAddr)
 				break;
 			case KEY_MODBUS_CFG_NAME_ADDR://点击传感器设置名称显示框调出 模糊界面  显示到1380
 				//5A A5 1182 1380 C9CF BAA3 B9C8 D4AA BFC6 BCBC FFFF
-        dispCinaName(buf);
+        dispChinaName(buf);
 				break;
 			case KEY_MODBUS_LASTNAME_ADDR:
 				dispChinaNameIndexLow();
-				dispCinaName(buf);
+				dispChinaName(buf);
 				break;
 			case KEY_MODBUS_NEXTNAME_ADDR:
 				dispChinaNameIndexAdd();
-				dispCinaName(buf);
+				dispChinaName(buf);
 				break;
 			case KEY_MODBUS_SURENAME_ADDR:// 显示到1360
 				break;	
