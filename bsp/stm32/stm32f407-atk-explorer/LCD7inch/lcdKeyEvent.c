@@ -94,7 +94,7 @@ void coverNowDisp(void);
 void surePassWord(void);
 void LCDRstPw(void);
 
-void dispChooseModbusName(void);
+//void dispChooseModbusName(void);
 
 void  nextModName(void);
 
@@ -164,9 +164,9 @@ extern int modbusChosIndex;
 void lcdAnaConfig(void);
 void  delOneAna(void);
 #endif
-extern void dispChenjiangData_tjw();
-extern void dispHuanliuData_tjw();
-void  dispWaipoData_tjw();
+extern void dispChenjiangData_tjw(void);
+extern void dispHuanliuData_tjw(void);
+void  dispWaipoData_tjw(void);
 //按键触发总接口
 void  keyReturn(uint16_t keyAddr)
 {
@@ -177,21 +177,58 @@ void  keyReturn(uint16_t keyAddr)
 		switch(keyAddr)
 		{
 			
-			case KEY_SURE_CHOOSE_MODBUS_ADDR:
-				changeBmp(71+modbusChosIndex);//71.bmp为环流数据展示
-			  dispCurrentModData();
+//			case KEY_SURE_CHOOSE_MODBUS_ADDR:
+//				changeBmp(71+modbusChosIndex);//71.bmp为环流数据展示
+//			  dispCurrentModData();
+//				break;
+//			case KEY_LAST_CHOOSE_MODBUS_ADDR:
+//				lastModName();
+//			  dispChooseModbusName();
+//				break;
+//			case KEY_NEXT_CHOOSE_MODBUS_ADDR:
+//				nextModName();
+//			  dispChooseModbusName();
+//				break;
+			
+			case KEY_HUANLIU_CHOOSE_ADDR://环流
+				dispHuanliuData();
 				break;
-			case KEY_LAST_CHOOSE_MODBUS_ADDR:
-				lastModName();
-			  dispChooseModbusName();
+			case KEY_JUFANG_CHOOSE_ADDR://"JuFang",
+				dispJufangData();
 				break;
-			case KEY_NEXT_CHOOSE_MODBUS_ADDR:
-				nextModName();
-			  dispChooseModbusName();
+			case KEY_FANGCHENJIANG_CHOOSE_ADDR://"FangChenJiang",
+				dispChenjiangData();
 				break;
-			case KEY_MODUBS_DATA_ADDR:
-				dispChooseModbusName();
-				break ;	
+			case KEY_FANGWAIPO_CHOOSE_ADDR://"FangWaiPo"
+				dispWaipoData();
+				break;
+			case KEY_JIAWAN_CHOOSE_ADDR://"JiaWan"();
+				dispCH4Data();
+				break;
+			case KEY_YANGQI_CHOOSE_ADDR://"YangQi",
+				dispO2Data();
+				break;
+			case KEY_LIUHUAQING_CHOOSE_ADDR://"LiuHuaQing",
+				dispH2SData();
+				break;
+			case KEY_YIYANGHUATAN_CHOOSE_ADDR://"YiYangHuaTan",
+				dispCOData();
+				break;
+			case KEY_WENSHIDU_CHOOSE_ADDR://"WenShiDu"
+				dispWenshiduData();
+				break;
+			case KEY_SHUIWEI_CHOOSE_ADDR://"ShuiWei"
+				dispWaterData();
+				break;
+			case KEY_LIEFENGYI_CHOOSE_ADDR://"LieFengYi"
+				dispLiefengData();
+				break;
+			case KEY_JINGGAI_CHOOSE_ADDR://"JingGai"
+				dispJinggaiData();
+				break;
+//			case KEY_MODUBS_DATA_ADDR:
+//				dispChooseModbusName();
+//				break ;	
 			case KEY_DATA_HUANLIU_LAST_ADDR:
 				lastHuanliuIndex();
 				dispHuanliuData();
@@ -595,10 +632,10 @@ void  keyReturn(uint16_t keyAddr)
 			case  KEY_CHOOSE_HUAJING_TJW_ADDR:
 				dispWaterData();
 			  dispWenshiduData();
-			  dispCH4Data();
+				dispCOData();
+				dispH2SData();
 				dispO2Data();
-			  dispH2SData();
-			  dispCOData();
+				dispCH4Data();
 				break;
 			case  KEY_CHOOSE_FANGWAIPO_TJW_ADDR:
 				dispWaipoData_tjw();
@@ -1083,8 +1120,14 @@ void LCDDispSDSize()
 {
 		int tot_sect,fre_sect;
 		sdSize_p(&tot_sect,&fre_sect);
-	  SDtotal.fVal=(float)tot_sect/2/1024/1024;
-	  SDfree.fVal =(float)fre_sect/2/1024/1024;
+	  if(gbSDExit==0){
+				SDtotal.iVal=0;
+				SDfree.iVal=0;
+		}
+		else{
+				SDtotal.fVal=(float)tot_sect/2/1024/1024;
+				SDfree.fVal =(float)fre_sect/2/1024/1024;
+		}
 	
     uint8_t buf[4];
 		buf[0]=(uint8_t)(SDtotal.iVal>>24);

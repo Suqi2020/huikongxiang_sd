@@ -13,6 +13,7 @@ static int dispLiefengTotlNum=0;
 void  dispLiefengData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispLiefengTotlNum=0;
 		for(int i=0;i<CRACKMETER_485_NUM;i++){
 				if(sheet.crackMeter[i].workFlag==RT_TRUE){
 					  dispLiefengTotlNum++;

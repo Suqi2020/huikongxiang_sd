@@ -15,6 +15,7 @@ extern partDischargeStru partDiscStru_p[PARTDISCHAG_485_NUM];
 void  dispJufangData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispJufangTotlNum=0;
 		for(int i=0;i<PARTDISCHAG_485_NUM;i++){
 			 if(sheet.partDischag[i].workFlag==RT_TRUE){
 				    dispJufangTotlNum++;

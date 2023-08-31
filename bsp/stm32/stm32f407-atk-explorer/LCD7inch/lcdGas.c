@@ -8,6 +8,7 @@ static int dispCH4TotlNum=0;
 void  dispCH4Data()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispCH4TotlNum=0;
 	  for(int i=0;i<CH4_485_NUM;i++){
 			if(sheet.ch4[i].workFlag==RT_TRUE){
 						dispCH4TotlNum++;
@@ -94,6 +95,7 @@ int dispO2TotlNum=0;
 void  dispO2Data()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispO2TotlNum=0;
 	  for(int i=0;i<O2_485_NUM;i++){
 			if(sheet.o2[i].workFlag==RT_TRUE){
 						dispO2TotlNum++;
@@ -178,6 +180,7 @@ int dispH2STotlNum=0;
 void  dispH2SData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispH2STotlNum=0;
 	  for(int i=0;i<H2S_485_NUM;i++){
 			if(sheet.h2s[i].workFlag==RT_TRUE){
 						dispH2STotlNum++;
@@ -262,6 +265,7 @@ int dispCOTotlNum=0;
 void  dispCOData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispCOTotlNum=0;
 	  for(int i=0;i<CO_485_NUM;i++){
 			if(sheet.co[i].workFlag==RT_TRUE){
 						dispCOTotlNum++;

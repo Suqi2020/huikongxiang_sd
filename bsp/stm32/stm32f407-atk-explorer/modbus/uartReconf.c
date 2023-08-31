@@ -130,7 +130,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 void uartReconfig()
 {
 		for(int i=0;i<UART_NUM;i++){
-				if(packFlash.uartBps[i]==0){//没用到的串口 给个默认波特率 
+				if((packFlash.uartBps[i]==0)||(packFlash.uartBps[i]==-1)){//没用到的串口 给个默认波特率 
 					  packFlash.uartBps[i]=9600;
 				}
 		}

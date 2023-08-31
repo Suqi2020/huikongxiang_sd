@@ -15,6 +15,7 @@ static int dispJinggaiTotlNum=0;
 void  dispJinggaiData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispJinggaiTotlNum=0;
 		for(int i=0;i<COVER_485_NUM;i++){
 			if(sheet.cover[i].workFlag==RT_TRUE){
 			    dispJinggaiTotlNum++;

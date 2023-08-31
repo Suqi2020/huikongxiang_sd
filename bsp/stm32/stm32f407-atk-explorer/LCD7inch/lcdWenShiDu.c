@@ -14,6 +14,7 @@ static int dispWenshiduTotlNum=0;
 void  dispWenshiduData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispWenshiduTotlNum=0;
 	 for(int i=0;i<TEMPHUM_485_NUM;i++){
 		if(sheet.tempHum[i].workFlag==RT_TRUE){
 			    dispWenshiduTotlNum++;

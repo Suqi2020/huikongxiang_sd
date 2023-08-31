@@ -1,4 +1,5 @@
 #include "board.h"
+#if 0
 static char  *sign="[LCDCHOOSE]";
 int modbusChosIndex=0;
 //显示选择的modbus名字
@@ -95,3 +96,4 @@ void  dispCurrentModData()
 }
 
 
+#endif

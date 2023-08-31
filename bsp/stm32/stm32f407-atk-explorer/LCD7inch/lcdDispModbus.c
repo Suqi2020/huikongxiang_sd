@@ -473,8 +473,6 @@ void LCDDispModInfoCpy(modbusPositStru *posit,uint8_t readIndex,LCDDispModInfoSt
 }
 
 
-
-
 //上电后控件第一次显示的中文名称拷贝 
 //传感器读取界面显示所有信息
 void LDCDispMosbusInfo()
@@ -588,12 +586,131 @@ void LDCDispMosbusInfo()
 				buf[3]=(uint8_t)(modbusLCDRead.colTime>>0);
 				LCDWtite(MODBUSDISP_TIME_ADDR,buf,4);
 		}
-		
-		
-		
 		rt_free(buf);
 		buf=RT_NULL;
 }
+
+
+//上电后控件第一次显示的中文名称拷贝 
+//传感器读取界面显示所有信息
+//uint8_t huanliu[]={0xBB,0xB7,0xC1,0xF7};
+//void LDCDispMosbusInfo()
+//{
+//	  if(modbDevReadIndex>=modbTotalIndex)
+//			modbDevReadIndex=0;//最后一页删除的时候要从第一页开始显示
+//	  LCDDispModInfoCpy(modPosit,modbDevReadIndex,&modbusLCDRead);
+//	  uint8_t *buf=NULL;
+//	  buf=rt_malloc(50);
+//	  //显示中文名
+//	 
+//		int Len=strlen(modbusLCDRead.name);
+//		for(int i=0;i<4;i++){
+//				buf[i]=huanliu[i];
+//		}
+//		int j=0;
+////		while((Len+j)<sizeof(modbusName[0])){
+////				buf[Len+j]=0xff;
+////				j++;
+////		}
+//	  LCDWtite(MODBUSDISP_NAME_ADDR,buf,4);
+//		
+//		//显示总共页
+//		buf[0]=0;
+//		buf[1]=modbTotalIndex;
+//		LCDWtite(MODBUSDISP_TOTALNUM_ADDR,buf,2);
+//		rt_kprintf("%s total %d\n",sign,modbTotalIndex);
+//		//显示当前页
+//		buf[0]=0;
+//		if(modbTotalIndex==0){
+//				buf[1]=0;
+//				LCDWtite(MODBUSDISP_NOWNUM_ADDR,buf,2);
+//							 Len=strlen(modbusLCDRead.ID);
+//				for(int i=0;i<Len;i++){
+//						buf[i]='0';
+//				}
+//				 j=0;
+//				while((Len+j)<MODBID_LEN-2){
+//						buf[Len+j]=0xff;
+//						j++;
+//						if(j>=2)
+//							break;
+//				}
+//				LCDWtite(MODBUSDISP_ID_ADDR,buf,MODBID_LEN-2);//7寸屏显示18
+//				//显示model
+//				Len=strlen(modbusLCDRead.model);
+//				for(int i=0;i<Len;i++){
+//						buf[i]='0';
+//				}
+//				 j=0;
+//				while((Len+j)<MODL_LEN-2){
+//						buf[Len+j]=0xff;
+//						j++;
+//				}
+//				LCDWtite(MODBUSDISP_TYPE_ADDR,buf,MODL_LEN-2);
+//				//显示PORT
+//				buf[0]=0;
+//				buf[1]=0;
+//				LCDWtite(MODBUSDISP_PORT_ADDR,buf,2);
+//				//显示addr
+//				buf[0]=0;
+//				buf[1]=0;
+//				LCDWtite(MODBUSDISP_ADDR_ADDR,buf,2);
+//				//显示colTime
+//				buf[0]=0;
+//				buf[1]=0;
+//				buf[2]=0;
+//				buf[3]=0;
+//				LCDWtite(MODBUSDISP_TIME_ADDR,buf,4);
+
+//		}
+//		else{
+//				buf[1]=modbDevReadIndex+1;
+//				LCDWtite(MODBUSDISP_NOWNUM_ADDR,buf,2);
+//			//显示ID
+//				 Len=strlen(modbusLCDRead.ID);
+//				for(int i=0;i<Len;i++){
+//						buf[i]=modbusLCDRead.ID[i];
+//				}
+//				 j=0;
+//				while((Len+j)<MODBID_LEN-2){
+//						buf[Len+j]=0xff;
+//						j++;
+//						if(j>=2)
+//							break;
+//				}
+//				LCDWtite(MODBUSDISP_ID_ADDR,buf,MODBID_LEN-2);//7寸屏显示18
+//				//显示model
+//				Len=strlen(modbusLCDRead.model);
+//				for(int i=0;i<Len;i++){
+//						buf[i]=modbusLCDRead.model[i];
+//				}
+//				 j=0;
+//				while((Len+j)<MODL_LEN-2){
+//						buf[Len+j]=0xff;
+//						j++;
+//				}
+//				LCDWtite(MODBUSDISP_TYPE_ADDR,buf,MODL_LEN-2);
+//				//显示PORT
+//				buf[0]=0;
+//				buf[1]=modbusLCDRead.port+1;
+//				LCDWtite(MODBUSDISP_PORT_ADDR,buf,2);
+//				//显示addr
+//				buf[0]=0;
+//				buf[1]=modbusLCDRead.addr;
+//				LCDWtite(MODBUSDISP_ADDR_ADDR,buf,2);
+//				//显示colTime
+//				buf[0]=(uint8_t)(modbusLCDRead.colTime>>24);
+//				buf[1]=(uint8_t)(modbusLCDRead.colTime>>16);
+//				buf[2]=(uint8_t)(modbusLCDRead.colTime>>8);
+//				buf[3]=(uint8_t)(modbusLCDRead.colTime>>0);
+//				LCDWtite(MODBUSDISP_TIME_ADDR,buf,4);
+//		}
+//		
+//		
+//		
+//		rt_free(buf);
+//		buf=RT_NULL;
+//}
 
 
 //故障传感器读取界面显示所有信息
@@ -928,6 +1045,8 @@ static int chinaNameIndex=0;//当前用到的名字标记  根据modbNumEnum对应起来
 
 
 //显示传感器中文名 lcd配置传感器界面的中文名称的选择
+
+
 void dispCinaName(uint8_t *buf)
 {
 		rt_kprintf("index %d\n",chinaNameIndex);

@@ -15,6 +15,7 @@ static int dispWaipoTotlNum=0;
 void  dispWaipoData()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispWaipoTotlNum=0;
 		for(int i=0;i<THREEAXIS_485_NUM;i++){
 				if(sheet.threeAxiss[i].workFlag==RT_TRUE){
 					  dispWaipoTotlNum++;
@@ -113,6 +114,7 @@ void  lastWaipoIndex()
 void  dispWaipoData_tjw()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispWaipoTotlNum=0;
 		for(int i=0;i<THREEAXIS_485_NUM;i++){
 				if(sheet.threeAxiss[i].workFlag==RT_TRUE){
 					  dispWaipoTotlNum++;

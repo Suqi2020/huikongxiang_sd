@@ -14,6 +14,7 @@ void  dispChenjiangData()
 {
 	
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispChenjiangTotlNum=0;
 		for(int i=0;i<PRESSSETTL_485_NUM;i++){
 				if(sheet.pressSetl[i].workFlag==RT_TRUE){
 						dispChenjiangTotlNum++;
@@ -107,7 +108,7 @@ void  lastChenJiangIndex()
 //显示环流界面71.bmp的所有数据
 void  dispChenjiangData_tjw()
 {
-	
+	  dispChenjiangTotlNum=0;
 	  uint8_t buf[MODBID_LEN+2]={0};
 		for(int i=0;i<PRESSSETTL_485_NUM;i++){
 				if(sheet.pressSetl[i].workFlag==RT_TRUE){

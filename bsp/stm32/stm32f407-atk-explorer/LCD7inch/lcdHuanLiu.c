@@ -14,6 +14,7 @@ static int dispHuanliuTotlNum=0;
 //显示环流界面71.bmp的所有数据
 void  dispHuanliuData()
 {
+	  dispHuanliuTotlNum=0;
 	  uint8_t buf[MODBID_LEN+2]={0};
 		for(int i=0;i<CIRCULA_485_NUM;i++){
 			if(sheet.cirCula[i].workFlag==RT_TRUE){
@@ -141,6 +142,7 @@ void  lastHuanliuIndex()
 void  dispHuanliuData_tjw()
 {
 	  uint8_t buf[MODBID_LEN+2]={0};
+		dispHuanliuTotlNum=0;
 		for(int i=0;i<CIRCULA_485_NUM;i++){
 			if(sheet.cirCula[i].workFlag==RT_TRUE){
 				    dispHuanliuTotlNum++;
