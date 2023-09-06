@@ -18,7 +18,7 @@ extern struct  rt_messagequeue LCDmque;
 uint8_t  sendLCDBuf[LCD_BUF_LEN];
 //uint8_t  recLCDBuf[LCD_BUF_LEN];
 
-
+//const uint8_t sheShiDu[2]={0xA1,0xE6};
 
 //往LCD屏幕发送数据 调用底层串口发送函数
  void LCDDataSend(uint8_t *buf,int lenth)
@@ -281,4 +281,27 @@ void  LCDDispNetOffline()
 		LCDWtite(NET_RESP_ADDR,buf,2*2);
 		
 		
+}
+
+
+void  LCDDispModbusState(int state,uint32_t addr)
+{
+		  uint8_t buf[20]={0};
+			uint8_t len=0;
+			if(state==1){
+				buf[len++]=0xD4;
+				buf[len++]=0XDA;
+				buf[len++]=0xCF;
+				buf[len++]=0XDF;
+
+			}
+			else{
+				buf[len++]=0xc0;
+				buf[len++]=0Xeb;
+				buf[len++]=0xCF;
+				buf[len++]=0XDF;
+			}
+			buf[len++]=0xff;
+			buf[len++]=0xff;
+			LCDWtite(addr,buf,len);
 }

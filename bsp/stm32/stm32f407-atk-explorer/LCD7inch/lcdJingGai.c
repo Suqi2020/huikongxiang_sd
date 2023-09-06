@@ -34,7 +34,7 @@ void  dispJinggaiData()
 				LCDWtite(DISP_DATA_COVER_SWITCH2P_ADDR,buf,2);
 				LCDWtite(DISP_DATA_COVER_VIBRATION_ADDR,buf,2);
 				LCDWtite(DISP_DATA_COVER_SWITCH1P_ADDR,buf,2);
-	
+	      LCDDispModbusState(0,DISP_DATA_COVER_STATE_ADDR);
 		}
 		else{
 				//ÏÔÊ¾×ÜÒ³Êý
@@ -83,7 +83,7 @@ void  dispJinggaiData()
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_COVER_SWITCH1P_ADDR,buf,len);
-				
+				LCDDispModbusState(cover[k].respStat,DISP_DATA_COVER_STATE_ADDR);
 		}
 
 }

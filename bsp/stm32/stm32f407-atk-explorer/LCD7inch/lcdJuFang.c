@@ -39,7 +39,7 @@ void  dispJufangData()
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_A_ADDR,buf,2);
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_B_ADDR,buf,2);
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_C_ADDR,buf,2);
-			
+			  LCDDispModbusState(0,DISP_DATA_JUFANG_STATE_ADDR);
 
 
 		}
@@ -70,51 +70,52 @@ void  dispJufangData()
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_JUFANG_ID_ADDR,buf,len);
 				
-				sprintf((char *)buf,"%u",partDiscStru_p[k].amplitudeA);
+				sprintf((char *)buf,"%uPc",partDiscStru_p[k].amplitudeA);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_JUFANG_PD_A_ADDR,buf,len);
-				sprintf((char *)buf,"%u",partDiscStru_p[k].amplitudeB);
+				sprintf((char *)buf,"%uPc",partDiscStru_p[k].amplitudeB);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_JUFANG_PD_B_ADDR,buf,len);
-				sprintf((char *)buf,"%u",partDiscStru_p[k].amplitudeC);
+				sprintf((char *)buf,"%uPc",partDiscStru_p[k].amplitudeC);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_JUFANG_PD_C_ADDR,buf,len);
-				sprintf((char *)buf,"%u",partDiscStru_p[k].freqA);
+				sprintf((char *)buf,"%uHz",partDiscStru_p[k].freqA);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_JUFANG_FREQ_A_ADDR,buf,len);
-				sprintf((char *)buf,"%u",partDiscStru_p[k].freqB);
+				sprintf((char *)buf,"%uHz",partDiscStru_p[k].freqB);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_JUFANG_FREQ_B_ADDR,buf,len);
-				sprintf((char *)buf,"%u",partDiscStru_p[k].freqC);
+				sprintf((char *)buf,"%uHz",partDiscStru_p[k].freqC);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_JUFANG_FREQ_C_ADDR,buf,len);
-				sprintf((char *)buf,"%u",partDiscStru_p[k].dischargeA);
+				sprintf((char *)buf,"%uPc",partDiscStru_p[k].dischargeA);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_A_ADDR,buf,len);
-				sprintf((char *)buf,"%u",partDiscStru_p[k].dischargeB);
+				sprintf((char *)buf,"%uPc",partDiscStru_p[k].dischargeB);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_B_ADDR,buf,len);
-				sprintf((char *)buf,"%u",partDiscStru_p[k].dischargeC);
+				sprintf((char *)buf,"%uPc",partDiscStru_p[k].dischargeC);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_C_ADDR,buf,len);
+				LCDDispModbusState(partDiscStru_p[k].respStat,DISP_DATA_JUFANG_STATE_ADDR);
 		}
 
 }

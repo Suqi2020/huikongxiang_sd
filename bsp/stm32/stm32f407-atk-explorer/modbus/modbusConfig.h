@@ -240,7 +240,7 @@ typedef struct{
 		uint32_t  dischargeCLowFlag;
 }partDisChgFlagStru;
 
-
+//extern const uint8_t sheShiDu[2];
 
 #define GAS_NUM               2
 #define THREEAXIS_485_NUM     40

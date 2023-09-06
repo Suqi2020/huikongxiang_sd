@@ -39,6 +39,7 @@ void  dispHuanliuData()
 				LCDWtite(DISP_DATA_HUANLIU_LOADR_A_ADDR,buf,2);
 				LCDWtite(DISP_DATA_HUANLIU_LOADR_B_ADDR,buf,2);
 				LCDWtite(DISP_DATA_HUANLIU_LOADR_C_ADDR,buf,2);
+			  LCDDispModbusState(0,DISP_DATA_HUANLIU_STATE_ADDR);
 		}
 		else{
 		
@@ -69,25 +70,26 @@ void  dispHuanliuData()
 				LCDWtite(DISP_DATA_HUANLIU_ID_ADDR,buf,len);
 
 					
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k].circlCurA);
+				sprintf((char *)buf,"%0.2fA",cirCurStru_p[k].circlCurA);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_HUANLIU_EARTH_A_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k].circlCurB);
+				sprintf((char *)buf,"%0.2fA",cirCurStru_p[k].circlCurB);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_HUANLIU_EARTH_B_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",cirCurStru_p[k].circlCurC);
+				sprintf((char *)buf,"%0.2fA",cirCurStru_p[k].circlCurC);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_HUANLIU_EARTH_C_ADDR,buf,len);
-				buf[0]='0';
-				buf[1]=0xff;
-				buf[2]=0xff;
-				LCDWtite(DISP_DATA_HUANLIU_RUN_A_ADDR,buf,3);
+				sprintf((char *)buf,"%0.2fA",cirCurStru_p[k].circlCurD);
+				len=strlen((char *)buf);
+				buf[len++]=0xff;
+				buf[len++]=0xff;
+				LCDWtite(DISP_DATA_HUANLIU_RUN_A_ADDR,buf,len);
 				buf[0]='0';
 				buf[1]=0xff;
 				buf[2]=0xff;
@@ -108,6 +110,7 @@ void  dispHuanliuData()
 				buf[1]=0xff;
 				buf[2]=0xff;
 				LCDWtite(DISP_DATA_HUANLIU_LOADR_C_ADDR,buf,3);
+				LCDDispModbusState(cirCurStru_p[k].respStat,DISP_DATA_HUANLIU_STATE_ADDR);
 		}
 
 }
@@ -181,25 +184,25 @@ void  dispHuanliuData_tjw()
 								buf[len++]	=0xff;  
 								buf[len++]  =0xff; 
 								LCDWtite(DISP_DATA_HUANLIU1_ID_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurA);
+								sprintf((char *)buf,"%0.2fA",cirCurStru_p[k1].circlCurA);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_HUANLIU1_EARTH_A_TJW_ADDR,buf,len);
 
-								sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurB);
+								sprintf((char *)buf,"%0.2fA",cirCurStru_p[k1].circlCurB);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_HUANLIU1_EARTH_B_TJW_ADDR,buf,len);
 
-								sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurC);
+								sprintf((char *)buf,"%0.2fA",cirCurStru_p[k1].circlCurC);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_HUANLIU1_EARTH_C_TJW_ADDR,buf,len);
 
-								sprintf((char *)buf,"%0.2f",cirCurStru_p[k1].circlCurD);
+								sprintf((char *)buf,"%0.2fA",cirCurStru_p[k1].circlCurD);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
@@ -222,25 +225,25 @@ void  dispHuanliuData_tjw()
 									buf[len++]	=0xff;  
 									buf[len++]  =0xff; 
 									LCDWtite(DISP_DATA_HUANLIU2_ID_TJW_ADDR,buf,len);
-									sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurA);
+									sprintf((char *)buf,"%0.2fA",cirCurStru_p[k2].circlCurA);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_HUANLIU2_EARTH_A_TJW_ADDR,buf,len);
 
-									sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurB);
+									sprintf((char *)buf,"%0.2fA",cirCurStru_p[k2].circlCurB);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_HUANLIU2_EARTH_B_TJW_ADDR,buf,len);
 
-									sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurC);
+									sprintf((char *)buf,"%0.2fA",cirCurStru_p[k2].circlCurC);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_HUANLIU2_EARTH_C_TJW_ADDR,buf,len);
 
-									sprintf((char *)buf,"%0.2f",cirCurStru_p[k2].circlCurD);
+									sprintf((char *)buf,"%0.2fA",cirCurStru_p[k2].circlCurD);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
 									buf[len++]=0xff;

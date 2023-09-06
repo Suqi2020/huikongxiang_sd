@@ -31,7 +31,7 @@ void  dispChenjiangData()
 				LCDWtite(DISP_DATA_CEHNJIANG_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CEHNJIANG_TEMP_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CEHNJIANG_HEIGHT_ADDR,buf,2);
-
+        LCDDispModbusState(0,DISP_DATA_CEHNJIANG_STATE_ADDR);
 
 		}
 		else{
@@ -61,17 +61,17 @@ void  dispChenjiangData()
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_CEHNJIANG_ID_ADDR,buf,len);
 				
-				sprintf((char *)buf,"%0.2f",pressSettle[k].height.flotVal);
+				sprintf((char *)buf,"%0.2fmm",pressSettle[k].height.flotVal);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_CEHNJIANG_HEIGHT_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",pressSettle[k].temp);
+				sprintf((char *)buf,"%0.2f¡æ",pressSettle[k].temp);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_CEHNJIANG_TEMP_ADDR,buf,len);
-
+        LCDDispModbusState(pressSettle[k].respStat,DISP_DATA_CEHNJIANG_STATE_ADDR);
 		}
 
 }
@@ -157,13 +157,14 @@ void  dispChenjiangData_tjw()
 									buf[len++]  =0xff; 
 									LCDWtite(DISP_DATA_CEHNJIANG1_ID_TJW_ADDR,buf,len);
 									
-									sprintf((char *)buf,"%0.2f",pressSettle[k1].height.flotVal);
+									sprintf((char *)buf,"%0.2fmm",pressSettle[k1].height.flotVal);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_CEHNJIANG1_HEIGHT_TJW_ADDR,buf,len);
-									sprintf((char *)buf,"%0.2f",pressSettle[k1].temp);
+									sprintf((char *)buf,"%0.1f¡æ",pressSettle[k1].temp);
 									len=strlen((char *)buf);
+									
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_CEHNJIANG1_TEMP_TJW_ADDR,buf,len);
@@ -185,12 +186,12 @@ void  dispChenjiangData_tjw()
 									buf[len++]  =0xff; 
 									LCDWtite(DISP_DATA_CEHNJIANG2_ID_TJW_ADDR,buf,len);
 									
-									sprintf((char *)buf,"%0.2f",pressSettle[k2].height.flotVal);
+									sprintf((char *)buf,"%0.2fmm",pressSettle[k2].height.flotVal);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_CEHNJIANG2_HEIGHT_TJW_ADDR,buf,len);
-									sprintf((char *)buf,"%0.2f",pressSettle[k2].temp);
+									sprintf((char *)buf,"%0.1f¡æ",pressSettle[k2].temp);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
 									buf[len++]=0xff;
@@ -213,13 +214,15 @@ void  dispChenjiangData_tjw()
 									buf[len++]  =0xff; 
 									LCDWtite(DISP_DATA_CEHNJIANG3_ID_TJW_ADDR,buf,len);
 									
-									sprintf((char *)buf,"%0.2f",pressSettle[k3].height.flotVal);
+									sprintf((char *)buf,"%0.2fmm",pressSettle[k3].height.flotVal);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_CEHNJIANG3_HEIGHT_TJW_ADDR,buf,len);
-									sprintf((char *)buf,"%0.2f",pressSettle[k3].temp);
+				
+									sprintf((char *)buf,"%0.1f¡æ",pressSettle[k3].temp);
 									len=strlen((char *)buf);
+
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_CEHNJIANG3_TEMP_TJW_ADDR,buf,len);
@@ -241,13 +244,16 @@ void  dispChenjiangData_tjw()
 									buf[len++]  =0xff; 
 									LCDWtite(DISP_DATA_CEHNJIANG4_ID_TJW_ADDR,buf,len);
 									
-									sprintf((char *)buf,"%0.2f",pressSettle[k4].height.flotVal);
+									sprintf((char *)buf,"%0.2fmm",pressSettle[k4].height.flotVal);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_CEHNJIANG4_HEIGHT_TJW_ADDR,buf,len);
-									sprintf((char *)buf,"%0.2f",pressSettle[k4].temp);
+									sprintf((char *)buf,"%0.1f¡æ",pressSettle[k4].temp);
 									len=strlen((char *)buf);
+//									buf[len++]=sheShiDu[0];
+//									buf[len++]=sheShiDu[1];
+
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_CEHNJIANG4_TEMP_TJW_ADDR,buf,len);

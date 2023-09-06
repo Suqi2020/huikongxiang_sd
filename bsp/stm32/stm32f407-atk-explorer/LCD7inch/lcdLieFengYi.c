@@ -30,7 +30,7 @@ void  dispLiefengData()
 				LCDWtite(DISP_DATA_LIEFENG_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_LIEFENG_TEMP_ADDR,buf,2);
 				LCDWtite(DISP_DATA_LIEFENG_DISTANC_ADDR,buf,2);
-
+				LCDDispModbusState(0,DISP_DATA_LIEFENG_STATE_ADDR);
 		}
 		else{
 				//ÏÔÊ¾×ÜÒ³Êý
@@ -59,17 +59,17 @@ void  dispLiefengData()
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_LIEFENG_ID_ADDR,buf,len);
 				
-				sprintf((char *)buf,"%0.2f",crackMeter[k].temp.flotVal);
+				sprintf((char *)buf,"%0.1f¡æ",crackMeter[k].temp.flotVal);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_LIEFENG_TEMP_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",crackMeter[k].distanc.flotVal);
+				sprintf((char *)buf,"%0.2fmm",crackMeter[k].distanc.flotVal);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_LIEFENG_DISTANC_ADDR,buf,len);
-				
+				LCDDispModbusState(crackMeter[k].respStat,DISP_DATA_LIEFENG_STATE_ADDR);
 		}
 
 }

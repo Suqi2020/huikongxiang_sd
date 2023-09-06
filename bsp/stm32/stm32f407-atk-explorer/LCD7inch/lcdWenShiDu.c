@@ -31,7 +31,7 @@ void  dispWenshiduData()
 				LCDWtite(DISP_DATA_WENSHIDU_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_WENSHIDU_TEMP_ADDR,buf,2);
 				LCDWtite(DISP_DATA_WENSHIDU_HUMI_ADDR,buf,2);
-
+				LCDDispModbusState(0,DISP_DATA_WENSHIDU_STATE_ADDR);
 		}
 		else{
 				//ÏÔÊ¾×ÜÒ³Êý
@@ -60,17 +60,19 @@ void  dispWenshiduData()
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_WENSHIDU_ID_ADDR,buf,len);
 				
-				sprintf((char *)buf,"%0.2f",thum[k].temp);
+				sprintf((char *)buf,"%0.1f¡æ",thum[k].temp);
 				len=strlen((char *)buf);
+//				buf[len++]=sheShiDu[0];
+//				buf[len++]=sheShiDu[1];
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_WENSHIDU_TEMP_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",thum[k].hum);
+				sprintf((char *)buf,"%0.1f%%RH",thum[k].hum);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_WENSHIDU_HUMI_ADDR,buf,len);
-
+				LCDDispModbusState(thum[k].respStat,DISP_DATA_WENSHIDU_STATE_ADDR);
 		}
 
 }

@@ -332,6 +332,7 @@
 #define 			DISP_DATA_HUANLIU_TOTALNUM_ADDR       0X715A
 #define 			KEY_DATA_HUANLIU_LAST_ADDR            0X715C
 #define 			KEY_DATA_HUANLIU_NEXT_ADDR            0X715E
+#define       DISP_DATA_HUANLIU_STATE_ADDR          0X7160
 //Ìì¾®ÍÝ start
 
 #define  KEY_CHOOSE_HUAJING_TJW_ADDR             0X2020
@@ -367,30 +368,30 @@
 #define 			DISP_DATA_JUFANG_TOTALNUM_ADDR      0X725A
 #define 			KEY_DATA_JUFANG_LAST_ADDR           0X725C
 #define 			KEY_DATA_JUFANG_NEXT_ADDR           0X725E
-
+#define       DISP_DATA_JUFANG_STATE_ADDR         0X7260
 
 //³Á½µÒÇ  73.bmp
 #define 			DISP_DATA_CEHNJIANG_ID_ADDR            0X7300
-#define       DISP_DATA_CEHNJIANG_TEMP_ADDR      		 0x7310
-#define       DISP_DATA_CEHNJIANG_HEIGHT_ADDR			 	 0X732A
+#define       DISP_DATA_CEHNJIANG_TEMP_ADDR      		 0X732A 
+#define       DISP_DATA_CEHNJIANG_HEIGHT_ADDR			 	 0x7310
 #define 			DISP_DATA_CEHNJIANG_TOTALNUM_ADDR      0X735A
 #define 			KEY_DATA_CEHNJIANG_LAST_ADDR           0X735C
 #define 			KEY_DATA_CEHNJIANG_NEXT_ADDR           0X735E
-
+#define       DISP_DATA_CEHNJIANG_STATE_ADDR         0X7360
 
 //Ìì¾®ÍÝ start
 #define 			DISP_DATA_CEHNJIANG1_ID_TJW_ADDR             0X7360
-#define       DISP_DATA_CEHNJIANG1_TEMP_TJW_ADDR      		 0x7370
-#define       DISP_DATA_CEHNJIANG1_HEIGHT_TJW_ADDR			 	 0X737A
+#define       DISP_DATA_CEHNJIANG1_HEIGHT_TJW_ADDR      		 0x7370
+#define       DISP_DATA_CEHNJIANG1_TEMP_TJW_ADDR			 	 0X737A
 #define 			DISP_DATA_CEHNJIANG2_ID_TJW_ADDR             0X7380
-#define       DISP_DATA_CEHNJIANG2_TEMP_TJW_ADDR      		 0x7390
-#define       DISP_DATA_CEHNJIANG2_HEIGHT_TJW_ADDR			 	 0X739A
+#define       DISP_DATA_CEHNJIANG2_HEIGHT_TJW_ADDR      		 0x7390
+#define       DISP_DATA_CEHNJIANG2_TEMP_TJW_ADDR			 	 0X739A
 #define 			DISP_DATA_CEHNJIANG3_ID_TJW_ADDR             0X73A0
-#define       DISP_DATA_CEHNJIANG3_TEMP_TJW_ADDR      		 0x73B0
-#define       DISP_DATA_CEHNJIANG3_HEIGHT_TJW_ADDR			 	 0X73BA
+#define       DISP_DATA_CEHNJIANG3_HEIGHT_TJW_ADDR      		 0x73B0
+#define       DISP_DATA_CEHNJIANG3_TEMP_TJW_ADDR			 	 0X73BA
 #define 			DISP_DATA_CEHNJIANG4_ID_TJW_ADDR            0X73C0
-#define       DISP_DATA_CEHNJIANG4_TEMP_TJW_ADDR      		 0x73D0
-#define       DISP_DATA_CEHNJIANG4_HEIGHT_TJW_ADDR			 	 0X73DA
+#define       DISP_DATA_CEHNJIANG4_HEIGHT_TJW_ADDR      		 0x73D0
+#define       DISP_DATA_CEHNJIANG4_TEMP_TJW_ADDR			 	 0X73DA
 //Ìì¾®ÍÝ end
 
 //·ÀÍâÆÆ  74.bmp
@@ -402,6 +403,10 @@
 #define 			DISP_DATA_FANGWAIPO_TOTALNUM_ADDR     0X745A
 #define 			KEY_DATA_FANGWAIPO_LAST_ADDR          0X745C
 #define 			KEY_DATA_FANGWAIPO_NEXT_ADDR          0X745E
+#define       DISP_DATA_FANGWAIPO_STATE_ADDR         0X7460
+
+
+
 
 //Ìì¾®ÍÝ start
 #define 			DISP_DATA_FANGWAIPO1_ID_TJW_ADDR            0X7430
@@ -434,7 +439,7 @@
 #define 			DISP_DATA_CH4_TOTALNUM_ADDR    	  0X755A
 #define 			KEY_DATA_CH4_LAST_ADDR          	0X755C
 #define 			KEY_DATA_CH4_NEXT_ADDR          	0X755E
-
+#define       DISP_DATA_CH4_STATE_ADDR          0X7560
 
 
 
@@ -444,7 +449,7 @@
 #define 			DISP_DATA_O2_TOTALNUM_ADDR    	0X765A
 #define 			KEY_DATA_O2_LAST_ADDR          	0X765C
 #define 			KEY_DATA_O2_NEXT_ADDR          	0X765E
-
+#define       DISP_DATA_O2_STATE_ADDR          0X7660
 
 //Áò»¯Çâ  77.bmp
 #define 			DISP_DATA_H2S_ID_ADDR           	0X7700
@@ -452,7 +457,7 @@
 #define 			DISP_DATA_H2S_TOTALNUM_ADDR    	0X775A
 #define 			KEY_DATA_H2S_LAST_ADDR          	0X775C
 #define 			KEY_DATA_H2S_NEXT_ADDR          	0X775E
-
+#define       DISP_DATA_H2S_STATE_ADDR          0X7760
 
 //Ò»Ñõ»¯Ì¼  78.bmp
 #define 			DISP_DATA_CO_ID_ADDR           	0X7800
@@ -460,6 +465,7 @@
 #define 			DISP_DATA_CO_TOTALNUM_ADDR    	0X785A
 #define 			KEY_DATA_CO_LAST_ADDR          	0X785C
 #define 			KEY_DATA_CO_NEXT_ADDR          	0X785E
+#define       DISP_DATA_CO_STATE_ADDR          0X7860
 
 //ÎÂÊª¶È  79.bmp
 #define 			DISP_DATA_WENSHIDU_ID_ADDR            0X7900
@@ -468,19 +474,22 @@
 #define 			DISP_DATA_WENSHIDU_TOTALNUM_ADDR      0X795A
 #define 			KEY_DATA_WENSHIDU_LAST_ADDR           0X795C
 #define 			KEY_DATA_WENSHIDU_NEXT_ADDR           0X795E
+#define       DISP_DATA_WENSHIDU_STATE_ADDR          0X7960
 //Ë®Î»  80.bmp
 #define 			DISP_DATA_WATER_ID_ADDR            0X8000
 #define       DISP_DATA_WATER_DEPTH_ADDR      	 0x8010
 #define 			DISP_DATA_WATER_TOTALNUM_ADDR      0X805A
 #define 			KEY_DATA_WATER_LAST_ADDR           0X805C
 #define 			KEY_DATA_WATER_NEXT_ADDR           0X805E
+#define       DISP_DATA_WATER_STATE_ADDR          0X8060
 //ÁÑ·ìÒÇ 81.bmp
 #define 			DISP_DATA_LIEFENG_ID_ADDR            0X8100
-#define       DISP_DATA_LIEFENG_TEMP_ADDR      		 0x8110
-#define       DISP_DATA_LIEFENG_DISTANC_ADDR			 0X812A
+#define       DISP_DATA_LIEFENG_TEMP_ADDR      		 0X812A 
+#define       DISP_DATA_LIEFENG_DISTANC_ADDR			 0x8110
 #define 			DISP_DATA_LIEFENG_TOTALNUM_ADDR      0X815A
 #define 			KEY_DATA_LIEFENG_LAST_ADDR           0X815C
 #define 			KEY_DATA_LIEFENG_NEXT_ADDR           0X815E
+#define       DISP_DATA_LIEFENG_STATE_ADDR          0X8160
 //¾®¸Ç 82.bmp
 #define 			DISP_DATA_COVER_ID_ADDR            0X8200
 #define       DISP_DATA_COVER_INCLINE_ADDR       0x8210
@@ -490,7 +499,7 @@
 #define 			DISP_DATA_COVER_TOTALNUM_ADDR      0X825A
 #define 			KEY_DATA_COVER_LAST_ADDR           0X825C
 #define 			KEY_DATA_COVER_NEXT_ADDR           0X825E
-
+#define       DISP_DATA_COVER_STATE_ADDR          0X8260
 
 
 
@@ -575,7 +584,7 @@
 extern bool pwssWdRet;
 
 extern int LCDWtite(uint16_t addr,uint8_t *data,uint8_t dataLen);
-
+extern void  LCDDispModbusState(int state,uint32_t addr);
 
 //typedef struct{
 //		char  name[25];

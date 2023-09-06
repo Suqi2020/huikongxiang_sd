@@ -4,10 +4,11 @@
 extern float ch4[CH4_485_NUM];
 static int dispCH4Index=0;
 static int dispCH4TotlNum=0;
+extern int ch4State(int i);
 //显示环流界面71.bmp的所有数据
 void  dispCH4Data()
 {
-	  uint8_t buf[MODBID_LEN+2]={0};
+	  uint8_t buf[MODBID_LEN+2+10]={0};
 		dispCH4TotlNum=0;
 	  for(int i=0;i<CH4_485_NUM;i++){
 			if(sheet.ch4[i].workFlag==RT_TRUE){
@@ -24,6 +25,7 @@ void  dispCH4Data()
 				buf[1]=0xff;
 				LCDWtite(DISP_DATA_CH4_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CH4_VALUE_ADDR,buf,2);
+        LCDDispModbusState(0,DISP_DATA_CH4_STATE_ADDR);
 		}
 		else{
 				//显示总页数
@@ -52,11 +54,13 @@ void  dispCH4Data()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_CH4_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",ch4[k]);
+				sprintf((char *)buf,"%0.1f%%LEL",ch4[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_CH4_VALUE_ADDR,buf,len);
+
+				LCDDispModbusState(ch4State(k),DISP_DATA_CH4_STATE_ADDR);
 		}
 }
 
@@ -91,6 +95,7 @@ void  lastCH4Index()
 extern float o2[O2_485_NUM];
 static int dispO2Index=0;
 int dispO2TotlNum=0;
+int o2State(int i);
 //显示环流界面71.bmp的所有数据
 void  dispO2Data()
 {
@@ -111,6 +116,8 @@ void  dispO2Data()
 				buf[1]=0xff;
 				LCDWtite(DISP_DATA_O2_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_O2_VALUE_ADDR,buf,2);
+
+				LCDDispModbusState(0,DISP_DATA_O2_STATE_ADDR);
 		}
 		else{
 				//显示总页数
@@ -138,11 +145,13 @@ void  dispO2Data()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_O2_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",o2[k]);
+				sprintf((char *)buf,"%0.2f%%vol",o2[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_O2_VALUE_ADDR,buf,len);
+
+				LCDDispModbusState(o2State(k),DISP_DATA_O2_STATE_ADDR);
 		}
 }
 
@@ -176,6 +185,7 @@ void  lastO2Index()
 extern float h2s[H2S_485_NUM];
 static int dispH2SIndex=0;
 int dispH2STotlNum=0;
+int h2sState(int i);
 //显示H2S界面71.bmp的所有数据
 void  dispH2SData()
 {
@@ -196,6 +206,8 @@ void  dispH2SData()
 				buf[1]=0xff;
 				LCDWtite(DISP_DATA_H2S_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_H2S_VALUE_ADDR,buf,2);
+
+				LCDDispModbusState(0,DISP_DATA_H2S_STATE_ADDR);
 		}
 		else{
 				//显示总页数
@@ -223,11 +235,13 @@ void  dispH2SData()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_H2S_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",h2s[k]);
+				sprintf((char *)buf,"%0.1fppm",h2s[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_H2S_VALUE_ADDR,buf,len);
+
+				LCDDispModbusState(h2sState(k),DISP_DATA_H2S_STATE_ADDR);
 		}
 }
 
@@ -261,6 +275,7 @@ void  lastH2SIndex()
 extern float co[CO_485_NUM];
 static int dispCOIndex=0;
 int dispCOTotlNum=0;
+int coState(int i);
 //显示环流界面71.bmp的所有数据
 void  dispCOData()
 {
@@ -281,6 +296,7 @@ void  dispCOData()
 				buf[1]=0xff;
 				LCDWtite(DISP_DATA_CO_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CO_VALUE_ADDR,buf,2);
+				LCDDispModbusState(0,DISP_DATA_CO_STATE_ADDR);
 		}
 		else{
 				//显示总页数
@@ -309,11 +325,12 @@ void  dispCOData()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_CO_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",co[k]);
+				sprintf((char *)buf,"%0.1fppm",co[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_CO_VALUE_ADDR,buf,len);
+				LCDDispModbusState(coState(k),DISP_DATA_CO_STATE_ADDR);
 		}
 }
 

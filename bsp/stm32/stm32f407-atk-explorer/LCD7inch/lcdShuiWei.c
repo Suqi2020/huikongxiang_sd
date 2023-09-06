@@ -3,6 +3,7 @@
 extern float waterDepth[WATERDEPTH_485_NUM];
 static int dispWaterIndex=0;
 static int dispWaterTotlNum=0;
+int waterDepthState(int i);
 //显示环流界面71.bmp的所有数据
 void  dispWaterData()
 {
@@ -23,6 +24,7 @@ void  dispWaterData()
 				buf[1]=0xff;
 				LCDWtite(DISP_DATA_WATER_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_WATER_DEPTH_ADDR,buf,2);
+			  LCDDispModbusState(0,DISP_DATA_WATER_STATE_ADDR);
 		}
 		else{
 				//显示总页数
@@ -50,11 +52,12 @@ void  dispWaterData()
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_WATER_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",waterDepth[k]);
+				sprintf((char *)buf,"%0.2fm",waterDepth[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_WATER_DEPTH_ADDR,buf,len);
+				LCDDispModbusState(waterDepthState(k),DISP_DATA_WATER_STATE_ADDR);
 		}
 }
 

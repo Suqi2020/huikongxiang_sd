@@ -34,6 +34,7 @@ void  dispWaipoData()
 				LCDWtite(DISP_DATA_FANGWAIPO_ACCY_ADDR,buf,2);
 				LCDWtite(DISP_DATA_FANGWAIPO_ACCZ_ADDR,buf,2);
 				LCDWtite(DISP_DATA_FANGWAIPO_TEMP_ADDR,buf,2);
+        LCDDispModbusState(0,DISP_DATA_FANGWAIPO_STATE_ADDR);
 
 		}
 		else{
@@ -64,26 +65,27 @@ void  dispWaipoData()
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_FANGWAIPO_ID_ADDR,buf,len);
 				
-				sprintf((char *)buf,"%u",threeAxisp[k].acclrationX);
+				sprintf((char *)buf,"%umg",threeAxisp[k].acclrationX);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_FANGWAIPO_ACCX_ADDR,buf,len);
-				sprintf((char *)buf,"%u",threeAxisp[k].acclrationY);
+				sprintf((char *)buf,"%umg",threeAxisp[k].acclrationY);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_FANGWAIPO_ACCY_ADDR,buf,len);
-				sprintf((char *)buf,"%u",threeAxisp[k].acclrationZ);
+				sprintf((char *)buf,"%umg",threeAxisp[k].acclrationZ);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_FANGWAIPO_ACCZ_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f",threeAxisp[k].temp);
+				sprintf((char *)buf,"%0.2f¡æ",threeAxisp[k].temp);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_FANGWAIPO_TEMP_ADDR,buf,len);
+        LCDDispModbusState(threeAxisp[k].respStat,DISP_DATA_FANGWAIPO_STATE_ADDR);
 		}
 
 }
@@ -171,22 +173,22 @@ void  dispWaipoData_tjw()
 								buf[len++]  =0xff; 
 								LCDWtite(DISP_DATA_FANGWAIPO1_ID_TJW_ADDR,buf,len);
 								
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationX);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationX);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO1_ACCX_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationY);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationY);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO1_ACCY_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationZ);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationZ);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO1_ACCZ_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%0.2f",threeAxisp[i].temp);
+								sprintf((char *)buf,"%0.2f¡æ",threeAxisp[i].temp);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
@@ -210,22 +212,22 @@ void  dispWaipoData_tjw()
 								buf[len++]  =0xff; 
 								LCDWtite(DISP_DATA_FANGWAIPO2_ID_TJW_ADDR,buf,len);
 								
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationX);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationX);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO2_ACCX_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationY);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationY);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO2_ACCY_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationZ);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationZ);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO2_ACCZ_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%0.2f",threeAxisp[i].temp);
+								sprintf((char *)buf,"%0.2f¡æ",threeAxisp[i].temp);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
@@ -249,22 +251,22 @@ void  dispWaipoData_tjw()
 								buf[len++]  =0xff; 
 								LCDWtite(DISP_DATA_FANGWAIPO3_ID_TJW_ADDR,buf,len);
 								
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationX);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationX);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO3_ACCX_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationY);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationY);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO3_ACCY_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationZ);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationZ);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO3_ACCZ_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%0.2f",threeAxisp[i].temp);
+								sprintf((char *)buf,"%0.2f¡æ",threeAxisp[i].temp);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
@@ -288,26 +290,27 @@ void  dispWaipoData_tjw()
 								buf[len++]  =0xff; 
 								LCDWtite(DISP_DATA_FANGWAIPO4_ID_TJW_ADDR,buf,len);
 								
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationX);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationX);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO4_ACCX_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationY);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationY);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO4_ACCY_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%u",threeAxisp[i].acclrationZ);
+								sprintf((char *)buf,"%umg",threeAxisp[i].acclrationZ);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO4_ACCZ_TJW_ADDR,buf,len);
-								sprintf((char *)buf,"%0.2f",threeAxisp[i].temp);
+								sprintf((char *)buf,"%0.2f¡æ",threeAxisp[i].temp);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_FANGWAIPO4_TEMP_TJW_ADDR,buf,len);
+								
 							  break;
 						}
 						
