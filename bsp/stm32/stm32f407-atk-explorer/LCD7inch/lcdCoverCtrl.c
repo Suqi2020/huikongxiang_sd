@@ -15,24 +15,9 @@ static char nowIndex=0;
 static char totalIndex=0;
 static char index[COVER_485_NUM]={0};
 extern bool  coverUartOnOff(char *ID,bool onOffFlag);
+uint8_t coverLevel[COVER_485_NUM]={0};//记录上次井盖开关状态  重启后丢失 保存的ram里
+void coverDispOnOff(uint8_t flag);
 
-
-void LCDClearOpen()
-{
-	 uint8_t buf[2];
-	 buf[0]=0xff;
-	 buf[1]=0xff;
-	
-	 LCDWtite(TEXT_COVER_OPENRESP_ADDR,buf,2);
-}
-void LCDClearClose()
-{
-	 uint8_t buf[2];
-	 buf[0]=0xff;
-	 buf[1]=0xff;
-	
-	 LCDWtite(TEXT_COVER_CLOSERESP_ADDR,buf,2);
-}
 //登记当前所有index
 static void signIndex()
 {
@@ -87,8 +72,8 @@ void coverNowDisp()
 		 return;
 	 nowIndex=0;
 	 coverDisp();
-	 LCDClearOpen();
-	 LCDClearClose();
+	 coverDispOnOff(coverLevel[index[nowIndex]]);
+
 }
 //下一个井盖
 void coverNextDisp()
@@ -99,8 +84,8 @@ void coverNextDisp()
 	 if(nowIndex>=totalIndex)
 		 nowIndex=0;
 	 coverDisp();
-	 LCDClearOpen();
-	 LCDClearClose();
+	 coverDispOnOff(coverLevel[index[nowIndex]]);
+
 }
 //上一个井盖
 void coverLastDisp()
@@ -112,42 +97,75 @@ void coverLastDisp()
 	 else
 		 nowIndex--;
 	 coverDisp();
-	 LCDClearOpen();
-	 LCDClearClose();
+   coverDispOnOff(coverLevel[index[nowIndex]]);
 }
 
 
 
 
-//开锁
-void coverOpen()
-{
-		LCDClearOpen();
-	 LCDClearClose();
-	 uint8_t buf[10];
 
-		if(coverUartOnOff(sheet.cover[index[nowIndex]].ID,true)==true){//打开成功
-			strcpy((char *)buf,"ON SUCC");//拷贝注意内存溢出  会拷贝0进去
+
+void coverDispOnOff(uint8_t flag)
+{
+	uint8_t buf[10];
+	int len=0;
+	switch (flag){
+		case 0:
+			buf[len++]='O';
+			buf[len++]='N';
+			break;
+		case 1:
+			buf[len++]='O';
+			buf[len++]='F';
+			buf[len++]='F';
+			break;
+		case 2:
+		buf[len++]='E';
+		buf[len++]='R';
+		buf[len++]='R';
+			break;
+		default:
+			
+		break;
+	}
+		buf[len++]=0xff;
+		buf[len++]=0xff;
+		LCDWtite(TEXT_COVER_OPENCLOSERSP_ADDR,buf,len);
+}
+//开锁  开锁成功on  关锁成功 off  开关锁无回应 err
+void  coverOpen(bool openFlag)
+{
+
+
+	 int ret=2;
+	//if(coverUartOnOff(sheet.cover[index[nowIndex]].ID,openFlag)==true){//打开成功
+	if(1){
+			if(openFlag==true){
+			  //strcpy((char *)buf,"ON");//拷贝注意内存溢出  会拷贝0进去
+				ret=0;
+			}
+			else{
+				ret=1;
+			}
 		}
 		else{
-			strcpy((char *)buf,"ON FAIL");//拷贝注意内存溢出  会拷贝0进去
-		}
-	  buf[7]=0xff;
-	  buf[8]=0xff;
-		LCDWtite(TEXT_COVER_OPENRESP_ADDR,buf,9);
+				ret=2;
+			}
+		coverLevel[index[nowIndex]]=ret;
+		coverDispOnOff(ret);
 }
 //关锁
-void coverClose()
-{
-	 LCDClearOpen();
-	 LCDClearClose();
-	 uint8_t buf[12];
+//void coverClose()
+//{
+//	 LCDClearOpen();
+//	 LCDClearClose();
+//	 uint8_t buf[12];
 
-		if(coverUartOnOff(sheet.cover[index[nowIndex]].ID,false)==true)//关闭成功
-			strcpy((char *)buf,"OFF SUCC");
-		else
-			strcpy((char *)buf,"OFF FAIL");
-	 buf[9]=0xff;
-	 buf[10]=0xff;
-		LCDWtite(TEXT_COVER_CLOSERESP_ADDR,buf,10);
-}
+//		if(coverUartOnOff(sheet.cover[index[nowIndex]].ID,false)==true)//关闭成功
+//			strcpy((char *)buf,"OFF SUCC");
+//		else
+//			strcpy((char *)buf,"OFF FAIL");
+//	 buf[9]=0xff;
+//	 buf[10]=0xff;
+//		LCDWtite(TEXT_COVER_CLOSERESP_ADDR,buf,10);
+//}

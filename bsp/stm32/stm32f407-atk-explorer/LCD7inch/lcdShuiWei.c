@@ -42,16 +42,27 @@ void  dispWaterData()
 						}
 				}
 				//œ‘ æidr
-			  int len=0;
+			  int len=0,reduLen=0;
 			  for(len=0;len<MODBID_LEN;len++){
 						buf[len]=sheet.waterDepth[k].ID[len];
 					  if(buf[len]==0){
+							  reduLen=len;
 								break;
 						}
 				}
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_WATER_ID_ADDR,buf,len);
+				
+				
+				len=0;
+			  for(int i=reduLen-3;i<reduLen;i++,len++){
+						buf[len]=sheet.waterDepth[k].ID[i];
+				}
+				buf[len++]	=0xff;  
+				buf[len++]  =0xff; 
+				LCDWtite(DISP_DATA_WATER_REDUID_ADDR,buf,len);
+				
 				sprintf((char *)buf,"%0.2fm",waterDepth[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;

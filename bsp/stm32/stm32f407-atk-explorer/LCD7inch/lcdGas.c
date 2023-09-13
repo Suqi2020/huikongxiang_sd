@@ -5,6 +5,12 @@ extern float ch4[CH4_485_NUM];
 static int dispCH4Index=0;
 static int dispCH4TotlNum=0;
 extern int ch4State(int i);
+
+const char o2SafeValue[] =">19.5%%VOL";
+const char coSafeValue[] ="<24ppm";
+const char h2sSafeValue[]="<6ppm";
+const char ch4afeValue[] ="<10%%LEV";
+
 //显示环流界面71.bmp的所有数据
 void  dispCH4Data()
 {
@@ -45,21 +51,37 @@ void  dispCH4Data()
 
 				//显示idr
 			  int len=0;
+				int reduLen=0;
 			  for(len=0;len<MODBID_LEN;len++){
 						buf[len]=sheet.ch4[k].ID[len];
 					  if(buf[len]==0){
+							  reduLen=len;
 								break;
 						}
 				}
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_CH4_ID_ADDR,buf,len);
+
+				len=0;
+			  for(int i=reduLen-3;i<reduLen;i++,len++){
+						buf[len]=sheet.ch4[k].ID[i];
+				}
+				buf[len++]	=0xff;  
+				buf[len++]  =0xff; 
+				LCDWtite(DISP_DATA_CH4_REDUID_ADDR,buf,len);
+				
+				
+				
 				sprintf((char *)buf,"%0.1f%%LEL",ch4[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_CH4_VALUE_ADDR,buf,len);
-
+				len=strlen((char *)ch4afeValue);
+				buf[len++]=0xff;
+				buf[len++]=0xff;
+				LCDWtite(DISP_DATA_CH4_SAFEVAL_ADDR,buf,len);
 				LCDDispModbusState(ch4State(k),DISP_DATA_CH4_STATE_ADDR);
 		}
 }
@@ -136,21 +158,36 @@ void  dispO2Data()
 				}
 				//显示idr
 			  int len=0;
+				int reduLen=0;
 			  for(len=0;len<MODBID_LEN;len++){
 						buf[len]=sheet.o2[k].ID[len];
 					  if(buf[len]==0){
+							  reduLen=len;
 								break;
 						}
 				}
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_O2_ID_ADDR,buf,len);
-				sprintf((char *)buf,"%0.2f%%vol",o2[k]);
+				
+	      len=0;
+			  for(int i=reduLen-3;i<reduLen;i++,len++){
+						buf[len]=sheet.o2[k].ID[i];
+				}
+				buf[len++]	=0xff;  
+				buf[len++]  =0xff; 
+				LCDWtite(DISP_DATA_O2_REDUID_ADDR,buf,len);
+				
+				sprintf((char *)buf,"%0.1f%%VOL",o2[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_O2_VALUE_ADDR,buf,len);
 
+				len=strlen((char *)o2SafeValue);
+				buf[len++]=0xff;
+				buf[len++]=0xff;
+				LCDWtite(DISP_DATA_O2_SAFEVAL_ADDR,buf,len);
 				LCDDispModbusState(o2State(k),DISP_DATA_O2_STATE_ADDR);
 		}
 }
@@ -225,22 +262,34 @@ void  dispH2SData()
 						}
 				}
 				//显示idr
-			  int len=0;
+			  int len=0,reduLen=0;
 			  for(len=0;len<MODBID_LEN;len++){
 						buf[len]=sheet.h2s[k].ID[len];
 					  if(buf[len]==0){
+							  reduLen=len;
 								break;
 						}
 				}
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_H2S_ID_ADDR,buf,len);
+	      len=0;
+			  for(int i=reduLen-3;i<reduLen;i++,len++){
+						buf[len]=sheet.h2s[k].ID[i];
+				}
+				buf[len++]	=0xff;  
+				buf[len++]  =0xff; 
+				LCDWtite(DISP_DATA_H2S_REDUID_ADDR,buf,len);
 				sprintf((char *)buf,"%0.1fppm",h2s[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_H2S_VALUE_ADDR,buf,len);
-
+				len=strlen((char *)h2sSafeValue);
+				strcpy((char *)buf,h2sSafeValue);
+				buf[len++]=0xff;
+				buf[len++]=0xff;
+				LCDWtite(DISP_DATA_H2S_SAFEVAL_ADDR,buf,len);
 				LCDDispModbusState(h2sState(k),DISP_DATA_H2S_STATE_ADDR);
 		}
 }
@@ -315,21 +364,35 @@ void  dispCOData()
 						}
 				}
 				//显示idr
-			  int len=0;
+			  int len=0,reduLen=0;
 			  for(len=0;len<MODBID_LEN;len++){
 						buf[len]=sheet.co[k].ID[len];
 					  if(buf[len]==0){
+							  reduLen=len;
 								break;
 						}
 				}
 				buf[len++]	=0xff;  
 				buf[len++]  =0xff; 
 				LCDWtite(DISP_DATA_CO_ID_ADDR,buf,len);
+	      len=0;
+			  for(int i=reduLen-3;i<reduLen;i++,len++){
+						buf[len]=sheet.co[k].ID[i];
+				}
+				buf[len++]	=0xff;  
+				buf[len++]  =0xff; 
+				LCDWtite(DISP_DATA_CO_REDUID_ADDR,buf,len);
 				sprintf((char *)buf,"%0.1fppm",co[k]);
 				len=strlen((char *)buf);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_CO_VALUE_ADDR,buf,len);
+				
+				len=strlen((char *)coSafeValue);
+			  strcpy((char *)buf,coSafeValue);
+				buf[len++]=0xff;
+				buf[len++]=0xff;
+				LCDWtite(DISP_DATA_CO_SAFEVAL_ADDR,buf,len);
 				LCDDispModbusState(coState(k),DISP_DATA_CO_STATE_ADDR);
 		}
 }

@@ -166,10 +166,15 @@ void  dispHuanliuData_tjw()
 				LCDWtite(DISP_DATA_HUANLIU2_EARTH_B_TJW_ADDR,buf,2);
 				LCDWtite(DISP_DATA_HUANLIU2_EARTH_C_TJW_ADDR,buf,2);
 				LCDWtite(DISP_DATA_HUANLIU2_CURRENT_TJW_ADDR,buf,2);
+				LCDWtite(DISP_DATA_HUANLIU1_REDUID_TJW_ADDR,buf,2);
+				LCDWtite(DISP_DATA_HUANLIU2_REDUID_TJW_ADDR,buf,2);
+				LCDDispModbusState(0,DISP_DATA_HUANLIU1_STATE_TJW_ADDR);
+				LCDDispModbusState(0,DISP_DATA_HUANLIU2_STATE_TJW_ADDR);
+
 		}
 		else{
 
-				int j=0,k1=0,k2=0;
+				int j=0,k1=0,k2=0,reduLen;
 				for (int i = 0; i < CIRCULA_485_NUM; i++)//查找真正的下标
 				{		
 						if(sheet.cirCula[i].workFlag==RT_TRUE){
@@ -178,12 +183,22 @@ void  dispHuanliuData_tjw()
 								for(len=0;len<MODBID_LEN;len++){
 										buf[len]=sheet.cirCula[k1].ID[len];
 										if(buf[len]==0){
+											  reduLen=len;
 												break;
 										}
 								}
 								buf[len++]	=0xff;  
 								buf[len++]  =0xff; 
 								LCDWtite(DISP_DATA_HUANLIU1_ID_TJW_ADDR,buf,len);
+								
+								len=0;
+								for(int i=reduLen-3;i<reduLen;i++,len++){
+										buf[len]=sheet.cirCula[k1].ID[i];
+								}
+								buf[len++]	=0xff;  
+								buf[len++]  =0xff; 
+								LCDWtite(DISP_DATA_HUANLIU1_REDUID_TJW_ADDR,buf,len);
+						
 								sprintf((char *)buf,"%0.2fA",cirCurStru_p[k1].circlCurA);
 								len=strlen((char *)buf);
 								buf[len++]=0xff;
@@ -207,6 +222,8 @@ void  dispHuanliuData_tjw()
 								buf[len++]=0xff;
 								buf[len++]=0xff;
 								LCDWtite(DISP_DATA_HUANLIU1_CURRENT_TJW_ADDR,buf,len);
+								LCDDispModbusState(cirCurStru_p[k1].respStat,DISP_DATA_HUANLIU1_STATE_TJW_ADDR);
+
 							  break;
 						}
 				}
@@ -219,12 +236,21 @@ void  dispHuanliuData_tjw()
 									for(len=0;len<MODBID_LEN;len++){
 											buf[len]=sheet.cirCula[k2].ID[len];
 											if(buf[len]==0){
+												  reduLen=len;
 													break;
 											}
 									}
 									buf[len++]	=0xff;  
 									buf[len++]  =0xff; 
 									LCDWtite(DISP_DATA_HUANLIU2_ID_TJW_ADDR,buf,len);
+									len=0;
+									for(int i=reduLen-3;i<reduLen;i++,len++){
+											buf[len]=sheet.cirCula[k2].ID[i];
+									}
+									buf[len++]	=0xff;  
+									buf[len++]  =0xff; 
+									LCDWtite(DISP_DATA_HUANLIU2_REDUID_TJW_ADDR,buf,len);
+
 									sprintf((char *)buf,"%0.2fA",cirCurStru_p[k2].circlCurA);
 									len=strlen((char *)buf);
 									buf[len++]=0xff;
@@ -248,16 +274,11 @@ void  dispHuanliuData_tjw()
 									buf[len++]=0xff;
 									buf[len++]=0xff;
 									LCDWtite(DISP_DATA_HUANLIU2_CURRENT_TJW_ADDR,buf,len);
+									LCDDispModbusState(cirCurStru_p[k2].respStat,DISP_DATA_HUANLIU2_STATE_TJW_ADDR);
 									break;
 							}
 					}
 				}
 				//显示idr
-	
-				
-				
-			  
-
 		}
-
 }

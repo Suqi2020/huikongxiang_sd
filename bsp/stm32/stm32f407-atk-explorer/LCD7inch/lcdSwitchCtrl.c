@@ -12,7 +12,9 @@
 const static char sign[]="[LCDSwtich]";
 extern char outName[OUTNAME_NUM][INOUTNAME_LEN];
 int switchInterfaceIndex=0;
-
+void  dispLevelState(char level);
+bool DOLevel[DO_NUM]={0};
+bool SWITCHLevel[SWITCH_NUM]={0};
 
 
 
@@ -197,6 +199,9 @@ void  dispOutputNameIDType()
 		
 									LCDWtite(DISP_SWITCH_TYPE_ADDR,buf,MODEL_LEN);//7寸屏显示18
 									findFlag=true;
+									
+									
+									//dispLevelState(DOLevel[k]);
 							}
 							break;
 						}
@@ -249,6 +254,7 @@ void  dispOutputNameIDType()
 
 								LCDWtite(DISP_SWITCH_TYPE_ADDR,buf,MODEL_LEN);//7寸屏显示18
 								findFlag=true;
+								//dispLevelState(SWITCHLevel[k]);
 						}
 						break;
 					}
@@ -270,14 +276,22 @@ void  dispOutputNameIDType()
 //io数据显示
 void  dispLevelState(char level)
 {
-	  uint8_t buf[2]={0};
+	  uint8_t buf[10]={0};
+		int len=0;
 		if(level==0){
-				buf[1]=0;
+				buf[len++]='O';
+			  buf[len++]='F';
+				buf[len++]='F';
+				buf[len++]=0XFF;
+				buf[len++]=0XFF;
 		}
 		else{
-				buf[1]=1;
+				buf[len++]='O';
+			  buf[len++]='N';
+				buf[len++]=0XFF;
+				buf[len++]=0XFF;
 		}
-		LCDWtite(DISP_SWITCH_LEVEL_ADDR,buf,2);
+		LCDWtite(DISP_SWITCH_LEVEL_ADDR,buf,len);
 }
 
 
@@ -294,36 +308,23 @@ void switchOutputOFFFun(char num);
 
 void levelSet(char level)
 {
+	  
 		switch(switchInterfaceIndex)
 		{
 			case 0://DO
-					for(int k=0;k<DO_NUM;k++){//查一遍 找到 GYNJLXSD000000499  如果
-						if(packFlash.digoutput[k].port==SwitchPortIndexY+1){
-							if(packFlash.digoutput[k].workFlag==RT_TRUE){//打开
-								if(level==0){
-										digOutputOFFFun(SwitchPortIndexY);
-								}
-								else{
-										digOutputONFun(SwitchPortIndexY);
-								}
-							}
-							break;
-						}
-					}
+				if(level==0){
+						digOutputOFFFun(SwitchPortIndexY);
+				}
+				else{
+						digOutputONFun(SwitchPortIndexY);
+				}
 				break;
 			case 1://SWITCH
-				for(int k=0;k<SWITCH_NUM;k++){//查一遍 找到 GYNJLXSD000000499  如果
-					if(packFlash.switchoutput[k].port==SwitchPortIndexY+1){
-						if(packFlash.switchoutput[k].workFlag==RT_TRUE){//打开
-								if(level==0){
-										switchOutputOFFFun(SwitchPortIndexY);
-								}
-								else{
-										switchOutputONFun(SwitchPortIndexY);
-								}
-						}
-						break;
-					}
+				if(level==0){
+						switchOutputOFFFun(SwitchPortIndexY);
+				}
+				else{
+						switchOutputONFun(SwitchPortIndexY);
 				}
 				break;
 			
@@ -333,8 +334,30 @@ bool digOutputReadFun(char num);
 bool v33OutputReadFun(char num);
 bool v5OutputReadFun(char num);
 bool switchOutputReadFun(char num);
+
+//不用配置do和switch 即可使用
 bool levelRead()
 {
+	
+	  rt_kprintf("levelread x=%d,y=%d\n",switchInterfaceIndex,SwitchPortIndexY);
+		switch(switchInterfaceIndex)
+		{
+			case 0://DO
+	
+				return digOutputReadFun(SwitchPortIndexY);
+				break;
+			case 1://SWITCH
+			 return switchOutputReadFun(SwitchPortIndexY);
+				break;
+			
+		}
+		return 0;
+}
+#if 0 //此函数必须在配置DO和SWITCH继电器成功的情况下才能使用  
+bool levelRead()
+{
+	
+	  rt_kprintf("levelread x=%d,y=%d\n",switchInterfaceIndex,SwitchPortIndexY);
 		switch(switchInterfaceIndex)
 		{
 			case 0://DO
@@ -381,3 +404,53 @@ bool levelRead()
 		}
 		return 0;
 }
+
+
+//此函数必须在配置DO和SWITCH继电器成功的情况下才能使用  
+void levelSet(char level)
+{
+	  
+		switch(switchInterfaceIndex)
+		{
+			case 0://DO
+					for(int k=0;k<DO_NUM;k++){//查一遍 找到 GYNJLXSD000000499  如果
+						if(packFlash.digoutput[k].port==SwitchPortIndexY+1){
+							if(packFlash.digoutput[k].workFlag==RT_TRUE)
+							{//打开
+								if(level==0){
+										digOutputOFFFun(SwitchPortIndexY);
+									  
+
+								}
+								else{
+										digOutputONFun(SwitchPortIndexY);
+
+								}
+
+							}
+							break;
+						}
+					}
+				break;
+			case 1://SWITCH
+				for(int k=0;k<SWITCH_NUM;k++){//查一遍 找到 GYNJLXSD000000499  如果
+					if(packFlash.switchoutput[k].port==SwitchPortIndexY+1){
+						if(packFlash.switchoutput[k].workFlag==RT_TRUE)
+							{//打开
+								if(level==0){
+										switchOutputOFFFun(SwitchPortIndexY);
+								}
+								else{
+										switchOutputONFun(SwitchPortIndexY);
+								}
+		
+						}
+						break;
+					}
+				}
+				break;
+			
+		}
+}
+
+#endif

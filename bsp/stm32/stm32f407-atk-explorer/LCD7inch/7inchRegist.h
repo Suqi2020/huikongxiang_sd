@@ -126,25 +126,28 @@
 //#define  KEY_SURE_CHOOSE_MODBUS_ADDR       0X2010
 //#define  KEY_LAST_CHOOSE_MODBUS_ADDR       0X2012
 //#define  KEY_NEXT_CHOOSE_MODBUS_ADDR       0X2014
-#define   KEY_HUANLIU_CHOOSE_ADDR     0X20A0  //值靠后一点
-#define   KEY_JUFANG_CHOOSE_ADDR      0X20A2
+#define   KEY_HUANLIU_CHOOSE_ADDR     		0X20A0  //值靠后一点
+#define   KEY_JUFANG_CHOOSE_ADDR      		0X20A2
 #define   KEY_FANGCHENJIANG_CHOOSE_ADDR   0X20A4
-#define   KEY_FANGWAIPO_CHOOSE_ADDR   0X20A6
-#define   KEY_JIAWAN_CHOOSE_ADDR      0X20A8
-#define   KEY_YANGQI_CHOOSE_ADDR      0X20AA
+#define   KEY_FANGWAIPO_CHOOSE_ADDR   		0X20A6
+#define   KEY_JIAWAN_CHOOSE_ADDR      		0X20A8
+#define   KEY_YANGQI_CHOOSE_ADDR      		0X20AA
 #define   KEY_LIUHUAQING_CHOOSE_ADDR      0X20AC
 #define   KEY_YIYANGHUATAN_CHOOSE_ADDR    0X20AE
-#define   KEY_WENSHIDU_CHOOSE_ADDR     0X20B0
-#define   KEY_SHUIWEI_CHOOSE_ADDR      0X20B2
-#define   KEY_LIEFENGYI_CHOOSE_ADDR    0X20B4
-#define   KEY_JINGGAI_CHOOSE_ADDR      0X20B6
+#define   KEY_WENSHIDU_CHOOSE_ADDR     		0X20B0
+#define   KEY_SHUIWEI_CHOOSE_ADDR      		0X20B2
+#define   KEY_LIEFENGYI_CHOOSE_ADDR    		0X20B4
+#define   KEY_JINGGAI_CHOOSE_ADDR      		0X20B6
 //////////////////////////////////////////////////////////////
 //开关控制界面
 #define   KEY_SWITCH_INTERFACE_ADDR    0x5400
 #define   KEY_SWITCH_PORT_ADDR         0x5402
-#define   KEY_SWITCH_LEVEL_ADDR        0x5404
-#define   KEY_SWITCH_SURE_ADDR         0x5406
+//#define   KEY_SWITCH_LEVEL_ADDR        0x5404
+//#define   KEY_SWITCH_SURE_ADDR         0x5406
 #define   KEY_SWITCH_RETURN_ADDR       0x5408
+
+//#define   KEY_SWITCH_ON_ADDR         	 0x540A
+//#define   KEY_SWITCH_OFF_ADDR          0x5404
 
 //#define   DISP_SWITCH_INTERFACE_ADDR   0x5440
 #define   DISP_SWITCH_PORT_ADDR        0x540C
@@ -154,24 +157,24 @@
 #define   DISP_SWITCH_LEVEL_ADDR       0x5414
 
 //开关控制调出接口显示界面
-#define   DISP_SWITCH_INTERFACE_ADDR  0x5410
+#define   DISP_SWITCH_INTERFACE_ADDR   0x5410
 
-#define   KEY_SWITCHINTERF_SURE_ADDR    		0x5418
+//#define   KEY_SWITCHINTERF_SURE_ADDR    		0x5418
 #define   KEY_SWITCHINTERF_NEXT_ADDR        0x541A
 #define   KEY_SWITCHINTERF_LAST_ADDR        0x541C
 #define   KEY_SWITCHINTERF_RETURN_ADDR      0x541E
 //开关控制调出port显示界面
 #define   DISP_SWITCHPORT_PORT_ADDR         0x5420
 
-#define   KEY_SWITCHPORT_SURE_ADDR    			0x5422
+//#define   KEY_SWITCHPORT_SURE_ADDR    			0x5422
 #define   KEY_SWITCHPORT_NEXT_ADDR        	0x5424
 #define   KEY_SWITCHPORT_LAST_ADDR        	0x5426
 #define   KEY_SWITCHPORT_RETURN_ADDR      	0x5428
 //开关控制调出电平显示界面
 #define   KEY_SWITCHLEVEL_ON_ADDR    				0x542A
 #define   KEY_SWITCHLEVEL_OFF_ADDR    			0x542C
-#define   KEY_SWITCHLEVEL_SURE_ADDR    			0x542E
-#define   KEY_SWITCHLEVEL_RETURN_ADDR    		0x5430
+//#define   KEY_SWITCHLEVEL_SURE_ADDR    			0x542E
+//#define   KEY_SWITCHLEVEL_RETURN_ADDR    		0x5430
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //输入界面
@@ -332,7 +335,10 @@
 #define 			DISP_DATA_HUANLIU_TOTALNUM_ADDR       0X715A
 #define 			KEY_DATA_HUANLIU_LAST_ADDR            0X715C
 #define 			KEY_DATA_HUANLIU_NEXT_ADDR            0X715E
-#define       DISP_DATA_HUANLIU_STATE_ADDR          0X7160
+#define       DISP_DATA_HUANLIU_STATE_ADDR          0X71C0
+#define       DISP_DATA_HUANLIU_REDUID_ADDR         0X71C4
+
+
 //天井洼 start
 
 #define  KEY_CHOOSE_HUAJING_TJW_ADDR             0X2020
@@ -341,6 +347,8 @@
 #define  KEY_CHOOSE_HUANLIU_TJW_ADDR       			 0X2026
 #define  KEY_CHOOSE_JINGGAI_TJW_ADDR       			 0X2028
 #define  KEY_CHOOSE_LIEFENGYI_TJW_ADDR           0X202A
+#define  KEY_CHOOSE_JUFANG_TJW_ADDR           	 0X202C
+#define  KEY_CHOOSE_JUFANG1_TJW_ADDR           	 0X202E
 //天井洼 end
 //天井洼 start
 #define 			DISP_DATA_HUANLIU1_ID_TJW_ADDR           	0X7160
@@ -353,6 +361,10 @@
 #define       DISP_DATA_HUANLIU2_EARTH_B_TJW_ADDR				0X71AA
 #define       DISP_DATA_HUANLIU2_EARTH_C_TJW_ADDR      	0x71B0
 #define       DISP_DATA_HUANLIU2_CURRENT_TJW_ADDR      	0x71BA
+#define       DISP_DATA_HUANLIU1_STATE_TJW_ADDR          		0X71C8
+#define       DISP_DATA_HUANLIU1_REDUID_TJW_ADDR         		0X71CC
+#define       DISP_DATA_HUANLIU2_STATE_TJW_ADDR          		0X71D0
+#define       DISP_DATA_HUANLIU2_REDUID_TJW_ADDR         		0X71D4
 //天井洼 end
 //局放  72.bmp
 #define 			DISP_DATA_JUFANG_ID_ADDR           	0X7200
@@ -369,7 +381,23 @@
 #define 			KEY_DATA_JUFANG_LAST_ADDR           0X725C
 #define 			KEY_DATA_JUFANG_NEXT_ADDR           0X725E
 #define       DISP_DATA_JUFANG_STATE_ADDR         0X7260
+#define       DISP_DATA_JUFANG_REDUID_ADDR        0X72CA
 
+//天井洼 start
+#define 			DISP_DATA_JUFANG_ID1_ADDR            0X7270
+#define       DISP_DATA_JUFANG_PD_A1_ADDR      		 0x7280
+#define       DISP_DATA_JUFANG_PD_B1_ADDR			 		 0X728A
+#define       DISP_DATA_JUFANG_PD_C1_ADDR      		 0x7290
+#define       DISP_DATA_JUFANG_FREQ_A1_ADDR        0X729A
+#define       DISP_DATA_JUFANG_FREQ_B1_ADDR        0X72A0
+#define       DISP_DATA_JUFANG_FREQ_C1_ADDR        0X72AA
+#define       DISP_DATA_JUFANG_DISCHG_A1_ADDR      0X72B0
+#define       DISP_DATA_JUFANG_DISCHG_B1_ADDR      0X72BA
+#define       DISP_DATA_JUFANG_DISCHG_C1_ADDR      0X72C0
+#define 			DISP_DATA_JUFANG_TOTALNUM1_ADDR      0X7264
+#define       DISP_DATA_JUFANG_STATE1_ADDR         0X7266
+#define       DISP_DATA_JUFANG_REDUID1_ADDR        0X72D0
+//天井洼 end
 //沉降仪  73.bmp
 #define 			DISP_DATA_CEHNJIANG_ID_ADDR            0X7300
 #define       DISP_DATA_CEHNJIANG_TEMP_ADDR      		 0X732A 
@@ -380,30 +408,43 @@
 #define       DISP_DATA_CEHNJIANG_STATE_ADDR         0X7360
 
 //天井洼 start
-#define 			DISP_DATA_CEHNJIANG1_ID_TJW_ADDR             0X7360
-#define       DISP_DATA_CEHNJIANG1_HEIGHT_TJW_ADDR      		 0x7370
+#define 			DISP_DATA_CEHNJIANG1_ID_TJW_ADDR           0X7360
+#define       DISP_DATA_CEHNJIANG1_HEIGHT_TJW_ADDR       0x7370
 #define       DISP_DATA_CEHNJIANG1_TEMP_TJW_ADDR			 	 0X737A
-#define 			DISP_DATA_CEHNJIANG2_ID_TJW_ADDR             0X7380
-#define       DISP_DATA_CEHNJIANG2_HEIGHT_TJW_ADDR      		 0x7390
+
+#define 			DISP_DATA_CEHNJIANG2_ID_TJW_ADDR           0X7380
+#define       DISP_DATA_CEHNJIANG2_HEIGHT_TJW_ADDR       0x7390
 #define       DISP_DATA_CEHNJIANG2_TEMP_TJW_ADDR			 	 0X739A
-#define 			DISP_DATA_CEHNJIANG3_ID_TJW_ADDR             0X73A0
-#define       DISP_DATA_CEHNJIANG3_HEIGHT_TJW_ADDR      		 0x73B0
+
+#define 			DISP_DATA_CEHNJIANG3_ID_TJW_ADDR           0X73A0
+#define       DISP_DATA_CEHNJIANG3_HEIGHT_TJW_ADDR       0x73B0
 #define       DISP_DATA_CEHNJIANG3_TEMP_TJW_ADDR			 	 0X73BA
-#define 			DISP_DATA_CEHNJIANG4_ID_TJW_ADDR            0X73C0
-#define       DISP_DATA_CEHNJIANG4_HEIGHT_TJW_ADDR      		 0x73D0
+
+#define 			DISP_DATA_CEHNJIANG4_ID_TJW_ADDR           0X73C0
+#define       DISP_DATA_CEHNJIANG4_HEIGHT_TJW_ADDR       0x73D0
 #define       DISP_DATA_CEHNJIANG4_TEMP_TJW_ADDR			 	 0X73DA
+
+#define       DISP_DATA_CEHNJIANG1_REDUID_TJW_ADDR			 0X73E0
+#define       DISP_DATA_CEHNJIANG2_REDUID_TJW_ADDR			 0X73E3
+#define       DISP_DATA_CEHNJIANG3_REDUID_TJW_ADDR			 0X73E6
+#define       DISP_DATA_CEHNJIANG4_REDUID_TJW_ADDR			 0X73E9
+
+#define       DISP_DATA_CEHNJIANG1_STATE_TJW_ADDR			 	 0X73EC
+#define       DISP_DATA_CEHNJIANG2_STATE_TJW_ADDR			 	 0X73F0
+#define       DISP_DATA_CEHNJIANG3_STATE_TJW_ADDR			 	 0X73F3
+#define       DISP_DATA_CEHNJIANG4_STATE_TJW_ADDR			 	 0X73F6
 //天井洼 end
 
 //防外破  74.bmp
-#define 			DISP_DATA_FANGWAIPO_ID_ADDR           0X7400
-#define       DISP_DATA_FANGWAIPO_ACCX_ADDR      		0x7410
-#define       DISP_DATA_FANGWAIPO_ACCY_ADDR			 		0X741A
-#define       DISP_DATA_FANGWAIPO_ACCZ_ADDR      		0x7420
-#define       DISP_DATA_FANGWAIPO_TEMP_ADDR         0X742A
-#define 			DISP_DATA_FANGWAIPO_TOTALNUM_ADDR     0X745A
-#define 			KEY_DATA_FANGWAIPO_LAST_ADDR          0X745C
-#define 			KEY_DATA_FANGWAIPO_NEXT_ADDR          0X745E
-#define       DISP_DATA_FANGWAIPO_STATE_ADDR         0X7460
+#define 			DISP_DATA_FANGWAIPO_ID_ADDR           	0X7400
+#define       DISP_DATA_FANGWAIPO_ACCX_ADDR      			0x7410
+#define       DISP_DATA_FANGWAIPO_ACCY_ADDR			 			0X741A
+#define       DISP_DATA_FANGWAIPO_ACCZ_ADDR      			0x7420
+#define       DISP_DATA_FANGWAIPO_TEMP_ADDR         	0X742A
+#define 			DISP_DATA_FANGWAIPO_TOTALNUM_ADDR     	0X745A
+#define 			KEY_DATA_FANGWAIPO_LAST_ADDR          	0X745C
+#define 			KEY_DATA_FANGWAIPO_NEXT_ADDR          	0X745E
+#define       DISP_DATA_FANGWAIPO_STATE_ADDR         	0X7460
 
 
 
@@ -432,10 +473,23 @@
 #define       DISP_DATA_FANGWAIPO4_ACCZ_TJW_ADDR      		0x74E0
 #define       DISP_DATA_FANGWAIPO4_TEMP_TJW_ADDR          0X74EA
 
+
+#define       DISP_DATA_FANGWAIPO1_REDUID_TJW_ADDR			 0X1090
+#define       DISP_DATA_FANGWAIPO2_REDUID_TJW_ADDR			 0X1093
+#define       DISP_DATA_FANGWAIPO3_REDUID_TJW_ADDR			 0X1096
+#define       DISP_DATA_FANGWAIPO4_REDUID_TJW_ADDR			 0X1099
+
+#define       DISP_DATA_FANGWAIPO1_STATE_TJW_ADDR			 	 0X109C
+#define       DISP_DATA_FANGWAIPO2_STATE_TJW_ADDR			 	 0X10A0
+#define       DISP_DATA_FANGWAIPO3_STATE_TJW_ADDR			 	 0X10A4
+#define       DISP_DATA_FANGWAIPO4_STATE_TJW_ADDR			 	 0X10A8
+
 //天井洼 end
 //甲烷  75.bmp
 #define 			DISP_DATA_CH4_ID_ADDR           	0X7500
 #define       DISP_DATA_CH4_VALUE_ADDR      		0x7510
+#define       DISP_DATA_CH4_REDUID_ADDR         0X7518
+#define       DISP_DATA_CH4_SAFEVAL_ADDR        0X7520
 #define 			DISP_DATA_CH4_TOTALNUM_ADDR    	  0X755A
 #define 			KEY_DATA_CH4_LAST_ADDR          	0X755C
 #define 			KEY_DATA_CH4_NEXT_ADDR          	0X755E
@@ -444,43 +498,51 @@
 
 
 //氧气  76.bmp
-#define 			DISP_DATA_O2_ID_ADDR           	0X7600
-#define       DISP_DATA_O2_VALUE_ADDR      		0x7610
-#define 			DISP_DATA_O2_TOTALNUM_ADDR    	0X765A
-#define 			KEY_DATA_O2_LAST_ADDR          	0X765C
-#define 			KEY_DATA_O2_NEXT_ADDR          	0X765E
+#define 			DISP_DATA_O2_ID_ADDR           	 0X7600
+#define       DISP_DATA_O2_VALUE_ADDR      		 0x7610
+#define       DISP_DATA_O2_REDUID_ADDR         0X7618
+#define       DISP_DATA_O2_SAFEVAL_ADDR        0X7620
+#define 			DISP_DATA_O2_TOTALNUM_ADDR    	 0X765A
+#define 			KEY_DATA_O2_LAST_ADDR          	 0X765C
+#define 			KEY_DATA_O2_NEXT_ADDR          	 0X765E
 #define       DISP_DATA_O2_STATE_ADDR          0X7660
 
 //硫化氢  77.bmp
 #define 			DISP_DATA_H2S_ID_ADDR           	0X7700
 #define       DISP_DATA_H2S_VALUE_ADDR      		0x7710
-#define 			DISP_DATA_H2S_TOTALNUM_ADDR    	0X775A
+#define       DISP_DATA_H2S_REDUID_ADDR         0X7718
+#define       DISP_DATA_H2S_SAFEVAL_ADDR        0X7720
+#define 			DISP_DATA_H2S_TOTALNUM_ADDR    	  0X775A
 #define 			KEY_DATA_H2S_LAST_ADDR          	0X775C
 #define 			KEY_DATA_H2S_NEXT_ADDR          	0X775E
 #define       DISP_DATA_H2S_STATE_ADDR          0X7760
 
 //一氧化碳  78.bmp
-#define 			DISP_DATA_CO_ID_ADDR           	0X7800
-#define       DISP_DATA_CO_VALUE_ADDR      		0x7810
-#define 			DISP_DATA_CO_TOTALNUM_ADDR    	0X785A
-#define 			KEY_DATA_CO_LAST_ADDR          	0X785C
-#define 			KEY_DATA_CO_NEXT_ADDR          	0X785E
+#define 			DISP_DATA_CO_ID_ADDR           	 0X7800
+#define       DISP_DATA_CO_VALUE_ADDR      		 0x7810
+#define       DISP_DATA_CO_REDUID_ADDR         0X7818
+#define       DISP_DATA_CO_SAFEVAL_ADDR        0X7820
+#define 			DISP_DATA_CO_TOTALNUM_ADDR    	 0X785A
+#define 			KEY_DATA_CO_LAST_ADDR          	 0X785C
+#define 			KEY_DATA_CO_NEXT_ADDR          	 0X785E
 #define       DISP_DATA_CO_STATE_ADDR          0X7860
 
 //温湿度  79.bmp
 #define 			DISP_DATA_WENSHIDU_ID_ADDR            0X7900
 #define       DISP_DATA_WENSHIDU_TEMP_ADDR      		0x7910
+#define       DISP_DATA_WENSHIDU_REDUID_ADDR        0X7918
 #define       DISP_DATA_WENSHIDU_HUMI_ADDR			    0X792A
 #define 			DISP_DATA_WENSHIDU_TOTALNUM_ADDR      0X795A
 #define 			KEY_DATA_WENSHIDU_LAST_ADDR           0X795C
 #define 			KEY_DATA_WENSHIDU_NEXT_ADDR           0X795E
-#define       DISP_DATA_WENSHIDU_STATE_ADDR          0X7960
+#define       DISP_DATA_WENSHIDU_STATE_ADDR         0X7960
 //水位  80.bmp
-#define 			DISP_DATA_WATER_ID_ADDR            0X8000
-#define       DISP_DATA_WATER_DEPTH_ADDR      	 0x8010
-#define 			DISP_DATA_WATER_TOTALNUM_ADDR      0X805A
-#define 			KEY_DATA_WATER_LAST_ADDR           0X805C
-#define 			KEY_DATA_WATER_NEXT_ADDR           0X805E
+#define 			DISP_DATA_WATER_ID_ADDR             0X8000
+#define       DISP_DATA_WATER_DEPTH_ADDR      	  0x8010
+#define       DISP_DATA_WATER_REDUID_ADDR         0X8018
+#define 			DISP_DATA_WATER_TOTALNUM_ADDR       0X805A
+#define 			KEY_DATA_WATER_LAST_ADDR            0X805C
+#define 			KEY_DATA_WATER_NEXT_ADDR            0X805E
 #define       DISP_DATA_WATER_STATE_ADDR          0X8060
 //裂缝仪 81.bmp
 #define 			DISP_DATA_LIEFENG_ID_ADDR            0X8100
@@ -489,7 +551,8 @@
 #define 			DISP_DATA_LIEFENG_TOTALNUM_ADDR      0X815A
 #define 			KEY_DATA_LIEFENG_LAST_ADDR           0X815C
 #define 			KEY_DATA_LIEFENG_NEXT_ADDR           0X815E
-#define       DISP_DATA_LIEFENG_STATE_ADDR          0X8160
+#define       DISP_DATA_LIEFENG_STATE_ADDR         0X8160
+#define       DISP_DATA_LIEFENG_REDUID_ADDR        0X8164
 //井盖 82.bmp
 #define 			DISP_DATA_COVER_ID_ADDR            0X8200
 #define       DISP_DATA_COVER_INCLINE_ADDR       0x8210
@@ -499,7 +562,8 @@
 #define 			DISP_DATA_COVER_TOTALNUM_ADDR      0X825A
 #define 			KEY_DATA_COVER_LAST_ADDR           0X825C
 #define 			KEY_DATA_COVER_NEXT_ADDR           0X825E
-#define       DISP_DATA_COVER_STATE_ADDR          0X8260
+#define       DISP_DATA_COVER_STATE_ADDR         0X8260
+#define       DISP_DATA_COVER_REDUID_ADDR        0x8264
 
 
 
@@ -514,8 +578,8 @@
 #define   KEY_RETURN_ADDR             0X1706
 //井盖界面
 #define   TEXT_COVER_ID_ADDR         			0X1900
-#define   TEXT_COVER_OPENRESP_ADDR        0X1910
-#define   TEXT_COVER_CLOSERESP_ADDR       0X1918
+#define   TEXT_COVER_OPENCLOSERSP_ADDR        0X1910
+//#define   TEXT_COVER_CLOSERESP_ADDR       0X1918
 
 #define   DATA_COVER_ADDR_ADDR         		0X1920
 #define   DATA_COVER_TOTALPAGE_ADDR       0X1922
@@ -533,8 +597,8 @@
 
 #define   KEY_TCP_ADDR									0X193C
 #define   KEY_MQTT_ADDR								  0X193E
-#define   SD_TOTOAL_SIZE_ADDR             0X1940
-#define   SD_REMAIN_SIZE_ADDR             0X1950
+#define   SD_TOTOAL_SIZE_ADDR           0X1940
+#define   SD_REMAIN_SIZE_ADDR           0X1950
 //[09:27:21.942]收←◆[LCD] fa:5a a5 15 82 19 0 47 59 4e 4a 4c 58 53 44 30 30 30 30 30 30 36 38 34 ff 
 // [LCD] fa:5a a5 5 82 19 20 0 1 
 // [LCD] fa:5a a5 5 82 19 26 ff ff 

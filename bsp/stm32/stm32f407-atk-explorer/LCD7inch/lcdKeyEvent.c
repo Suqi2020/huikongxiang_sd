@@ -85,8 +85,8 @@ void dispName(void);
 void dispSubName(void);
 void nextSubName(void);
 void lastSubName(void);
-void coverClose(void);
-void coverOpen(void);
+//void coverClose(void);
+void coverOpen(bool openFlag);
 void coverLastDisp(void);
 void coverNextDisp(void);
 void coverNowDisp(void);
@@ -416,14 +416,17 @@ void  keyReturn(uint16_t keyAddr)
 				rt_kprintf("%sKEY_SWITCH_INTERFACE_ADDR \n",sign);
 				dispInterFaceIndexFun();
 			  dispPortIndexFun();
+			
+			
+				ret=levelRead();
+				dispLevelState(ret);
 				break;
 			case KEY_SWITCH_PORT_ADDR:
 				break;
-			case KEY_SWITCH_LEVEL_ADDR:
-				break;
+
 			
-			case KEY_SWITCH_SURE_ADDR:
-				break;
+//			case KEY_SWITCH_SURE_ADDR:
+//				break;
 			
 			case KEY_SWITCH_RETURN_ADDR:
 				break;
@@ -437,8 +440,8 @@ void  keyReturn(uint16_t keyAddr)
 				LCDRstDispSameID(DISP_MODBUS_SAME_ID_MSG_ADDR);
 			  break;
 
-			case KEY_SWITCHINTERF_SURE_ADDR://do nothing
-				break;
+//			case KEY_SWITCHINTERF_SURE_ADDR://do nothing
+//				break;
 			case KEY_SWITCHINTERF_NEXT_ADDR:
 				rt_kprintf("%sKEY_SWITCHINTERF_NEXT_ADDR \n",sign);
 				dispInterFaceIndexAdd();
@@ -448,7 +451,7 @@ void  keyReturn(uint16_t keyAddr)
 			  dispOutputNameIDType();
 			  ret=levelRead();
 			  dispLevelState(ret);
-			  levelSet(ret);
+			 // levelSet(ret);
 				break;
 			case KEY_SWITCHINTERF_LAST_ADDR:
 				rt_kprintf("%sKEY_SWITCHINTERF_LAST_ADDR \n",sign);
@@ -459,20 +462,21 @@ void  keyReturn(uint16_t keyAddr)
 			  dispOutputNameIDType();
 			  ret=levelRead();
 			  dispLevelState(ret);
-			  levelSet(ret);
+			 // levelSet(ret);
 				break;
 			case KEY_SWITCHINTERF_RETURN_ADDR://
-				
+
 				break;
-			case KEY_SWITCHPORT_SURE_ADDR:
-				break;
+//			case KEY_SWITCHPORT_SURE_ADDR:
+//				break;
 			case KEY_SWITCHPORT_NEXT_ADDR:
 				dispPortIndexAdd();
 			  dispPortIndexFun();
 			  dispOutputNameIDType();
 				ret=levelRead();
 			  dispLevelState(ret);
-			  levelSet(ret);
+			rt_kprintf("KEY_SWITCHPORT_NEXT_ADDR %d \n",ret);
+			 // levelSet(ret);
 				break;
 			case KEY_SWITCHPORT_LAST_ADDR:
 				dispPortIndexLow();
@@ -480,7 +484,8 @@ void  keyReturn(uint16_t keyAddr)
 			  dispOutputNameIDType();
 				ret=levelRead();
 			  dispLevelState(ret);
-			  levelSet(ret);
+			rt_kprintf("KEY_SWITCHPORT_LAST_ADDR %d \n",ret);
+			//  levelSet(ret);
 				break;
 			case KEY_SWITCHPORT_RETURN_ADDR:
 				//dispOutputNameIDType();
@@ -495,10 +500,7 @@ void  keyReturn(uint16_t keyAddr)
 			  dispLevelState(0);
 			  levelSet(0);
 				break;
-			case KEY_SWITCHLEVEL_SURE_ADDR:
-				break;
-			case KEY_SWITCHLEVEL_RETURN_ADDR:
-				break;
+
 			///////////input_start///////////////
 			case KEY_INPUTCFG_SURE_ADDR:
 				lcdInputConfig();
@@ -560,10 +562,10 @@ void  keyReturn(uint16_t keyAddr)
 				break;
 			//井盖
 			case KEY_COVER_OPEN_ADDR:
-				coverOpen();
+				coverOpen(true);
 				break;
 			case KEY_COVER_CLOSE_ADDR:
-				coverClose();
+				coverOpen(false);
 				break;			
 			case KEY_COVER_LAST_ADDR:
 				coverLastDisp();
@@ -618,8 +620,7 @@ void  keyReturn(uint16_t keyAddr)
 
 				LCDClearSaveOK();
 				LCDClearRstOK();
-				LCDClearClose();
-				LCDClearOpen();
+
 				break;
 			case  KEY_SOFT_VER_ADDR:
 				LCDDispSoftVer();
@@ -630,12 +631,12 @@ void  keyReturn(uint16_t keyAddr)
 				break;
 //天井洼定制  start
 			case  KEY_CHOOSE_HUAJING_TJW_ADDR:
-				dispWaterData();
-			  dispWenshiduData();
-				dispCOData();
-				dispH2SData();
 				dispO2Data();
+				dispH2SData();
 				dispCH4Data();
+				dispCOData();
+				dispWaterData();
+				dispWenshiduData();
 				break;
 			case  KEY_CHOOSE_FANGWAIPO_TJW_ADDR:
 				dispWaipoData_tjw();
@@ -652,10 +653,13 @@ void  keyReturn(uint16_t keyAddr)
 			case  KEY_CHOOSE_LIEFENGYI_TJW_ADDR:
 				dispLiefengData();
 				break;
-//天井洼定制  end
-			///////////output_end///////////////
-//#define        KEY_ANA_SUBNAME_INTERFACE_ADDR     0x522C
-//#define        KEY_ANA_SURE_ADDR     0x522E
+			case  KEY_CHOOSE_JUFANG_TJW_ADDR:
+				dispJufangData_tjw();
+				break;
+			case  KEY_CHOOSE_JUFANG1_TJW_ADDR:
+				dispJufangData_tjw();
+				break;
+
 	#ifndef     ANA_MASK
 			case   KEY_ANA_LOOK_ADDR :
 				getAnaTotalNum();
