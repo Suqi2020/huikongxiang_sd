@@ -6,10 +6,10 @@ static int dispCH4Index=0;
 static int dispCH4TotlNum=0;
 extern int ch4State(int i);
 
-const char o2SafeValue[] =">19.5%%VOL";
+const char o2SafeValue[] =">19.5%VOL";
 const char coSafeValue[] ="<24ppm";
 const char h2sSafeValue[]="<6ppm";
-const char ch4afeValue[] ="<10%%LEV";
+const char ch4afeValue[] ="<10%LEV";
 
 //显示环流界面71.bmp的所有数据
 void  dispCH4Data()
@@ -31,6 +31,7 @@ void  dispCH4Data()
 				buf[1]=0xff;
 				LCDWtite(DISP_DATA_CH4_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CH4_VALUE_ADDR,buf,2);
+			  LCDWtite(DISP_DATA_CH4_REDUID_ADDR,buf,2);
         LCDDispModbusState(0,DISP_DATA_CH4_STATE_ADDR);
 		}
 		else{
@@ -78,7 +79,9 @@ void  dispCH4Data()
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_CH4_VALUE_ADDR,buf,len);
+				
 				len=strlen((char *)ch4afeValue);
+				memcpy(buf,ch4afeValue,len);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_CH4_SAFEVAL_ADDR,buf,len);
@@ -138,7 +141,7 @@ void  dispO2Data()
 				buf[1]=0xff;
 				LCDWtite(DISP_DATA_O2_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_O2_VALUE_ADDR,buf,2);
-
+				LCDWtite(DISP_DATA_CH4_REDUID_ADDR,buf,2);
 				LCDDispModbusState(0,DISP_DATA_O2_STATE_ADDR);
 		}
 		else{
@@ -183,7 +186,8 @@ void  dispO2Data()
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_O2_VALUE_ADDR,buf,len);
-
+				len=0;
+        memcpy(buf,o2SafeValue,strlen(o2SafeValue));
 				len=strlen((char *)o2SafeValue);
 				buf[len++]=0xff;
 				buf[len++]=0xff;
@@ -243,7 +247,7 @@ void  dispH2SData()
 				buf[1]=0xff;
 				LCDWtite(DISP_DATA_H2S_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_H2S_VALUE_ADDR,buf,2);
-
+				LCDWtite(DISP_DATA_CH4_REDUID_ADDR,buf,2);
 				LCDDispModbusState(0,DISP_DATA_H2S_STATE_ADDR);
 		}
 		else{
@@ -285,6 +289,8 @@ void  dispH2SData()
 				buf[len++]=0xff;
 				buf[len++]=0xff;
 				LCDWtite(DISP_DATA_H2S_VALUE_ADDR,buf,len);
+				
+
 				len=strlen((char *)h2sSafeValue);
 				strcpy((char *)buf,h2sSafeValue);
 				buf[len++]=0xff;
@@ -345,6 +351,7 @@ void  dispCOData()
 				buf[1]=0xff;
 				LCDWtite(DISP_DATA_CO_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CO_VALUE_ADDR,buf,2);
+			  LCDWtite(DISP_DATA_CH4_REDUID_ADDR,buf,2);
 				LCDDispModbusState(0,DISP_DATA_CO_STATE_ADDR);
 		}
 		else{

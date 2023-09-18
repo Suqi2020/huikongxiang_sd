@@ -34,10 +34,17 @@ extern int mod_printf(const char *fmt, ...);
 inoutDevStru inpoutpFlag __attribute__((at(0x2000D000)))={0};//输入输出超值的标记位  指定内存地址  防止更改代码后内存地址移位
 ////sheet.autoctrl[pindex].output[outputIndex].flag中指针指向了inpoutpFlag
 //const static char sign[]="[autoCtrl]";
-char inName[INNAME_NUM][INOUTNAME_LEN]={"AI","DI","MB",};
-//char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","V3O","V5O","SWITCH"};
+const char inName[INNAME_NUM][INOUTNAME_LEN]={"AI","DI","MB",};
+//const char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","V3O","V5O","SWITCH"};
 //char outSwitchNum[OUTNAME_NUM]={DO_NUM,V33O_NUM,V5O_NUM,SWITCH_NUM};
-char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","SSWITCH"};
+const char outName[OUTNAME_NUM][INOUTNAME_LEN]={"DO","SSWITCH"};
+
+
+const uint8_t outChinaName[OUTNAME_NUM][INOUTNAME_LEN]={{0x54,0x54,0x4c,0xb5,0xe7,0xc6,0xbd,0x00},\
+																												{0xBC,0xCC,0xB5,0xE7,0xC6,0xF7,0x00,0x00}};
+
+																										
+
 char outSwitchNum[OUTNAME_NUM]={DO_NUM,SWITCH_NUM};
 uint8_t inputIndex=0; //本次配置控制逻辑的输入坐标配置   被inputFlag 指针调用
 uint8_t outputIndex=0;//本次配置控制逻辑的输出的坐标配置 被outputFlag指针调用

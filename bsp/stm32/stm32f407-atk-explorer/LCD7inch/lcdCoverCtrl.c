@@ -10,7 +10,7 @@
 
 #include "7inchRegist.h"
 const static char sign[]="[LCDCover]";
-extern char outName[OUTNAME_NUM][INOUTNAME_LEN];
+//extern char outName[OUTNAME_NUM][INOUTNAME_LEN];
 static char nowIndex=0;
 static char totalIndex=0;
 static char index[COVER_485_NUM]={0};
@@ -138,8 +138,8 @@ void  coverOpen(bool openFlag)
 
 
 	 int ret=2;
-	//if(coverUartOnOff(sheet.cover[index[nowIndex]].ID,openFlag)==true){//打开成功
-	if(1){
+	if(coverUartOnOff(sheet.cover[index[nowIndex]].ID,openFlag)==true){//打开成功
+	//if(1){
 			if(openFlag==true){
 			  //strcpy((char *)buf,"ON");//拷贝注意内存溢出  会拷贝0进去
 				ret=0;

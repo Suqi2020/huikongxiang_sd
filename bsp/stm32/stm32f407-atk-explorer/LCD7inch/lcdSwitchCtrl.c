@@ -10,7 +10,7 @@
 
 #include "7inchRegist.h"
 const static char sign[]="[LCDSwtich]";
-extern char outName[OUTNAME_NUM][INOUTNAME_LEN];
+extern char outChinaName[OUTNAME_NUM][INOUTNAME_LEN];
 int switchInterfaceIndex=0;
 void  dispLevelState(char level);
 bool DOLevel[DO_NUM]={0};
@@ -23,10 +23,10 @@ void dispInterFaceIndexFun()
 {
 		rt_kprintf("%\n ");
 		for(int i=0;i<INOUTNAME_LEN;i++){//ACUID_LEN
-			 	rt_kprintf("%0x ",outName[switchInterfaceIndex][i]);
+			 	rt_kprintf("%0x ",outChinaName[switchInterfaceIndex][i]);
 		}
 		rt_kprintf("%\n ");
-		LCDWtite(DISP_SWITCH_INTERFACE_ADDR,			(uint8_t *)outName[switchInterfaceIndex],INOUTNAME_LEN);
+		LCDWtite(DISP_SWITCH_INTERFACE_ADDR,			(uint8_t *)outChinaName[switchInterfaceIndex],INOUTNAME_LEN);
 		//LCDWtite(DISP_SWITCHINTERF_INTERFACE_ADDR,(uint8_t *)outName[switchInterfaceIndex],INOUTNAME_LEN);
 }
 //接口名称增加

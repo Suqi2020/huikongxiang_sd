@@ -350,9 +350,9 @@ typedef enum{
 #endif
 #define CHINA_NAME_LEN  9
 #ifdef  USE_4GAS
-const static char  modbusName[MODBUS_NUM][NAME_LEN] ={"HuanLiu","JuFang","FangChenJiang","FangWaiPo","JiaWan","YangQi","LiuHuaQing","YiYangHuaTan","WenShiDu","ShuiWei","LieFengYi","JingGai"};
+const static char  *modbusName[MODBUS_NUM] ={"HuanLiu","JuFang","FangChenJiang","FangWaiPo","JiaWan","YangQi","LiuHuaQing","YiYangHuaTan","WenShiDu","ShuiWei","LieFengYi","JingGai"};
 
-
+//https://www.qqxiuzi.cn/bianma/zifuji.php  ×Ö·û×ª»»GB2312
 const static uint8_t mdbusChinaName[MODBUS_NUM][CHINA_NAME_LEN]={0xBB,0xB7,0xC1,0xF7,0x00,0x00,0x00,0x00,0x00,\
 																										0xBE,0xD6,0xB7,0xC5,0x00,0x00,0x00,0x00,0x00,\
 																										0xB7,0xC0,0xB3,0xC1,0xBD,0xB5,0x00,0x00,0x00,\
@@ -366,7 +366,7 @@ const static uint8_t mdbusChinaName[MODBUS_NUM][CHINA_NAME_LEN]={0xBB,0xB7,0xC1,
 																										0xC1,0xD1,0xB7,0xEC,0xD2,0xC7,0x00,0x00,0x00,\
 																										0xBE,0xAE,0xB8,0xC7,0x00,0x00,0x00,0x00,0x00};
 //const static char  modbusNameFold[MODBUS_NUM][NAME_LEN+6]={"0://HuanLiu","0://JuFang","0://FangChenJiang","0://FangWaiPo","0://JiaWan","0://YangQi","0://LiuHuaQing","0://YiYangHuaTan","0://WenShiDu","0://ShuiWei","0://LieFengYi","0://JingGai"};
-const static char  modbusLog[MODBUS_NUM][100]={
+const static char  *modbusLog[MODBUS_NUM]={
 	"earthCurA runCurA loadRatioA earthCurB runCurB loadRatioB earthCurC runCurC loadRatioC time(ms)\r\n",\
 	"pdA freqA dischargeDateA pdB freqB dischargeDateB  pdC freqC dischargeDateC time(ms)\r\n",\
 	"temp height time(ms)\r\n",\
@@ -456,11 +456,6 @@ typedef struct{
 			
 			autoCtrl_stru		 autoctrl[CRTL_TOTAL_NUM];
 			
-			//uint32_t         autoCrtl
-			
-
-
-
 
 	    
 }deviceFlashStru;//´æ´¢µ½flashÖÐ

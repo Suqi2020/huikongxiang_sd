@@ -288,14 +288,14 @@ void  LCDDispModbusState(int state,uint32_t addr)
 {
 		  uint8_t buf[20]={0};
 			uint8_t len=0;
-			if(state==1){
+			if(state==1){//‘⁄œﬂ
 				buf[len++]=0xD4;
 				buf[len++]=0XDA;
 				buf[len++]=0xCF;
 				buf[len++]=0XDF;
 
 			}
-			else{
+			else{//¿Îœﬂ
 				buf[len++]=0xc0;
 				buf[len++]=0Xeb;
 				buf[len++]=0xCF;

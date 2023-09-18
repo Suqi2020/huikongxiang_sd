@@ -31,6 +31,7 @@ void  dispWenshiduData()
 				LCDWtite(DISP_DATA_WENSHIDU_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_WENSHIDU_TEMP_ADDR,buf,2);
 				LCDWtite(DISP_DATA_WENSHIDU_HUMI_ADDR,buf,2);
+			  LCDWtite(DISP_DATA_WENSHIDU_REDUID_ADDR,buf,2);
 				LCDDispModbusState(0,DISP_DATA_WENSHIDU_STATE_ADDR);
 		}
 		else{

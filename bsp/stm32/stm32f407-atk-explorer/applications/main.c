@@ -173,6 +173,8 @@ void  outIOInit(void);
 char  printVer[50];
 extern void hartWareTest();
 
+
+
 int main(void)
 {
 
@@ -190,7 +192,7 @@ int main(void)
 	  if(packFlash_LEN<sizeof(packFlash)){
 				printf("err:packFlash_LEN too small\n");
 		}
-	  if((packFlash_LEN+sizeof(packFlash)+sizeof(sheet))>65536){
+	  if((packFlash_LEN+sizeof(packFlash)+sizeof(sheet))>65536){		
 				printf("err:64k flash to save user data too small\n");
 		}
 	  outIOInit();
@@ -304,53 +306,53 @@ int main(void)
 
 		hartWareTest();
 		
-//		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
-//		if(tidNetRec!=NULL){
-//				rt_thread_startup(tidNetRec);													 
-//				printf("%sRTcreat netDataRecTask \r\n",sign);
-//		}
-//		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
-//		if(tidNetSend!=NULL){
-//				rt_thread_startup(tidNetSend);													 
-//				printf("%sRTcreat netDataSendTask \r\n",sign);
-//		}
-//    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
-//		if(tidW5500!=NULL){
-//				rt_thread_startup(tidW5500);													 
-//				printf("%sRTcreat w5500Task task\r\n",sign);
-//		}
+		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
+		if(tidNetRec!=NULL){
+				rt_thread_startup(tidNetRec);													 
+				printf("%sRTcreat netDataRecTask \r\n",sign);
+		}
+		tidNetSend =  rt_thread_create("netSend",netDataSendTask,RT_NULL,512*2,3, 10 );
+		if(tidNetSend!=NULL){
+				rt_thread_startup(tidNetSend);													 
+				printf("%sRTcreat netDataSendTask \r\n",sign);
+		}
+    tidW5500 =  rt_thread_create("w5500",w5500Task,RT_NULL,512*3,2, 10 );
+		if(tidW5500!=NULL){
+				rt_thread_startup(tidW5500);													 
+				printf("%sRTcreat w5500Task task\r\n",sign);
+		}
 
-//		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
-//		if(tidUpkeep!=NULL){
-//				rt_thread_startup(tidUpkeep);													 
-//				printf("%sRTcreat upKeepStateTask \r\n",sign);
-//		}
+		tidUpkeep 	=  rt_thread_create("upKeep",upKeepStateTask,RT_NULL,512*4,4, 10 );
+		if(tidUpkeep!=NULL){
+				rt_thread_startup(tidUpkeep);													 
+				printf("%sRTcreat upKeepStateTask \r\n",sign);
+		}
 
 
-//		tidMqtt = rt_thread_create("mqtt",mqttTask,RT_NULL,512*2,4, 10 );
-//		if(tidMqtt!=NULL){
-//				rt_thread_startup(tidMqtt);													 
-//				rt_kprintf("RTcreat mqtt task\r\n");
-//		}
-//		else{
-//				rt_kprintf("RTcreat mqtt ERR\r\n");
-//		}		
-/////////////////////////////////////事件标志组////////////////////////////
-//    if (rt_event_init(&mqttAckEvent, "mqttAckEvent", RT_IPC_FLAG_FIFO) != RT_EOK)
-//    {
-//        rt_kprintf("%sinit mqttAckEvent failed.\n",sign);
+		tidMqtt = rt_thread_create("mqtt",mqttTask,RT_NULL,512*2,4, 10 );
+		if(tidMqtt!=NULL){
+				rt_thread_startup(tidMqtt);													 
+				rt_kprintf("RTcreat mqtt task\r\n");
+		}
+		else{
+				rt_kprintf("RTcreat mqtt ERR\r\n");
+		}		
+///////////////////////////////////事件标志组////////////////////////////
+    if (rt_event_init(&mqttAckEvent, "mqttAckEvent", RT_IPC_FLAG_FIFO) != RT_EOK)
+    {
+        rt_kprintf("%sinit mqttAckEvent failed.\n",sign);
 
-//    }
-//		tidSdRTC =  rt_thread_create("sdRTC",sdRTCTask,RT_NULL,512*4,8, 10 );
-//		if(tidSdRTC!=NULL){
-//				rt_thread_startup(tidSdRTC);													 
-//				printf("%sRTcreat sdRTCTask\r\n",sign);
-//		}
-//		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
-//		if(tidAutoCtrl!=NULL){
-//				rt_thread_startup(tidAutoCtrl);													 
-//				printf("%sRTcreat autoCtrlTask\r\n",sign);
-//		}
+    }
+		tidSdRTC =  rt_thread_create("sdRTC",sdRTCTask,RT_NULL,512*4,8, 10 );
+		if(tidSdRTC!=NULL){
+				rt_thread_startup(tidSdRTC);													 
+				printf("%sRTcreat sdRTCTask\r\n",sign);
+		}
+		tidAutoCtrl =  rt_thread_create("autoCtrl",autoCtrlTask,RT_NULL,512*2,5, 10 );
+		if(tidAutoCtrl!=NULL){
+				rt_thread_startup(tidAutoCtrl);													 
+				printf("%sRTcreat autoCtrlTask\r\n",sign);
+		}
 
 #ifdef  USE_WDT
 		extern IWDG_HandleTypeDef hiwdg;

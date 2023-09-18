@@ -70,7 +70,7 @@ void lcdCopyOutputPort(uint8_t *rec)
 
 
 uint8_t su8OutNameCfgIndex=0;//输入菜单的坐标
-extern char outName[OUTNAME_NUM][INOUTNAME_LEN];
+extern char outChinaName[OUTNAME_NUM][INOUTNAME_LEN];
 
 //输出设置读取interface接口下一个
 void  dispoutConfigNext()
@@ -92,9 +92,9 @@ void  dispoutputNameInterf()
 {
 		uint8_t *buf=NULL;
 	  buf=rt_malloc(50);
-		int Len=strlen(outName[su8OutNameCfgIndex]);
+		int Len=strlen(outChinaName[su8OutNameCfgIndex]);
 		for(int i=0;i<Len;i++){
-				buf[i]=outName[su8OutNameCfgIndex][i];
+				buf[i]=outChinaName[su8OutNameCfgIndex][i];
 		}
 		int j=0;
 		while((j)<2){
@@ -253,9 +253,9 @@ void  dispoutputReadInterf()
 {
 		uint8_t *buf=NULL;
 	  buf=rt_malloc(50);
-		int Len=strlen(outName[su8OutNameReadIndex]);
+		int Len=strlen(outChinaName[su8OutNameReadIndex]);
 		for(int i=0;i<Len;i++){
-				buf[i]=outName[su8OutNameReadIndex][i];
+				buf[i]=outChinaName[su8OutNameReadIndex][i];
 		}
 		int j=0;
 		while((Len+j)<INOUTNAME_LEN){
@@ -439,7 +439,7 @@ void  dispOutputRead()
 		buf[0]=0;
 		buf[1]=su8OutputTotalNum[su8OutNameReadIndex];
 		LCDWtite(DISP_OUTPUT_READ_TOTALNUM_ADDR,buf,2);
-		rt_kprintf("%s %s total %d\n",sign,outName[su8OutNameReadIndex],su8OutputTotalNum[su8OutNameReadIndex]);
+		rt_kprintf("%s %s total %d\n",sign,outChinaName[su8OutNameReadIndex],su8OutputTotalNum[su8OutNameReadIndex]);
 		//显示当前页
 		buf[0]=0;
 		buf[1]=su8OutputTheNum[su8OutNameReadIndex];
