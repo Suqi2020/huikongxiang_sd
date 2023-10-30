@@ -443,7 +443,7 @@ void Wk1234UartRTSCTS(uint8_t port)
 		Wk1234WriteSlaveRegister(port,WK2XXX_FWTL_REG,0X20);//继续接收触点
 		Wk1234WriteSlaveRegister(port,WK2XXX_SPAGE_REG,0);//切换到page0 
 }
-
+#if 0
 /************************************************************************************************/
 //函数功能:数据处理。本函数主要实现把接收的数据，然后再发送出来。
 /**************************uint8_t WK2xxxPortProcess(void)********************************************/
@@ -502,4 +502,4 @@ uint8_t Wk1234UartProcess(void)
 	
 	return gifr;
 }
-
+#endif

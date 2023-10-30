@@ -39,7 +39,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 			{
 				
 //				rt_kprintf("485 1read\n");
-				gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
+				  gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
 					do{
 							//判断子串口1是否有中断
 							if(gifr&GIFR_UT1INT_BIT){ /*数据处理*///pcb映射串口1+1
@@ -104,7 +104,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 							if(gifr&GIFR_UT4INT_BIT){//pcb映射串口8
 										/*数据接收*/
 									 count=Wk5678UartRxChars(4,recBuf);//一次接收的数据不会超过256Byte
-								//rt_kprintf("485 7read\n");
+								rt_kprintf("485 7read\n");
 							}
 							
 							gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);

@@ -32,7 +32,7 @@ void  dispCH4Data()
 				LCDWtite(DISP_DATA_CH4_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CH4_VALUE_ADDR,buf,2);
 			  LCDWtite(DISP_DATA_CH4_REDUID_ADDR,buf,2);
-        LCDDispModbusState(0,DISP_DATA_CH4_STATE_ADDR);
+        LCDDispModbusState(-1,DISP_DATA_CH4_STATE_ADDR);
 		}
 		else{
 				//显示总页数
@@ -142,7 +142,7 @@ void  dispO2Data()
 				LCDWtite(DISP_DATA_O2_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_O2_VALUE_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CH4_REDUID_ADDR,buf,2);
-				LCDDispModbusState(0,DISP_DATA_O2_STATE_ADDR);
+				LCDDispModbusState(-1,DISP_DATA_O2_STATE_ADDR);
 		}
 		else{
 				//显示总页数
@@ -248,7 +248,7 @@ void  dispH2SData()
 				LCDWtite(DISP_DATA_H2S_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_H2S_VALUE_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CH4_REDUID_ADDR,buf,2);
-				LCDDispModbusState(0,DISP_DATA_H2S_STATE_ADDR);
+				LCDDispModbusState(-1,DISP_DATA_H2S_STATE_ADDR);
 		}
 		else{
 				//显示总页数
@@ -352,7 +352,7 @@ void  dispCOData()
 				LCDWtite(DISP_DATA_CO_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_CO_VALUE_ADDR,buf,2);
 			  LCDWtite(DISP_DATA_CH4_REDUID_ADDR,buf,2);
-				LCDDispModbusState(0,DISP_DATA_CO_STATE_ADDR);
+				LCDDispModbusState(-1,DISP_DATA_CO_STATE_ADDR);
 		}
 		else{
 				//显示总页数

@@ -56,11 +56,14 @@ void timeInc()
 		}
 }
 
-
+//快速设置 用于快速来读取modbus数据
 static void timeQuckIncSet()
 {
 	  for(int i=0;i<TIM_NUM;i++){
-			  tim[i].count=0xF000+i*2;
+			  if(i==PARTDISCHAG_TIME)
+					tim[i].count=sheet.partDischagColTime-10;
+				else
+						tim[i].count=0xF000+i*2;
 
 		}
 }

@@ -27,7 +27,7 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+17)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+18)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
 const char date[]="20230912";
@@ -304,7 +304,7 @@ int main(void)
 				printf("%sRTcreat LCDStateTask \r\n",sign);
 		}
 
-		hartWareTest();
+		hartWareTest();//工装测试
 		
 		tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
 		if(tidNetRec!=NULL){
@@ -413,7 +413,10 @@ bool netOKState()
 			return gbNetState;
 		}
 }
+#ifdef   USE_WDT
 
+extern IWDG_HandleTypeDef hiwdg;
+#endif
 void hartWareTest()
 {
 	//	int read=TESTCODE_READ;//读取工装测试电平
@@ -430,6 +433,10 @@ void hartWareTest()
 		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
     while (1)//task用于测试 以及闪灯操作
     {
+			
+			#ifdef  USE_WDT
+				HAL_IWDG_Refresh(&hiwdg);
+			#endif
 			  if(TESTSWITCH_READ==GPIO_PIN_RESET){
 					rt_thread_mdelay(20);
 					if(TESTSWITCH_READ==GPIO_PIN_RESET){

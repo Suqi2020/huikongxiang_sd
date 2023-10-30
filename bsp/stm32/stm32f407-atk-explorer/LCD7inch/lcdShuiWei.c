@@ -25,7 +25,7 @@ void  dispWaterData()
 				LCDWtite(DISP_DATA_WATER_ID_ADDR,buf,2);
 				LCDWtite(DISP_DATA_WATER_DEPTH_ADDR,buf,2);
 			  LCDWtite(DISP_DATA_WATER_REDUID_ADDR,buf,2);
-			  LCDDispModbusState(0,DISP_DATA_WATER_STATE_ADDR);
+			  LCDDispModbusState(-1,DISP_DATA_WATER_STATE_ADDR);
 		}
 		else{
 				//ÏÔÊ¾×ÜÒ³Êý

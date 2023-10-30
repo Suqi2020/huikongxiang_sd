@@ -40,7 +40,7 @@ void  dispJufangData()
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_B_ADDR,buf,2);
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_C_ADDR,buf,2);
 			  LCDWtite(DISP_DATA_JUFANG_REDUID_ADDR,buf,2);
-			  LCDDispModbusState(0,DISP_DATA_JUFANG_STATE_ADDR);
+			  LCDDispModbusState(-1,DISP_DATA_JUFANG_STATE_ADDR);
 
 
 		}
@@ -178,7 +178,7 @@ void  dispJufangData_tjw()
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_C_ADDR,buf,2);
 			  LCDWtite(DISP_DATA_JUFANG_REDUID_ADDR,buf,2);
 			
-			  LCDDispModbusState(0,DISP_DATA_JUFANG_STATE_ADDR);
+			  LCDDispModbusState(-1,DISP_DATA_JUFANG_STATE_ADDR);
 
 				LCDWtite(DISP_DATA_JUFANG_ID1_ADDR,buf,2);
 				LCDWtite(DISP_DATA_JUFANG_PD_A1_ADDR,buf,2);
@@ -191,7 +191,7 @@ void  dispJufangData_tjw()
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_B1_ADDR,buf,2);
 				LCDWtite(DISP_DATA_JUFANG_DISCHG_C1_ADDR,buf,2);
 				LCDWtite(DISP_DATA_JUFANG_REDUID1_ADDR,buf,2);
-			  LCDDispModbusState(0,DISP_DATA_JUFANG_STATE1_ADDR);
+			  LCDDispModbusState(-1,DISP_DATA_JUFANG_STATE1_ADDR);
 		}
 		
 		
