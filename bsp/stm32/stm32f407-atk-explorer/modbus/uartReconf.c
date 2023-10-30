@@ -24,104 +24,192 @@ extern rt_sem_t   uart5678_sem;
 //note：此程序有个bug 如果是子设备主动上传数据  不知道对应通道 需要重新封装函数
 extern uint8_t Read_RingBuff3(uint8_t *rData);
 
+
+
+//串口滤波函数 用在发送函数之前 如果有冗余数据  需要丢掉 局放重启会发出冗余数据
+static void  filterRs485ErrData()
+{
+	  uint8_t *buf=rt_malloc(200);
+	  int count=0;
+	  uint8_t gifr=0;
+
+		gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
+		do{
+				//判断子串口1是否有中断
+				if(gifr&GIFR_UT1INT_BIT){ /*数据处理*///pcb映射串口1+1
+						/*数据接收*/
+						 count=Wk1234UartRxChars(1,buf);//一次接收的数据不会超过256Byte
+						 rt_kprintf("485 1 filter\n");
+
+				}	
+				//判断子串口2是否有中断
+				if(gifr&GIFR_UT2INT_BIT){//pcb映射串口2+1
+					/*数据接收*/
+						 count=Wk1234UartRxChars(2,buf);//一次接收的数据不会超过256Byte
+						 rt_kprintf("485 2 filter\n");
+
+				}
+				//判断子串口3是否有中断
+				if(gifr&GIFR_UT3INT_BIT){//pcb映射串口0+1
+							/*数据接收*/
+						count=Wk1234UartRxChars(3,buf);//一次接收的数据不会超过256Byte
+						rt_kprintf("485 3 filter\n");
+				}
+				//判断子串口4是否有中断
+				if(gifr&GIFR_UT4INT_BIT){//pcb映射串口3+1
+							/*数据接收*/
+						 count=Wk1234UartRxChars(4,buf);//一次接收的数据不会超过256Byte
+						 rt_kprintf("485 4 filter\n");
+				}
+				
+				gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
+		}while(gifr&0x0f);
+				
+
+		gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);
+		do{
+				//判断子串口1是否有中断
+				if(gifr&GIFR_UT1INT_BIT){ /*数据处理*///pcb映射串口7
+						/*数据接收*/
+						 count=Wk5678UartRxChars(1,buf);//一次接收的数据不会超过256Byte
+							rt_kprintf("485 5 filter\n");
+				}	
+				//判断子串口2是否有中断
+				if(gifr&GIFR_UT2INT_BIT){//pcb映射串口5
+					/*数据接收*/
+						 count=Wk5678UartRxChars(2,buf);//一次接收的数据不会超过256Byte
+							rt_kprintf("485 6 filter\n");
+				}
+				//判断子串口3是否有中断
+				if(gifr&GIFR_UT3INT_BIT){//pcb映射串口6
+							/*数据接收*/
+						count=Wk5678UartRxChars(3,buf);//一次接收的数据不会超过256Byte
+						rt_kprintf("485 7 filter\n");
+				}
+				//判断子串口4是否有中断
+				if(gifr&GIFR_UT4INT_BIT){//pcb映射串口8
+							/*数据接收*/
+						 count=Wk5678UartRxChars(4,buf);//一次接收的数据不会超过256Byte
+						rt_kprintf("485 8 filter\n");
+				}
+				gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);
+		}while(gifr&0x0f);
+
+		while(true==Read_RingBuff3(buf+count)){
+			count++;
+			rt_thread_mdelay(2);
+		}
+		rt_free(buf);
+		buf=NULL;
+}
+
+
 int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 {
 	  int count=0;
 	  uint8_t gifr=0;
-		switch(chanl)
-		{
 
-			case 0:
-			case 1:
-			case 2:
-			case 3:
-			if(rt_sem_take(uart1234_sem,timeout)==RT_EOK)
-			{
-				
-//				rt_kprintf("485 1read\n");
-				  gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
-					do{
-							//判断子串口1是否有中断
-							if(gifr&GIFR_UT1INT_BIT){ /*数据处理*///pcb映射串口1+1
-									/*数据接收*/
-									 count=Wk1234UartRxChars(1,recBuf);//一次接收的数据不会超过256Byte
-								   rt_kprintf("485 0read\n");
-								  return count;
-							}	
-							//判断子串口2是否有中断
-							if(gifr&GIFR_UT2INT_BIT){//pcb映射串口2+1
+		if((chanl==0)||(chanl==1)||(chanl==2)||(chanl==3)){
+			if(rt_sem_take(uart1234_sem,timeout)==RT_EOK){
+				gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
+				do{
+						//判断子串口1是否有中断
+					if(chanl==2){
+						if(gifr&GIFR_UT1INT_BIT){ /*数据处理*///pcb映射串口1+1
 								/*数据接收*/
-									 count=Wk1234UartRxChars(2,recBuf);//一次接收的数据不会超过256Byte
-									 rt_kprintf("485 1read\n");
-								  return count;
-							}
-							//判断子串口3是否有中断
-							if(gifr&GIFR_UT3INT_BIT){//pcb映射串口0+1
-										/*数据接收*/
-									count=Wk1234UartRxChars(3,recBuf);//一次接收的数据不会超过256Byte
-								  rt_kprintf("485 2read\n");
-								  return count;
-							}
-							//判断子串口4是否有中断
-							if(gifr&GIFR_UT4INT_BIT){//pcb映射串口3+1
-										/*数据接收*/
-									 count=Wk1234UartRxChars(4,recBuf);//一次接收的数据不会超过256Byte
-								   rt_kprintf("485 3read\n");
-								  return count;
-							}
-							
-							gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
-					}while(gifr&0x0f);
-				}
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			if(rt_sem_take(uart5678_sem,timeout)==RT_EOK)
-			{
-	//			rt_kprintf(":485 2read\n");
+								 count=Wk1234UartRxChars(1,recBuf);//一次接收的数据不会超过256Byte
+								 rt_kprintf("485 3read\n");
+								return count;
+						}	
+					}
+						//判断子串口2是否有中断
+					if(chanl==0){
+						if(gifr&GIFR_UT2INT_BIT){//pcb映射串口2+1
+							/*数据接收*/
+								 count=Wk1234UartRxChars(2,recBuf);//一次接收的数据不会超过256Byte
+								 rt_kprintf("485 1read\n");
+								return count;
+						}
+					}
+						//判断子串口3是否有中断
+					if(chanl==1){
+						if(gifr&GIFR_UT3INT_BIT){//pcb映射串口0+1
+									/*数据接收*/
+								count=Wk1234UartRxChars(3,recBuf);//一次接收的数据不会超过256Byte
+								rt_kprintf("485 2read\n");
+								return count;
+						}
+					}
+						//判断子串口4是否有中断
+					if(chanl==3){
+						if(gifr&GIFR_UT4INT_BIT){//pcb映射串口3+1
+									/*数据接收*/
+								 count=Wk1234UartRxChars(4,recBuf);//一次接收的数据不会超过256Byte
+								 rt_kprintf("485 4read\n");
+								return count;
+						}
+					}
+					gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
+				}while(gifr&0x0f);
+			}
+			return 0;
+		}
+		if((chanl==4)||(chanl==5)||(chanl==6)||(chanl==7)){
+			if(rt_sem_take(uart5678_sem,timeout)==RT_EOK){
 				gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);
 					do{
 							//判断子串口1是否有中断
+						if(chanl==6){
 							if(gifr&GIFR_UT1INT_BIT){ /*数据处理*///pcb映射串口7
 									/*数据接收*/
-									 count=Wk5678UartRxChars(1,recBuf);//一次接收的数据不会超过256Byte
-								rt_kprintf("485 4read\n");
+									count=Wk5678UartRxChars(1,recBuf);//一次接收的数据不会超过256Byte
+									rt_kprintf("485 7read\n");
+									return count;
 							}	
+						}
 							//判断子串口2是否有中断
+						if(chanl==4){
 							if(gifr&GIFR_UT2INT_BIT){//pcb映射串口5
 								/*数据接收*/
-									 count=Wk5678UartRxChars(2,recBuf);//一次接收的数据不会超过256Byte
-								rt_kprintf("485 5read\n");
+									count=Wk5678UartRxChars(2,recBuf);//一次接收的数据不会超过256Byte
+									rt_kprintf("485 5read\n");
+									return count;
 							}
+						}
 							//判断子串口3是否有中断
+						if(chanl==5){
 							if(gifr&GIFR_UT3INT_BIT){//pcb映射串口6
 										/*数据接收*/
 									count=Wk5678UartRxChars(3,recBuf);//一次接收的数据不会超过256Byte
-								rt_kprintf("485 6read\n");
+									rt_kprintf("485 6read\n");
+									return count;
 							}
+						}
 							//判断子串口4是否有中断
+						if(chanl==3){
 							if(gifr&GIFR_UT4INT_BIT){//pcb映射串口8
 										/*数据接收*/
-									 count=Wk5678UartRxChars(4,recBuf);//一次接收的数据不会超过256Byte
-								rt_kprintf("485 7read\n");
+									count=Wk5678UartRxChars(4,recBuf);//一次接收的数据不会超过256Byte
+									rt_kprintf("485 8read\n");
+									return count;
 							}
+						}
 							
-							gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);
+						gifr=Wk5678ReadGlobalRegister(WK2XXX_GIFR_REG);
 					}while(gifr&0x0f);
 				}
-				break;
-			case 8://单独一路  备用
+			return 0;
+			}
+			if(chanl==8){
 				rt_thread_mdelay(timeout);
 				while(true==Read_RingBuff3(recBuf+count)){
 					count++;
 					rt_thread_mdelay(2);
 				}
-			break;
+				return count;
 			}
-		return count;
+		  return 0;
 }
-
 
 
 
@@ -249,7 +337,8 @@ void uartSingConf(int chanl,int bps)
 //485根据串口发送
 void rs485UartSend(uint8_t chanl,uint8_t *buf,int len)
 {
-//UART2(1) UART3(2) UART6(3) UART1(debug) UART4(4)
+    filterRs485ErrData();//读取数据前先进行滤波
+	  rt_thread_mdelay(2);
 	  if(len==0)
 			return;
 		rt_kprintf("%srs485 send %d\n",sign,chanl);

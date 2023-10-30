@@ -202,7 +202,7 @@ uint16_t Wk1234UartTxChars(uint8_t port,int len,uint8_t *sendbuf);
 uint16_t Wk1234UartRxChars(uint8_t port,uint8_t *recbuf);
 void Wk1234UartRS485(uint8_t port);
 void Wk1234UartRTSCTS(uint8_t port);
-uint8_t Wk1234UartProcess(void);
+//uint8_t Wk1234UartProcess(void);
 
 
 
