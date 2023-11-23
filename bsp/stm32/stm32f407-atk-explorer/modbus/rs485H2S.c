@@ -144,7 +144,7 @@ static uint16_t h2sPack(bool respFlag)
 				nodeobj_p= cJSON_CreateObject();
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 
-					sprintf(sprinBuf,"%02f",h2s[i]);
+					sprintf(sprinBuf,"%.2f",h2s[i]);
 					cJSON_AddItemToObject(nodeobj_p,"hydrogenSulfide",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
 			
 				sprintf(sprinBuf,"%llu",utcTime_ms());

@@ -5,7 +5,7 @@ const static char sign[]="[裂缝仪]";
 
 //#define   SLAVE_ADDR     0X02 
 //#define   LENTH          50  //工作环流用到的最大接收buf长度
-
+ static  bool alarmFLag=false;
 
  crackMeterStru crackMeter[CRACKMETER_485_NUM];
 //返回沉降仪的通讯状态 true--通讯成功 false--通讯失败
@@ -40,7 +40,7 @@ static void  crackMeterUartSend(int num,uint8_t *buf,int len)
 //沉降仪比较阈值并设置相应的flag标记
 static void pressStlCheckSetFlag(int num)
 {
-	  static  bool alarmFLag=false;
+	 
 		alarmFLag=false;
 	  if(sheet.modbusCrackMeter[num].tempUpLimit!=0){
 			if(crackMeter[num].temp.flotVal>=sheet.modbusCrackMeter[num].tempUpLimit){
@@ -194,10 +194,10 @@ uint16_t crackMeterJsonPack(bool respFlag)
 					
 					nodeobj_p= cJSON_CreateObject();
 					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
-					sprintf(sprinBuf,"%02f",crackMeter[i].temp.flotVal);
+					sprintf(sprinBuf,"%.2f",crackMeter[i].temp.flotVal);
 					cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf)); 		strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
-					sprintf(sprinBuf,"%02f",crackMeter[i].distanc.flotVal );
+					sprintf(sprinBuf,"%.2f",crackMeter[i].distanc.flotVal );
 					cJSON_AddItemToObject(nodeobj_p,"distance",cJSON_CreateString(sprinBuf));  			strcat(sdData,sprinBuf);strcat(sdData,"  ");
 					sprintf(sprinBuf,"%llu",utcTime_ms());
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");
@@ -248,8 +248,8 @@ void resetCrackMeterWarnFlag()
 //模拟温度和湿度值读取以及打包成json格式  返回true 有告警 false 无告警
 bool modCrackMeterWarn2Send()
 {
-//		if(alarmFLag==false)//TEST
-//			return false;
+		if(alarmFLag==false)//TEST
+			return false;
 		char* out = NULL;
 		//创建数组
 		cJSON* Array = NULL;
@@ -262,7 +262,7 @@ bool modCrackMeterWarn2Send()
 		// 加入节点（键值对）
 		cJSON_AddNumberToObject(root, "mid",mcu.upMessID);
 		cJSON_AddStringToObject(root, "packetType","EVENTS_485_ALARM");
-		cJSON_AddStringToObject(root, "identifier","cover_monitor");
+		cJSON_AddStringToObject(root, "identifier","crackmeter_monitor");
 		cJSON_AddStringToObject(root, "acuId",(char *)packFlash.acuId);
 		char *sprinBuf=RT_NULL;
 		sprinBuf=rt_malloc(20);//20个字符串长度 够用了

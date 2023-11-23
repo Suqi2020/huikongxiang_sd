@@ -114,9 +114,9 @@ uint16_t analogTempHumJsonPack(bool respFlag)
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 			
 			
-				sprintf(sprinBuf,"%02f",temp);
+				sprintf(sprinBuf,"%.2f",temp);
 				cJSON_AddItemToObject(nodeobj_p,"ÎÂ¶È",cJSON_CreateString(sprinBuf));
-				sprintf(sprinBuf,"%02f",humi );
+				sprintf(sprinBuf,"%.2f",humi );
 				cJSON_AddItemToObject(nodeobj_p,"Êª¶È",cJSON_CreateString(sprinBuf));
 
 				sprintf(sprinBuf,"%llu",utcTime_ms());

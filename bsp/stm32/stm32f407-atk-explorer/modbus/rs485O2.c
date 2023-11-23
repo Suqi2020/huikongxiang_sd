@@ -155,7 +155,7 @@ static uint16_t o2Pack(bool respFlag)
 				nodeobj_p= cJSON_CreateObject();
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 
-					sprintf(sprinBuf,"%02f",o2[i]);
+					sprintf(sprinBuf,"%.2f",o2[i]);
 					cJSON_AddItemToObject(nodeobj_p,"oxygen",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
 			

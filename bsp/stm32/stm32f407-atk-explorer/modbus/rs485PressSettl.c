@@ -179,10 +179,10 @@ uint16_t pressSettlJsonPack(bool respFlag)
 					
 					nodeobj_p= cJSON_CreateObject();
 					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
-					sprintf(sprinBuf,"%02f",pressSettle[i].temp);
+					sprintf(sprinBuf,"%.2f",pressSettle[i].temp);
 					cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
-					sprintf(sprinBuf,"%02f",pressSettle[i].height.flotVal );
+					sprintf(sprinBuf,"%.2f",pressSettle[i].height.flotVal );
 					cJSON_AddItemToObject(nodeobj_p,"height",cJSON_CreateString(sprinBuf));     strcat(sdData,sprinBuf);strcat(sdData,"  ");
 					sprintf(sprinBuf,"%llu",utcTime_ms());
 					cJSON_AddItemToObject(nodeobj_p,"monitoringTime",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"\r\n");

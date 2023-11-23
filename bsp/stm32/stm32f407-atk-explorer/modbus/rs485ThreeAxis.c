@@ -236,7 +236,7 @@ static uint16_t threeAxisJsonPack(bool respFlag)
 				nodeobj_p= cJSON_CreateObject();
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 				
-				sprintf(sprinBuf,"%02f",threeAxisp[i].temp);
+				sprintf(sprinBuf,"%.2f",threeAxisp[i].temp);
 				cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf));   strcat(sdData,sprinBuf);strcat(sdData,"  ");
 				sprintf(sprinBuf,"%d",threeAxisp[i].acclrationX);
 				cJSON_AddItemToObject(nodeobj_p,"accelerationX",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");

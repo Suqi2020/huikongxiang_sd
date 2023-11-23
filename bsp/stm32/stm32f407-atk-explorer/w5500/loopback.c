@@ -217,7 +217,7 @@ void loopback_tcp(uint16 port)
 			netRxBufLen=getSn_RX_RSR(SOCK_TCPC); 								  	         /*定义len为已接收数据的长度*/
 			if(netRxBufLen>0)
 			{
-				rt_kprintf("reclen :%d",netRxBufLen);
+				rt_kprintf("%snet reclen :%d",sign,netRxBufLen);
 				if(!USE_MQTT){
 						recv(SOCK_TCPC,NetRxBuffer,netRxBufLen); 							   		         /*接收来自Server的数据*/
 						NetRxBuffer[netRxBufLen]=0;  //防止多打印

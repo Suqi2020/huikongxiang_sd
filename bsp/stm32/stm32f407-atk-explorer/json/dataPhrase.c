@@ -69,22 +69,23 @@ packTypeEnum  downLinkPackTpyeGet(cJSON  *TYPE)
 //需要判断devid 和消息ID一致才认为心跳发送成功
 rt_bool_t timeSetFun(cJSON  *Json)
 {
-
+		uint64_t  nowTime=utcTime_ms();
 		cJSON  *time =cJSON_GetObjectItem(Json,"timestamp");
+	  
 	  rt_kprintf("%stime:%s\n\r",sign,time->valuestring);
 
 		cJSON  *msg =cJSON_GetObjectItem(Json,"msg");
-		rt_kprintf("%sheart msg %s\r\n",sign,msg->valuestring);
+		rt_kprintf("%smsg \"%s\"\r\n",sign,msg->valuestring);
 
 		static uint64_t u64getTick_p;
 		u64getTick_p =atoll(time->valuestring);
 		rt_kprintf("%stime:[%lu]s \r\n",sign, (uint32_t)((u64getTick_p)/1000));
 		rt_kprintf("%stime:[%lu]ms\r\n",sign, (uint32_t)(u64getTick_p)%1000);
 	  extern void  subTimeStampSet(uint64_t time);
-	  if(utcTime_ms()-u64getTick_p>=3000){
+	  if(abs(nowTime-u64getTick_p)>=30000){
         subTimeStampSet(u64getTick_p);
 			  correctLcdTime(u64getTick_p/1000);
-			  rt_kprintf("%stime:RTC 误差大于3秒 校时\r\n",sign);
+			  rt_kprintf("%stime:RTC 误差大于30秒 校时\r\n",sign);
 		}
 		cJSON  *mid =cJSON_GetObjectItem(Json,"mid");
     if(mcu.upHeartMessID != mid->valueint){
@@ -123,8 +124,8 @@ rt_bool_t comRespFun(cJSON  *Json,uint32_t mesgID)
 		}
 	#endif   //suqi  只用心跳回应来校时
 		cJSON  *msg =cJSON_GetObjectItem(Json,"msg");
-		rt_kprintf("%sdown msg %s\r\n",sign,msg->valuestring);
-		timeSetFun(Json);
+		rt_kprintf("%sdown msg \"%s\"\r\n",sign,msg->valuestring);
+		//timeSetFun(Json);
 		cJSON  *mid =cJSON_GetObjectItem(Json,"mid");
     if(mesgID!= mid->valueint){
 				rt_kprintf("%sreg resp messID err %d %d\r\n",sign,mid->valueint,mesgID);
@@ -189,7 +190,7 @@ void AllDownPhrase(char *data,int lenth)
 					case	PROPERTIES_HEART_RESP:
 						if(!USE_MQTT){
 							if(RT_TRUE==timeSetFun(Json)){//收到心跳回应 怎么通知发送层
-									rt_kprintf("%srec heart resp\r\n",sign);
+									rt_kprintf("%sheart resp succ\r\n",sign);
 							}
 						}
 						break;

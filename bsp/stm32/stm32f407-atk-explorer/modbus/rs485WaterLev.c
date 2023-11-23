@@ -145,7 +145,7 @@ uint16_t waterDepthJsonPack(bool respFlag)
 				
 				nodeobj_p= cJSON_CreateObject();
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
-				sprintf(sprinBuf,"%02f",waterDepth[i]);
+				sprintf(sprinBuf,"%.2f",waterDepth[i]);
 				cJSON_AddItemToObject(nodeobj_p,"depth",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
 				sprintf(sprinBuf,"%llu",utcTime_ms());

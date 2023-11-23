@@ -143,7 +143,7 @@ static uint16_t coPack(bool respFlag)
 				nodeobj_p= cJSON_CreateObject();
 				cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
 
-					sprintf(sprinBuf,"%02f",co[i]);
+					sprintf(sprinBuf,"%.2f",co[i]);
 					cJSON_AddItemToObject(nodeobj_p,"monoxide",cJSON_CreateString(sprinBuf));strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
 

@@ -115,27 +115,27 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 												nodeobj_p = cJSON_CreateObject();
 												cJSON_AddItemToObject(nodeobj,"data",nodeobj_p);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusCircul[j].cirCurALowLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusCircul[j].cirCurALowLimit );
 												cJSON_AddStringToObject(nodeobj_p,"earthCurA_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusCircul[j].cirCurAUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusCircul[j].cirCurAUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"earthCurA_high",sprinBuf);
 												cJSON_AddStringToObject(nodeobj_p,"runCurA_low","0.0");
 												cJSON_AddStringToObject(nodeobj_p,"runCurA_high","0.0");
 												cJSON_AddStringToObject(nodeobj_p,"loadRatioA_low","0.0");
 												cJSON_AddStringToObject(nodeobj_p,"loadRatioA_high","0.0");
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusCircul[j].cirCurBLowLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusCircul[j].cirCurBLowLimit );
 												cJSON_AddStringToObject(nodeobj_p,"earthCurB_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusCircul[j].cirCurBUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusCircul[j].cirCurBUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"earthCurB_high",sprinBuf);
 												cJSON_AddStringToObject(nodeobj_p,"runCurB_low","0.0");
 												cJSON_AddStringToObject(nodeobj_p,"runCurB_high","0.0");
 												cJSON_AddStringToObject(nodeobj_p,"loadRatioB_low","0.0");
 												cJSON_AddStringToObject(nodeobj_p,"loadRatioB_high","0.0");
 
-												sprintf(sprinBuf,"%02f",sheet.modbusCircul[j].cirCurCLowLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusCircul[j].cirCurCLowLimit );
 												cJSON_AddStringToObject(nodeobj_p,"earthCurC_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusCircul[j].cirCurCUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusCircul[j].cirCurCUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"earthCurC_high",sprinBuf);
 												cJSON_AddStringToObject(nodeobj_p,"runCurC_low","0.0");
 												cJSON_AddStringToObject(nodeobj_p,"runCurC_high","0.0");
@@ -163,9 +163,9 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 												nodeobj_p = cJSON_CreateObject();
 												cJSON_AddItemToObject(nodeobj,"data",nodeobj_p);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusWaterDepth[j].depthLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusWaterDepth[j].depthLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"depth_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusWaterDepth[j].depthUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusWaterDepth[j].depthUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"depth_high",sprinBuf);
 	
 										}
@@ -190,14 +190,14 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 												nodeobj_p = cJSON_CreateObject();
 												cJSON_AddItemToObject(nodeobj,"data",nodeobj_p);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusCrackMeter[j].tempLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusCrackMeter[j].tempLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"temperature_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusCrackMeter[j].tempUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusCrackMeter[j].tempUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"temperature_high",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusCrackMeter[j].distancLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusCrackMeter[j].distancLowLimit);
 											
 												cJSON_AddStringToObject(nodeobj_p,"distance_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusCrackMeter[j].distancUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusCrackMeter[j].distancUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"distance_high",sprinBuf);
 										}
 								}
@@ -221,14 +221,14 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 												nodeobj_p = cJSON_CreateObject();
 												cJSON_AddItemToObject(nodeobj,"data",nodeobj_p);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusTempHum[j].tempLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusTempHum[j].tempLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"temperature_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusTempHum[j].tempUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusTempHum[j].tempUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"temperature_high",sprinBuf);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusTempHum[j].humLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusTempHum[j].humLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"humidity_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusTempHum[j].humUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusTempHum[j].humUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"humidity_high",sprinBuf);
 	
 										}
@@ -253,24 +253,24 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 												nodeobj_p = cJSON_CreateObject();
 												cJSON_AddItemToObject(nodeobj,"data",nodeobj_p);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusO2[j].o2LowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusO2[j].o2LowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"oxy_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusO2[j].o2UpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusO2[j].o2UpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"oxy_high",sprinBuf);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusCo[j].coLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusCo[j].coLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"monoxide_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusCo[j].coUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusCo[j].coUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"monoxide_high",sprinBuf);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusH2s[j].h2sLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusH2s[j].h2sLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"hydrogenSulfide_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusH2s[j].h2sUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusH2s[j].h2sUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"hydrogenSulfide_high",sprinBuf);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusCh4[j].ch4LowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusCh4[j].ch4LowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"methane_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusCh4[j].ch4UpLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusCh4[j].ch4UpLimit);
 												cJSON_AddStringToObject(nodeobj_p,"methane_high",sprinBuf);
 	
 										}
@@ -295,9 +295,9 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 												nodeobj_p = cJSON_CreateObject();
 												cJSON_AddItemToObject(nodeobj,"data",nodeobj_p);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusThreAxis[j].tempLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusThreAxis[j].tempLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"temperature_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusThreAxis[j].tempUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusThreAxis[j].tempUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"temperature_high",sprinBuf);
 											
 												sprintf(sprinBuf,"%d",sheet.modbusThreAxis[j].accXLowLimit);
@@ -337,14 +337,14 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 												nodeobj_p = cJSON_CreateObject();
 												cJSON_AddItemToObject(nodeobj,"data",nodeobj_p);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusPreSettl[j].tempLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusPreSettl[j].tempLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"temperature_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusPreSettl[j].tempUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusPreSettl[j].tempUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"temperature_high",sprinBuf);
 											
-												sprintf(sprinBuf,"%02f",sheet.modbusPreSettl[j].heightLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.modbusPreSettl[j].heightLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"height_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.modbusPreSettl[j].heightUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.modbusPreSettl[j].heightUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"height_high",sprinBuf);
 	
 										}
@@ -372,14 +372,14 @@ void senseTHGetJsonResp(cJSON   *Json,bool modbusFlag)
 												nodeobj_p = cJSON_CreateObject();
 												cJSON_AddItemToObject(nodeobj,"data",nodeobj_p);
 											
-												sprintf(sprinBuf,"%02f",sheet.analogTempHum.tempLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.analogTempHum.tempLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"temperature_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.analogTempHum.tempUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.analogTempHum.tempUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"temperature_high",sprinBuf);
 											
-												sprintf(sprinBuf,"%02f",sheet.analogTempHum.humLowLimit);
+												sprintf(sprinBuf,"%.2f",sheet.analogTempHum.humLowLimit);
 												cJSON_AddStringToObject(nodeobj_p,"humidity_low",sprinBuf);
-												sprintf(sprinBuf,"%02f",sheet.analogTempHum.humUpLimit );
+												sprintf(sprinBuf,"%.2f",sheet.analogTempHum.humUpLimit );
 												cJSON_AddStringToObject(nodeobj_p,"humidity_high",sprinBuf);
 											 break;
 										}

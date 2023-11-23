@@ -30,9 +30,9 @@ typedef struct
 
  typedef struct  
  { 
-  unsigned a:1; 
-  unsigned b:3; 
-  unsigned c:4; 
+  uint8_t a:1; 
+  uint8_t b:3; 
+  uint8_t c:4; 
  } bs; 
  
 //局放读取用到的参数定义 不包括图谱

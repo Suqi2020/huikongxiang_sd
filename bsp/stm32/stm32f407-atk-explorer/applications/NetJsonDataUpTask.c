@@ -311,6 +311,7 @@ void   upKeepStateTask(void *para)
 	  //clearUartData();
 	  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);//开启中断 清除串口冗余数据
 	  RingBuff3_Init();//清除buf 清除串口冗余数据
+	  rt_thread_mdelay(2000);//如果主控板与modbus设备同时上电 modbus设备会延时启动来保证modbus设备稳定启动
 	  readMultiCirCulaPoint();//对于环流来讲 运行前需要提取扩大方式
 	
   

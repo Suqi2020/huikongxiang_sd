@@ -738,9 +738,9 @@ uint16_t devRegJsonPack()
 
 
 		//lenth
-	  NetTxBuffer[2]=(uint8_t)((len)>>8);//更新json长度
-	  NetTxBuffer[3]=(uint8_t)(len);
-	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len);
+	  NetTxBuffer[2]=(uint8_t)((len-HEAD_LEN-LENTH_LEN)>>8);//更新json长度
+	  NetTxBuffer[3]=(uint8_t)(len-HEAD_LEN-LENTH_LEN);
+	  uint16_t jsonBodyCrc=RTU_CRC(NetTxBuffer+HEAD_LEN+LENTH_LEN,len-HEAD_LEN-LENTH_LEN);
 	  //crc
 	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc>>8); len++;//更新crc
 	  NetTxBuffer[len]=(uint8_t)(jsonBodyCrc);    len++;

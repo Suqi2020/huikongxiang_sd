@@ -256,17 +256,17 @@ uint16_t circulaJsonPack(bool respFlag)
 				  cJSON_AddNumberToObject(nodeobj,"responseStatus",cirCurStru_p[i].respStat);
 					nodeobj_p= cJSON_CreateObject();
 					cJSON_AddItemToObject(nodeobj, "data", nodeobj_p);
-					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurA);
+					sprintf(sprinBuf,"%.2f",cirCurStru_p[i].circlCurA);
 					cJSON_AddItemToObject(nodeobj_p,"earthCurA",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"runCurA",cJSON_CreateString(""));         strcat(sdData,"0");strcat(sdData,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"loadRatioA",cJSON_CreateString(""));      strcat(sdData,"0");strcat(sdData,"  ");
 					
-					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurB);
+					sprintf(sprinBuf,"%.2f",cirCurStru_p[i].circlCurB);
 					cJSON_AddItemToObject(nodeobj_p,"earthCurB",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"runCurB",cJSON_CreateString(""));         strcat(sdData,"0");strcat(sdData,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"loadRatioB",cJSON_CreateString(""));      strcat(sdData,"0");strcat(sdData,"  ");
 					
-					sprintf(sprinBuf,"%02f",cirCurStru_p[i].circlCurC);
+					sprintf(sprinBuf,"%.2f",cirCurStru_p[i].circlCurC);
 					cJSON_AddItemToObject(nodeobj_p,"earthCurC",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"runCurC",cJSON_CreateString(""));         strcat(sdData,"0");strcat(sdData,"  ");
 					cJSON_AddItemToObject(nodeobj_p,"loadRatioC",cJSON_CreateString(""));      strcat(sdData,"0");strcat(sdData,"  ");
