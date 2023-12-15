@@ -226,9 +226,9 @@ void loopback_tcp(uint16 port)
 						recv(SOCK_TCPC,NetRxBuffer+PACK_HEAD_LEN,netRxBufLen); 							   		         /*接收来自Server的数据*/
 						NetRxBuffer[netRxBufLen+PACK_HEAD_LEN]=0;
 						NetRxBuffer[0]=(uint8_t)(netRxBufLen>>24);
-						NetRxBuffer[0]=(uint8_t)(netRxBufLen>>16);
-						NetRxBuffer[0]=(uint8_t)(netRxBufLen>>8);
-						NetRxBuffer[0]=(uint8_t)(netRxBufLen>>0);//填充头部
+						NetRxBuffer[1]=(uint8_t)(netRxBufLen>>16);
+						NetRxBuffer[2]=(uint8_t)(netRxBufLen>>8);
+						NetRxBuffer[3]=(uint8_t)(netRxBufLen>>0);//填充头部
 				}
 				
 				extern struct rt_mailbox mbNetRecData;

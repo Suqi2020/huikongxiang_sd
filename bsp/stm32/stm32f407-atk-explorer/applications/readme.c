@@ -267,7 +267,16 @@
 //V4.20    修改3秒校准时间为30秒，
 //         增加uint64_t  nowTime=utcTime_ms();当前时间提取变量  20231120
 //         加入了一个c++的语言 用编译器下载没问题 tf卡无法实现拷贝
-//
+//V4.21    	rt_thread_mdelay(500);return;   
+//    			if(modCoWarn2Send()==true){  
+//          在每个传感器Warn2Send之前跳出  不进行判断上传       20231201
+//V4.22			if(rt_sem_take(uart1234_sem,timeout)==RT_EOK){
+//					rt_kprintf("485-1234 read chanl%d\n",chanl);
+//       串口发送完数据后 出现产生io中断uart1234_sem获取ok
+//       去读取寄存器值  Wk1234UartRxChars读取到的数据conut为0后 
+//       以后再也获取不到 uart1234_sem信号量 怀疑wk芯片bug再也接收不到数据
+//       解决思路：获取到中断信号量而读取到的数据conut为0时候来复位wk芯片
+//                                                              20231215
 /* typedef struct  
  { 
   uint8_t a:1; 

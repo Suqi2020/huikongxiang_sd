@@ -501,7 +501,7 @@ uint16_t devRegJsonPack()
 	for(int j=0;j<CIRCULA_485_NUM;j++){//核对有没有配置过
 		if(sheet.cirCula[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.cirCula[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[CIRCULA]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[CIRCULA]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -515,7 +515,7 @@ uint16_t devRegJsonPack()
 	for(int j=0;j<PARTDISCHAG_485_NUM;j++){//核对有没有配置过
 		if(sheet.partDischag[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.partDischag[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[PARTDISCHAG]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[PARTDISCHAG]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -532,7 +532,7 @@ uint16_t devRegJsonPack()
 	for(int j=0;j<PRESSSETTL_485_NUM;j++){//核对有没有配置过
 		if(sheet.pressSetl[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.pressSetl[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[PRESSSETTL]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[PRESSSETTL]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -545,7 +545,7 @@ uint16_t devRegJsonPack()
 	for(int j=0;j<THREEAXIS_485_NUM;j++){//核对有没有配置过
 		if(sheet.threeAxiss[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.threeAxiss[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[THREEAXIS]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[THREEAXIS]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -560,7 +560,7 @@ uint16_t devRegJsonPack()
  	for(int j=0;j<CH4_485_NUM;j++){//核对有没有配置过
 		if(sheet.ch4[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.ch4[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[CH4]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[CH4]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -573,7 +573,7 @@ uint16_t devRegJsonPack()
 	for(int j=0;j<O2_485_NUM;j++){//核对有没有配置过
 		if(sheet.o2[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.o2[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[O2]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[O2]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -586,7 +586,7 @@ uint16_t devRegJsonPack()
 	for(int j=0;j<H2S_485_NUM;j++){//核对有没有配置过
 		if(sheet.h2s[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.h2s[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[H2S]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[H2S]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -599,7 +599,7 @@ uint16_t devRegJsonPack()
 	for(int j=0;j<CO_485_NUM;j++){//核对有没有配置过
 		if(sheet.co[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.co[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[CO]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[CO]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -613,7 +613,7 @@ uint16_t devRegJsonPack()
  	for(int j=0;j<TEMPHUM_485_NUM;j++){//核对有没有配置过
 		if(sheet.tempHum[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.tempHum[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[TEMPHUM]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[TEMPHUM]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -626,7 +626,7 @@ uint16_t devRegJsonPack()
  	for(int j=0;j<WATERDEPTH_485_NUM;j++){//核对有没有配置过
 		if(sheet.waterDepth[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.waterDepth[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[WATERDEPTH]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[WATERDEPTH]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -639,7 +639,7 @@ uint16_t devRegJsonPack()
  	for(int j=0;j<CRACKMETER_485_NUM;j++){//核对有没有配置过
 		if(sheet.crackMeter[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.crackMeter[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[CRACKMETER]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[CRACKMETER]);
 				strcat((char *)NetTxBuffer,spBuf);
@@ -652,7 +652,7 @@ uint16_t devRegJsonPack()
  	for(int j=0;j<COVER_485_NUM;j++){//核对有没有配置过
 		if(sheet.cover[j].workFlag==RT_TRUE){
 				strcat((char *)NetTxBuffer,"{\"device\":{");
-				sprintf(spBuf,"\"model\":\"%s\",",sheet.cover[j].model);
+				sprintf(spBuf,"\"model\":\"%s\",",modbusModel[COVER]);
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"name\":\"%s\",",modbusName[COVER]);
 				strcat((char *)NetTxBuffer,spBuf);

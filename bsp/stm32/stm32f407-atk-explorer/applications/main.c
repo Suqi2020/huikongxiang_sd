@@ -27,10 +27,10 @@
 #include <string.h>
 
       
-#define APP_VER       ((4<<8)+20)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+22)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20231120";
+const char date[]="20231215";
 
 bool USE_MQTT=true;
 
@@ -63,8 +63,8 @@ rt_sem_t   		uart5678_sem	=	RT_NULL;
 
 //邮箱的定义
 extern struct  rt_mailbox mbNetSendData;;
-static char 	 mbSendPool[20];//发送缓存20条
-static char 	 mbRecPool[20];//发送缓存20条
+static char 	 mbSendPool[20];//发送缓存20/4条
+static char 	 mbRecPool[20];//发送缓存20/4条
 extern struct rt_mailbox mbNetRecData;
 
 static char 	 sdWritePool[100];//发送缓存100条

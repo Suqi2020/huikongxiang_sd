@@ -351,7 +351,7 @@ typedef enum{
 #define CHINA_NAME_LEN  9
 #ifdef  USE_4GAS
 const static char  *modbusName[MODBUS_NUM] ={"HuanLiu","JuFang","FangChenJiang","FangWaiPo","JiaWan","YangQi","LiuHuaQing","YiYangHuaTan","WenShiDu","ShuiWei","LieFengYi","JingGai"};
-
+const static char  *modbusModel[MODBUS_NUM] ={"SHGYIT-041","SHGYIT-061","SHGYIT-052","SHGYIT-051","SHGYIT-012","SHGYIT-014","SHGYIT-013","SHGYIT-011","SHGYIT-015","SHGYIT-016","SHGYIT-053","SHGYIT-2"};
 //https://www.qqxiuzi.cn/bianma/zifuji.php  ×Ö·û×ª»»GB2312
 const static uint8_t mdbusChinaName[MODBUS_NUM][CHINA_NAME_LEN]={0xBB,0xB7,0xC1,0xF7,0x00,0x00,0x00,0x00,0x00,\
 																										0xBE,0xD6,0xB7,0xC5,0x00,0x00,0x00,0x00,0x00,\

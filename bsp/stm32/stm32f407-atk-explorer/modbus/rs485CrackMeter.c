@@ -314,7 +314,7 @@ void crackMeterRead2Send(rt_bool_t netStat,bool respFlag)
 				crackMeterJsonPack(respFlag);
 				if(netStat==RT_TRUE)
 						rt_mb_send_wait(&mbNetSendData, (rt_ubase_t)&NetTxBuffer,RT_WAITING_FOREVER);
-				rt_thread_mdelay(500);
+				rt_thread_mdelay(500);return;
 				if(modCrackMeterWarn2Send()==true){
 							resetCrackMeterWarnFlag();//每次判断后复位warnflag状态值
 							if(netStat==RT_TRUE)
