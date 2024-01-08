@@ -2,6 +2,8 @@
 #ifndef  __MODBUS_DATA_H__
 #define  __MODBUS_DATA_H__
 #include  "stdint.h"
+
+#define   UINT16_BELOW_ZERO    (1<<15)
 typedef struct
 {
 	  //环流值 放大了100倍

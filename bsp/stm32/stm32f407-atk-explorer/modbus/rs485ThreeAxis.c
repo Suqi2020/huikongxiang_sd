@@ -181,6 +181,17 @@ void readThreeTempAcc(int num)
 
 extern char   sdData[DATA_LEN];
 
+//判断value值如果为负就格式化负数 否则为正
+void sprintf_threeAxis(char *buf,uint16_t value)
+{
+				if((UINT16_BELOW_ZERO&value)==0){
+					sprintf(buf,"%d",value);
+				}
+				else{
+					sprintf(buf,"-%d",~value+1);
+				}
+}				
+				
 //输入 respFlag 为true就是回应
 //              为false就是report数据
 static uint16_t threeAxisJsonPack(bool respFlag)
@@ -238,11 +249,12 @@ static uint16_t threeAxisJsonPack(bool respFlag)
 				
 				sprintf(sprinBuf,"%.2f",threeAxisp[i].temp);
 				cJSON_AddItemToObject(nodeobj_p,"temperature",cJSON_CreateString(sprinBuf));   strcat(sdData,sprinBuf);strcat(sdData,"  ");
-				sprintf(sprinBuf,"%d",threeAxisp[i].acclrationX);
+
+				sprintf_threeAxis(sprinBuf,threeAxisp[i].acclrationX);
 				cJSON_AddItemToObject(nodeobj_p,"accelerationX",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
-				sprintf(sprinBuf,"%d",threeAxisp[i].acclrationY);
+				sprintf_threeAxis(sprinBuf,threeAxisp[i].acclrationY);
 				cJSON_AddItemToObject(nodeobj_p,"accelerationY",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
-				sprintf(sprinBuf,"%d",threeAxisp[i].acclrationZ);
+				sprintf_threeAxis(sprinBuf,threeAxisp[i].acclrationZ);
 				cJSON_AddItemToObject(nodeobj_p,"accelerationZ",cJSON_CreateString(sprinBuf)); strcat(sdData,sprinBuf);strcat(sdData,"  ");
 
 				sprintf(sprinBuf,"%llu",utcTime_ms());

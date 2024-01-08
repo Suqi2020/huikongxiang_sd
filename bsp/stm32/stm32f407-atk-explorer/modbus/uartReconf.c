@@ -122,7 +122,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 									/*数据接收*/
 								count=Wk1234UartRxChars(3,recBuf);//一次接收的数据不会超过256Byte
 								rt_kprintf("485 0read\n");
-								break;
+								//break;
 						}
 					}
 						//判断子串口1是否有中断
@@ -131,7 +131,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 								/*数据接收*/
 								 count=Wk1234UartRxChars(1,recBuf);//一次接收的数据不会超过256Byte
 								 rt_kprintf("485 1read\n");
-								break;
+								//break;
 						}	
 					}
 						//判断子串口2是否有中断
@@ -140,7 +140,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 							/*数据接收*/
 								 count=Wk1234UartRxChars(2,recBuf);//一次接收的数据不会超过256Byte
 								 rt_kprintf("485 2read\n");
-								break;
+								//break;
 						}
 					}
 
@@ -150,7 +150,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 									/*数据接收*/
 								 count=Wk1234UartRxChars(4,recBuf);//一次接收的数据不会超过256Byte
 								 rt_kprintf("485 3read\n");
-								break;
+								//break;
 						}
 					}
 					gifr=Wk1234ReadGlobalRegister(WK2XXX_GIFR_REG);
@@ -170,7 +170,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 										/*数据接收*/
 									count=Wk5678UartRxChars(3,recBuf);//一次接收的数据不会超过256Byte
 									rt_kprintf("485 4read\n");
-									break;
+									//break;
 							}
 						}
 							//判断子串口1是否有中断
@@ -179,7 +179,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 									/*数据接收*/
 									count=Wk5678UartRxChars(1,recBuf);//一次接收的数据不会超过256Byte
 									rt_kprintf("485 5read\n");
-									break;
+									//break;
 							}	
 						}
 							//判断子串口2是否有中断
@@ -188,7 +188,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 								/*数据接收*/
 									count=Wk5678UartRxChars(2,recBuf);//一次接收的数据不会超过256Byte
 									rt_kprintf("485 6read\n");
-									break;
+									//break;
 							}
 						}
 
@@ -198,7 +198,7 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 										/*数据接收*/
 									count=Wk5678UartRxChars(4,recBuf);//一次接收的数据不会超过256Byte
 									rt_kprintf("485 7read\n");
-									break;
+									//break;
 							}
 						}
 							
@@ -208,12 +208,13 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 
 			}
 		  if((count<=2)&&(irq==1)){
-				rt_kprintf("ERR:uart irq come nodata rst uart%d\n",count);
+				rt_kprintf("ERR:uart irq come nodata rst uart  count=%d\n",count);
+				
+				MX_USART2_UART_Init(115200);  //初始化主波特率
+        MX_USART3_UART_Init(115200);  //初始化主波特率
 				extern void uartReconfig();
-				extern void uartIrqEnaAfterQueue();
 				uartReconfig();//串口重新配置
-				uartIrqEnaAfterQueue();//串口中断中用到了队列  开启中断需要放到后边
-				rt_thread_mdelay(1000);
+				
 			}
 			if(chanl==8){
 				rt_thread_mdelay(timeout);
@@ -226,8 +227,38 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 		  return count;
 }
 
-
-
+int wk1234_check_OK()
+{
+	
+		Wk1234WriteGlobalRegister(WK2XXX_GENA_REG,0x35);
+	  rt_sem_take(uart1234_sem,5);
+	  int ret=Wk1234ReadGlobalRegister(WK2XXX_GENA_REG);
+		if(0xF5==ret){
+			rt_kprintf("1read ok\n");
+			Wk1234WriteGlobalRegister(WK2XXX_GENA_REG,0x3F);
+			return RT_TRUE;
+		}
+		else{
+			rt_kprintf("1read err 0x%02x\n",ret);
+			return RT_FALSE;
+		}
+}
+int wk5678_check_OK()
+{
+	
+		Wk5678WriteGlobalRegister(WK2XXX_GENA_REG,0x35);
+	  rt_sem_take(uart5678_sem,5);
+		int ret =Wk5678ReadGlobalRegister(WK2XXX_GENA_REG);
+		if(0xF5==ret){
+			rt_kprintf("2read ok\n");
+			Wk5678WriteGlobalRegister(WK2XXX_GENA_REG,0x3F);
+			return RT_TRUE;
+		}
+		else{
+			rt_kprintf("2read err 0x%02x\n",ret);
+			return RT_FALSE;
+		}
+}
 
 //串口重新配置 选择对应的modbus传感器
 void uartReconfig()
@@ -245,27 +276,40 @@ void uartReconfig()
 		RingBuff3_Init();
 		MX_USART6_UART_Init(packFlash.uartBps[8]);
 		__HAL_UART_ENABLE_IT(&huart6, UART_IT_RXNE);
-		Wk1xxxRstInit();
-		/*主串口波特率匹配*/
-		Wk1234MasterUartBaudAdaptive();
-//		//初始化子串口
-		Wk1234UartInit(1);
-		Wk1234UartInit(2);
-		Wk1234UartInit(3);
-		Wk1234UartInit(4);
-//		//设置子串口波特率
-		Wk1234UartSetBaud(3,packFlash.uartBps[0]);
-		Wk1234UartSetBaud(1,packFlash.uartBps[1]);
-		Wk1234UartSetBaud(2,packFlash.uartBps[2]);
-		Wk1234UartSetBaud(4,packFlash.uartBps[3]);
-		Wk1234UartRS485(1);
-		Wk1234UartRS485(2);
-		Wk1234UartRS485(3);
-		Wk1234UartRS485(4);
-//		
-//		
-//		
-//		
+		
+		
+		int  count =1;
+		do{
+			HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
+			Wk1xxxRstInit();
+			/*主串口波特率匹配*/
+		  Wk1234MasterUartBaudAdaptive();
+	//		//初始化子串口
+			Wk1234UartInit(1);
+			Wk1234UartInit(2);
+			Wk1234UartInit(3);
+			Wk1234UartInit(4);
+	//		//设置子串口波特率
+			Wk1234UartSetBaud(3,packFlash.uartBps[0]);
+			Wk1234UartSetBaud(1,packFlash.uartBps[1]);
+			Wk1234UartSetBaud(2,packFlash.uartBps[2]);
+			Wk1234UartSetBaud(4,packFlash.uartBps[3]);
+			Wk1234UartRS485(1);
+			Wk1234UartRS485(2);
+			Wk1234UartRS485(3);
+			Wk1234UartRS485(4);
+			HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+			rt_thread_mdelay(500*count);
+			if(count++>1){
+				rt_kprintf("ERR:reset wk1234 uart %dtimes failed\n",count-1);
+				if(count>5)
+				break;
+			}
+		}while(RT_FALSE==wk1234_check_OK());
+
+		count=1;
+		do{
+		HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
 		Wk2xxxRstInit();
 //		/*主串口波特率匹配*/
 		Wk5678MasterUartBaudAdaptive();
@@ -283,6 +327,14 @@ void uartReconfig()
 		Wk5678UartRS485(2);
 		Wk5678UartRS485(3);
 		Wk5678UartRS485(4);
+		HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+		rt_thread_mdelay(500*count);
+		if(count++>1){
+			rt_kprintf("ERR:reset wk5678 uart %dtimes failed\n",count-1);
+			if(count>5)
+			break;
+		}
+		}while(RT_FALSE==wk5678_check_OK());
 	  rt_kprintf("%sUART re config\n",sign);
 
 }

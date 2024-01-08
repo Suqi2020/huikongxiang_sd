@@ -19,14 +19,14 @@ void Wk1xxxRstInit(void)
 HAL_StatusTypeDef Uart3Transmit( uint8_t *pData, uint16_t size)
 {
 		return	HAL_UART_Transmit(&huart3,pData,size,100);
-	    //rt_kprintf("uart3 send\n");
+	    //rt_krt_kprintf("uart3 send\n");
 }
 
 
 HAL_StatusTypeDef Uart3Receive(uint8_t *pData, uint16_t size)
 {
 		return	HAL_UART_Receive(&huart3,pData,size,100); 	
-	    //rt_kprintf("uart3 rec\n");
+	    //rt_krt_kprintf("uart3 rec\n");
 }
 
 
@@ -165,7 +165,7 @@ uint8_t Wk1234MasterUartBaudAdaptive(void)
 	Uart3Transmit(&cmd,1);
 	HAL_Delay(10);
 	ret=Wk1234ReadGlobalRegister(WK2XXX_GENA_REG);
-	printf("WkMasterUartBaudAdaptive---gena:%x\n",ret);
+	rt_kprintf("WkMasterUartBaudAdaptive---gena:%x\n",ret);
 	if((ret&0xf0)==0xf0){
 		return 0;
 	}else{
@@ -250,8 +250,8 @@ uint8_t Wk1234UartSetBaud(uint8_t port,uint32_t baudrate)
 			baud0=(uint8_t)(temp&0xff);
 			temp=(((freq%(baudrate*16))*100)/(baudrate));
 			pres=(temp+100/2)/100;
-			printf("Wk_SetBaud---freq:%d,baudrate:%d\n",freq,baudrate);
-			printf("Wk_SetBaud---baud1:%x,baud0:%x,pres:%x\n",baud1,baud0,pres);
+			rt_kprintf("Wk_SetBaud---freq:%d,baudrate:%d\n",freq,baudrate);
+			rt_kprintf("Wk_SetBaud---baud1:%x,baud0:%x,pres:%x\n",baud1,baud0,pres);
 			//关掉子串口收发使能
 			scr=Wk1234ReadSlaveRegister(port,WK2XXX_SCR_REG); 
 			Wk1234WriteSlaveRegister(port,WK2XXX_SCR_REG,0);
@@ -265,7 +265,7 @@ uint8_t Wk1234UartSetBaud(uint8_t port,uint32_t baudrate)
 			Wk1234WriteSlaveRegister(port,WK2XXX_SCR_REG,scr);
 			return 0;
 		}else{
-			printf("Wk_SetBaud error！！！！\n");
+			rt_kprintf("Wk_SetBaud error！！！！\n");
 			return 1;
 		}
 }
@@ -328,7 +328,7 @@ uint8_t Wk1234UartFormatSet(uint8_t port,uint8_t stopformat,uint8_t paritytype)
 		Wk1234WriteSlaveRegister(port,WK2XXX_SCR_REG,scr);
 		Wk1234WriteSlaveRegister(port,WK2XXX_SIER_REG,sier);
 				
-		printf("Wk_FormatSet--LCR:%x,SCR:%x,SIER:%x\n",lcr,scr,sier);
+		rt_kprintf("Wk_FormatSet--LCR:%x,SCR:%x,SIER:%x\n",lcr,scr,sier);
 		return 0;
 		
 }

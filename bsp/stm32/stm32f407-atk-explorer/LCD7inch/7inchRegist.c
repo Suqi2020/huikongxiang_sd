@@ -21,7 +21,7 @@ uint8_t  sendLCDBuf[LCD_BUF_LEN];
 //const uint8_t sheShiDu[2]={0xA1,0xE6};
 
 //往LCD屏幕发送数据 调用底层串口发送函数
- void LCDDataSend(uint8_t *buf,int lenth)
+void LCDDataSend(uint8_t *buf,int lenth)
 {
 //	 rt_kprintf("%s LCD send:",sign);
 	 for(int i=0;i<lenth;i++){

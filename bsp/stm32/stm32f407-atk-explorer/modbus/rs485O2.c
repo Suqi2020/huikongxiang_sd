@@ -166,7 +166,7 @@ static uint16_t o2Pack(bool respFlag)
 				}
 //				extern void o2SaveSD(char *id,char *data);
 //				o2SaveSD(sheet.o2[i].ID,sdData);
-				modbusTxtSaveSD(sheet.o2[i].ID,sdData,PRESSSETTL);
+				modbusTxtSaveSD(sheet.o2[i].ID,sdData,O2);
 
 			}
 			}

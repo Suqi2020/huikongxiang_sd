@@ -154,7 +154,7 @@ static uint16_t h2sPack(bool respFlag)
 				}
 //				extern void h2sSaveSD(char *id,char *data);
 //				h2sSaveSD(sheet.h2s[i].ID,sdData);
-				modbusTxtSaveSD(sheet.h2s[i].ID,sdData,WATERDEPTH);
+				modbusTxtSaveSD(sheet.h2s[i].ID,sdData,H2S);
 
 			}
 			}

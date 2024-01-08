@@ -744,7 +744,7 @@ void EXTI15_10_IRQHandler(void)
     if(HAL_GPIO_ReadPin(IRQ5678_GPIO_Port,IRQ5678_Pin)==GPIO_PIN_RESET){
 			 HAL_GPIO_EXTI_IRQHandler(IRQ5678_Pin);
 			 rt_sem_release(uart5678_sem);
-			 //rt_kprintf("irq:2\n");
+			 //rt_kprintf("i:2\n");
 		}
 			
 		
@@ -753,12 +753,12 @@ void EXTI15_10_IRQHandler(void)
 			 rt_sem_release(uart1234_sem);
 			 //rt_kprintf("i:1\n");
 		}
-    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_10);
-    
-    
-    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
-    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_14);
-    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);
+//    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_10);
+//    
+//    
+//    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
+//    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_14);
+//    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);
     rt_interrupt_leave();
 }
 #endif

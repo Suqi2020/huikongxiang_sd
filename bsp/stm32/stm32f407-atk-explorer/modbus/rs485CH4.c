@@ -162,7 +162,7 @@ static uint16_t ch4Pack(bool respFlag)
 				}
 //				extern void ch4SaveSD(char *id,char *data);
 //				ch4SaveSD(sheet.ch4[i].ID,sdData);
-				modbusTxtSaveSD(sheet.ch4[i].ID,sdData,WATERDEPTH);
+				modbusTxtSaveSD(sheet.ch4[i].ID,sdData,CH4);
 
 			}
 			}
