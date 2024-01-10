@@ -453,6 +453,9 @@ void  relayTest()
 //不能打印 uint64_t 数据  拆分成32位打印
 int tick()
 {
+	
+	
+	
     RTC_TimeTypeDef read;
 	  uint64_t time =utcTime_ms();
 
@@ -468,10 +471,22 @@ int tick()
 }
 //FINSH_FUNCTION_EXPORT(tick, tick finsh);//FINSH_FUNCTION_EXPORT_CMD
 MSH_CMD_EXPORT(tick,tick stamp);//FINSH_FUNCTION_EXPORT_CMD
+//获取mcu维护的时间戳 
 
+int tickLCD()
+{
+	
+	
+	
+		extern uint32_t lcdUtcTime_beijing();
+	  lcdUtcTime_beijing();
 
-
-
+	
+	  return 0;
+}
+//FINSH_FUNCTION_EXPORT(tick, tick finsh);//FINSH_FUNCTION_EXPORT_CMD
+MSH_CMD_EXPORT(tickLCD,tickLCD stamp);//FINSH_FUNCTION_EXPORT_CMD
+//获取LCD的时间戳
 int tickSet(int argc, char *argv[])
 {
 
@@ -493,7 +508,7 @@ int tickSet(int argc, char *argv[])
 	  return 0;
 }
 MSH_CMD_EXPORT(tickSet,tick set stamp);//FINSH_FUNCTION_EXPORT_CMD
-
+//设置mcu和LCD的时间戳 两个时间戳单独维护 考虑到有些场合没有显示屏
 
 
 uint32_t 	offLTimes;
