@@ -27,7 +27,7 @@
 #include <string.h>
 
 //#define APP_VER       ((4<<8)+22)//0x0105 表示1.5版本
-#define APP_VER       ((4<<8)+25)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+26)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
 const char date[]="20240108";
@@ -417,6 +417,41 @@ bool netOKState()
 
 extern IWDG_HandleTypeDef hiwdg;
 #endif
+
+//	//IO测试
+////adc采集测试
+//	//串口收发测试
+//继电器测试
+//联网测试
+#define STEP_NAME_LEN 19
+const static uint8_t setpName[5][STEP_NAME_LEN]={\
+	0xd2,0xBB,0xa1,0xa2,0x49,0x4f,0xca,0xe4,0xc8,0xeb,0xca,0xe4,0xb3,0xf6,0xb2,0xe2,0xca,0xd4,0x00,\
+	0xb6,0xfe,0xa1,0xa2,0x41,0x44,0x43,0xb2,0xc9,0xbc,0xaf,0xb2,0xe2,0xca,0xd4,0x00,0x00,0x00,0x00,\
+	0xc8,0xfd,0xa1,0xa2,0xb4,0xae,0xbf,0xda,0xca,0xd5,0xb7,0xa2,0xb2,0xe2,0xca,0xd4,0x00,0x00,0x00,\
+	0xcb,0xc4,0xa1,0xa2,0xbc,0xcc,0xb5,0xe7,0xc6,0xf7,0xca,0xe4,0xb3,0xf6,0xb2,0xe2,0xca,0xd4,0x00,\
+	0xce,0xe5,0xa1,0xa2,0xc1,0xaa,0xcd,0xf8,0xb2,0xe2,0xca,0xd4,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+
+
+
+static void dispStepName(int index)
+{
+	  uint8_t buf[STEP_NAME_LEN+10];
+
+		int nameLen=strlen((char *)setpName[index]);
+	  int i=0;
+		for(i=0;i<STEP_NAME_LEN;i++){
+			  
+				buf[i]=setpName[index][i];
+			  if(buf[i]==0)
+					 break;
+		}
+		buf[i]=0xff;
+		buf[i+1]=0xff;
+
+		LCDWtite(TEST_STEP_ADDR,buf,i+2);
+}
+
+
 void hartWareTest()
 {
 	//	int read=TESTCODE_READ;//读取工装测试电平
@@ -431,6 +466,32 @@ void hartWareTest()
 		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 		rt_thread_mdelay(500);
 		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		extern void changeBmp(int num);
+		
+		
+			  uint8_t  localIp[4];
+	  uint8_t  gateway[4];
+	  uint8_t  remoteIp[4];
+    uint16_t remotePort; 
+		
+		
+		packFlash.netIpFlash.localIp[0]=192;
+		packFlash.netIpFlash.localIp[1]=168;
+		packFlash.netIpFlash.localIp[2]=1;
+		packFlash.netIpFlash.localIp[3]=100;
+		
+	  packFlash.netIpFlash.gateway[0]=192;
+		packFlash.netIpFlash.gateway[1]=168;
+		packFlash.netIpFlash.gateway[2]=1;
+		packFlash.netIpFlash.gateway[3]=1; 
+		
+	  packFlash.netIpFlash.remoteIp[0]=192;
+		packFlash.netIpFlash.remoteIp[1]=168;
+		packFlash.netIpFlash.remoteIp[2]=1;
+		packFlash.netIpFlash.remoteIp[3]=199; 
+		packFlash.netIpFlash.remotePort=8080;
+		changeBmp(30);
+		dispStepName(step);
     while (1)//task用于测试 以及闪灯操作
     {
 			
@@ -456,6 +517,8 @@ void hartWareTest()
 									if((tidNetSend->stat & RT_THREAD_STAT_MASK)==RT_THREAD_SUSPEND)
 											rt_thread_delete(tidNetSend);
 							 }
+							 changeBmp(30);
+							 dispStepName(step);
 							// rt_kprintf("切换step\n");
 							 
 					}
@@ -465,7 +528,7 @@ void hartWareTest()
 
 					case IO_inout_step:
 						ioInOutTest();
-					  rt_thread_mdelay(1000);
+					  rt_thread_mdelay(200);
 						break;
 					case ADC_in_step:
 						adcGetTest();

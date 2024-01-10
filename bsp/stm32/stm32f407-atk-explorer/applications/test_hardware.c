@@ -388,6 +388,7 @@ int  rs485UartRecp(int chanl,int timeout)
 void uartTest()
 {
 	  static int confFlag=false;
+	  uint8_t ret[UART_NUM]={0};
 	  if(confFlag==false){
 				for(int i=0;i<UART_NUM;i++){
 
@@ -405,16 +406,23 @@ void uartTest()
 
 				rs485UartRec(j,(uint8_t *)testRBuf,100);
 			  if(strncmp(testSBuf,(char *)testRBuf,strlen((char *)testSBuf))==0){
-						rt_kprintf("uart[%d] 收发测试成功\n",j+1);
+						//rt_kprintf("uart[%d] 收发测试成功\n",j+1);
+					  ret[j]=1;
 				}
-				else{
-						rt_kprintf("uart[%d] 收发测试失败\n",j+1);
-//					  testRBuf[j][10]=0;
-					 // rt_kprintf("rec;[%s]\n",testRBuf[j]);
-				}
+//				else{
+//						rt_kprintf("uart[%d] 收发测试失败\n",j+1);
+////					  testRBuf[j][10]=0;
+//					 // rt_kprintf("rec;[%s]\n",testRBuf[j]);
+//				}
 		}
+		for(int i=0;i<UART_NUM-1;i++){
+        if(ret[i]==1)
+						rt_kprintf("uart[%d] 收发测试成功\n",i+1);
+				else
+						rt_kprintf("uart[%d] 收发测试失败\n",i+1);
 
-		rs485TestUseUart6();
+		}
+	//	rs485TestUseUart6();
 		rt_thread_mdelay(1000);
 }
 
