@@ -29,7 +29,7 @@ extern uint8_t Read_RingBuff3(uint8_t *rData);
 //串口滤波函数 用在发送函数之前 如果有冗余数据  需要丢掉 局放重启会发出冗余数据
 static void  filterRs485ErrData()
 {
-	  uint8_t *buf=rt_malloc(200);
+	  uint8_t *buf=rt_malloc(300);
 	  int count=0;
 	  uint8_t gifr=0;
 	  rt_sem_trytake(uart1234_sem);

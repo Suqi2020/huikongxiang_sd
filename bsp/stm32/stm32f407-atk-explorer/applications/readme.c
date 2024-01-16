@@ -291,6 +291,9 @@
 //V4.26  增加工装测试                                          20240109
 //V4.27  增加tickLCD显示屏时间戳获取指令 
 //				与tick指令（获取mcu维护的时间戳）不冲突  						 20240110
+//V4.28  static void  filterRs485ErrData()
+//修改  uint8_t *buf=rt_malloc(200); 为300  太小会导致buf溢出  20240115
+//       修改水位类型为 WATER_LEVEL                            20240116
 /* typedef struct  
  { 
   uint8_t a:1; 	

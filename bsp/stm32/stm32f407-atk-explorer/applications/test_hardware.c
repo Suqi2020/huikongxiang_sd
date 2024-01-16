@@ -507,7 +507,7 @@ int tickSet(int argc, char *argv[])
 
 	  return 0;
 }
-MSH_CMD_EXPORT(tickSet,tick set stamp);//FINSH_FUNCTION_EXPORT_CMD
+MSH_CMD_EXPORT(tickSet,tickSet stamp);//FINSH_FUNCTION_EXPORT_CMD
 //设置mcu和LCD的时间戳 两个时间戳单独维护 考虑到有些场合没有显示屏
 
 

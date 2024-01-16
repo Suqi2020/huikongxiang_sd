@@ -632,7 +632,7 @@ uint16_t devRegJsonPack()
 				strcat((char *)NetTxBuffer,spBuf);
 				sprintf(spBuf,"\"deviceId\":\"%s\",",sheet.waterDepth[j].ID);
 				strcat((char *)NetTxBuffer,spBuf);
-				sprintf(spBuf,"\"type\":%d}},",AIR_ENVIRONMENT);
+				sprintf(spBuf,"\"type\":%d}},",WATER_LEVEL);
 				strcat((char *)NetTxBuffer,spBuf);
 		}
 	}

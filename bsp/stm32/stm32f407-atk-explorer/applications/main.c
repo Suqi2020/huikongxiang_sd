@@ -27,10 +27,10 @@
 #include <string.h>
 
 //#define APP_VER       ((4<<8)+22)//0x0105 表示1.5版本
-#define APP_VER       ((4<<8)+27)//0x0105 表示1.5版本
+#define APP_VER       ((4<<8)+28)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20240108";
+const char date[]="20240116";
 
 bool USE_MQTT=true;
 
