@@ -100,7 +100,7 @@
 #include "sdioRW.h"
 
 
-#define  USE_WDT
+//#define  USE_WDT
 #define  CCMRAM __attribute__((section("ccmram"))) 
 #define  PACK_HEAD_LEN  4
 

@@ -294,6 +294,7 @@
 //V4.28  static void  filterRs485ErrData()
 //修改  uint8_t *buf=rt_malloc(200); 为300  太小会导致buf溢出  20240115
 //       修改水位类型为 WATER_LEVEL                            20240116
+//       临时增加遇到串口接收错误复位mcu                       20240117
 /* typedef struct  
  { 
   uint8_t a:1; 	

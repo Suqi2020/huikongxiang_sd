@@ -30,7 +30,7 @@
 #define APP_VER       ((4<<8)+28)//0x0105 表示1.5版本
 //注：本代码中json格式解析非UTF8_格式代码（GB2312格式中文） 会导致解析失败
 //    打印log如下 “[dataPhrs]err:json cannot phrase”  20230403
-const char date[]="20240116";
+const char date[]="20240117";
 
 bool USE_MQTT=true;
 
@@ -364,6 +364,13 @@ int main(void)
 		}
 		HAL_IWDG_Refresh(&hiwdg);
 #endif	
+		while(1){
+		RELAY4_OFF;
+			rt_thread_mdelay(5000);
+		RELAY4_ON;
+			rt_thread_mdelay(5000);
+		printf("TEST \r\n");
+		}
 		//队列初始化之后再开启串口中断接收
 //		char test[50]={0};
 //			uint32_t a=4294967290;
@@ -545,7 +552,7 @@ void hartWareTest()
 
 					case INTERNET_step:
 						if(change){
-							
+
 							change=false;
 							tidNetRec =  rt_thread_create("netRec",netDataRecTask,RT_NULL,512*2,3, 10 );
 							if(tidNetRec!=NULL){
@@ -563,6 +570,8 @@ void hartWareTest()
 									printf("%sRTcreat w5500Task task\r\n",sign);
 							}
 						}
+
+						
 					  //rt_thread_mdelay(1000);
 						break;
 				}

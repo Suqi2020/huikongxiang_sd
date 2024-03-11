@@ -209,11 +209,11 @@ int  rs485UartRec(int chanl,uint8_t *recBuf,int timeout)
 			}
 		  if((count<=2)&&(irq==1)){
 				rt_kprintf("ERR:uart irq come nodata rst uart  count=%d\n",count);
-				
-				MX_USART2_UART_Init(115200);  //初始化主波特率
-        MX_USART3_UART_Init(115200);  //初始化主波特率
-				extern void uartReconfig();
-				uartReconfig();//串口重新配置
+				rt_hw_cpu_reset();//复位mcu
+//				MX_UART4_Init(115200);//(115200);  //初始化主波特率
+//        MX_USART3_UART_Init(115200);  //初始化主波特率
+//				extern void uartReconfig();
+//				uartReconfig();//串口重新配置
 				
 			}
 			if(chanl==8){
@@ -281,7 +281,7 @@ void uartReconfig()
 		int  count =1;
 		do{
 			HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
-			Wk1xxxRstInit();
+			//Wk1xxxRstInit();
 			/*主串口波特率匹配*/
 		  Wk1234MasterUartBaudAdaptive();
 	//		//初始化子串口
@@ -310,7 +310,7 @@ void uartReconfig()
 		count=1;
 		do{
 		HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
-		Wk2xxxRstInit();
+		//Wk2xxxRstInit();
 //		/*主串口波特率匹配*/
 		Wk5678MasterUartBaudAdaptive();
 //		//初始化子串口

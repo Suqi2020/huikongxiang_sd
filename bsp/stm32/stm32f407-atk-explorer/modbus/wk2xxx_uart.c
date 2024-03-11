@@ -54,7 +54,13 @@ uint8_t Wk5678ReadGlobalRegister(uint8_t greg)
 	 Uart4Receive(&rec,1);		 								
 	 return rec;
 }
-
+void wk5678clearRec()
+{
+	uint8_t rec;
+	while(HAL_OK==HAL_UART_Receive(&huart4,&rec,1,1000)){
+		rt_kprintf("clear uart4 buf\n");
+	}
+}
 /************************WkWriteSlaveRegister()*******************
 **
 * @param port:Uart port
@@ -155,10 +161,12 @@ uint8_t Wk5678ReadSlaveFifo(uint8_t port,uint8_t *rec,uint16_t num)
 uint8_t Wk5678MasterUartBaudAdaptive(void)
 {    
 	uint8_t cmd=0x55,ret=0;
-
+  wk5678clearRec();
 	Wk2xxxRstInit();
+	
 	Uart4Transmit(&cmd,1);
 	HAL_Delay(10);
+	wk5678clearRec();
 	ret=Wk5678ReadGlobalRegister(WK2XXX_GENA_REG);
 	printf("WkMasterUartBaudAdaptive---gena:%x\n",ret);
 	if((ret&0xf0)==0xf0){

@@ -29,7 +29,13 @@ HAL_StatusTypeDef Uart3Receive(uint8_t *pData, uint16_t size)
 	    //rt_krt_kprintf("uart3 rec\n");
 }
 
-
+void wk1234clearRec()
+{
+	uint8_t rec;
+	while(HAL_OK==HAL_UART_Receive(&huart3,&rec,1,1000)){
+		rt_kprintf("clear uart3 buf\n");
+	}
+}
 
 /**********************WkWriteGlobalRegister*************
 *@param greg:Global register 6-bit address
@@ -160,10 +166,12 @@ uint8_t Wk1234ReadSlaveFifo(uint8_t port,uint8_t *rec,uint16_t num)
 uint8_t Wk1234MasterUartBaudAdaptive(void)
 {    
 	uint8_t cmd=0x55,ret=0;
-
+  wk1234clearRec();
 	Wk1xxxRstInit();
+	
 	Uart3Transmit(&cmd,1);
 	HAL_Delay(10);
+	wk1234clearRec();
 	ret=Wk1234ReadGlobalRegister(WK2XXX_GENA_REG);
 	rt_kprintf("WkMasterUartBaudAdaptive---gena:%x\n",ret);
 	if((ret&0xf0)==0xf0){
